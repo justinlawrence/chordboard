@@ -1,5 +1,5 @@
 var song1 = `Escape
-by Jesse Kongos 
+by Jesse Kongos
 
 Verse 1:
 D
@@ -27,7 +27,7 @@ Bm     A         Bm     D
 So why don't you come away
 G          A
 With me my love
-     Bm       
+     Bm
 We'll do what it takes
 D
 I'll keep you safe
@@ -66,7 +66,7 @@ Bm     A         Bm     D
 So why don't you come away
 G          A
 With me my love
-     Bm       
+     Bm
 We'll do what it takes
 D
 I'll keep you safe
@@ -83,50 +83,50 @@ Coldplay
 
 Verse 1:
  G  Em   Bm
-oh no i see 
+oh no i see
 F               Am              G
-a spider web is tangled up with me 
+a spider web is tangled up with me
 G     Em      Bm
-and I lost my head 
+and I lost my head
 F                      Am                G
-and thought of all the stupid things i’d said 
+and thought of all the stupid things i’d said
 
 Verse 2:
 G  Em        Bm
 oh no what’s this
 F                    Am                   G
-a spider web and i’m caught in the middle 
+a spider web and i’m caught in the middle
 
 G    Em        Bm
-so I turned to run and 
+so I turned to run and
 F                  Am                G
-thought of all the stupid things i’d done 
+thought of all the stupid things i’d done
 
 Chorus:
 A                                 Em
-and ah i never meant to cause you trouble 
+and ah i never meant to cause you trouble
 A                          Em
-ah i never meant to do you wrong 
+ah i never meant to do you wrong
 A                            Em
-ah well if I ever caused you trouble 
+ah well if I ever caused you trouble
 A                                  Em
-then oh no I never meant to do you harm. 
+then oh no I never meant to do you harm.
 
 Verse 3:
-G  Em   Bm    
-oh no i see 
+G  Em   Bm
+oh no i see
 F                     Am               G
-a spider web and it’s me in the middle 
+a spider web and it’s me in the middle
 G    Em        Bm
-so i twist and turn 
+so i twist and turn
 F                Am               G
-but here am i in my little bubble 
+but here am i in my little bubble
 
 Bridge:
 Em       F#m    G   F#m Em
-and they spun a web for me 
+and they spun a web for me
 Em   F#m    G   F#m Em
-they spun a web for me 
+they spun a web for me
 Em       F#m    G   F#m Em
 and they spun a web for me`;
 
@@ -134,61 +134,61 @@ var song3 = `Elohim
 Marty Sampson
 
 [Intro]
-Eb Cm G# Fm 
+Eb Cm G# Fm
 
 [Verse 1]
-Eb                    
+Eb
 I stand upon the solid rock of faith in Christ
-                                               G#   
+                                               G#
 This steadfast shall not break apart within the trial
 I am assured His promises will never fail
-Fm                     
+Fm
 As long as life remains He is faithful
 
 [Chorus]
-Eb              Bb         
+Eb              Bb
 God is patient, God is kind
-G#               Fm               
+G#               Fm
 He does not envy, He does not boast
-Eb                          Bb 
+Eb                          Bb
 His ways are higher than my own
-                        Eb      G#   
+                        Eb      G#
 His thoughts consume the great unknown
-                           Bb     Eb  
+                           Bb     Eb
 Of this alone I am sure, my God is love
 
 [Verse 2]
-Eb                    
+Eb
 I draw my breath under His created windswept sky
-                                                G#  
+                                                G#
 I know my hope shall last long after my flesh retires
-                                                 Fm 
+                                                 Fm
 From dusk until the dawn He calls His children home
 
 His righteous love outlasts generations
 
 [Chorus]
-Eb              Bb         
+Eb              Bb
 God is patient, God is kind
-G#               Fm               
+G#               Fm
 He does not envy, He does not boast
-Eb                          Bb 
+Eb                          Bb
 His ways are higher than my own
-                        Eb      G#     
+                        Eb      G#
 His thoughts consume the great unknown
-                           Bb       Eb  G#   Eb Bb 
+                           Bb       Eb  G#   Eb Bb
 Of this alone I am sure, my God is love
 
-Bb Cm G# Eb 
+Bb Cm G# Eb
 
 [Bridge]
-       Bb          Cm      G#           Eb   
+       Bb          Cm      G#           Eb
 He is Almighty God, Elohim, Maker of the Earth
-         Bb             Cm             G#             Eb   
+         Bb             Cm             G#             Eb
 He is the Lord of Hosts, Heaven's King, God of endless worth
-           Bb           Cm           G#           Eb  
+           Bb           Cm           G#           Eb
 His kingdom stands above every power, every living soul
-           Bb            Cm         G#           Eb   Bb Cm G# Eb 
+           Bb            Cm         G#           Eb   Bb Cm G# Eb
 His love is like the sun, ever true, shining over all`;
 
 var song4 = `Angels we have heard on high
@@ -201,11 +201,11 @@ And the mountains in reply, echoing their joyous strains
 
 Chorus:
 Eb C Fm Bb/D Eb Ab/C Bb Ab Eb/G  Ab/F Eb/G Bb  Eb Ab Eb/Bb Bb Cm Fm Bb/G Ab Eb/Bb Bb Eb
-Glo - ria 
-in excelsis deo, 
-glo - ria   
+Glo - ria
+in excelsis deo,
+glo - ria
 
-in excelsis deo 
+in excelsis deo
 
 Verse 2:
 Eb/C          Bb/D    Eb   Cm        Eb/Bb Ab  Bb     Eb
@@ -215,9 +215,9 @@ Come adore on bended knee, Christ the Lord the new born King
 
 Chorus 2:
 Eb C Fm Bb/D Eb Ab/C Bb Ab Eb/G  Ab/F Eb/G Bb  Eb Ab Eb/Bb Bb Cm Fm Bb/G Ab Eb/Bb Bb Eb
-Glo - ria in excelsis deo, glo - ria   in excelsis deo 
+Glo - ria in excelsis deo, glo - ria   in excelsis deo
 Eb   C#           B                   Bb               Eb C F
-Sing gloria, sing gloria, sing glory, oh sing glory x2 
+Sing gloria, sing gloria, sing glory, oh sing glory x2
 
 Verse 3:
 F/D            C/E      F     Dm      F/C     Bb   C   F
@@ -227,13 +227,13 @@ And the mountains in reply, echoing their joyous strains
 
 Chorus 3:
 F D Gm C/E F Bb/D C  Bb F/A   Bb/G F/A C   F  Bb F/C C  Dm Gm C/A Bb F/C C F
-Glo - ria in excelsis deo, glo - ria   in excelsis deo 
+Glo - ria in excelsis deo, glo - ria   in excelsis deo
 F    Eb           C#                  C            F
 Sing gloria, sing gloria, sing glory, oh sing glory x2
 
 Verse 4:
 F               Eb Cm   F    Eb/F F            Eb  Cm   F    Eb/F
-Hark the herald angels sing , Glory to the new born King 
+Hark the herald angels sing , Glory to the new born King
 F             Eb Cm    F     Eb/F
 Joyful all ye nations rise, join the triumph of the skies
 F            Eb   Cm C#
@@ -260,6 +260,8 @@ Prince of peace came to earth the skies rejoice
 Heaven sings with a might voice
 C#    Eb
 Glory Hallelujah`;
+
+require( './sheet.less' );
 
 var songs = [song1, song2, song3, song4];
 var currentIndex = 0;
@@ -378,7 +380,7 @@ function parseLines(input) {
 
 		} else if (prevLine && isChords(prevLine) && !isChords(line)) {
 
-			// Remove previous line from output because we want it to be 
+			// Remove previous line from output because we want it to be
 			// attached to the current line.
 			output.pop();
 			output.push({
