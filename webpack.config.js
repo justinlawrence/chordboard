@@ -11,6 +11,10 @@ module.exports = {
 	module:  {
 		loaders: [
 			{
+				test:   /\.txt$/,
+				loader: 'raw-loader'
+			},
+			{
 				test:   /\.less$/,
 				loader: 'style-loader!css-loader!less-loader'
 			},
