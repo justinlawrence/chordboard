@@ -71,7 +71,7 @@ function parseSong( song ) {
 				} );
 
 				html += '<section id="section-' + sectionIndex + '" class="section" data-section="' + line.text + '">';
-				html += buildSectionTitle( line );
+				//html += buildSectionTitle( line );
 
 				sectionIndex++;
 

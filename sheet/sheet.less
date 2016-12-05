@@ -5,8 +5,9 @@
 @horiz-padding: 48px;
 
 body {
-	padding: @vert-padding @horiz-padding;
-	color: @black-text;
+	padding:     @vert-padding @horiz-padding;
+	color:       @black-text;
+	font-family: sans-serif;
 }
 
 #sheet {
@@ -14,40 +15,38 @@ body {
 }
 
 .chord-pair .text-line {
-	margin-top: 24px;
-	display: inline-block;
-	position: relative;
-	white-space: pre;
-	height: 24px;
-	min-width: 24px;
-	line-height: 24px;
+	margin-top:     24px;
+	display:        inline-block;
+	position:       relative;
+	white-space:    pre;
+	height:         24px;
+	min-width:      24px;
+	line-height:    24px;
 	vertical-align: middle;
 	&:before {
-		content: attr(data-content);
+		content:  attr(data-content);
 		position: absolute;
-		top: -18px;
+		top:      -18px;
 	}
 }
 
 .chord-pair .text-line:before,
 .chord-line {
-	color: #00aff0;
+	color:     #00aff0;
 	font-size: 14px;
 }
 
 .artist {
-	font-size: 16px;
+	font-size:   16px;
 	margin-left: 16px;
-	color: #999;
+	color:       #999;
 }
-
 
 // These are chords that are found on a separate line
 
-.chord-line {}
+.chord-line { }
 
-.chord-pair {}
-
+.chord-pair { }
 
 // Blank whitespace lines
 
@@ -56,59 +55,94 @@ body {
 }
 
 .section {
-	position: relative;
+	position:     relative;
 	padding-left: 24px;
-	margin-top: 8px;
-	border-left: 4px solid #ddd;
+	margin-top:   8px;
+	border-left:  4px solid #ddd;
+
+	&[data-section]:before {
+		color:            white;
+		border-radius:    4px;
+		padding:          4px 8px;
+		position:         absolute;
+		background-color: #eee;
+		transform:        translate(~"calc(-100% - 24px)", 0);
+		transform-origin: 0 0;
+		text-transform:   uppercase;
+		z-index:          1;
+	}
 
 	&[data-section*="Bridge"] {
-		border-left: 4px solid #E040FB;
+		border-left: 4px solid #41fa41;
+
+		&:before {
+			content:          "BR";
+			background-color: #41fa41;
+		}
 	}
 
 	&[data-section*="Chorus"] {
 		border-left: 4px solid #e91e63;
+
+		&:before {
+			content:          "CH";
+			background-color: #e91e63;
+		}
 	}
 
 	&[data-section*="Pre-chorus"] {
-		border-left: 4px solid #FF9800;
+		border-left: 4px solid #ff9800;
+
+		&:before {
+			content:          "P-CH";
+			background-color: #41fa41;
+		}
 	}
 
-	&[data-section*="Verse 1"] {
-		border-left: 4px solid #cddc39;
+	&[data-section*="Verse"] {
+		border-left: 4px solid #444;
+
+		&:before {
+			background-color: #444;
+		}
 	}
 
-	&[data-section*="Verse 2"] {
-		border-left: 4px solid #FFEB3B;
-	}
-
-	&[data-section*="Verse 3"] {
-		border-left: 4px solid #03A9F4;
-	}
+	&[data-section*="Verse 1"]:before { content: "1"; }
+	&[data-section*="Verse 2"]:before { content: "2"; }
+	&[data-section*="Verse 3"]:before { content: "3"; }
+	&[data-section*="Verse 4"]:before { content: "4"; }
+	&[data-section*="Verse 5"]:before { content: "5"; }
+	&[data-section*="Verse 6"]:before { content: "6"; }
+	&[data-section*="Verse 7"]:before { content: "7"; }
+	&[data-section*="Verse 8"]:before { content: "8"; }
+	&[data-section*="Verse 9"]:before { content: "9"; }
+	&[data-section*="Verse 10"]:before { content: "10"; }
 
 	.section-title {
-		font-size: 12px;
-		position: absolute;
-		transform: rotate(90deg) translate(0,~"calc(100% + 20px)");
+		font-size:        12px;
+		position:         absolute;
+		transform:        rotate(90deg) translate(0, ~"calc(100% + 20px)");
 		transform-origin: 0 0;
-		text-transform: uppercase;
+		text-transform:   uppercase;
 	}
 }
 
 #sections {
 	background-color: white;
-	position: fixed;
-	top: @vert-padding + @title-height;
-	left: 0;
-	right: 0;
-	padding-left: @horiz-padding;
-	padding-right: @horiz-padding;
-	height: @sections-height;
-	line-height: @sections-height;
-	z-index: 1;
+	position:         fixed;
+	top:              @vert-padding + @title-height;
+	left:             0;
+	right:            0;
+	padding-left:     @horiz-padding;
+	padding-right:    @horiz-padding;
+	height:           @sections-height;
+	line-height:      @sections-height;
+	z-index:          2;
+	box-shadow:       0 2px 2px rgba(0, 0, 0, 0.07);
 
 	a {
 		display: inline-block;
-		cursor: pointer;
+		cursor:  pointer;
 
 		&:hover {
 			background-color: #eee;
@@ -122,48 +156,49 @@ body {
 
 // The lyric lines, there are 2 types, the ones in chord-pairs and the ones that are found without chords
 .text-line {
-	color: @black-text;
+	color:     @black-text;
 	font-size: 20px;
 }
-
 
 // The song title
 
 .title {
 	background-color: white;
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	padding-top: @vert-padding;
-	padding-left: @horiz-padding;
-	padding-right: @horiz-padding;
-	font-size: 24px;
-	height: @title-height;
-	line-height: @title-height;
-	z-index: 1;
+	position:         fixed;
+	top:              0;
+	left:             0;
+	right:            0;
+	padding-top:      @vert-padding;
+	padding-left:     @horiz-padding;
+	padding-right:    @horiz-padding;
+	font-size:        24px;
+	height:           @title-height;
+	line-height:      @title-height;
+	z-index:          2;
 }
 
 .prev-button,
 .next-button {
-	position: fixed;
-	top: 0;
-	width: 44px;
-	height: 44px;
-	z-index: 2;
-	cursor: pointer;
-	user-select: none;
-	vertical-align:middle;
-	text-align:center;
-	color:#c0c0c0;
+	position:       fixed;
+	top:            0;
+	width:          44px;
+	height:         44px;
+	cursor:         pointer;
+	user-select:    none;
+	vertical-align: middle;
+	text-align:     center;
+	color:          #c0c0c0;
+	z-index:        3;
 	&:hover {
-		color:white;
+		color:            white;
 		background-color: #00aff0;
 	}
 }
+
 .prev-button {
 	left: 0;
 }
+
 .next-button {
 	right: 0;
 }
