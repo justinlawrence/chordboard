@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "description": "A decentralised, open-source chord sheet manager for live musicians.",
-  "main": "index.js",
+  "main": "src/main.js",
+  "config": {
+    "port": 8080
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev-server": "webpack-dev-server --port 8080 --progress --inline --hot",
-    "start": "npm run dev-server"
+    "dev-server": "webpack-dev-server --progress --colors --inline --hot --port $npm_package_config_port",
+    "start": "npm run dev-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -19,14 +22,24 @@
     "url": "https://github.com/justinlawrence/chordboard/issues"
   },
   "homepage": "https://github.com/justinlawrence/chordboard#readme",
+  "dependencies": {
+    "preact": "7.1.0"
+  },
   "devDependencies": {
+    "babel-core": "6.18.2",
+    "babel-loader": "6.2.7",
+    "babel-plugin-transform-decorators-legacy": "1.3.4",
+    "babel-plugin-transform-react-jsx": "6.22.0",
+    "babel-preset-latest": "6.16.0",
     "css-loader": "0.26.1",
     "img-loader": "1.3.1",
-    "less": "2.7.1",
-    "less-loader": "2.2.3",
+    "extract-text-webpack-plugin": "2.0.0-rc.3",
+    "node-sass": "4.5.0",
+    "postcss-loader": "1.1.1",
     "raw-loader": "0.5.1",
+    "sass-loader": "4.1.1",
     "style-loader": "0.13.1",
-    "webpack": "1.13.3",
-    "webpack-dev-server": "1.16.2"
+    "webpack": "2.2.1",
+    "webpack-dev-server": "2.3.0"
   }
 }

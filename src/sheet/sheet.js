@@ -1,5 +1,27 @@
-require( './sheet.less' );
+import {h, Component} from 'preact';
+require( './sheet.scss' );
 
+class Sheet extends Component {
+	constructor( props ) {
+		super( props );
+
+		this.songs = requireAll( require.context( '../songs', false, /\.txt$/ ) );
+		this.currentIndex = 0;
+
+	}
+
+	render() {
+
+		return (
+			<div>HELLO</div>
+		);
+
+	}
+}
+
+export default Sheet;
+
+/*
 var songs = requireAll( require.context( '../songs', false, /\.txt$/ ) );
 var currentIndex = 0;
 var prevButton = document.querySelector( ".prev-button" );
@@ -23,7 +45,7 @@ nextButton.addEventListener( "click", function () {
 
 } );
 
-parseSong( songs[ currentIndex ] );
+parseSong( songs[ currentIndex ] );*/
 
 //-----------------------------------------------------
 
@@ -181,7 +203,8 @@ function parseLines( input ) {
 
 function isChords( input ) {
 
-	var output = input.replace( /(\s|[A-G](#|b)?m?|(sus|maj|min|aug|dim|add)\d?|\/|-|\|)/g,
+	var output = input.replace(
+		/(\s|[A-G](#|b)?m?|(sus|maj|min|aug|dim|add)\d?|\/|-|\|)/g,
 		"" );
 
 	return !(output);

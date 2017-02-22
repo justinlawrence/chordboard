@@ -1,4 +1,10 @@
-node_modules
+node_modules/
 npm-debug.log
+
+.tmp
 .idea
 .DS_Store
+
+coverage/
+build/
+report/

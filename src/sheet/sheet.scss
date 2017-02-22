@@ -1,17 +1,17 @@
-@black-text: #444;
-@title-height: 32px;
-@sections-height: 44px;
-@vert-padding: 16px;
-@horiz-padding: 48px;
+$text-color: #444;
+$title-height: 32px;
+$sections-height: 44px;
+$vert-padding: 16px;
+$horiz-padding: 48px;
 
 body {
-	padding:     @vert-padding @horiz-padding;
-	color:       @black-text;
+	padding:     $vert-padding $horiz-padding;
+	color:       $text-color;
 	font-family: sans-serif;
 }
 
 #sheet {
-	padding-top: @title-height + @sections-height;
+	padding-top: $title-height + $sections-height;
 }
 
 .chord-pair .text-line {
@@ -66,7 +66,7 @@ body {
 		padding:          4px 8px;
 		position:         absolute;
 		background-color: #eee;
-		transform:        translate(~"calc(-100% - 24px)", 0);
+		transform:        translate(calc(-100% - 24px), 0);
 		transform-origin: 0 0;
 		text-transform:   uppercase;
 		z-index:          1;
@@ -121,7 +121,7 @@ body {
 	.section-title {
 		font-size:        12px;
 		position:         absolute;
-		transform:        rotate(90deg) translate(0, ~"calc(100% + 20px)");
+		transform:        rotate(90deg) translate(0, calc(100% + 20px));
 		transform-origin: 0 0;
 		text-transform:   uppercase;
 	}
@@ -130,13 +130,13 @@ body {
 #sections {
 	background-color: white;
 	position:         fixed;
-	top:              @vert-padding + @title-height;
+	top:              $vert-padding + $title-height;
 	left:             0;
 	right:            0;
-	padding-left:     @horiz-padding;
-	padding-right:    @horiz-padding;
-	height:           @sections-height;
-	line-height:      @sections-height;
+	padding-left:     $horiz-padding;
+	padding-right:    $horiz-padding;
+	height:           $sections-height;
+	line-height:      $sections-height;
 	z-index:          2;
 	box-shadow:       0 2px 2px rgba(0, 0, 0, 0.07);
 
@@ -156,7 +156,7 @@ body {
 
 // The lyric lines, there are 2 types, the ones in chord-pairs and the ones that are found without chords
 .text-line {
-	color:     @black-text;
+	color:     $text-color;
 	font-size: 20px;
 }
 
@@ -168,12 +168,12 @@ body {
 	top:              0;
 	left:             0;
 	right:            0;
-	padding-top:      @vert-padding;
-	padding-left:     @horiz-padding;
-	padding-right:    @horiz-padding;
+	padding-top:      $vert-padding;
+	padding-left:     $horiz-padding;
+	padding-right:    $horiz-padding;
 	font-size:        24px;
-	height:           @title-height;
-	line-height:      @title-height;
+	height:           $title-height;
+	line-height:      $title-height;
 	z-index:          2;
 }
 
