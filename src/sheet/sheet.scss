@@ -32,14 +32,14 @@ body {
 
 .chord-pair .text-line:before,
 .chord-line {
-	color:     #00aff0;
-	font-size: 14px;
+	color:     #03A9F4;
+	font-size: 15px;
 }
 
 .artist {
-	font-size:   16px;
+	font-size:   12px;
 	margin-left: 16px;
-	color:       #999;
+	font-style: italic;
 }
 
 // These are chords that are found on a separate line
@@ -73,16 +73,16 @@ body {
 	}
 
 	&[data-section*="Bridge"] {
-		border-left: 4px solid #41fa41;
+		border-left: 4px solid #03A9F4;
 
 		&:before {
 			content:          "BR";
-			background-color: #41fa41;
+			background-color: #03A9F4;
 		}
 	}
 
 	&[data-section*="Chorus"] {
-		border-left: 4px solid #e91e63;
+		border-left: 4px solid #ff5252;
 
 		&:before {
 			content:          "CH";
@@ -94,8 +94,35 @@ body {
 		border-left: 4px solid #ff9800;
 
 		&:before {
-			content:          "P-CH";
+			content:          "PCH";
 			background-color: #41fa41;
+		}
+	}
+
+	&[data-section*="Intro"] {
+		border-left: 4px solid #00BCD4;
+
+		&:before {
+			content:          "IN";
+			background-color: #00BCD4;
+		}
+	}
+
+	&[data-section*="Out"] {
+		border-left: 4px solid #444;
+
+		&:before {
+			content:          "OUT";
+			background-color: #444;
+		}
+	}
+
+	&[data-section*="Interlude"] {
+		border-left: 4px solid silver;
+
+		&:before {
+			content:          "INT";
+			background-color: silver;
 		}
 	}
 
@@ -145,7 +172,7 @@ body {
 		cursor:  pointer;
 
 		&:hover {
-			background-color: #eee;
+			color: #03A9F4;
 		}
 	}
 }
@@ -187,7 +214,7 @@ body {
 	user-select:    none;
 	vertical-align: middle;
 	text-align:     center;
-	color:          #c0c0c0;
+	color:          white;
 	z-index:        3;
 	&:hover {
 		color:            white;
