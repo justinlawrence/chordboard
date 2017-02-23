@@ -1,5 +1,5 @@
 import {h, Component} from 'preact';
-import Sheet from "./sheet/sheet";
+import Sheet from "./sheet/Sheet";
 
 class App extends Component {
 	render() {

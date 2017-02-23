@@ -10,7 +10,7 @@ body {
 	font-family: sans-serif;
 }
 
-#sheet {
+.sheet {
 	padding-top: $title-height + $sections-height;
 }
 
@@ -43,13 +43,11 @@ body {
 }
 
 // These are chords that are found on a separate line
-
 .chord-line { }
 
 .chord-pair { }
 
 // Blank whitespace lines
-
 .empty-line {
 	height: 16px;
 }
@@ -154,7 +152,7 @@ body {
 	}
 }
 
-#sections {
+.sections {
 	background-color: white;
 	position:         fixed;
 	top:              $vert-padding + $title-height;
