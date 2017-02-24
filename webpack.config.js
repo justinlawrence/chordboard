@@ -6,9 +6,9 @@ module.exports = {
 	devtool: 'eval-source-map',
 	entry:   './src/main.js',
 	output:  {
-		path: path.resolve( __dirname, 'build', 'assets' ),
+		path: path.resolve( __dirname, 'build' ),
 		filename:   'main.js',
-		publicPath: '/static/'
+		publicPath: '/build'
 	},
 	module:  {
 		loaders: [
