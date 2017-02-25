@@ -6,7 +6,7 @@ module.exports = {
 	devtool: 'eval-source-map',
 	entry:   './src/main.js',
 	output:  {
-		path: path.resolve( __dirname, 'build' ),
+		path:       path.resolve( __dirname, 'build' ),
 		filename:   'main.js',
 		publicPath: '/build'
 	},
@@ -18,8 +18,8 @@ module.exports = {
 				use:     'babel-loader'
 			},
 			{
-				test:   /\.txt$/,
-				loader: 'raw-loader'
+				test: /(\.txt|\.onsong)$/,
+				use:  'raw-loader'
 			},
 			{
 				test: /\.css$/,
@@ -43,7 +43,7 @@ module.exports = {
 							loader:  'postcss-loader',
 							options: {
 								sourceMap: 'inline',
-								plugins: function () {
+								plugins:   function () {
 									return [
 										require( 'autoprefixer' )
 									];

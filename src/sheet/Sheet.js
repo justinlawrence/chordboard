@@ -3,6 +3,7 @@ import ChordLine from "./lines/ChordLine.js";
 import ChordPair from "./lines/ChordPair.js";
 import Line from "./lines/Line.js";
 import Sections from "./Sections.js";
+import Parser from "../parsers/parser.js";
 import Title from "./lines/Title.js";
 import './Sheet.scss';
 
@@ -13,7 +14,7 @@ class Sheet extends Component {
 		// TODO: Songs should be managed outside of the sheet and the sheet
 		// should only have to deal with one song.
 		this.songs = requireAll(
-			require.context( '../songs', false, /\.txt$/ ) );
+			require.context( '../songs', false, /(\.txt|\.onsong)$/ ) );
 		this.state = {
 			currentIndex: 0
 		};
@@ -86,20 +87,42 @@ export default Sheet;
 
 function parseSong( song, sections ) {
 
-	let lines = parseLines( song );
+	let parser = new Parser();
+	let lines = parser.parse( song );
 	let children = [];
 	let result = [];
 	let section = "";
 	let sectionIndex = 0;
+	let title = null;
+	let artist = null;
 
 	for ( let i = 0; i < lines.length; i++ ) {
 
 		let line = lines[ i ];
 
+		if ( i > 1 && !artist ) {
+
+			console.warn( "parseSong - expected an artist on line 2" );
+			artist = "...";
+
+		}
+
 		switch ( lines[ i ].type ) {
+
+			case "artist":
+				artist = line.text;
+				children.push( <Title text={title} artist={artist}/> );
+				children.push( <div id="sections"></div> );
+				break;
 
 			case "chord-line":
 				children.push( <ChordLine text={line.text}/> );
+				break;
+
+			case "chord-mix":
+
+				children.push(
+					<ChordPair chords={line.chords} text={line.text}/> );
 				break;
 
 			case "chord-pair":
@@ -122,7 +145,7 @@ function parseSong( song, sections ) {
 					// Finish off last section
 					result.push( <section id={"section-" + sectionIndex}
 					                      class="section"
-					                      data-section={section}>{children}</section>);
+					                      data-section={section}>{children}</section> );
 					children = [];
 
 				} else {
@@ -142,8 +165,7 @@ function parseSong( song, sections ) {
 				break;
 
 			case "title":
-				children.push( <Title text={line.text} artist={line.artist}/> );
-				children.push( <div id="sections"></div> );
+				title = line.text;
 				break;
 
 		}
@@ -158,100 +180,13 @@ function parseSong( song, sections ) {
 
 	}
 
-	return result;
+	if ( children.length && !section ) {
 
-}
-
-function parseLines( input ) {
-
-	let ENDS_WITH_COLON = /:$/;
-	let SQUARE_BRACKET = /^\[(.*)\]$/;
-	let lines = input.split( "\n" );
-	let prevLine = "";
-	let output = [];
-
-	for ( let i = 0; i < lines.length; i++ ) {
-
-		let line = lines[ i ];
-
-		if ( line.trim() === "" ) {
-
-			output.push( {
-				type: "empty",
-				text: line
-			} );
-
-		} else if ( prevLine && isChords( prevLine ) && !isChords( line ) ) {
-
-			// Remove previous line from output because we want it to be
-			// attached to the current line.
-			output.pop();
-			output.push( {
-				type:   "chord-pair",
-				chords: prevLine,
-				text:   line
-			} );
-
-		} else {
-
-			if ( i === 0 ) {
-
-				output.push( {
-					type: "title",
-					text: line
-				} );
-
-			} else if ( i === 1 ) {
-
-				output[ 0 ].artist = line;
-
-			} else if ( ENDS_WITH_COLON.test( line ) ) {
-
-				output.push( {
-					type: "section",
-					text: line.replace( ENDS_WITH_COLON, "" )
-				} );
-
-			} else if ( SQUARE_BRACKET.test( line ) ) {
-
-				output.push( {
-					type: "section",
-					text: line.replace( SQUARE_BRACKET, "$1" )
-				} );
-
-			} else if ( isChords( line ) ) {
-
-				output.push( {
-					type: "chord-line",
-					text: line
-				} );
-
-			} else {
-
-				output.push( {
-					type: "line",
-					text: line
-				} );
-
-			}
-
-		}
-
-		prevLine = line;
+		result = result.concat( children );
 
 	}
 
-	return output;
-
-}
-
-function isChords( input ) {
-
-	let output = input.replace(
-		/(\s|[A-G](#|b)?m?|(sus|maj|min|aug|dim|add)\d?|\/|-|\|)/g,
-		"" );
-
-	return !(output);
+	return result;
 
 }
 
