@@ -1,14 +1,9 @@
-$text-color: #444;
+@import "../../styles/typography";
 $title-height: 32px;
 $sections-height: 44px;
 $vert-padding: 16px;
 $horiz-padding: 48px;
 
-body {
-	padding:     $vert-padding $horiz-padding;
-	color:       $text-color;
-	font-family: sans-serif;
-}
 .sheet {
 	padding-top: $title-height + $sections-height;
 }

@@ -1,7 +1,9 @@
 import Router from 'preact-router';
-import Song from "./common/Song.js";
-import SongList from "./common/SongList.js";
-import SongViewer from "./common/SongViewer.js";
+
+import Navbar from './common/Navbar/Navbar.js';
+import Song from './common/Song.js';
+import SongList from './common/SongList.js';
+import SongViewer from './common/SongViewer.js';
 
 const rawSongs = requireAll(
 	require.context( '../songs', false, /(\.txt)$/ )
@@ -20,10 +22,13 @@ class App extends PreactComponent {
 	render( props, { songs } ) {
 
 		return (
-			<Router>
-				<SongList path="/" songs={songs}/>
-				<SongViewer path="/song/:slug" songs={songs} />
-			</Router>
+			<div>
+				<Navbar/>
+				<Router>
+					<SongList path="/" songs={songs}/>
+					<SongViewer path="/song/:slug" songs={songs}/>
+				</Router>
+			</div>
 		);
 
 	}

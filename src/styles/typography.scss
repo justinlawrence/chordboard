@@ -1,4 +1,8 @@
+$text-color: #444;
+
 html {
-  font-size:   1em;
-  line-height: 1.4;
+	color:       $text-color;
+	font-family: sans-serif;
+	font-size:   1em;
+	line-height: 1.4;
 }
