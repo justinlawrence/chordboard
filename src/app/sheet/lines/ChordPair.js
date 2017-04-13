@@ -7,7 +7,7 @@ export default ( { chords, text } ) => {
 	let chordString = chords.replace( /\s+/g, " " ).split( " " );
 
 	let indices = [];
-	while ( (result = WORD_INDEX.exec( chordString )) ) {
+	while ( (result = WORD_INDEX.exec( chords )) ) {
 
 		indices.push( result.index );
 

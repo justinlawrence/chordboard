@@ -1,16 +1,36 @@
+const config = require( './package.json' ).config;
 const path = require( 'path' );
 const webpack = require( 'webpack' );
 const ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
 
 module.exports = {
-	devtool: 'eval-source-map',
-	entry:   './src/main.js',
-	output:  {
+	devtool:   'eval-source-map',
+	devServer: {
+		compress: true,
+		hot:      true,
+		inline:   true,
+
+		// Serves /index.html in place of 404's on dev-server requests.
+		// Therefore allowing the angular router to handle the request.
+		historyApiFallback: {
+			index: "/"
+		},
+
+		// The rest is terminal config.
+		quiet:  false,
+		noInfo: false,
+		stats:  {
+			colors:       true,
+			chunkModules: false
+		}
+	},
+	entry:     './src/main.js',
+	output:    {
 		path:       path.resolve( __dirname, 'build' ),
 		filename:   'main.js',
 		publicPath: '/build'
 	},
-	module:  {
+	module:    {
 		loaders: [
 			{
 				test:    /\.js$/,
@@ -31,8 +51,8 @@ module.exports = {
 			{
 				test: /\.scss$/,
 				use:  ExtractTextPlugin.extract( {
-					fallbackLoader: 'style-loader?sourceMap',
-					loader:         [
+					fallback: 'style-loader?sourceMap',
+					use:      [
 						{
 							loader:  'css-loader',
 							options: {
@@ -68,7 +88,11 @@ module.exports = {
 			}
 		]
 	},
-	plugins: [
-		new ExtractTextPlugin( '[name].css' )
+	plugins:   [
+		new ExtractTextPlugin( '[name].css' ),
+		new webpack.ProvidePlugin( {
+			PreactComponent: path.resolve( 'src/globals/component.js' ),
+			jsx:             path.resolve( 'src/globals/jsx.js' )
+		} )
 	]
 };

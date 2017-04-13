@@ -1,8 +1,7 @@
 {
     "sourceMaps": true,
-    "presets": [ "latest" ],
+    "presets": [ "env", "stage-0", "react" ],
     "plugins": [
-        [ "transform-decorators-legacy" ],
-        [ "transform-react-jsx", { "pragma": "h" } ]
+        [ "transform-react-jsx", { "pragma": "jsx" } ]
     ]
 }

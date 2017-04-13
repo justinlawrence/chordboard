@@ -9,11 +9,9 @@ body {
 	color:       $text-color;
 	font-family: sans-serif;
 }
-
 .sheet {
 	padding-top: $title-height + $sections-height;
 }
-
 .chord-pair .text-line {
 	margin-top:     24px;
 	display:        inline-block;
@@ -29,29 +27,23 @@ body {
 		top:      -18px;
 	}
 }
-
 .chord-pair .text-line:before,
 .chord-line {
-	color:     #03A9F4;
+	color:     #03a9f4;
 	font-size: 15px;
 }
-
 .artist {
 	font-size:   12px;
 	margin-left: 16px;
-	font-style: italic;
+	font-style:  italic;
 }
-
 // These are chords that are found on a separate line
 .chord-line { }
-
 .chord-pair { }
-
 // Blank whitespace lines
 .empty-line {
 	height: 16px;
 }
-
 .section {
 	position:     relative;
 	padding-left: 24px;
@@ -71,11 +63,11 @@ body {
 	}
 
 	&[data-section*="Bridge"] {
-		border-left: 4px solid #03A9F4;
+		border-left: 4px solid #03a9f4;
 
 		&:before {
 			content:          "BR";
-			background-color: #03A9F4;
+			background-color: #03a9f4;
 		}
 	}
 
@@ -98,11 +90,11 @@ body {
 	}
 
 	&[data-section*="Intro"] {
-		border-left: 4px solid #00BCD4;
+		border-left: 4px solid #00bcd4;
 
 		&:before {
 			content:          "IN";
-			background-color: #00BCD4;
+			background-color: #00bcd4;
 		}
 	}
 
@@ -151,7 +143,6 @@ body {
 		text-transform:   uppercase;
 	}
 }
-
 .sections {
 	background-color: white;
 	position:         fixed;
@@ -170,23 +161,22 @@ body {
 		cursor:  pointer;
 
 		&:hover {
-			color: #03A9F4;
+			color: #03a9f4;
 		}
 	}
 }
-
 .separator {
 	margin: 0 8px;
 }
-
 // The lyric lines, there are 2 types, the ones in chord-pairs and the ones that are found without chords
 .text-line {
 	color:     $text-color;
 	font-size: 20px;
+	&:empty {
+		min-width: 20px;
+	}
 }
-
 // The song title
-
 .title {
 	background-color: white;
 	position:         fixed;
@@ -201,7 +191,6 @@ body {
 	line-height:      $title-height;
 	z-index:          2;
 }
-
 .prev-button,
 .next-button {
 	position:       fixed;
@@ -219,11 +208,9 @@ body {
 		background-color: #00aff0;
 	}
 }
-
 .prev-button {
 	left: 0;
 }
-
 .next-button {
 	right: 0;
 }

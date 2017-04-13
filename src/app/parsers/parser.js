@@ -65,10 +65,23 @@ class Parser {
 
 	clean( line ) {
 
+		if ( !line ) { return ""; }
+
 		// White-list a bunch of characters so we can clean out any invisible
 		// characters.
 		return line.replace(
-			/[^a-zA-Z0-9+-._,:<>/?'"+=%@#!$%*&();\s\r\n\t{}\[\]\\]/g, "" );
+			/[^a-zA-Z0-9+-._,:<>/?’'"+=%@#!$%*&();\s\r\n\t{}\[\]\\]/g, "" );
+
+	}
+
+	parseToObject( songText ) {
+
+		let text = this.clean( songText );
+		let lines = text.split( "\n" );
+
+		lines.forEach( ( line, i ) => {
+
+		} );
 
 	}
 
@@ -111,6 +124,7 @@ class Parser {
 
 						for ( let i = 0, len = line.length; i < len; i++ ) {
 
+							// Onsong specific.
 							if ( line[ i ] === "[" ) {
 
 								chord = true;
@@ -139,10 +153,6 @@ class Parser {
 
 						chords = chordLine;
 						text = textLine;
-
-						console.log( chords );
-						console.log( text );
-
 
 					}
 

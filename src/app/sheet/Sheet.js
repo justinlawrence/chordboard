@@ -8,39 +8,6 @@ import Title from "./lines/Title.js";
 import './Sheet.scss';
 
 class Sheet extends Component {
-	constructor( props ) {
-		super( props );
-
-		// TODO: Songs should be managed outside of the sheet and the sheet
-		// should only have to deal with one song.
-		this.songs = requireAll(
-			require.context( '../songs', false, /(\.txt|\.onsong)$/ ) );
-		this.state = {
-			currentIndex: 0
-		};
-
-	}
-
-	// TODO: Move sheet changing functionality outside of sheet
-	nextSheet() {
-
-		let currentIndex = this.state.currentIndex + 1;
-		currentIndex = Math.min( this.songs.length - 1, currentIndex );
-
-		this.setState( { currentIndex } );
-
-	}
-
-	// TODO: Move sheet changing functionality outside of sheet
-	prevSheet() {
-
-		let currentIndex = this.state.currentIndex - 1;
-		currentIndex = Math.max( 0, currentIndex );
-
-		this.setState( { currentIndex } );
-
-	}
-
 	scrollToSection( section ) {
 
 		let totalVertPadding = 32;
@@ -60,21 +27,17 @@ class Sheet extends Component {
 
 	}
 
-	render( props, { currentIndex } ) {
+	render( { song } ) {
 
 		let sections = [];
 
 		return (
-			<div>
-				<a class="prev-button"
-				   onClick={this.prevSheet.bind( this )}>&lt;</a>
-				<div class="sheet">
-					<Sections sections={sections}
-					          onClick={this.scrollToSection.bind( this )}/>
-					{parseSong( this.songs[ currentIndex ], sections )}
-				</div>
-				<a class="next-button"
-				   onClick={this.nextSheet.bind( this )}>&gt;</a>
+			<div class="sheet">
+
+				<Sections sections={sections}
+				          onClick={this.scrollToSection.bind( this )}/>
+				{parseSong( song, sections )}
+
 			</div>
 		);
 
@@ -87,33 +50,20 @@ export default Sheet;
 
 function parseSong( song, sections ) {
 
-	let parser = new Parser();
-	let lines = parser.parse( song );
+	let lines = song.contents;
 	let children = [];
 	let result = [];
 	let section = "";
 	let sectionIndex = 0;
-	let title = null;
-	let artist = null;
+
+	children.push( <Title text={song.title} artist={song.artist}/> );
+	children.push( <div id="sections"></div> );
 
 	for ( let i = 0; i < lines.length; i++ ) {
 
 		let line = lines[ i ];
 
-		if ( i > 1 && !artist ) {
-
-			console.warn( "parseSong - expected an artist on line 2" );
-			artist = "...";
-
-		}
-
 		switch ( lines[ i ].type ) {
-
-			case "artist":
-				artist = line.text;
-				children.push( <Title text={title} artist={artist}/> );
-				children.push( <div id="sections"></div> );
-				break;
 
 			case "chord-line":
 				children.push( <ChordLine text={line.text}/> );
@@ -164,10 +114,6 @@ function parseSong( song, sections ) {
 
 				break;
 
-			case "title":
-				title = line.text;
-				break;
-
 		}
 
 	}
@@ -187,12 +133,6 @@ function parseSong( song, sections ) {
 	}
 
 	return result;
-
-}
-
-function requireAll( requireContext ) {
-
-	return requireContext.keys().map( requireContext );
 
 }
 
