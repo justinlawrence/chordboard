@@ -5,7 +5,9 @@ $vert-padding: 16px;
 $horiz-padding: 48px;
 
 .sheet {
-	padding-top: $title-height + $sections-height;
+	padding-top:   $title-height + $sections-height;
+	padding-left:  $horiz-padding;
+	padding-right: $horiz-padding;
 }
 .chord-pair .text-line {
 	margin-top:     24px;
