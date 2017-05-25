@@ -1,4 +1,6 @@
 import slugify from 'slugify';
+import './SongList.scss';
+
 
 class SongList extends PreactComponent {
 	render( { songs } ) {
@@ -6,7 +8,8 @@ class SongList extends PreactComponent {
 		return (
 			<div class="SongList">
 				{ songs.map( song => (
-					<div>
+					<div class="songTitle">
+
 						<a href={`/song/${slugify(song.title)}`}>
 							{song.title}
 						</a>

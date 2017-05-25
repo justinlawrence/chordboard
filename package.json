@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/justinlawrence/chordboard#readme",
   "dependencies": {
+    "browser-sync": "^2.18.8",
     "preact": "7.1.0",
     "preact-router": "2.4.5",
     "slugify": "1.1.0",
