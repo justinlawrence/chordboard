@@ -1,3 +1,4 @@
+
 const ENDS_WITH_COLON = /:$/;
 
 const artist = {
@@ -191,5 +192,156 @@ function isChords( input ) {
 		/(\s|[A-G](#|b)?m?|(sus|maj|min|aug|dim|add)\d?|\/|-|\|)/g, "" );
 
 	return !(output);
+
+}
+
+//--------------------------------------------------------------------------------
+
+//shamelessly copied off https://stackoverflow.com/questions/7936843/how-do-i-transpose-music-chords-using-javascript
+
+function transposeChord(chord, amount) {
+  var scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+  return chord.replace(/[CDEFGAB]#?/g,
+                       function(match) {
+                         var i = (scale.indexOf(match) + amount) % scale.length;
+                         return scale[ i < 0 ? i + scale.length : i ];
+                       });
+}
+
+//--------------------------------------------------------------------------------
+
+function returnSampleChordStructure() {
+
+	/*
+
+	https://en.wikipedia.org/wiki/Nashville_number_system
+
+	data types
+
+	header
+
+		title
+		subtitle
+		author
+		copyright
+		ccli
+		key
+		bpm
+		highestnote
+		recommendedKeys
+		versions
+		links (youtube, spotify etc.)
+		comments
+		fontSize
+		similar
+
+	detail
+
+		line
+			type
+				section
+				words
+			content
+			chords
+				position
+				chord /
+
+//chord colours as assigned by Isaac Newton
+Pitch	Solfège	Colour
+C	do (or doh in tonic sol-fa)	Red
+D	re	Orange
+E	mi	Yellow
+F	fa	Green
+G	sol (or so in tonic sol-fa)	Blue
+A	la	Indigo
+Blue Violet
+B	ti/si	Purple
+Red Violet
+
+
+
+
+
+
+	*/
+
+	return {
+ "lines": [
+  {
+   "type": {
+    "t": "title"
+   },
+   "content": " Hello world"
+  },
+  {
+   "type": {
+    "st": "subtitle"
+   },
+   "content": " Foo Bar"
+  },
+  {
+   "type": {
+    "b": "blank"
+   }
+  },
+  {
+   "type": {
+    "c": "comment"
+   },
+   "content": " © 2015 FooBar Ltd"
+  },
+  {
+   "type": {
+    "b": "blank"
+   }
+  },
+  {
+   "type": {
+    "v": "verse"
+   },
+   "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.",
+   "chords": {
+    "0": "G", //1
+    "31": "D/F#", //5/7
+    "69": "Em" //6
+   }
+  },
+	"content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.",
+	"chords": {
+	 "0": "G",
+	 "31": "D/F#",
+	 "69": "Em"
+ },
+  {
+   "type": {
+    "v": "verse"
+   },
+   "content": "Sed sit amet ipsum mauris.",
+   "chords": {
+    "5": "G"
+   }
+  },
+  {
+   "type": {
+    "v": "verse"
+   },
+   "content": "Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit.",
+   "chords": {
+    "12": "G",
+    "28": "D/F#",
+    "64": "G"
+   }
+  },
+  {
+   "type": {
+    "v": "verse"
+   },
+   "content": "Donec et mollis dolor.",
+   "chords": {
+    "27": "D/F#",
+    "7": "Bm7"
+   }
+  }
+ ]
 
 }
