@@ -1,3 +1,4 @@
+import slugify from 'slugify';
 import Router from 'preact-router';
 
 import Navbar from './common/Navbar/Navbar.js';
@@ -10,23 +11,35 @@ const rawSongs = requireAll(
 );
 
 class App extends PreactComponent {
+	songList = [];
+	songMap = {};
+	state = {
+		index: 0
+	};
+
 	constructor( props ) {
 		super( props );
 
-		this.state = {
-			songs: rawSongs.map( s => new Song( s ) )
-		};
+		this.songList = rawSongs.map( s => new Song( s ) );
+
+		this.songList.forEach( song => {
+
+			const id = slugify( song.title );
+
+			this.songMap[ id ] = song;
+
+		} );
 
 	}
 
-	render( props, { songs } ) {
+	render( props, {index} ) {
 
 		return (
 			<div>
-				<Navbar/>
+				<Navbar index={index} songList={this.songList}/>
 				<Router>
-					<SongList path="/" songs={songs}/>
-					<SongViewer path="/song/:slug" songs={songs}/>
+					<SongList default path="/songs" songs={this.songList}/>
+					<SongViewer path="/songs/:id" songMap={this.songMap}/>
 				</Router>
 			</div>
 		);

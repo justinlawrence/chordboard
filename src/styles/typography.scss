@@ -1,24 +1,10 @@
-$text-color: #444;
-
 html {
 	color:       $text-color;
 	font-family: 'Raleway', sans-serif;
 	font-size:   1em;
 	line-height: 1.4;
 }
-
-a {
-	color: $text-color ;
-  text-decoration: none;
-
-  &:hover {
-    color: red;
-    text-decoration: underline;
-  }
-
-}
-
 ::selection {
-	color: white;
-  background: $text-color
+	background: $text-color;
+	color:      white;
 }

@@ -33,11 +33,12 @@ class Sheet extends Component {
 
 		return (
 			<div class="sheet">
-
+				<div class="sheet-header">
+				<Title text={song.title} artist={song.artist}/>
 				<Sections sections={sections}
 				          onClick={this.scrollToSection.bind( this )}/>
+				</div>
 				{parseSong( song, sections )}
-
 			</div>
 		);
 
@@ -55,9 +56,6 @@ function parseSong( song, sections ) {
 	let result = [];
 	let section = "";
 	let sectionIndex = 0;
-
-	children.push( <Title text={song.title} artist={song.artist}/> );
-	children.push( <div id="sections"></div> );
 
 	for ( let i = 0; i < lines.length; i++ ) {
 

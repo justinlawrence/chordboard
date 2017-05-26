@@ -1,5 +1,29 @@
 .navbar {
-	background-color: #333;
-	color:            white;
-	padding:          16px;
+	background-color: #ddd;
+	display:          flex;
+	padding:          0 16px;
+
+	.nav-title {
+		line-height: 48px;
+		padding:     0 8px;
+	}
+
+	.nav-button {
+		cursor:      pointer;
+		line-height: 48px;
+		padding:     0 8px;
+		user-select: none;
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+
+	.prev-button,
+	.next-button {
+		display:     block;
+		text-align:  center;
+		user-select: none;
+		width:       32px;
+	}
 }

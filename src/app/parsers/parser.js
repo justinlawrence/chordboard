@@ -117,50 +117,20 @@ class Parser {
 
 					}
 
-					if ( check.type === "chord-mix" ) {
-
-						let chord = false;
-						let chordLine = "";
-						let textLine = "";
-
-						for ( let i = 0, len = line.length; i < len; i++ ) {
-
-							// Onsong specific.
-							if ( line[ i ] === "[" ) {
-
-								chord = true;
-
-							} else if ( line[ i ] === "]" ) {
-
-								chord = false;
-
-							} else if ( chord ) {
-
-								chordLine += line[ i ];
-
-							} else {
-
-								textLine += line[ i ];
-
-								if ( textLine.length > chordLine.length ) {
-
-									chordLine += " ";
-
-								}
-
-							}
-
-						}
-
-						chords = chordLine;
-						text = textLine;
-
-					}
+					/*
+					"chords": {
+						"0": "",
+					    "12": "G",
+					    "28": "D/F#",
+					    "64": "G"
+					    "180": "A"
+					   }
+					 */
 
 					output.push( {
-						chords,
+						chords: chords,
 						type: check.type,
-						text
+						text: text
 					} );
 
 					break;
@@ -265,7 +235,7 @@ Red Violet
 
 	*/
 
-	return {
+	/*return {
  "lines": [
   {
    "type": {
@@ -342,6 +312,6 @@ Red Violet
     "7": "Bm7"
    }
   }
- ]
+ ]*/
 
 }
