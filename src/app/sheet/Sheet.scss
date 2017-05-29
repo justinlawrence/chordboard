@@ -23,8 +23,8 @@ $horiz-padding: 48px;
 	}
 
 	.sections {
-		height:        $sections-height;
-		line-height:   $sections-height;
+		height:      $sections-height;
+		line-height: $sections-height;
 
 		a {
 			display: inline-block;
@@ -36,7 +36,8 @@ $horiz-padding: 48px;
 		}
 	}
 }
-.chord-pair .text-line {
+.chord-pair .text-line,
+.chord-line .text-line {
 	margin-top:     24px;
 	display:        inline-block;
 	position:       relative;
@@ -51,7 +52,7 @@ $horiz-padding: 48px;
 	}
 }
 .chord-pair .text-line:before,
-.chord-line {
+.chord-line .text-line:before {
 	color:     #03a9f4;
 	font-size: 15px;
 }
@@ -61,8 +62,15 @@ $horiz-padding: 48px;
 	font-style:  italic;
 }
 // These are chords that are found on a separate line
-.chord-line { }
-.chord-pair { }
+.chord-line .text-line {
+	height:       0;
+	margin-right: 8px;
+	visibility:   hidden;
+
+	&:before {
+		visibility: visible;
+	}
+}
 // Blank whitespace lines
 .empty-line {
 	height: 16px;
@@ -166,7 +174,6 @@ $horiz-padding: 48px;
 		text-transform:   uppercase;
 	}
 }
-
 .separator {
 	margin: 0 8px;
 }

@@ -1,4 +1,3 @@
-
 const ENDS_WITH_COLON = /:$/;
 
 const artist = {
@@ -10,11 +9,6 @@ const artist = {
 const chordLine = {
 	type: "chord-line",
 	test: line => isChords( line )
-};
-
-const chordMix = {
-	type: "chord-mix",
-	test: line => containsChords( line )
 };
 
 const chordPair = {
@@ -56,7 +50,6 @@ class Parser {
 			title,
 			artist,
 			chordPair,
-			chordMix,
 			section,
 			chordLine,
 			line
@@ -117,20 +110,17 @@ class Parser {
 
 					}
 
-					/*
-					"chords": {
-						"0": "",
-					    "12": "G",
-					    "28": "D/F#",
-					    "64": "G"
-					    "180": "A"
-					   }
-					 */
+					if ( check.type === "chord-line" ) {
+
+						chords = text.replace( /-/g, "" );
+						text = "";
+
+					}
 
 					output.push( {
-						chords: chords,
-						type: check.type,
-						text: text
+						chords: chordStringToObject( chords ),
+						type:   check.type,
+						text:   text
 					} );
 
 					break;
@@ -150,32 +140,50 @@ class Parser {
 
 export default Parser;
 
-function containsChords( input ) {
+function chordStringToObject( chordString ) {
 
-	return /\[.*?\]/g.test( input );
+	if ( !chordString ) { return; }
+
+	const WORD_INDEX = /(?:\b([A-G])\S*?\/[A-G]|\b([A-G]))/g;
+	const chords = chordString.split( /\s+/g );
+	const indices = [];
+
+	let result;
+	while ( (result = WORD_INDEX.exec( chordString )) ) {
+
+		indices.push( result.index );
+
+	}
+
+	// If the first index is not zero, then the first chord starts in the
+	// middle of the line. So prepend a zero to keep text structure.
+	if ( indices[ 0 ] !== 0 ) {
+
+		indices.unshift( 0 );
+
+	}
+
+	const chordObject = {};
+	chords.forEach( ( chord, i ) => {
+
+		chordObject._sort = indices;
+		chordObject[ indices[ i ] ] = chord;
+
+	} );
+
+	//console.log( chordObject );
+
+	return chordObject;
 
 }
 
 function isChords( input ) {
 
 	let output = input.replace(
-		/(\s|[A-G](#|b)?m?|(sus|maj|min|aug|dim|add)\d?|\/|-|\|)/g, "" );
+		/(\s|[A-G](#|b)?|m|[0-9]|(sus|maj|min|aug|dim|add)\d?|\/|-|\|)/g, "" );
 
 	return !(output);
 
-}
-
-//--------------------------------------------------------------------------------
-
-//shamelessly copied off https://stackoverflow.com/questions/7936843/how-do-i-transpose-music-chords-using-javascript
-
-function transposeChord(chord, amount) {
-  var scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-  return chord.replace(/[CDEFGAB]#?/g,
-                       function(match) {
-                         var i = (scale.indexOf(match) + amount) % scale.length;
-                         return scale[ i < 0 ? i + scale.length : i ];
-                       });
 }
 
 //--------------------------------------------------------------------------------

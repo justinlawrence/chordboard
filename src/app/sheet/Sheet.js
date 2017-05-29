@@ -27,16 +27,30 @@ class Sheet extends Component {
 
 	}
 
+	changeKey = amount => {
+
+		this.props.song.transpose( amount );
+		this.forceUpdate();
+
+	};
+
+	transposeDown = () => { this.changeKey( 1 ); };
+	transposeUp = () => { this.changeKey( -1 ); };
+
 	render( { song } ) {
 
 		let sections = [];
 
+		console.log( "didRender", song );
+
 		return (
 			<div class="sheet">
 				<div class="sheet-header">
-				<Title text={song.title} artist={song.artist}/>
-				<Sections sections={sections}
-				          onClick={this.scrollToSection.bind( this )}/>
+					<button onClick={this.transposeDown}>Transpose down</button>
+					<button onClick={this.transposeUp}>Transpose up</button>
+					<Title text={song.title} artist={song.artist}/>
+					<Sections sections={sections}
+					          onClick={this.scrollToSection.bind( this )}/>
 				</div>
 				{parseSong( song, sections )}
 			</div>
@@ -64,13 +78,7 @@ function parseSong( song, sections ) {
 		switch ( lines[ i ].type ) {
 
 			case "chord-line":
-				children.push( <ChordLine text={line.text}/> );
-				break;
-
-			case "chord-mix":
-
-				children.push(
-					<ChordPair chords={line.chords} text={line.text}/> );
+				children.push( <ChordLine chords={line.chords}/> );
 				break;
 
 			case "chord-pair":

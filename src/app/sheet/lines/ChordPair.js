@@ -1,43 +1,39 @@
 import {h} from "preact";
+import {range} from "lodash";
 
-export default ( { chords, text } ) => {
+const ChordPair = ( { chords, text } ) => {
 
-	let WORD_INDEX = /\b[A-G]/g;
-	let result;
-	let chordString = chords.replace( /\s+/g, " " ).split( " " );
+	const children = [];
 
-	let indices = [];
-	while ( (result = WORD_INDEX.exec( chords )) ) {
+	chords._sort.forEach( ( index, i ) => {
 
-		indices.push( result.index );
-
-	}
-
-	// If the first index is not zero, then the first chord starts in the
-	// middle of the line. So prepend a zero to keep text structure.
-	if ( indices[ 0 ] !== 0 ) {
-
-		indices.unshift( 0 );
-
-	}
-
-	let children = [];
-
-	for ( let i = 0; i < indices.length; i++ ) {
-
-		let index = indices[ i ];
-		let nextIndex = indices[ i + 1 ] || Infinity;
+		const nextIndex = chords._sort[ i + 1 ] || Infinity;
 		let slice = text.slice( index, nextIndex );
 
-		children.push(
-			<span class="text-line" data-content={chordString[ i ]}>{slice}</span> );
+		// Pad the sliced text with spaces so overhanging chords will be
+		// positioned correctly.
+		if ( slice.length < nextIndex - index && nextIndex - index !== Infinity ) {
 
-	}
+			range( (nextIndex - index) - slice.length ).forEach( () => {
+
+				slice += " ";
+
+			} );
+
+		}
+
+		children.push(
+			<span class="text-line" data-content={chords[ index ]}>
+				{slice}
+			</span>
+		);
+
+	} );
 
 	return (
-		<div class="chord-pair">
-			{children}
-		</div>
+		<div class="chord-pair">{children}</div>
 	);
 
 };
+
+export default ChordPair;

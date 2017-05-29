@@ -10,7 +10,7 @@ class Song {
 		let parser = new Parser();
 		let songLines = parser.parse( songText );
 
-		songLines.forEach( (line, i) => {
+		songLines.forEach( ( line, i ) => {
 
 			if ( i > 1 && !this.artist ) {
 
@@ -36,6 +36,42 @@ class Song {
 		} );
 
 	}
+
+	transpose( amount ) {
+
+		// Save old state?
+
+		// Iterate through all chords in song.
+		this.contents.forEach( line => {
+
+			// check if line.chords !== undefined
+			// then for each line.chords
+			//     transposeChord( chord, amount )
+
+		} );
+
+	}
 }
 
 export default Song;
+
+
+//--------------------------------------------------------------------------------
+
+//shamelessly copied off
+// https://stackoverflow.com/questions/7936843/how-do-i-transpose-music-chords-using-javascript
+
+function transposeChord( chord, amount ) {
+
+	var scale = [ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#",
+		"B" ];
+
+	return chord.replace( /[CDEFGAB]#?/g, ( match ) => {
+
+		var i = (scale.indexOf( match ) + amount) % scale.length;
+
+		return scale[ i < 0 ? i + scale.length : i ];
+
+	} );
+
+}
