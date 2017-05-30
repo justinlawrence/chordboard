@@ -44,9 +44,19 @@ class Song {
 		// Iterate through all chords in song.
 		this.contents.forEach( line => {
 
-			// check if line.chords !== undefined
-			// then for each line.chords
-			//     transposeChord( chord, amount )
+			if ( line.chords !== undefined ) {
+
+				line.chords._sort.forEach( chordIndex => {
+
+					console.log("chord index:", chordIndex);
+					console.log("currentChord:", line.chords[chordIndex]);
+					//console.log("transposing", currentChord, transposeChord(currentChord, amount));
+
+					line.chords[chordIndex] = transposeChord( line.chords[chordIndex], amount );
+
+				})
+
+			}
 
 		} );
 

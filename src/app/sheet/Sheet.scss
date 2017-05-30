@@ -107,7 +107,7 @@ $horiz-padding: 48px;
 
 		&:before {
 			content:          "CH";
-			background-color: #e91e63;
+			background-color: #ff5252;
 		}
 	}
 
@@ -116,7 +116,7 @@ $horiz-padding: 48px;
 
 		&:before {
 			content:          "PCH";
-			background-color: #41fa41;
+			background-color: #ff9800;
 		}
 	}
 
@@ -138,7 +138,9 @@ $horiz-padding: 48px;
 		}
 	}
 
-	&[data-section*="Interlude"] {
+
+	&[data-section*="Interlude"],
+	&[data-section*="Instrumental"] {
 		border-left: 4px solid silver;
 
 		&:before {
@@ -185,4 +187,3 @@ $horiz-padding: 48px;
 		min-width: 20px;
 	}
 }
-

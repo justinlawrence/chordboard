@@ -7,9 +7,11 @@ class Navbar extends PreactComponent {
 		const prevSong = songList[ index - 1 ];
 		const nextSong = songList[ index + 1 ];
 
+		console.log("song index is ", index);
+
 		return (
 			<div class="navbar">
-				<div class="nav-title">Chordboard</div>
+				<div class="nav-title"><a href='/'>Chordboard</a></div>
 				<a href="/songs" class="nav-button">Songs</a>
 				{ prevSong ?
 					<a href={`/songs/${slugify(prevSong.title)}`}

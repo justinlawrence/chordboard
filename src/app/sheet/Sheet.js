@@ -34,8 +34,8 @@ class Sheet extends Component {
 
 	};
 
-	transposeDown = () => { this.changeKey( 1 ); };
-	transposeUp = () => { this.changeKey( -1 ); };
+	transposeDown = () => { this.changeKey( -1 ); };
+	transposeUp = () => { this.changeKey( 1 ); };
 
 	render( { song } ) {
 
@@ -46,11 +46,11 @@ class Sheet extends Component {
 		return (
 			<div class="sheet">
 				<div class="sheet-header">
-					<button onClick={this.transposeDown}>Transpose down</button>
-					<button onClick={this.transposeUp}>Transpose up</button>
 					<Title text={song.title} artist={song.artist}/>
 					<Sections sections={sections}
 					          onClick={this.scrollToSection.bind( this )}/>
+					<button onClick={this.transposeDown}>-</button>
+					<button onClick={this.transposeUp}>+</button>
 				</div>
 				{parseSong( song, sections )}
 			</div>
@@ -141,4 +141,3 @@ function parseSong( song, sections ) {
 	return result;
 
 }
-

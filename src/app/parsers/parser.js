@@ -1,4 +1,5 @@
 const ENDS_WITH_COLON = /:$/;
+const SURROUNDED_BY_SQUARE_BRACKETS = /\]$/;
 
 const artist = {
 	type:      "artist",
@@ -36,6 +37,12 @@ const section = {
 	test:      line => ENDS_WITH_COLON.test( line )
 };
 
+const sectionbrackets = {
+	type:      "section",
+	formatter: line => line.replace( /\[|\]/g, "" ),
+	test:      line => SURROUNDED_BY_SQUARE_BRACKETS.test( line )
+};
+
 const title = {
 	type:      "title",
 	formatter: line => line.replace( /{(?:t|title):\s?(.+?)}/g, "$1" ),
@@ -51,6 +58,7 @@ class Parser {
 			artist,
 			chordPair,
 			section,
+			sectionbrackets,
 			chordLine,
 			line
 		];
@@ -177,6 +185,8 @@ function chordStringToObject( chordString ) {
 
 }
 
+//--------------------------------------------------------------------------------
+
 function isChords( input ) {
 
 	let output = input.replace(
@@ -188,11 +198,13 @@ function isChords( input ) {
 
 //--------------------------------------------------------------------------------
 
-function returnSampleChordStructure() {
+/*
 
-	/*
+	nashville number reference:
 
 	https://en.wikipedia.org/wiki/Nashville_number_system
+
+	sample structure:
 
 	data types
 
@@ -236,90 +248,4 @@ Blue Violet
 B	ti/si	Purple
 Red Violet
 
-
-
-
-
-
-	*/
-
-	/*return {
- "lines": [
-  {
-   "type": {
-    "t": "title"
-   },
-   "content": " Hello world"
-  },
-  {
-   "type": {
-    "st": "subtitle"
-   },
-   "content": " Foo Bar"
-  },
-  {
-   "type": {
-    "b": "blank"
-   }
-  },
-  {
-   "type": {
-    "c": "comment"
-   },
-   "content": " © 2015 FooBar Ltd"
-  },
-  {
-   "type": {
-    "b": "blank"
-   }
-  },
-  {
-   "type": {
-    "v": "verse"
-   },
-   "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.",
-   "chords": {
-    "0": "G", //1
-    "31": "D/F#", //5/7
-    "69": "Em" //6
-   }
-  },
-	"content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.",
-	"chords": {
-	 "0": "G",
-	 "31": "D/F#",
-	 "69": "Em"
- },
-  {
-   "type": {
-    "v": "verse"
-   },
-   "content": "Sed sit amet ipsum mauris.",
-   "chords": {
-    "5": "G"
-   }
-  },
-  {
-   "type": {
-    "v": "verse"
-   },
-   "content": "Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit.",
-   "chords": {
-    "12": "G",
-    "28": "D/F#",
-    "64": "G"
-   }
-  },
-  {
-   "type": {
-    "v": "verse"
-   },
-   "content": "Donec et mollis dolor.",
-   "chords": {
-    "27": "D/F#",
-    "7": "Bm7"
-   }
-  }
- ]*/
-
-}
+*/
