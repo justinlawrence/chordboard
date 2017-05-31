@@ -13,8 +13,8 @@ class Sheet extends Component {
 		let totalVertPadding = 32;
 		let headerHeight = 92;
 
-		location.href = "#";
-		location.href = "#section-" + section.index;
+		location.href = '#';
+		location.href = '#section-' + section.index;
 
 		let scrollBottom = window.innerHeight - document.body.scrollTop + totalVertPadding;
 
@@ -41,19 +41,21 @@ class Sheet extends Component {
 
 		let sections = [];
 
-		console.log( "didRender", song );
+		//console.log( 'didRender', song );
 
 		return (
-			<div class="sheet">
-				<div class="sheet-header">
-					<Title text={song.title} artist={song.artist}/>
-					<Sections sections={sections}
-					          onClick={this.scrollToSection.bind( this )}/>
-					<button onClick={this.transposeDown}>-</button>
-					<button onClick={this.transposeUp}>+</button>
+			song ?
+				<div class="sheet">
+					<div class="sheet-header">
+						<Title text={song.title} artist={song.artist}/>
+						<Sections sections={sections}
+						          onClick={this.scrollToSection.bind( this )}/>
+						<button onClick={this.transposeDown}>-</button>
+						<button onClick={this.transposeUp}>+</button>
+					</div>
+					{parseSong( song, sections )}
 				</div>
-				{parseSong( song, sections )}
-			</div>
+				: null
 		);
 
 	}
@@ -68,7 +70,7 @@ function parseSong( song, sections ) {
 	let lines = song.contents;
 	let children = [];
 	let result = [];
-	let section = "";
+	let section = '';
 	let sectionIndex = 0;
 
 	for ( let i = 0; i < lines.length; i++ ) {
@@ -77,29 +79,29 @@ function parseSong( song, sections ) {
 
 		switch ( lines[ i ].type ) {
 
-			case "chord-line":
+			case 'chord-line':
 				children.push( <ChordLine chords={line.chords}/> );
 				break;
 
-			case "chord-pair":
+			case 'chord-pair':
 				children.push(
 					<ChordPair chords={line.chords} text={line.text}/> );
 				break;
 
-			case "empty":
+			case 'empty':
 				children.push( <div class="empty-line"></div> );
 				break;
 
-			case "line":
+			case 'line':
 				children.push( <Line text={line.text}/> );
 				break;
 
-			case "section":
+			case 'section':
 
 				if ( section ) {
 
 					// Finish off last section
-					result.push( <section id={"section-" + sectionIndex}
+					result.push( <section id={`section-${sectionIndex}`}
 					                      class="section"
 					                      data-section={section}>{children}</section> );
 					children = [];
@@ -126,7 +128,7 @@ function parseSong( song, sections ) {
 
 	if ( section ) {
 
-		result.push( <section id={"section-" + sectionIndex}
+		result.push( <section id={`section-${sectionIndex}`}
 		                      class="section"
 		                      data-section={section}>{children}</section> );
 

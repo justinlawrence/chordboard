@@ -4,7 +4,7 @@ import Router from 'preact-router';
 import Navbar from './common/Navbar/Navbar.js';
 import Song from './common/Song.js';
 import SongList from './common/SongList.js';
-import SongViewer from './common/SongViewer.js';
+import Sheet from './sheet/Sheet.js';
 
 const rawSongs = requireAll(
 	require.context( '../songs', false, /(\.txt)$/ )
@@ -12,9 +12,12 @@ const rawSongs = requireAll(
 
 class App extends PreactComponent {
 	songList = [];
-	songMap = {};
+	songMap = {
+		_sort: []
+	};
 	state = {
-		index: 0
+		index: 0,
+		song:  null
 	};
 
 	constructor( props ) {
@@ -27,19 +30,73 @@ class App extends PreactComponent {
 			const id = slugify( song.title );
 
 			this.songMap[ id ] = song;
+			this.songMap._sort.push( id );
+
+		} );
+
+		this.setSongFromUrl( Router.getCurrentUrl() );
+
+		Router.subscribers.push( url => {
+
+			this.setSongFromUrl( url );
 
 		} );
 
 	}
 
-	render( props, {index} ) {
+	goToNextSong = () => {
+
+		this.goToSongIndex( this.state.index + 1 );
+
+
+	};
+
+	goToPreviousSong = () => {
+
+		this.goToSongIndex( this.state.index - 1 );
+
+	};
+
+	goToSongIndex = index => {
+
+		const len = this.songList.length;
+
+		// Set index range to between 0 and list length.
+		index = Math.min( Math.max( index, 0 ), len - 1 );
+
+		// OR
+
+		// Set index to wrap around at the ends.
+		//index = index < 0 ? len - 1 : index >= len ? 0 : index;
+
+		const song = this.songList[ index ];
+
+		Router.route( `/songs/${slugify( song.title )}-${index}` );
+
+	};
+
+	setSongFromUrl = url => {
+
+		const id = url.replace( /\/songs\/(.+)-.+?$/, "$1" );
+		const song = this.songMap[ id ];
+		const index = this.songMap._sort.indexOf( id );
+
+		this.setState( {
+			index: index,
+			song:  song
+		} );
+
+	};
+
+	render( {}, { song } ) {
 
 		return (
 			<div>
-				<Navbar index={index} songList={this.songList}/>
+				<Navbar goToNextSong={this.goToNextSong}
+				        goToPreviousSong={this.goToPreviousSong}/>
 				<Router>
 					<SongList default path="/songs" songs={this.songList}/>
-					<SongViewer path="/songs/:id" songMap={this.songMap}/>
+					<Sheet path="/songs/:id" song={song}/>
 				</Router>
 			</div>
 		);

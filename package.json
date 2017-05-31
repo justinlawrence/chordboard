@@ -26,7 +26,7 @@
   "dependencies": {
     "browser-sync": "^2.18.8",
     "preact": "7.1.0",
-    "preact-router": "2.4.5",
+    "preact-router": "2.5.2",
     "slugify": "1.1.0",
     "webpack-merge": "^4.1.0"
   },
