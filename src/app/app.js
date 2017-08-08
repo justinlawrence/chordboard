@@ -4,6 +4,7 @@ import Router from 'preact-router';
 import Navbar from './common/Navbar/Navbar.js';
 import Song from './common/Song.js';
 import SongList from './common/SongList.js';
+import SongEditor from './common/SongEditor.js';
 import Sheet from './sheet/Sheet.js';
 
 const rawSongs = requireAll(
@@ -96,6 +97,7 @@ class App extends PreactComponent {
 				        goToPreviousSong={this.goToPreviousSong}/>
 				<Router>
 					<SongList default path="/songs" songs={this.songList}/>
+					<SongEditor path="/new"/>
 					<Sheet path="/songs/:id" song={song}/>
 				</Router>
 			</div>
