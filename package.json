@@ -7,6 +7,7 @@
     "port": 8080
   },
   "scripts": {
+    "api": "node src/server",
     "dev-server": "webpack-dev-server --env=dev --progress --hot --inline",
     "start": "npm run dev-server",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -24,6 +25,9 @@
   },
   "homepage": "https://github.com/justinlawrence/chordboard#readme",
   "dependencies": {
+    "body-parser": "^1.17.2",
+    "cors": "^2.8.4",
+    "express": "^4.15.4",
     "preact": "^8.2.1",
     "preact-router": "^2.5.4",
     "slugify": "^1.1.0"
