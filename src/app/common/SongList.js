@@ -2,19 +2,36 @@ import slugify from 'slugify';
 import './SongList.scss';
 
 const SongList = ( { songs } ) => (
-	<div class="SongList">
-		<div class="songTitle">
-			<a href={`/new`}>
-				New song
-			</a>
-		</div>
-		{ songs.map( ( song, i ) => (
-			<div class="songTitle">
-				<a href={`/songs/${slugify(song.title)}-${i}`}>
-					{song.title}
-				</a>
+	<div class="song-list">
+
+		<div class="song-list__left-column">
+
+				<div class="song-list__search">
+					<input type="text"
+								 class="song-editor__title"
+								 placeholder="Search titles and words"
+								 value={""}/>
+			 </div>
+
+				<div class="song-list__add">
+					<a href={`/new`}>
+						-- Add a song --
+					</a>
+				</div>
+
+				{ songs.map( ( song, i ) => (
+					<div class="song-list__title">
+						<a href={`/songs/${slugify(song.title)}-${i}`}>
+							{song.title}
+						</a>
+					</div>
+				) ) }
+
 			</div>
-		) ) }
+			<div class="song-list__right-column">
+				…
+			</div>
+
 	</div>
 );
 

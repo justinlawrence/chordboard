@@ -1,4 +1,6 @@
 import './SongEditor.scss';
+import Sheet from '../sheet/Sheet.js';
+
 
 class SongEditor extends PreactComponent {
 	state = {
@@ -55,6 +57,10 @@ class SongEditor extends PreactComponent {
 					<button onClick={this.onSaveSong}>Save</button>
 				</div>
 				<div class="song-editor__right-column">
+					<div class="song-editor__preview">
+						Song Preview
+						{parseSong( content, "" )}
+					</div>
 				</div>
 			</div>
 		);

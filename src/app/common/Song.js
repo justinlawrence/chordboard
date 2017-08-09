@@ -20,17 +20,11 @@ class Song {
 			}
 
 			if ( line.type === 'title' ) {
-
 				this.title = line.text;
-
 			} else if ( line.type === 'artist' ) {
-
 				this.artist = line.text;
-
 			} else {
-
 				this.contents.push( line );
-
 			}
 
 		} );
