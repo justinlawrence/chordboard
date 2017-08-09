@@ -1,6 +1,6 @@
 import './SongEditor.scss';
-import Sheet from '../sheet/Sheet.js';
-
+import Sheet, {parseSong} from '../sheet/Sheet.js';
+import Song from './Song.js';
 
 class SongEditor extends PreactComponent {
 	state = {
@@ -58,8 +58,7 @@ class SongEditor extends PreactComponent {
 				</div>
 				<div class="song-editor__right-column">
 					<div class="song-editor__preview">
-						Song Preview
-						{parseSong( content, "" )}
+						{parseSong( new Song(content), "" )}
 					</div>
 				</div>
 			</div>

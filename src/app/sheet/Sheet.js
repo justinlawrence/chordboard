@@ -65,7 +65,7 @@ export default Sheet;
 
 //-----------------------------------------------------
 
-function parseSong( song, sections ) {
+export function parseSong( song, sections ) {
 
 	let lines = song.contents;
 	let children = [];
