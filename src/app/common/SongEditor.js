@@ -1,5 +1,6 @@
 import './SongEditor.scss';
 import Sheet, {parseSong} from '../sheet/Sheet.js';
+import Sections from "../sheet/Sections.js";
 import Song from './Song.js';
 
 class SongEditor extends PreactComponent {
@@ -56,9 +57,15 @@ class SongEditor extends PreactComponent {
 					</textarea>
 					<button onClick={this.onSaveSong}>Save</button>
 				</div>
+
 				<div class="song-editor__right-column">
 					<div class="song-editor__preview">
-						{parseSong( new Song(content), "" )}
+						<div class="song-editor__preview-title">
+							{title}
+						</div>
+						<div class="song-editor__preview-content">
+							{parseSong( new Song("\nartist\n" + content), "" )}
+						</div>
 					</div>
 				</div>
 			</div>

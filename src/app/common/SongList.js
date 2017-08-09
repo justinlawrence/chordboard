@@ -8,7 +8,7 @@ const SongList = ( { songs } ) => (
 
 				<div class="song-list__search">
 					<input type="text"
-								 class="song-editor__title"
+								 class="song-list__title"
 								 placeholder="Search titles and words"
 								 value={""}/>
 			 </div>
