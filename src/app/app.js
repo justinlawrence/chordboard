@@ -1,37 +1,50 @@
-import slugify from 'slugify';
 import Router from 'preact-router';
 
 import Navbar from './common/Navbar/Navbar.js';
-import Song from './common/Song.js';
 import SongList from './common/SongList.js';
 import SongEditor from './common/SongEditor.js';
 import Sheet from './sheet/Sheet.js';
+import PouchDB from 'pouchdb';
+import PouchDBFindPlugin from 'pouchdb-find';
 
-const rawSongs = requireAll(
-	require.context( '../songs', false, /(\.txt)$/ )
-);
+PouchDB.plugin( PouchDBFindPlugin );
+
+const db = new PouchDB( 'chordboard' );
+
+// Does nothing if the index already exists
+db.createIndex( {
+	index: { fields: [ 'type', 'users' ] }
+} );
+
+//
+PouchDB.sync( 'chordboard', 'http://localhost:5984/chordboard' );
 
 class App extends PreactComponent {
-	songList = [];
-	songMap = {
-		_sort: []
-	};
 	state = {
-		index: 0,
-		song:  null
+		slug:     "",
+		songList: []
 	};
 
 	constructor( props ) {
 		super( props );
 
-		this.songList = rawSongs.map( s => new Song( s ) );
+		// This gets docs linked to the user: justin
+		db.find( {
+			selector: {
+				type:  'song',
+				users: {
+					$in: [ 'justin' ]
+				}
+			}
+		} ).then( result => {
 
-		this.songList.forEach( song => {
+			this.setState( {
+				songList: result.docs
+			} );
 
-			const id = slugify( song.title );
+		} ).catch( err => {
 
-			this.songMap[ id ] = song;
-			this.songMap._sort.push( id );
+			console.warn( 'App.constructor - pouchdb query failed', err );
 
 		} );
 
@@ -72,33 +85,34 @@ class App extends PreactComponent {
 
 		const song = this.songList[ index ];
 
-		Router.route( `/songs/${slugify( song.title )}-${index}` );
+		Router.route( `/songs/${song.slug}` );
 
 	};
 
 	setSongFromUrl = url => {
 
-		const id = url.replace( /\/songs\/(.+)-.+?$/, "$1" );
-		const song = this.songMap[ id ];
-		const index = this.songMap._sort.indexOf( id );
+		const slugMatch = url.match( /\/songs\/(.+)$/ );
 
-		this.setState( {
-			index: index,
-			song:  song
-		} );
+		if ( slugMatch ) {
+
+			this.setState( {
+				slug: slugMatch[ 1 ]
+			} );
+
+		}
 
 	};
 
-	render( {}, { song } ) {
+	render( {}, { slug, songList } ) {
 
 		return (
 			<div>
 				<Navbar goToNextSong={this.goToNextSong}
 				        goToPreviousSong={this.goToPreviousSong}/>
 				<Router>
-					<SongList default path="/songs" songs={this.songList}/>
+					<SongList default path="/songs" songs={songList}/>
 					<SongEditor path="/new"/>
-					<Sheet path="/songs/:id" song={song}/>
+					<Sheet path="/songs/:slug" slug={slug}/>
 				</Router>
 			</div>
 		);

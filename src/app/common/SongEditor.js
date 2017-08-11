@@ -1,52 +1,89 @@
+import slugify from 'slugify';
 import './SongEditor.scss';
-import Sheet, {parseSong} from '../sheet/Sheet.js';
+import {parseSong} from '../sheet/Sheet.js';
 import Sections from "../sheet/Sections.js";
 import Song from './Song.js';
+import PouchDB from 'pouchdb';
+
+const db = new PouchDB( 'chordboard' );
 
 class SongEditor extends PreactComponent {
 	state = {
+		author:  '',
 		title:   '',
 		content: ''
 	};
 
+	componentDidMount() {
+
+		// This gets all docs... good for debugging
+		/*db.allDocs( {
+			include_docs: true
+		} ).then( docs => console.log( docs ) );*/
+
+	}
+
+	onAuthorInput = event => {
+		this.setState( { author: event.target.value } );
+	};
+
 	onContentInput = event => {
-
 		this.setState( { content: event.target.value } );
-
 	};
 
 	onTitleInput = event => {
-
 		this.setState( { title: event.target.value } );
-
 	};
 
 	onSaveSong = () => {
 
-		const { title, content } = this.state;
+		const { title, author, content } = this.state;
 
-		fetch( '//localhost:3000/api/songs', {
-			method:  'post',
-			headers: {
-				'Accept':       'application/json, text/plain, */*',
-				'Content-Type': 'application/json'
-			},
-			body:    JSON.stringify( { title, content } )
+		// Check to see if the slug exists already first.
+		/*db.find( {
+			selector: {
+				type: 'song',
+				slug: slugify( title )
+			}
+		} ).then( function ( result ) {
+			// handle result
+		} ).catch( function ( err ) {
+			console.error( err );
+		} );*/
+
+		db.post( {
+			type:    'song',
+			users:   [ 'justin' ],
+			slug:    slugify( title ),
+			author:   author,
+			title:   title,
+			content: content
 		} )
-			.then( res => console.log( res ) );
+			.then( () => {
+
+				PouchDB.sync( 'chordboard', 'http://localhost:5984/chordboard' );
+
+			} );
 
 	};
 
-	render( {}, { title, content } ) {
+	render( {}, { author, title, content } ) {
 
 		return (
 			<div class="song-editor">
 				<div class="song-editor__left-column">
-					<input type="text"
-					       class="song-editor__title"
-					       onInput={this.onTitleInput}
-					       placeholder="Title"
-					       value={title}/>
+					<input
+						type="text"
+						class="song-editor__title"
+						onInput={this.onTitleInput}
+						placeholder="Title"
+						value={title}/>
+					<input
+						type="text"
+						class="song-editor__author"
+						onInput={this.onAuthorInput}
+						placeholder="Author"
+						value={author}/>
 					<textarea
 						class="song-editor__content"
 						onInput={this.onContentInput}
@@ -63,8 +100,11 @@ class SongEditor extends PreactComponent {
 						<div class="song-editor__preview-title">
 							{title}
 						</div>
+						<div class="song-editor__preview-author">
+							{author}
+						</div>
 						<div class="song-editor__preview-content">
-							{parseSong( new Song("\nartist\n" + content), "" )}
+							{parseSong( new Song( content ), [] )}
 						</div>
 					</div>
 				</div>

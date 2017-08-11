@@ -29,6 +29,7 @@
     "cors": "^2.8.4",
     "express": "^4.15.4",
     "pouchdb": "^6.3.4",
+    "pouchdb-find": "^6.3.4",
     "preact": "^8.2.1",
     "preact-router": "^2.5.5",
     "slugify": "^1.1.0"

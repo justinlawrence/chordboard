@@ -1,13 +1,72 @@
-import {h, Component} from 'preact';
 import ChordLine from "./lines/ChordLine.js";
 import ChordPair from "./lines/ChordPair.js";
 import Line from "./lines/Line.js";
 import Sections from "./Sections.js";
 import Parser from "../parsers/parser.js";
+import PouchDB from 'pouchdb';
+import PouchDBFindPlugin from 'pouchdb-find';
+import Song from 'app/common/Song.js';
 import Title from "./lines/Title.js";
 import './Sheet.scss';
 
-class Sheet extends Component {
+PouchDB.plugin( PouchDBFindPlugin );
+
+const db = new PouchDB( 'chordboard' );
+
+db.createIndex( {
+	index: { fields: [ 'type', 'slug' ] }
+} );
+
+class Sheet extends PreactComponent {
+	state = {
+		isLoading: true,
+		song: null
+	};
+
+	componentDidMount() {
+		this.handleProps( this.props );
+	}
+
+	componentWillReceiveProps( nextProps ) {
+		this.handleProps( nextProps );
+	}
+
+	handleProps = props => {
+
+		this.setState( {
+			isLoading: true
+		});
+
+		if ( props.slug ) {
+
+			db.find( {
+				selector: {
+					type:  'song',
+					slug: props.slug
+				}
+			} ).then( result => {
+
+				this.setState( {
+					isLoading: false,
+					song: new Song( result.docs[ 0 ] )
+				} );
+
+			} ).catch( err => {
+
+				console.error( 'Sheet.handleProps -', err );
+
+				this.setState( {
+					isLoading: false,
+					song:      null
+				} );
+
+			} );
+
+
+		}
+
+	};
+
 	scrollToSection( section ) {
 
 		let totalVertPadding = 32;
@@ -37,7 +96,7 @@ class Sheet extends Component {
 	transposeDown = () => { this.changeKey( -1 ); };
 	transposeUp = () => { this.changeKey( 1 ); };
 
-	render( { song } ) {
+	render( { slug }, { song } ) {
 
 		let sections = [];
 
