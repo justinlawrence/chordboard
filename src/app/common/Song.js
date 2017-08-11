@@ -5,10 +5,13 @@ class Song {
 	contents = [];
 	title = '';
 
-	constructor( songText ) {
+	constructor( songDoc ) {
 
 		let parser = new Parser();
-		let songLines = parser.parse( songText );
+		let songLines = parser.parse( songDoc.content );
+
+		this.title = songDoc.title;
+		this.artist = songDoc.artist;
 
 		songLines.forEach( ( line, i ) => {
 
@@ -19,13 +22,13 @@ class Song {
 
 			}
 
-			if ( line.type === 'title' ) {
+			/*if ( line.type === 'title' ) {
 				this.title = line.text;
 			} else if ( line.type === 'artist' ) {
 				this.artist = line.text;
-			} else {
+			} else {*/
 				this.contents.push( line );
-			}
+			//}
 
 		} );
 

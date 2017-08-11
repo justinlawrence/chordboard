@@ -7,6 +7,12 @@ module.exports = function () {
 
 	return {
 		entry:   './src/main.js',
+		resolve: {
+			modules: [
+				path.resolve( "src" ),
+				"node_modules"
+			]
+		},
 		output:  {
 			path: path.resolve( __dirname, '..', 'build' ),
 			filename:          '[name].js',
