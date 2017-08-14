@@ -16,8 +16,7 @@ db.createIndex( {
 	index: { fields: [ 'type', 'users' ] }
 } );
 
-//
-PouchDB.sync( 'chordboard', 'http://localhost:5984/chordboard' );
+//PouchDB.sync( 'chordboard', 'http://localhost:5984/chordboard' );
 
 class App extends PreactComponent {
 	state = {

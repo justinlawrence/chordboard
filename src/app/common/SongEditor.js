@@ -61,7 +61,8 @@ class SongEditor extends PreactComponent {
 		} )
 			.then( () => {
 
-				PouchDB.sync( 'chordboard', 'http://localhost:5984/chordboard' );
+				//TODO
+				//PouchDB.sync( 'chordboard', 'http://localhost:5984/chordboard' );
 
 			} );
 
@@ -104,7 +105,7 @@ class SongEditor extends PreactComponent {
 							{author}
 						</div>
 						<div class="song-editor__preview-content">
-							{parseSong( new Song( content ), [] )}
+							{parseSong( new Song( title + "\n" + content ), [] )}
 						</div>
 					</div>
 				</div>
