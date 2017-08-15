@@ -4028,7 +4028,7 @@ html-minifier@^3.2.3:
     relateurl "0.2.x"
     uglify-js "3.0.x"
 
-html-webpack-plugin@^2.28.0, html-webpack-plugin@^2.29.0:
+html-webpack-plugin@^2.28.0, html-webpack-plugin@^2.30.1:
   version "2.30.1"
   resolved "https://registry.yarnpkg.com/html-webpack-plugin/-/html-webpack-plugin-2.30.1.tgz#7f9c421b7ea91ec460f56527d78df484ee7537d5"
   dependencies:
@@ -6548,6 +6548,16 @@ pouchdb@^6.3.4:
     uuid "^3.1.0"
     vuvuzela "1.0.3"
 
+preact-icon-base@2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/preact-icon-base/-/preact-icon-base-2.0.6.tgz#d3d6c8fa1c87e8c3408265617dfe4b77dfbdc24b"
+
+preact-icons@^2.2.5:
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/preact-icons/-/preact-icons-2.2.5.tgz#826d5733d5916cc19189b4552b93377fd1f10b08"
+  dependencies:
+    preact-icon-base "2.0.6"
+
 preact-router@^2.5.5:
   version "2.5.5"
   resolved "https://registry.yarnpkg.com/preact-router/-/preact-router-2.5.5.tgz#d186a7405efc70f7c9b7759174769e6b56bf9324"
@@ -7532,9 +7542,9 @@ slide@^1.1.5:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/slide/-/slide-1.1.6.tgz#56eb027d65b4d2dce6cb2e2d32c4d4afc9e1d707"
 
-slugify@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/slugify/-/slugify-1.1.0.tgz#7e5b0938d52b5efab1878247ef0f6a4f05db7ee0"
+slugify@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/slugify/-/slugify-1.2.1.tgz#2118f4b0fbcfd79d7b2c451c22b724e5c1991330"
 
 sntp@0.2.x:
   version "0.2.4"
@@ -8599,7 +8609,7 @@ webpack-dev-middleware@^1.10.2, webpack-dev-middleware@^1.11.0:
     range-parser "^1.0.3"
     time-stamp "^2.0.0"
 
-webpack-dev-server@^2.5.1:
+webpack-dev-server@^2.7.1:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/webpack-dev-server/-/webpack-dev-server-2.7.1.tgz#21580f5a08cd065c71144cf6f61c345bca59a8b8"
   dependencies:
@@ -8669,9 +8679,9 @@ webpack-sources@^1.0.1:
     source-list-map "^2.0.0"
     source-map "~0.5.3"
 
-webpack@^3.2.0:
-  version "3.5.3"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-3.5.3.tgz#e68653963bda146e212832c04a4d8041d2b4b8c8"
+webpack@^3.5.4:
+  version "3.5.4"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-3.5.4.tgz#5583eb263ed27b78b5bd17bfdfb0eb1b1cd1bf81"
   dependencies:
     acorn "^5.0.0"
     acorn-dynamic-import "^2.0.0"

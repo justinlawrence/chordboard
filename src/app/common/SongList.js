@@ -1,4 +1,3 @@
-import slugify from 'slugify';
 import './SongList.scss';
 
 class SongList extends PreactComponent {
@@ -39,7 +38,7 @@ class SongList extends PreactComponent {
 					</div>
 
 					<div class="song-list__add">
-						<a href={`/new`}>
+						<a href="/new">
 							-- Add a song --
 						</a>
 					</div>

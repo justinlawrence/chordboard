@@ -1,34 +1,87 @@
 import slugify from 'slugify';
-import './SongEditor.scss';
-import {parseSong} from '../sheet/Sheet.js';
-import Sections from "../sheet/Sections.js";
-import Song from './Song.js';
 import PouchDB from 'pouchdb';
+import PouchDBFindPlugin from 'pouchdb-find';
+
+import {parseSong} from '../sheet/Sheet.js';
+import Song from './Song.js';
+import './SongEditor.scss';
+
+PouchDB.plugin( PouchDBFindPlugin );
 
 const db = new PouchDB( 'chordboard' );
 
+db.createIndex( {
+	index: { fields: [ 'type', 'slug' ] }
+} );
+
 class SongEditor extends PreactComponent {
 	state = {
-		author:  '',
-		title:   '',
-		content: ''
+		author:    '',
+		isLoading: false,
+		title:     '',
+		content:   '',
+		song:      null
 	};
 
 	componentDidMount() {
-
-		// This gets all docs... good for debugging
-		/*db.allDocs( {
-			include_docs: true
-		} ).then( docs => console.log( docs ) );*/
-
+		this.handleProps( this.props );
 	}
+
+	componentWillReceiveProps( nextProps ) {
+		this.handleProps( nextProps );
+	}
+
+	handleProps = props => {
+
+		this.setState( {
+			isLoading: true
+		} );
+
+		if ( props.slug ) {
+
+			db.find( {
+				selector: {
+					type: 'song',
+					slug: props.slug
+				}
+			} ).then( result => {
+
+				const song = new Song( result.docs[ 0 ] );
+
+				this.setState( {
+					author:    song.author,
+					isLoading: false,
+					title:     song.title,
+					content:   song.content,
+					song:      song
+				} );
+
+			} ).catch( err => {
+
+				console.error( 'Sheet.handleProps -', err );
+
+				this.setState( {
+					author:    '',
+					isLoading: false,
+					title:     '',
+					content:   '',
+					song:      null
+				} );
+
+			} );
+
+		}
+
+	};
 
 	onAuthorInput = event => {
 		this.setState( { author: event.target.value } );
 	};
 
 	onContentInput = event => {
-		this.setState( { content: event.target.value } );
+		const content = event.target.value;
+		const song = Object.assign( {}, this.state.song, { content } );
+		this.setState( { content, song } );
 	};
 
 	onTitleInput = event => {
@@ -37,38 +90,76 @@ class SongEditor extends PreactComponent {
 
 	onSaveSong = () => {
 
-		const { title, author, content } = this.state;
+		const { author, content, title, song } = this.state;
+		const isNew = song._id === null;
 
-		// Check to see if the slug exists already first.
-		/*db.find( {
-			selector: {
-				type: 'song',
-				slug: slugify( title )
-			}
-		} ).then( function ( result ) {
-			// handle result
-		} ).catch( function ( err ) {
-			console.error( err );
-		} );*/
+		if ( isNew ) {
 
-		db.post( {
-			type:    'song',
-			users:   [ 'justin' ],
-			slug:    slugify( title ),
-			author:   author,
-			title:   title,
-			content: content
-		} )
-			.then( () => {
+			// First check to see if the slug already exists.
+			db.find( {
+				selector: {
+					type: 'song',
+					slug: slugify( title )
+				}
+			} ).then( result => {
+
+				if ( result.docs.length ) {
+
+					// Slug already exists
+
+					// TODO: make the slug unique by appending a number to the
+					// end Note: If we wanted to allow duplicate slugs across
+					// database but unique per user, we would require some kind
+					// of user context in the url. Something like what GitHub
+					// do with the username first.
+
+				} else {
+
+					db.post( {
+						type:    'song',
+						users:   [ 'justin' ],
+						slug:    slugify( title ),
+						author:  author,
+						title:   title,
+						content: content
+					} ).then( () => {
+
+						//TODO
+						//PouchDB.sync( 'chordboard',
+						// 'http://localhost:5984/chordboard' );
+
+					} );
+
+				}
+
+			} ).catch( err => {
+				console.error( err );
+			} );
+
+		} else {
+
+			const data = Object.assign( {}, song );
+
+			data.author = author;
+			data.content = content;
+			data.slug = slugify( title );
+			data.title = title;
+
+			db.put( data ).then( () => {
 
 				//TODO
-				//PouchDB.sync( 'chordboard', 'http://localhost:5984/chordboard' );
+				//PouchDB.sync( 'chordboard',
+				// 'http://localhost:5984/chordboard' );
 
+			} ).catch( err => {
+				console.error( err );
 			} );
+
+		}
 
 	};
 
-	render( {}, { author, title, content } ) {
+	render( {}, { author, title, content, song } ) {
 
 		return (
 			<div class="song-editor">
@@ -90,7 +181,7 @@ class SongEditor extends PreactComponent {
 						onInput={this.onContentInput}
 						placeholder="Content"
 						rows="25"
-						>
+					>
 						{content}
 					</textarea>
 					<button onClick={this.onSaveSong}>Save</button>
@@ -105,7 +196,7 @@ class SongEditor extends PreactComponent {
 							{author}
 						</div>
 						<div class="song-editor__preview-content">
-							{parseSong( new Song( title + "\n" + content ), [] )}
+							{parseSong( new Song( song ), [] )}
 						</div>
 					</div>
 				</div>

@@ -1,34 +1,31 @@
-import Parser from '../parsers/parser.js';
+import Parser from '../parsers/song-parser.js';
 
 class Song {
-	artist = '';
-	contents = [];
+	_id = null;
+	_rev = null;
+	author = '';
+	content = '';
+	lines = [];
+	slug = '';
 	title = '';
 
 	constructor( songDoc ) {
 
+		if ( !songDoc ) { songDoc = {}; }
+
 		let parser = new Parser();
 		let songLines = parser.parse( songDoc.content );
 
+		this._id = songDoc._id;
+		this._rev = songDoc._rev;
+		this.slug = songDoc.slug;
 		this.title = songDoc.title;
-		this.artist = songDoc.artist;
+		this.author = songDoc.author;
+		this.content = songDoc.content;
 
 		songLines.forEach( ( line, i ) => {
 
-			if ( i > 1 && !this.artist ) {
-
-				console.warn( "parseSong - expected an artist on line 2" );
-				this.artist = "...";
-
-			}
-
-			/*if ( line.type === 'title' ) {
-				this.title = line.text;
-			} else if ( line.type === 'artist' ) {
-				this.artist = line.text;
-			} else {*/
-				this.contents.push( line );
-			//}
+			this.lines.push( line );
 
 		} );
 
@@ -39,19 +36,21 @@ class Song {
 		// Save old state?
 
 		// Iterate through all chords in song.
-		this.contents.forEach( line => {
+		this.lines.forEach( line => {
 
 			if ( line.chords !== undefined ) {
 
 				line.chords._sort.forEach( chordIndex => {
 
-					console.log("chord index:", chordIndex);
-					console.log("currentChord:", line.chords[chordIndex]);
-					//console.log("transposing", currentChord, transposeChord(currentChord, amount));
+					console.log( "chord index:", chordIndex );
+					console.log( "currentChord:", line.chords[ chordIndex ] );
+					//console.log("transposing", currentChord,
+					// transposeChord(currentChord, amount));
 
-					line.chords[chordIndex] = transposeChord( line.chords[chordIndex], amount );
+					line.chords[ chordIndex ] = transposeChord(
+						line.chords[ chordIndex ], amount );
 
-				})
+				} )
 
 			}
 

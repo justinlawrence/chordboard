@@ -1,46 +1,15 @@
-const ENDS_WITH_COLON = /:$/;
-const SURROUNDED_BY_SQUARE_BRACKETS = /\]$/;
+/**
+ * File parser
+ *
+ * The focus of this parser is to convert raw song files into an easier to use
+ * data structure.
+ */
+import dataTypes from './data-types.js';
 
 const artist = {
 	type:      "artist",
 	formatter: line => line.replace( /{(?:st|subtitle):\s?(.+?)}/g, "$1" ),
 	test:      ( line, prevLine, i ) => i === 1
-};
-
-const chordLine = {
-	type: "chord-line",
-	test: line => isChords( line )
-};
-
-const chordPair = {
-	type: "chord-pair",
-	test: ( line, prevLine ) => {
-
-		return prevLine && isChords( prevLine ) && !isChords( line );
-
-	}
-};
-
-const empty = {
-	type: "empty",
-	test: line => line.trim() === ""
-};
-
-const line = {
-	type: "line",
-	test: line => !!line
-};
-
-const section = {
-	type:      "section",
-	formatter: line => line.replace( ENDS_WITH_COLON, "" ),
-	test:      line => ENDS_WITH_COLON.test( line )
-};
-
-const sectionbrackets = {
-	type:      "section",
-	formatter: line => line.replace( /\[|\]/g, "" ),
-	test:      line => SURROUNDED_BY_SQUARE_BRACKETS.test( line )
 };
 
 const title = {
@@ -53,14 +22,14 @@ class Parser {
 	constructor() {
 
 		this.checks = [
-			empty,
+			dataTypes.empty,
 			title,
 			artist,
-			chordPair,
-			section,
-			sectionbrackets,
-			chordLine,
-			line
+			dataTypes.chordPair,
+			dataTypes.section,
+			dataTypes.sectionbrackets,
+			dataTypes.chordLine,
+			dataTypes.line
 		];
 
 	}
@@ -183,17 +152,6 @@ function chordStringToObject( chordString ) {
 	//console.log( chordObject );
 
 	return chordObject;
-
-}
-
-//--------------------------------------------------------------------------------
-
-function isChords( input ) {
-
-	let output = input.replace(
-		/(\s|[A-G](#|b)?|m|[0-9]|(sus|maj|min|aug|dim|add)\d?|\/|-|\|)/g, "" );
-
-	return !(output);
 
 }
 

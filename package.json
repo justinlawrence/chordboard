@@ -31,8 +31,9 @@
     "pouchdb": "^6.3.4",
     "pouchdb-find": "^6.3.4",
     "preact": "^8.2.1",
+    "preact-icons": "^2.2.5",
     "preact-router": "^2.5.5",
-    "slugify": "^1.1.0"
+    "slugify": "^1.2.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -45,15 +46,15 @@
     "css-loader": "^0.28.4",
     "extract-text-webpack-plugin": "^3.0.0",
     "fauxton": "^1.1.13",
-    "html-webpack-plugin": "^2.29.0",
+    "html-webpack-plugin": "^2.30.1",
     "img-loader": "^2.0.0",
     "node-sass": "^4.5.3",
     "postcss-loader": "^2.0.6",
     "raw-loader": "^0.5.1",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
-    "webpack": "^3.2.0",
-    "webpack-dev-server": "^2.5.1",
+    "webpack": "^3.5.4",
+    "webpack-dev-server": "^2.7.1",
     "webpack-merge": "^4.1.0"
   }
 }

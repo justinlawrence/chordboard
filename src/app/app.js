@@ -1,4 +1,5 @@
 import Router from 'preact-router';
+import {findIndex} from 'lodash';
 
 import Navbar from './common/Navbar/Navbar.js';
 import SongList from './common/SongList.js';
@@ -51,6 +52,10 @@ class App extends PreactComponent {
 
 		Router.subscribers.push( url => {
 
+			this.setState( {
+				slug: ""
+			} );
+
 			this.setSongFromUrl( url );
 
 		} );
@@ -59,20 +64,25 @@ class App extends PreactComponent {
 
 	goToNextSong = () => {
 
-		this.goToSongIndex( this.state.index + 1 );
+		const index = findIndex( this.state.songList,
+			s => s.slug === this.state.slug );
 
+		this.goToSongIndex( index + 1 );
 
 	};
 
 	goToPreviousSong = () => {
 
-		this.goToSongIndex( this.state.index - 1 );
+		const index = findIndex( this.state.songList,
+			s => s.slug === this.state.slug );
+
+		this.goToSongIndex( index - 1 );
 
 	};
 
 	goToSongIndex = index => {
 
-		const len = this.songList.length;
+		const len = this.state.songList.length;
 
 		// Set index range to between 0 and list length.
 		index = Math.min( Math.max( index, 0 ), len - 1 );
@@ -82,7 +92,7 @@ class App extends PreactComponent {
 		// Set index to wrap around at the ends.
 		//index = index < 0 ? len - 1 : index >= len ? 0 : index;
 
-		const song = this.songList[ index ];
+		const song = this.state.songList[ index ];
 
 		Router.route( `/songs/${song.slug}` );
 
@@ -111,6 +121,7 @@ class App extends PreactComponent {
 				<Router>
 					<SongList default path="/songs" songs={songList}/>
 					<SongEditor path="/new"/>
+					<SongEditor path="/songs/:slug/edit" slug={slug}/>
 					<Sheet path="/songs/:slug" slug={slug}/>
 				</Router>
 			</div>

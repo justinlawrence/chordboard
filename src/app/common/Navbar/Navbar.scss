@@ -1,29 +1,40 @@
+@import '../../../styles/config';
 .navbar {
 	background-color: #f4f4f4;
 	display:          flex;
 	padding:          0 16px;
 
-	.nav-title {
+	&__title {
 		line-height: 48px;
 		padding:     0 8px;
-	}
-
-	.nav-button {
-		cursor:      pointer;
-		line-height: 48px;
-		padding:     0 8px;
-		user-select: none;
 
 		&:hover {
 			text-decoration: none;
 		}
 	}
 
-	.prev-button,
-	.next-button {
-		display:     block;
-		text-align:  center;
-		user-select: none;
-		width:       32px;
+	&__button {
+		align-items:      center;
+		border:           0;
+		background-color: transparent;
+		cursor:           pointer;
+		display:          flex;
+		padding:          0 12px;
+		user-select:      none;
+
+		&:active,
+		&:focus {
+			outline: none;
+		}
+
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.1);
+			color:            inherit;
+			text-decoration:  none;
+		}
+	}
+
+	&__change-song-button {
+		font-size: 24px;
 	}
 }

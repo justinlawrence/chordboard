@@ -1,11 +1,11 @@
 import {h} from "preact";
 
-export default ( { artist, text } ) => {
+export default ( { author, text } ) => {
 
 	return (
 		<div class="title">
-			{ text }
-			<span class="artist">{ artist }</span>
+			{text}
+			<span class="author">{author}</span>
 		</div>
 	);
 

@@ -1,10 +1,10 @@
+import PouchDB from 'pouchdb';
+import PouchDBFindPlugin from 'pouchdb-find';
+
 import ChordLine from "./lines/ChordLine.js";
 import ChordPair from "./lines/ChordPair.js";
 import Line from "./lines/Line.js";
 import Sections from "./Sections.js";
-import Parser from "../parsers/parser.js";
-import PouchDB from 'pouchdb';
-import PouchDBFindPlugin from 'pouchdb-find';
 import Song from 'app/common/Song.js';
 import Title from "./lines/Title.js";
 import './Sheet.scss';
@@ -62,7 +62,6 @@ class Sheet extends PreactComponent {
 
 			} );
 
-
 		}
 
 	};
@@ -88,7 +87,7 @@ class Sheet extends PreactComponent {
 
 	changeKey = amount => {
 
-		this.props.song.transpose( amount );
+		this.state.song.transpose( amount );
 		this.forceUpdate();
 
 	};
@@ -96,17 +95,15 @@ class Sheet extends PreactComponent {
 	transposeDown = () => { this.changeKey( -1 ); };
 	transposeUp = () => { this.changeKey( 1 ); };
 
-	render( { slug }, { song } ) {
+	render( {}, { song } ) {
 
 		let sections = [];
-
-		//console.log( 'didRender', song );
 
 		return (
 			song ?
 				<div class="sheet">
 					<div class="sheet-header">
-						<Title text={song.title} artist={song.artist}/>
+						<Title text={song.title} author={song.author}/>
 						<Sections sections={sections}
 						          onClick={this.scrollToSection.bind( this )}/>
 						<button onClick={this.transposeDown}>-</button>
@@ -126,7 +123,7 @@ export default Sheet;
 
 export function parseSong( song, sections ) {
 
-	let lines = song.contents;
+	let lines = song.lines;
 	let children = [];
 	let result = [];
 	let section = '';
