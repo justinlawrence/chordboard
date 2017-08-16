@@ -42,46 +42,53 @@ class SongList extends PreactComponent {
 
 				<div class="column is-three-quarters">
 
-					<div class="table">
-						<div class="tbody">
+					<h1>Songs</h1>
 
-							<div class="tr">
-								<div class="td">
-									<div class="control">
-										<input
-											type="text"
-											class="input"
-											onInput={this.handleSearchInput}
-											placeholder="Search titles and words"
-											value={searchText}/>
-									</div>
-								</div>
-								<div class="td">
-									<a href="/new" class="button is-primary">
-										New song
-									</a>
-								</div>
-							</div>
+					<div class="field has-addons has-addons-right">
 
+						<p class="control has-icons-left">
+							<input
+								type="text"
+								class="input"
+								onInput={this.handleSearchInput}
+								placeholder="Search titles or words"
+								value={searchText}/>
+
+							<span class="icon is-small is-left">
+			      		<i class="fa fa-search"></i>
+			    		</span>
+						</p>
+						<p class="control">
+							&nbsp;
+						</p>
+
+						<p class="control">
+							<a href="/new" class="button is-primary">
+								New song
+							</a>
+						</p>
+
+					</div>
+
+					<table class="table is-bordered is-striped is-fullwidth">
+
+						<tbody>
 
 							{ songs.filter( this.filterSongs ).map( ( song, i ) => (
-										<div class="tr">
-											<div class="td">
+										<tr>
+											<td>
 												<a href={`/songs/${song.slug}`}>
 													{song.title}
 												</a>
-											</div>
-										</div>
+											</td>
+										</tr>
 							) ) }
 
-						</div>
-				</div>
+						</tbody>
 
-
-				<div class="column">
+					</table>
 
 				</div>
-			</div>
 
 			</div>
 		);

@@ -117,7 +117,7 @@ class SongEditor extends PreactComponent {
 
 					db.post( {
 						type:    'song',
-						users:   [ 'justin' ],
+						users:   [ 'justin' ], //TODO
 						slug:    slugify( title ),
 						author:  author,
 						title:   title,
@@ -162,32 +162,61 @@ class SongEditor extends PreactComponent {
 	render( {}, { author, title, content, song } ) {
 
 		return (
-			<div class="song-editor">
-				<div class="song-editor__left-column">
-					<input
-						type="text"
-						class="song-editor__title"
-						onInput={this.onTitleInput}
-						placeholder="Title"
-						value={title}/>
-					<input
-						type="text"
-						class="song-editor__author"
-						onInput={this.onAuthorInput}
-						placeholder="Author"
-						value={author}/>
-					<textarea
-						class="song-editor__content"
-						onInput={this.onContentInput}
-						placeholder="Content"
-						rows="25"
-					>
-						{content}
-					</textarea>
-					<a class="button is-primary" onClick={this.onSaveSong}>Save</a>
+			<section>
+			<div class="columns">
+				<div class="column is-three-quarters">
+
+					<div class="field">
+
+						<p class="control has-icons-left">
+							<input
+								type="text"
+								class="input"
+								onInput={this.onTitleInput}
+								placeholder="Title"
+								value={title}/>
+
+							<span class="icon is-small is-left">
+			      		<i class="fa fa-chevron-right"></i>
+			    		</span>
+
+						</p>
+					</div>
+
+					<div class="field">
+
+						<p class="control has-icons-left">
+							<input
+								type="text"
+								class="input"
+								onInput={this.onAuthorInput}
+								placeholder="Author"
+								value={author}/>
+
+							<span class="icon is-small is-left">
+			      		<i class="fa fa-chevron-right"></i>
+			    		</span>
+						</p>
+					</div>
+
+					<div class="field">
+
+						<p class="control">
+							<textarea
+								class="textarea"
+								onInput={this.onContentInput}
+								placeholder="Type words and chords here."
+								rows="25"
+							>
+								{content}
+							</textarea>
+						</p>
+
+					</div>
 				</div>
 
-				<div class="song-editor__right-column">
+				<div class="column">
+
 					<a class="button is-primary"
 						 onClick={this.onSaveSong}>Save</a>
 
@@ -204,6 +233,7 @@ class SongEditor extends PreactComponent {
 					</div>
 				</div>
 			</div>
+		</section>
 		);
 
 	}
