@@ -21,76 +21,65 @@ class SongList extends PreactComponent {
 
 	};
 
-	/*
-	<section class="section">
-		<div class="container">
-			<h1 class="title">
-				Hello World
-			</h1>
-			<p class="subtitle">
-				My first website with <strong>Bulma</strong>!
-			</p>
-		</div>
-	</section>
-
-	*/
-
 	render( { songs }, { searchText } ) {
 
 		return (
-			<div class="columns">
+			<section class="section">
+				<div class="container">
+				<div class="columns">
 
-				<div class="column is-three-quarters">
+					<div class="column is-three-quarters">
 
-					<h1>Songs</h1>
 
-					<div class="field has-addons has-addons-right">
+						<div class="field has-addons has-addons-right">
 
-						<p class="control has-icons-left">
-							<input
-								type="text"
-								class="input"
-								onInput={this.handleSearchInput}
-								placeholder="Search titles or words"
-								value={searchText}/>
+							<p class="control has-icons-left">
+								<input
+									type="text"
+									class="input"
+									onInput={this.handleSearchInput}
+									placeholder="Search titles or words"
+									value={searchText}/>
 
-							<span class="icon is-small is-left">
-			      		<i class="fa fa-search"></i>
-			    		</span>
-						</p>
-						<p class="control">
-							&nbsp;
-						</p>
+								<span class="icon is-small is-left">
+				      		<i class="fa fa-search"></i>
+				    		</span>
+							</p>
+							<p class="control">
+								&nbsp;
+							</p>
 
-						<p class="control">
-							<a href="/new" class="button is-primary">
-								New song
-							</a>
-						</p>
+							<p class="control">
+								<a href="/new" class="button is-primary">
+									New song
+								</a>
+							</p>
+
+						</div>
+
+						<table class="table is-bordered is-striped is-fullwidth">
+
+							<tbody>
+
+								{ songs.filter( this.filterSongs ).map( ( song, i ) => (
+											<tr>
+												<td>
+													<a href={`/songs/${song.slug}`}>
+														{song.title}
+													</a>
+												</td>
+											</tr>
+								) ) }
+
+							</tbody>
+
+						</table>
 
 					</div>
 
-					<table class="table is-bordered is-striped is-fullwidth">
-
-						<tbody>
-
-							{ songs.filter( this.filterSongs ).map( ( song, i ) => (
-										<tr>
-											<td>
-												<a href={`/songs/${song.slug}`}>
-													{song.title}
-												</a>
-											</td>
-										</tr>
-							) ) }
-
-						</tbody>
-
-					</table>
-
 				</div>
-
 			</div>
+		</section>
 		);
 
 	}
