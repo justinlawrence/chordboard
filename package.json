@@ -26,6 +26,7 @@
   "homepage": "https://github.com/justinlawrence/chordboard#readme",
   "dependencies": {
     "body-parser": "^1.17.2",
+    "bulma": "^0.5.1",
     "cors": "^2.8.4",
     "express": "^4.15.4",
     "pouchdb": "^6.3.4",
@@ -33,7 +34,8 @@
     "preact": "^8.2.1",
     "preact-icons": "^2.2.5",
     "preact-router": "^2.5.5",
-    "slugify": "^1.2.1"
+    "slugify": "^1.2.1",
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

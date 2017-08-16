@@ -21,40 +21,67 @@ class SongList extends PreactComponent {
 
 	};
 
+	/*
+	<section class="section">
+		<div class="container">
+			<h1 class="title">
+				Hello World
+			</h1>
+			<p class="subtitle">
+				My first website with <strong>Bulma</strong>!
+			</p>
+		</div>
+	</section>
+
+	*/
+
 	render( { songs }, { searchText } ) {
 
 		return (
-			<div class="song-list">
+			<div class="columns">
 
-				<div class="song-list__left-column">
+				<div class="column is-three-quarters">
 
-					<div class="song-list__search">
-						<input
-							type="text"
-							class="song-list__title"
-							onInput={this.handleSearchInput}
-							placeholder="Search titles and words"
-							value={searchText}/>
-					</div>
+					<div class="table">
+						<div class="tbody">
 
-					<div class="song-list__add">
-						<a href="/new">
-							-- Add a song --
-						</a>
-					</div>
+							<div class="tr">
+								<div class="td">
+									<div class="control">
+										<input
+											type="text"
+											class="input"
+											onInput={this.handleSearchInput}
+											placeholder="Search titles and words"
+											value={searchText}/>
+									</div>
+								</div>
+								<div class="td">
+									<a href="/new" class="button is-primary">
+										New song
+									</a>
+								</div>
+							</div>
 
-					{ songs.filter( this.filterSongs ).map( ( song, i ) => (
-						<div class="song-list__title">
-							<a href={`/songs/${song.slug}`}>
-								{song.title}
-							</a>
+
+							{ songs.filter( this.filterSongs ).map( ( song, i ) => (
+										<div class="tr">
+											<div class="td">
+												<a href={`/songs/${song.slug}`}>
+													{song.title}
+												</a>
+											</div>
+										</div>
+							) ) }
+
 						</div>
-					) ) }
+				</div>
+
+
+				<div class="column">
 
 				</div>
-				<div class="song-list__right-column">
-					…
-				</div>
+			</div>
 
 			</div>
 		);

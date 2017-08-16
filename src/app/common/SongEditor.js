@@ -184,10 +184,13 @@ class SongEditor extends PreactComponent {
 					>
 						{content}
 					</textarea>
-					<button onClick={this.onSaveSong}>Save</button>
+					<a class="button is-primary" onClick={this.onSaveSong}>Save</a>
 				</div>
 
 				<div class="song-editor__right-column">
+					<a class="button is-primary"
+						 onClick={this.onSaveSong}>Save</a>
+
 					<div class="song-editor__preview">
 						<div class="song-editor__preview-title">
 							{title}
