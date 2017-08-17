@@ -17,7 +17,12 @@ db.createIndex( {
 	index: { fields: [ 'type', 'users' ] }
 } );
 
-//PouchDB.sync( 'chordboard', 'http://localhost:5984/chordboard' );
+	PouchDB.sync( 'chordboard', 'http://localhost:5984/chordboard' )
+		.catch( err => {
+
+			console.warn( 'Could not sync to remote database', err );
+
+		});
 
 class App extends PreactComponent {
 	state = {

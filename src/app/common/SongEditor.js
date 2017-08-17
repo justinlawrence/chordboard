@@ -94,10 +94,7 @@ class SongEditor extends PreactComponent {
 		const { author, content, title, song } = this.state;
 		const isNew = isNil( song._id );
 
-		console.log("song is", song);
-
 		if ( isNew ) {
-			console.log("adding a new song ", song._id)
 
 			// First check to see if the slug already exists.
 			db.find( {
@@ -129,7 +126,7 @@ class SongEditor extends PreactComponent {
 						content: content
 					} ).then( () => {
 
-						alert( 'Added new task!');
+						alert( 'Added new task!' );
 
 						//TODO
 						//PouchDB.sync( 'chordboard',
@@ -145,24 +142,29 @@ class SongEditor extends PreactComponent {
 
 		} else {
 
-			console.log("editing existing id ", song._id);
-
 			const data = Object.assign( {}, song );
-
-			console.log( "put", data );
 
 			data.author = author;
 			data.content = content;
 			data.slug = slugify( title );
 			data.title = title;
 
-			db.put( data ).then( () => {
+			db.put( data ).then( ( data ) => {
 
 				alert( 'Updated successfully!' );
 
-				//TODO
-				//PouchDB.sync( 'chordboard',
-				// 'http://localhost:5984/chordboard' );
+				this.setState( {
+					song: Object.assign( {}, this.state.song,
+						{ _rev: data.rev } )
+				} );
+
+				PouchDB.sync( 'chordboard', 'http://localhost:5984/chordboard' )
+					.catch( err => {
+
+						console.warn( 'Could not sync to remote database',
+							err );
+
+					} );
 
 			} ).catch( err => {
 				console.error( err );
@@ -232,7 +234,7 @@ class SongEditor extends PreactComponent {
 						<div class="column">
 
 							<a class="button is-primary"
-								 onClick={this.onSaveSong}>Save</a>
+							   onClick={this.onSaveSong}>Save</a>
 
 							<div class="song-editor__preview">
 

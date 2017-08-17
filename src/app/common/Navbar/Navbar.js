@@ -1,6 +1,4 @@
 import Router from 'preact-router';
-import FaAngleLeft from 'preact-icons/lib/fa/angle-left';
-import FaAngleRight from 'preact-icons/lib/fa/angle-right';
 import './Navbar.scss';
 
 class Navbar extends PreactComponent {
@@ -38,16 +36,22 @@ class Navbar extends PreactComponent {
 				<div class="navbar__title">
 
 					<a href='/'>
-						<img src="http://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28" />
+						<img src="http://bulma.io/images/bulma-logo.png"
+						     alt="Bulma: a modern CSS framework based on Flexbox"
+						     width="112" height="28"/>
 					</a>
 
 				</div>
 
 				<a href="/songs" class="navbar__button">Songs</a>
 				<button class="navbar__button navbar__change-song-button"
-				        onClick={goToPreviousSong}><FaAngleLeft/></button>
+				        onClick={goToPreviousSong}>
+					<i class="fa fa-angle-left"></i>
+				</button>
 				<button class="navbar__button navbar__change-song-button"
-				        onClick={goToNextSong}><FaAngleRight/></button>
+				        onClick={goToNextSong}>
+					<i class="fa fa-angle-right"></i>
+				</button>
 				{isViewingSong ?
 					<button
 						class="navbar__button"

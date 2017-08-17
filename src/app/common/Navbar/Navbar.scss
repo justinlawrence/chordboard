@@ -35,6 +35,13 @@
 	}
 
 	&__change-song-button {
-		font-size: 24px;
+		.fa {
+			align-items:     center;
+			display:         flex;
+			font-size:       24px;
+			height:          24px;
+			justify-content: center;
+			width:           24px;
+		}
 	}
 }
