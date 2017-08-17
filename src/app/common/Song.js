@@ -8,6 +8,7 @@ class Song {
 	lines = [];
 	slug = '';
 	title = '';
+	type = 'song';
 
 	constructor( songDoc ) {
 
@@ -20,6 +21,7 @@ class Song {
 		this._rev = songDoc._rev;
 		this.slug = songDoc.slug;
 		this.title = songDoc.title;
+		this.users = songDoc.users;
 		this.author = songDoc.author;
 		this.content = songDoc.content;
 

@@ -1,3 +1,4 @@
+import {isNil} from 'lodash';
 import slugify from 'slugify';
 import PouchDB from 'pouchdb';
 import PouchDBFindPlugin from 'pouchdb-find';
@@ -91,7 +92,7 @@ class SongEditor extends PreactComponent {
 	onSaveSong = () => {
 
 		const { author, content, title, song } = this.state;
-		const isNew = song._id === null;
+		const isNew = isNil( song._id );
 
 		if ( isNew ) {
 
@@ -106,6 +107,7 @@ class SongEditor extends PreactComponent {
 				if ( result.docs.length ) {
 
 					// Slug already exists
+					alert( 'Slug already exists' );
 
 					// TODO: make the slug unique by appending a number to the
 					// end Note: If we wanted to allow duplicate slugs across
@@ -124,6 +126,8 @@ class SongEditor extends PreactComponent {
 						content: content
 					} ).then( () => {
 
+						alert( 'Added new task!');
+
 						//TODO
 						//PouchDB.sync( 'chordboard',
 						// 'http://localhost:5984/chordboard' );
@@ -140,12 +144,16 @@ class SongEditor extends PreactComponent {
 
 			const data = Object.assign( {}, song );
 
+			console.log( "put", data );
+
 			data.author = author;
 			data.content = content;
 			data.slug = slugify( title );
 			data.title = title;
 
 			db.put( data ).then( () => {
+
+				alert( 'Updated successfully!' );
 
 				//TODO
 				//PouchDB.sync( 'chordboard',
