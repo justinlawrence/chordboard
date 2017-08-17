@@ -94,7 +94,10 @@ class SongEditor extends PreactComponent {
 		const { author, content, title, song } = this.state;
 		const isNew = isNil( song._id );
 
+		console.log("song is", song);
+
 		if ( isNew ) {
+			console.log("adding a new song ", song._id)
 
 			// First check to see if the slug already exists.
 			db.find( {
@@ -119,7 +122,7 @@ class SongEditor extends PreactComponent {
 
 					db.post( {
 						type:    'song',
-						users:   [ 'justin' ],
+						users:   [ 'justin' ], //TODO
 						slug:    slugify( title ),
 						author:  author,
 						title:   title,
@@ -141,6 +144,8 @@ class SongEditor extends PreactComponent {
 			} );
 
 		} else {
+
+			console.log("editing existing id ", song._id);
 
 			const data = Object.assign( {}, song );
 
@@ -170,45 +175,83 @@ class SongEditor extends PreactComponent {
 	render( {}, { author, title, content, song } ) {
 
 		return (
-			<div class="song-editor">
-				<div class="song-editor__left-column">
-					<input
-						type="text"
-						class="song-editor__title"
-						onInput={this.onTitleInput}
-						placeholder="Title"
-						value={title}/>
-					<input
-						type="text"
-						class="song-editor__author"
-						onInput={this.onAuthorInput}
-						placeholder="Author"
-						value={author}/>
-					<textarea
-						class="song-editor__content"
-						onInput={this.onContentInput}
-						placeholder="Content"
-						rows="25"
-					>
-						{content}
-					</textarea>
-					<button onClick={this.onSaveSong}>Save</button>
-				</div>
+			<section class="section">
+				<div class="container">
+					<div class="columns">
+						<div class="column is-three-quarters">
 
-				<div class="song-editor__right-column">
-					<div class="song-editor__preview">
-						<div class="song-editor__preview-title">
-							{title}
+							<div class="field">
+
+								<p class="control has-icons-left">
+									<input
+										type="text"
+										class="input"
+										onInput={this.onTitleInput}
+										placeholder="Title"
+										value={title}/>
+
+									<span class="icon is-small is-left">
+					      		<i class="fa fa-chevron-right"></i>
+					    		</span>
+
+								</p>
+							</div>
+
+							<div class="field">
+
+								<p class="control has-icons-left">
+									<input
+										type="text"
+										class="input"
+										onInput={this.onAuthorInput}
+										placeholder="Author"
+										value={author}/>
+
+									<span class="icon is-small is-left">
+					      		<i class="fa fa-chevron-right"></i>
+					    		</span>
+								</p>
+							</div>
+
+							<div class="field">
+
+								<p class="control">
+									<textarea
+										class="textarea"
+										onInput={this.onContentInput}
+										placeholder="Type words and chords here."
+										rows="25"
+									>
+										{content}
+									</textarea>
+								</p>
+
+							</div>
 						</div>
-						<div class="song-editor__preview-author">
-							{author}
-						</div>
-						<div class="song-editor__preview-content">
-							{parseSong( new Song( song ), [] )}
+
+						<div class="column">
+
+							<a class="button is-primary"
+								 onClick={this.onSaveSong}>Save</a>
+
+							<div class="song-editor__preview">
+
+								<h1 class="title">
+									{title}
+								</h1>
+								<h2 class="subtitle">
+									{author}
+								</h2>
+
+								<div class="song-editor__preview-content">
+									{parseSong( new Song( song ), [] )}
+								</div>
+
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			</section>
 		);
 
 	}

@@ -24,39 +24,62 @@ class SongList extends PreactComponent {
 	render( { songs }, { searchText } ) {
 
 		return (
-			<div class="song-list">
+			<section class="section">
+				<div class="container">
+				<div class="columns">
 
-				<div class="song-list__left-column">
+					<div class="column is-three-quarters">
 
-					<div class="song-list__search">
-						<input
-							type="text"
-							class="song-list__title"
-							onInput={this.handleSearchInput}
-							placeholder="Search titles and words"
-							value={searchText}/>
-					</div>
 
-					<div class="song-list__add">
-						<a href="/new">
-							-- Add a song --
-						</a>
-					</div>
+						<div class="field has-addons has-addons-right">
 
-					{ songs.filter( this.filterSongs ).map( ( song, i ) => (
-						<div class="song-list__title">
-							<a href={`/songs/${song.slug}`}>
-								{song.title}
-							</a>
+							<p class="control has-icons-left">
+								<input
+									type="text"
+									class="input"
+									onInput={this.handleSearchInput}
+									placeholder="Search titles or words"
+									value={searchText}/>
+
+								<span class="icon is-small is-left">
+				      		<i class="fa fa-search"></i>
+				    		</span>
+							</p>
+							<p class="control">
+								&nbsp;
+							</p>
+
+							<p class="control">
+								<a href="/new" class="button is-primary">
+									New song
+								</a>
+							</p>
+
 						</div>
-					) ) }
+
+						<table class="table is-bordered is-striped is-fullwidth">
+
+							<tbody>
+
+								{ songs.filter( this.filterSongs ).map( ( song, i ) => (
+											<tr>
+												<td>
+													<a href={`/songs/${song.slug}`}>
+														{song.title}
+													</a>
+												</td>
+											</tr>
+								) ) }
+
+							</tbody>
+
+						</table>
+
+					</div>
 
 				</div>
-				<div class="song-list__right-column">
-					…
-				</div>
-
 			</div>
+		</section>
 		);
 
 	}
