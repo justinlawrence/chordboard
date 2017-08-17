@@ -32,7 +32,6 @@
     "pouchdb": "^6.3.4",
     "pouchdb-find": "^6.3.4",
     "preact": "^8.2.1",
-    "preact-icons": "^2.2.5",
     "preact-router": "^2.5.5",
     "slugify": "^1.2.1",
     "url": "^0.11.0"
