@@ -25,14 +25,12 @@ $horiz-padding: 48px;
 	.sections {
 		height:      $sections-height;
 		line-height: $sections-height;
+		font-size: .8em;
+		padding-right: 20px;	
 
 		a {
 			display: inline-block;
 			cursor:  pointer;
-
-			&:hover {
-				color: #03a9f4;
-			}
 		}
 	}
 }

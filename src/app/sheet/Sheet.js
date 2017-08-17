@@ -105,9 +105,11 @@ class Sheet extends PreactComponent {
 					<div class="sheet-header">
 						<Title text={song.title} author={song.author}/>
 						<Sections sections={sections}
-						          onClick={this.scrollToSection.bind( this )}/>
+					    onClick={this.scrollToSection.bind( this )}/>
+
 						<button onClick={this.transposeDown}>-</button>
 						<button onClick={this.transposeUp}>+</button>
+
 					</div>
 					{parseSong( song, sections )}
 				</div>

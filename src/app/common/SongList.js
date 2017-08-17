@@ -9,7 +9,7 @@ class SongList extends PreactComponent {
 
 		// TODO: filter the song list
 		// return false to remove song from list
-		return song.title.toLowerCase().includes( this.state.searchText );
+		return song.title.toLowerCase().includes( this.state.searchText ) || song.content.toLowerCase().includes( this.state.searchText );;
 
 	};
 
