@@ -13,10 +13,9 @@ export default ( { onClick, sections } ) => {
 		);
 
 		if ( index < sections.length - 1 ) {
-
-			children.push( <span class="separator">&middot;</span> );
-
+			children.push( <span class="separator">&nbsp;</span> );
 		}
+
 
 	} );
 

@@ -219,7 +219,7 @@ class SongEditor extends PreactComponent {
 
 								<p class="control">
 									<textarea
-										class="textarea"
+										class="textarea song-editor__content"
 										onInput={this.onContentInput}
 										placeholder="Type words and chords here."
 										rows="25"
