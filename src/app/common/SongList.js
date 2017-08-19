@@ -42,8 +42,8 @@ class SongList extends PreactComponent {
 									value={searchText}/>
 
 								<span class="icon is-small is-left">
-				      		<i class="fa fa-search"></i>
-				    		</span>
+					                <i class="fa fa-search"></i>
+					            </span>
 							</p>
 							<p class="control">
 								&nbsp;

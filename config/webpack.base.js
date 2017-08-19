@@ -1,4 +1,3 @@
-const config = require( './../package.json' ).config;
 const path = require( 'path' );
 const webpack = require( 'webpack' );
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
@@ -14,7 +13,7 @@ module.exports = function () {
 			]
 		},
 		output:  {
-			path: path.resolve( __dirname, '..', 'build' ),
+			path: path.resolve( '..', 'build' ),
 			filename:          '[name].js',
 			publicPath:        '/',
 			sourceMapFilename: '[name].map'
