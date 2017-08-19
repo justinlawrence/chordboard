@@ -11,7 +11,7 @@
     "dev-server": "webpack-dev-server --env=dev --progress --hot --inline",
     "start": "npm run dev-server",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "npm run build && scp -rp build irjweb:/var/www/chordboard",
+    "deploy": "npm run build && rsync -azP --delete ./build/ irjweb:/var/www/chordboard",
     "build": "webpack -p --env=prod --progress"
   },
   "repository": {
