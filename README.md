@@ -2,9 +2,6 @@
 
 ```yarn install```
 
-
-### Installation
-
 #### Enable cors
 Copied from https://github.com/pouchdb/add-cors-to-couchdb
 
