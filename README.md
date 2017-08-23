@@ -1,17 +1,31 @@
 # ChordBoard
-A decentralised, open-source chord sheet manager for live musicians.
+An open-source chord sheet manager for live musicians.
 
-ln -s conf/chordboard.apache.conf /etc/apache/sites-available/chordboard
+
 
 ### Installation
 
-```npm install```
+```yarn install```
+
+
+Enable cors
+
+Copied from https://github.com/pouchdb/add-cors-to-couchdb
+
+```npm install -g add-cors-to-couchdb```
+
+```add-cors-to-couchdb```
+
+
+```ln -s conf/chordboard.apache.conf /etc/apache/sites-available/chordboard```
 
 
 
 ### Run the project
 
-```npm start```
+```yarn start```
 
 
+### Deploy the project
 
+```yarn deploy```
