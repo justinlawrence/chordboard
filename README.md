@@ -1,15 +1,10 @@
-# ChordBoard
-An open-source chord sheet manager for live musicians.
-
-
-
 ### Installation
 
 ```yarn install```
 
 
+#### Installation
 Enable cors
-
 Copied from https://github.com/pouchdb/add-cors-to-couchdb
 
 ```npm install -g add-cors-to-couchdb```
