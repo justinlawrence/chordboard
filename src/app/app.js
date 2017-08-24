@@ -11,7 +11,7 @@ PouchDB.plugin( PouchDBFindPlugin );
 
 const db = new PouchDB( 'chordboard' );
 //const dbHost = 'http://localhost:5984/chordboard';
-const dbHost = 'https://chordboard.co:5984/chordboard';
+const dbHost = 'https://chordboard.co:6984/chordboard';
 
 // Does nothing if the index already exists
 db.createIndex( {
