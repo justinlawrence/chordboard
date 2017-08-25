@@ -27,6 +27,7 @@
   "dependencies": {
     "body-parser": "^1.17.2",
     "bulma": "^0.5.1",
+    "copy-webpack-plugin": "^4.0.1",
     "cors": "^2.8.4",
     "express": "^4.15.4",
     "pouchdb": "^6.3.4",
