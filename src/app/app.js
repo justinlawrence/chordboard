@@ -1,6 +1,5 @@
 import Router from 'preact-router';
 import {findIndex} from 'lodash';
-
 import Navbar from './common/Navbar/Navbar.js';
 import SongList from './common/SongList.js';
 import SongEditor from './common/SongEditor.js';
@@ -11,13 +10,15 @@ import PouchDBFindPlugin from 'pouchdb-find';
 PouchDB.plugin( PouchDBFindPlugin );
 
 const db = new PouchDB( 'chordboard' );
+//const dbHost = 'http://localhost:5984/chordboard';
+const dbHost = 'https://chordboard.co:6984/chordboard';
 
 // Does nothing if the index already exists
 db.createIndex( {
 	index: { fields: [ 'type', 'users' ] }
 } );
 
-	PouchDB.sync( 'chordboard', 'http://localhost:5984/chordboard' )
+	PouchDB.sync( 'chordboard', dbHost )
 		.catch( err => {
 
 			console.warn( 'Could not sync to remote database', err );

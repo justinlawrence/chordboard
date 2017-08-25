@@ -129,8 +129,7 @@ class SongEditor extends PreactComponent {
 						alert( 'Added new task!' );
 
 						//TODO
-						//PouchDB.sync( 'chordboard',
-						// 'http://localhost:5984/chordboard' );
+						PouchDB.sync( 'chordboard', dbHost );
 
 					} );
 

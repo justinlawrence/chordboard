@@ -9,7 +9,7 @@ class SongList extends PreactComponent {
 
 		// TODO: filter the song list
 		// return false to remove song from list
-		return song.title.toLowerCase().includes( this.state.searchText ) || song.content.toLowerCase().includes( this.state.searchText );;
+		return song.title.toLowerCase().includes( this.state.searchText ) || song.content.toLowerCase().includes( this.state.searchText ) || song.author.toLowerCase().includes( this.state.searchText );
 
 	};
 
@@ -38,7 +38,7 @@ class SongList extends PreactComponent {
 									type="text"
 									class="input"
 									onInput={this.handleSearchInput}
-									placeholder="Search titles or words"
+									placeholder="Titles, words, authors"
 									value={searchText}/>
 
 								<span class="icon is-small is-left">
@@ -67,6 +67,9 @@ class SongList extends PreactComponent {
 													<a href={`/songs/${song.slug}`}>
 														{song.title}
 													</a>
+												</td>
+												<td>
+														{song.author}
 												</td>
 											</tr>
 								) ) }
