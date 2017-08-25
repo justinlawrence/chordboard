@@ -36,9 +36,9 @@ class Navbar extends PreactComponent {
 				<div class="navbar__title">
 
 					<a href='/'>
-						<img src="http://bulma.io/images/bulma-logo.png"
-						     alt="Bulma: a modern CSS framework based on Flexbox"
-						     width="112" height="28"/>
+						<img src="/assets/chordboard-logo.png"
+						     alt="Chordboard: a chord manager for live musicians"
+						     width="182" />
 					</a>
 
 				</div>
