@@ -10,8 +10,7 @@ import PouchDBFindPlugin from 'pouchdb-find';
 PouchDB.plugin( PouchDBFindPlugin );
 
 const db = new PouchDB( 'chordboard' );
-//const dbHost = 'http://localhost:5984/chordboard';
-const dbHost = 'https://chordboard.co:6984/chordboard';
+const dbHost = 'https://couchdb.cloudno.de/chordboard';
 
 // Does nothing if the index already exists
 db.createIndex( {
@@ -137,9 +136,3 @@ class App extends PreactComponent {
 }
 
 export default App;
-
-function requireAll( requireContext ) {
-
-	return requireContext.keys().map( requireContext );
-
-}
