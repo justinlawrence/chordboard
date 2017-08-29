@@ -10,14 +10,13 @@ import PouchDBFindPlugin from 'pouchdb-find';
 PouchDB.plugin( PouchDBFindPlugin );
 
 const db = new PouchDB( 'chordboard' );
-const dbHost = 'https://couchdb.cloudno.de/chordboard';
 
 // Does nothing if the index already exists
 db.createIndex( {
 	index: { fields: [ 'type', 'users' ] }
 } );
 
-	PouchDB.sync( 'chordboard', dbHost )
+	PouchDB.sync( 'chordboard', 'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' )
 		.catch( err => {
 
 			console.warn( 'Could not sync to remote database', err );

@@ -129,7 +129,7 @@ class SongEditor extends PreactComponent {
 						alert( 'Added new task!' );
 
 						//TODO
-						PouchDB.sync( 'chordboard', dbHost );
+						PouchDB.sync( 'chordboard', 'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' );
 
 					} );
 
@@ -157,7 +157,7 @@ class SongEditor extends PreactComponent {
 						{ _rev: data.rev } )
 				} );
 
-				PouchDB.sync( 'chordboard', dbHost )
+				PouchDB.sync( 'chordboard', 'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' )
 					.catch( err => {
 
 						console.warn( 'Could not sync to remote database',

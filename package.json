@@ -2,7 +2,7 @@
   "name": "chordboard",
   "version": "1.0.0",
   "private": true,
-  "description": "A decentralised, open-source chord sheet manager for live musicians.",
+  "description": "An open-source chord sheet manager for live musicians.",
   "config": {
     "port": 8080
   },
@@ -11,8 +11,8 @@
     "dev-server": "webpack-dev-server --env=dev --progress --hot --inline",
     "start": "npm run dev-server",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy-irjweb": "npm run build && rsync -azP --delete ./build/ irjweb:/var/www/chordboard",
-    "deploy-cloudnode": "npm run build && rsync -azP --exclude=.git --delete ./build/ /var/www/chordboard-cloudnode",
+    "deploy": "npm run build && rsync -azP --delete ./build/ irjweb:/var/www/chordboard",
+    "deploy-cloudnode": "npm run build && rsync -azP --exclude=.git --delete ./build/ /var/www/chordboard-cloudnode && git -C /var/www/chordboard-cloudnode add . && git -C /var/www/chordboard-cloudnode commit -m \"auto-build\" && git -C /var/www/chordboard-cloudnode push origin master",
     "build": "webpack -p --env=prod --progress"
   },
   "repository": {
