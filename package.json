@@ -11,7 +11,8 @@
     "dev-server": "webpack-dev-server --env=dev --progress --hot --inline",
     "start": "npm run dev-server",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "npm run build && rsync -azP --delete ./build/ irjweb:/var/www/chordboard",
+    "deploy-irjweb": "npm run build && rsync -azP --delete ./build/ irjweb:/var/www/chordboard",
+    "deploy-cloudnode": "npm run build && rsync -azP --exclude=.git --delete ./build/ /var/www/chordboard-cloudnode",
     "build": "webpack -p --env=prod --progress"
   },
   "repository": {
