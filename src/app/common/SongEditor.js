@@ -157,7 +157,7 @@ class SongEditor extends PreactComponent {
 						{ _rev: data.rev } )
 				} );
 
-				PouchDB.sync( 'chordboard', 'http://localhost:5984/chordboard' )
+				PouchDB.sync( 'chordboard', dbHost )
 					.catch( err => {
 
 						console.warn( 'Could not sync to remote database',
