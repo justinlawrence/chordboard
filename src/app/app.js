@@ -16,15 +16,6 @@ db.createIndex( {
 	index: { fields: [ 'type', 'users' ] }
 } );
 
-const syncEvents = [
-	'active',
-	'change',
-	'complete',
-	'denied',
-	'error',
-	'paused'
-];
-
 const remoteDbSettings = {
 	adapter: 'http',
 	auth:    {
@@ -50,24 +41,8 @@ class App extends PreactComponent {
 	constructor( props ) {
 		super( props );
 
-		// This gets docs linked to the user: justin
-		db.find( {
-			selector: {
-				type:  'song',
-				users: {
-					$in: [ 'justin' ]
-				}
-			}
-		} ).then( result => {
-
-			this.setState( {
-				songList: result.docs
-			} );
-
-		} ).catch( err => {
-
-			console.warn( 'App.constructor - pouchdb query failed', err );
-
+		this._getListOfSongs().then( songList => {
+			this.setState( { songList } );
 		} );
 
 		this.setSongFromUrl( Router.getCurrentUrl() );
@@ -82,12 +57,12 @@ class App extends PreactComponent {
 
 		} );
 
-		syncEvents.forEach( syncEvent => {
-			sync.on( syncEvent, arg => {
-				//store.dispatch( { type: types.SET_SYNC_STATE, text: syncEvent } )
-				console.log( "syncEvent", syncEvent, arg );
+		sync.on( "change", info => {
 
+			this._getListOfSongs().then( songList => {
+				this.setState( { songList } );
 			} );
+
 		} );
 
 	}
@@ -158,6 +133,26 @@ class App extends PreactComponent {
 		);
 
 	}
+
+	_getListOfSongs = () => {
+
+		// This gets docs linked to the user: justin
+		return db.find( {
+			selector: {
+				type:  'song',
+				users: {
+					$in: [ 'justin' ]
+				}
+			}
+		} )
+			.then( result => result.docs )
+			.catch( err => {
+
+				console.warn( 'App.constructor - pouchdb query failed', err );
+
+			} );
+
+	};
 }
 
 export default App;
