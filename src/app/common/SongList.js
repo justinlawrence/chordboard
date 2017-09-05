@@ -7,8 +7,6 @@ class SongList extends PreactComponent {
 
 	filterSongs = song => {
 
-		// TODO: filter the song list
-		// return false to remove song from list
 		return song.title.toLowerCase().includes( this.state.searchText ) || song.content.toLowerCase().includes( this.state.searchText ) || song.author.toLowerCase().includes( this.state.searchText );
 
 	};

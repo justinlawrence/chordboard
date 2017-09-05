@@ -5,25 +5,16 @@ const commonConfig = require( './webpack.base.js' );
 module.exports = function ( env ) {
 
 	return webpackMerge( commonConfig(), {
-		devtool:   'eval-source-map',
+		devtool:   'source-map',
 		devServer: {
 			compress: true,
 			hot:      true,
-			inline:   true,
 			port:     config.port,
 
 			// Serves /index.html in place of 404's on dev-server requests.
 			// Therefore allowing the angular router to handle the request.
 			historyApiFallback: {
 				index: "/"
-			},
-
-			// The rest is terminal config.
-			quiet:  false,
-			noInfo: false,
-			stats:  {
-				colors:       true,
-				chunkModules: false
 			}
 		},
 		module:    {

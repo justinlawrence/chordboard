@@ -16,12 +16,30 @@ db.createIndex( {
 	index: { fields: [ 'type', 'users' ] }
 } );
 
-	PouchDB.sync( 'chordboard', 'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' )
-		.catch( err => {
+const syncEvents = [
+	'active',
+	'change',
+	'complete',
+	'denied',
+	'error',
+	'paused'
+];
 
-			console.warn( 'Could not sync to remote database', err );
+const remoteDbSettings = {
+	adapter: 'http',
+	auth:    {
+		username: 'justinlawrence',
+		password: 'cXcmbbLFO8'
+	}
+};
+const localDB = new PouchDB( 'chordboard' );
+const remoteDB = new PouchDB( 'https://couchdb.cloudno.de/chordboard',
+	remoteDbSettings );
 
-		});
+const sync = localDB.sync( remoteDB, {
+	live:  true,
+	retry: true
+} );
 
 class App extends PreactComponent {
 	state = {
@@ -62,6 +80,14 @@ class App extends PreactComponent {
 
 			this.setSongFromUrl( url );
 
+		} );
+
+		syncEvents.forEach( syncEvent => {
+			sync.on( syncEvent, arg => {
+				//store.dispatch( { type: types.SET_SYNC_STATE, text: syncEvent } )
+				console.log( "syncEvent", syncEvent, arg );
+
+			} );
 		} );
 
 	}

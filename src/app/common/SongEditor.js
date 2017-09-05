@@ -126,7 +126,7 @@ class SongEditor extends PreactComponent {
 						content: content
 					} ).then( () => {
 
-						alert( 'Added new task!' );
+						alert( 'Added new song!' );
 
 						//TODO
 						PouchDB.sync( 'chordboard', 'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' );
