@@ -38,20 +38,24 @@ class Navbar extends PreactComponent {
 					<a href='/'>
 						<img src="/assets/chordboard-logo.png"
 						     alt="Chordboard: a chord manager for live musicians"
-						     width="182" />
+						     width="142" />
 					</a>
 
 				</div>
 
 				<a href="/songs" class="navbar__button">Songs</a>
+					<a href="/sets" class="navbar__button">Sets</a>
+
 				<button class="navbar__button navbar__change-song-button"
 				        onClick={goToPreviousSong}>
 					<i class="fa fa-angle-left"></i>
 				</button>
+
 				<button class="navbar__button navbar__change-song-button"
 				        onClick={goToNextSong}>
 					<i class="fa fa-angle-right"></i>
 				</button>
+
 				{isViewingSong ?
 					<button
 						class="navbar__button"
@@ -59,6 +63,7 @@ class Navbar extends PreactComponent {
 						Edit song
 					</button>
 					: null}
+
 			</nav>
 		);
 

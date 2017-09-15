@@ -3,6 +3,7 @@ import {findIndex} from 'lodash';
 import Navbar from './common/Navbar/Navbar.js';
 import SongList from './common/SongList.js';
 import SongEditor from './common/SongEditor.js';
+import SetList from './common/SetList.js';
 import Sheet from './sheet/Sheet.js';
 import PouchDB from 'pouchdb';
 import PouchDBFindPlugin from 'pouchdb-find';
@@ -10,6 +11,7 @@ import PouchDBFindPlugin from 'pouchdb-find';
 PouchDB.plugin( PouchDBFindPlugin );
 
 const db = new PouchDB( 'chordboard' );
+const user = 'justin';
 
 // Does nothing if the index already exists
 db.createIndex( {
@@ -119,6 +121,8 @@ class App extends PreactComponent {
 
 	render( {}, { slug, songList } ) {
 
+//					<SetList path="/sets" sets={setList}/>
+
 		return (
 			<div>
 				<Navbar goToNextSong={this.goToNextSong}
@@ -141,18 +145,38 @@ class App extends PreactComponent {
 			selector: {
 				type:  'song',
 				users: {
-					$in: [ 'justin' ]
+					$in: [ user ]
 				}
 			}
 		} )
 			.then( result => result.docs )
 			.catch( err => {
 
-				console.warn( 'App.constructor - pouchdb query failed', err );
+				console.warn( 'App.constructor - pouchdb query failed: _getListOfSongs', err );
 
 			} );
 
 	};
+
+	_getListOfSets = () => {
+
+		// This gets all sets
+		return db.find( {
+			selector: {
+				type:  'set',
+				_id:	 'set/justin' //TODO: de-hardcode the user
+			}
+		} )
+			.then( result => result.docs )
+			.catch( err => {
+
+				console.warn( 'App.constructor - pouchdb query failed: _getListOfSets', err );
+
+			} );
+
+	};
+
+
 }
 
 export default App;
