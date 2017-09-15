@@ -1,7 +1,6 @@
 import Router from 'preact-router';
 import PouchDB from 'pouchdb';
 import PouchDBFindPlugin from 'pouchdb-find';
-
 import './SongList.scss';
 
 PouchDB.plugin( PouchDBFindPlugin );
@@ -134,7 +133,7 @@ class SongList extends PreactComponent {
 											</td>
 											{isAddToSet &&
 											<td>
-												<button class="button is-primary"
+												<button class="button is-primary is-outlined"
 												        onClick={() => this.addToSet(
 													        song )}>
 													<span>Add to set</span>

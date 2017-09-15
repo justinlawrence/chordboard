@@ -28,7 +28,6 @@ class SetList extends PreactComponent {
 
 						<div class="column is-three-quarters">
 
-
 							<div class="field has-addons has-addons-right">
 
 								<p class="control has-icons-left">
@@ -41,8 +40,9 @@ class SetList extends PreactComponent {
 
 									<span class="icon is-small is-left">
 						                <i class="fa fa-search"></i>
-						            </span>
+						      </span>
 								</p>
+
 								<p class="control">
 									&nbsp;
 								</p>
@@ -68,6 +68,9 @@ class SetList extends PreactComponent {
 										</td>
 										<td>
 											{set.author}
+										</td>
+										<td>
+											{set.key}
 										</td>
 									</tr>
 								) )}
