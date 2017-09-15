@@ -192,8 +192,8 @@ class SongEditor extends PreactComponent {
 										value={title}/>
 
 									<span class="icon is-small is-left">
-					      		<i class="fa fa-chevron-right"></i>
-					    		</span>
+						                <i class="fa fa-chevron-right"></i>
+						            </span>
 
 								</p>
 							</div>

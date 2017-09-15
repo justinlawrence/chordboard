@@ -1,9 +1,11 @@
 import Router from 'preact-router';
 import {findIndex} from 'lodash';
 import Navbar from './common/Navbar/Navbar.js';
+import SetEditor from 'app/common/SetEditor.js';
 import SongList from './common/SongList.js';
 import SongEditor from './common/SongEditor.js';
 import SetList from './common/SetList.js';
+import SetViewer from './common/SetViewer.js';
 import Sheet from './sheet/Sheet.js';
 import PouchDB from 'pouchdb';
 import PouchDBFindPlugin from 'pouchdb-find';
@@ -14,6 +16,9 @@ const db = new PouchDB( 'chordboard' );
 const user = 'justin';
 
 // Does nothing if the index already exists
+db.createIndex( {
+	index: { fields: [ 'type' ] }
+} );
 db.createIndex( {
 	index: { fields: [ 'type', 'users' ] }
 } );
@@ -37,6 +42,7 @@ const sync = localDB.sync( remoteDB, {
 class App extends PreactComponent {
 	state = {
 		slug:     "",
+		setList:  [],
 		songList: []
 	};
 
@@ -45,6 +51,9 @@ class App extends PreactComponent {
 
 		this._getListOfSongs().then( songList => {
 			this.setState( { songList } );
+		} );
+		this._getListOfSets().then( setList => {
+			this.setState( { setList } );
 		} );
 
 		this.setSongFromUrl( Router.getCurrentUrl() );
@@ -63,6 +72,10 @@ class App extends PreactComponent {
 
 			this._getListOfSongs().then( songList => {
 				this.setState( { songList } );
+			} );
+
+			this._getListOfSets().then( setList => {
+				this.setState( { setList } );
 			} );
 
 		} );
@@ -119,9 +132,7 @@ class App extends PreactComponent {
 
 	};
 
-	render( {}, { slug, songList } ) {
-
-//					<SetList path="/sets" sets={setList}/>
+	render( {}, { slug, setList, songList } ) {
 
 		return (
 			<div>
@@ -129,8 +140,14 @@ class App extends PreactComponent {
 				        goToPreviousSong={this.goToPreviousSong}/>
 				<Router>
 					<SongList default path="/songs" songs={songList}/>
-					<SongEditor path="/new"/>
+					<SongList path="/songs/add-to-set/:slug" songs={songList}/>
+					<SongEditor path="/songs/new"/>
 					<SongEditor path="/songs/:slug/edit" slug={slug}/>
+
+					<SetList path="/sets" sets={setList}/>
+					<SetViewer path="/sets/:slug" slug={slug}/>
+					<SetEditor path="/sets/new"/>
+
 					<Sheet path="/songs/:slug" slug={slug}/>
 				</Router>
 			</div>
@@ -152,7 +169,9 @@ class App extends PreactComponent {
 			.then( result => result.docs )
 			.catch( err => {
 
-				console.warn( 'App.constructor - pouchdb query failed: _getListOfSongs', err );
+				console.warn(
+					'App.constructor - pouchdb query failed: _getListOfSongs',
+					err );
 
 			} );
 
@@ -163,14 +182,15 @@ class App extends PreactComponent {
 		// This gets all sets
 		return db.find( {
 			selector: {
-				type:  'set',
-				_id:	 'set/justin' //TODO: de-hardcode the user
+				type: 'set'
 			}
 		} )
 			.then( result => result.docs )
 			.catch( err => {
 
-				console.warn( 'App.constructor - pouchdb query failed: _getListOfSets', err );
+				console.warn(
+					'App.constructor - pouchdb query failed: _getListOfSets',
+					err );
 
 			} );
 
