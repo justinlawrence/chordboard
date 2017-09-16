@@ -2,7 +2,7 @@ import slugify from 'slugify';
 import PouchDB from 'pouchdb';
 import PouchDBFindPlugin from 'pouchdb-find';
 
-import './set-editor.scss';
+import './SetEditor.scss';
 
 PouchDB.plugin( PouchDBFindPlugin );
 

@@ -5,7 +5,7 @@ import ChordLine from "./lines/ChordLine.js";
 import ChordPair from "./lines/ChordPair.js";
 import Line from "./lines/Line.js";
 import Sections from "./Sections.js";
-import Song from 'app/common/Song.js';
+import Song from 'app/common/SongViewer.js';
 import Title from "./lines/Title.js";
 import './Sheet.scss';
 
@@ -102,15 +102,26 @@ class Sheet extends PreactComponent {
 		return (
 			song ?
 				<div class="sheet">
-					<div class="sheet-header">
-						<Title text={song.title} author={song.author}/>
-						<Sections sections={sections}
-					    onClick={this.scrollToSection.bind( this )}/>
+					<nav class="level">
+						<div class="level-left">
+							<div class="level-item">
+								<p class="subtitle is-5">
+									<Title text={song.title} author={song.author}/>
+								</p>
+							</div>
+						</div>
+						<div class="level-right">
+							<div class="level-item">
 
-						<button onClick={this.transposeDown}>-</button>
-						<button onClick={this.transposeUp}>+</button>
+								<Sections sections={sections}
+							    onClick={this.scrollToSection.bind( this )}/>
 
-					</div>
+								<button onClick={this.transposeDown}>-</button>
+								<button onClick={this.transposeUp}>+</button>
+
+							</div>
+						</div>
+					</nav>
 					{parseSong( song, sections )}
 				</div>
 				: null

@@ -123,14 +123,17 @@ class SongList extends PreactComponent {
 								{songs.filter( this.filterSongs ).map(
 									( song, i ) => (
 										<tr>
+
 											<td>
-												<a href={`/songs/${song.slug}`}>
-													{song.title}
-												</a>
+
+												<a href={`/songs/${song.slug}`}>{song.title}</a>
+
+												<span class="help">
+													by {song.author}
+												</span>
+
 											</td>
-											<td>
-												{song.author}
-											</td>
+
 											{isAddToSet &&
 											<td>
 												<button class="button is-primary is-outlined"
