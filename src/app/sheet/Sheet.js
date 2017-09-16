@@ -6,7 +6,6 @@ import ChordPair from "./lines/ChordPair.js";
 import Line from "./lines/Line.js";
 import Sections from "./Sections.js";
 import Song from 'app/common/SongViewer.js';
-import Title from "./lines/Title.js";
 import './Sheet.scss';
 
 PouchDB.plugin( PouchDBFindPlugin );
@@ -103,19 +102,23 @@ class Sheet extends PreactComponent {
 			song ?
 				<div class="sheet">
 					<nav class="level">
+
 						<div class="level-left">
 							<div class="level-item">
-								<p class="subtitle is-5">
-									<Title text={song.title} author={song.author}/>
-								</p>
+								<h4 class="subtitle is-4">
+									{song.title}
+								</h4>
+								<p class="subtitle is-6">&nbsp; {song.author}</p>
 							</div>
 						</div>
+
 						<div class="level-right">
-							<div class="level-item">
+							<div class="level-item is-hidden-mobile">
 
 								<Sections sections={sections}
 							    onClick={this.scrollToSection.bind( this )}/>
-
+							</div>
+							<div class="level-item">
 								<button onClick={this.transposeDown}>-</button>
 								<button onClick={this.transposeUp}>+</button>
 

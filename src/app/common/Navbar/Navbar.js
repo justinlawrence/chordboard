@@ -1,5 +1,4 @@
 import Router from 'preact-router';
-import './Navbar.scss';
 
 class Navbar extends PreactComponent {
 	state = {
@@ -32,37 +31,38 @@ class Navbar extends PreactComponent {
 	render( { goToNextSong, goToPreviousSong }, { isViewingSong } ) {
 
 		return (
-			<nav class="navbar">
-				<div class="navbar__title">
+			<nav class="navbar is-light">
+				<div class="navbar-brand">
 
-					<a href='/'>
+					<a class="navbar-item" href='/'>
 						<img src="/assets/chordboard-logo.png"
 						     alt="Chordboard: a chord manager for live musicians"
 						     width="142" />
 					</a>
 
-				</div>
 
-				<a href="/songs" class="navbar__button">Songs</a>
-					<a href="/sets" class="navbar__button">Sets</a>
+					<a class="navbar-item" href="/songs">Songs</a>
+					<a class="navbar-item" href="/sets">Sets</a>
 
-				<button class="navbar__button navbar__change-song-button"
-				        onClick={goToPreviousSong}>
-					<i class="fa fa-angle-left"></i>
-				</button>
+					<a class="navbar-item" onClick={goToPreviousSong}>
+						<span class="icon">
+							<i class="fa fa-angle-left"></i>
+						</span>
+					</a>
 
-				<button class="navbar__button navbar__change-song-button"
-				        onClick={goToNextSong}>
-					<i class="fa fa-angle-right"></i>
-				</button>
+					<a class="navbar-item" onClick={goToNextSong}>
+						<span class="icon">
+							<i class="fa fa-angle-right"></i>
+						</span>
+					</a>
 
-				{isViewingSong ?
-					<button
-						class="navbar__button"
-						onClick={this.editCurrentSong}>
-						Edit song
-					</button>
-					: null}
+					{isViewingSong ?
+						<a class="navbar-item" onClick={this.editCurrentSong}>
+							Edit song
+						</a>
+						: null}
+
+					</div>
 
 			</nav>
 		);

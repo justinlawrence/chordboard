@@ -7,9 +7,11 @@ export default ( { onClick, sections } ) => {
 	sections.forEach( ( section, index ) => {
 
 		children.push(
+
 			<a onClick={onClick.bind( this, section )}>
 				{section.title}
 			</a>
+
 		);
 
 		if ( index < sections.length - 1 ) {
@@ -19,6 +21,6 @@ export default ( { onClick, sections } ) => {
 
 	} );
 
-	return <div class="sections">{ children }</div>;
+	return <div class="level-item">{ children }</div>;
 
 };
