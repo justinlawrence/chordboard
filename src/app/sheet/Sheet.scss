@@ -1,22 +1,8 @@
-@import "../../styles/main";
-$title-height: 32px;
-$sections-height: 44px;
-$vert-padding: 16px;
 $horiz-padding: 48px;
 
 .sheet {
 	padding-left:  $horiz-padding;
 	padding-right: $horiz-padding;
-	align-items:flex-start;
-
-	.sections {
-		font-size: .8em;
-
-		a {
-			display: inline-block;
-			cursor:  pointer;
-		}
-	}
 }
 .chord-pair .text-line,
 .chord-line .text-line {
@@ -38,11 +24,7 @@ $horiz-padding: 48px;
 	color:     #03a9f4;
 	font-size: 15px;
 }
-.author {
-	font-size:   12px;
-	margin-left: 16px;
-	font-style:  italic;
-}
+
 // These are chords that are found on a separate line
 .chord-line .text-line {
 	height:       0;
@@ -151,20 +133,10 @@ $horiz-padding: 48px;
 	&[data-section*="Verse 9"]:before { content: "9"; }
 	&[data-section*="Verse 10"]:before { content: "10"; }
 
-	.section-title {
-		font-size:        12px;
-		position:         absolute;
-		transform:        rotate(90deg) translate(0, calc(100% + 20px));
-		transform-origin: 0 0;
-		text-transform:   uppercase;
-	}
-}
-.separator {
-	margin: 0 8px;
+
 }
 // The lyric lines, there are 2 types, the ones in chord-pairs and the ones that are found without chords
 .text-line {
-	color:     $text-color;
 	font-size: 20px;
 	&:empty {
 		min-width: 20px;

@@ -5,7 +5,7 @@ import ChordLine from "./lines/ChordLine.js";
 import ChordPair from "./lines/ChordPair.js";
 import Line from "./lines/Line.js";
 import Sections from "./Sections.js";
-import Song from 'app/common/SongViewer.js';
+import Song from 'app/common/Song.js';
 import './Sheet.scss';
 
 PouchDB.plugin( PouchDBFindPlugin );
@@ -100,38 +100,47 @@ class Sheet extends PreactComponent {
 
 		return (
 			song ?
-				<div class="sheet">
-					<nav class="level">
+			<section class="section">
+				<div class="container">
+					<div class="columns">
 
-						<div class="level-left">
-							<div class="level-item">
-								<h4 class="subtitle is-4">
-									{song.title}
-								</h4>
-								<p class="subtitle is-6">&nbsp; {song.author}</p>
-							</div>
+						<div class="column is-three-quarters">
+
+								<nav class="level">
+
+									<div class="level-left">
+										<div class="level-item">
+											<p class="subtitle is-5">
+												<strong>{song.title}</strong>
+											</p>
+											<div class="level-item">
+												<p class="subtitle is-6">&nbsp;by {song.author}&nbsp;</p>
+											</div>
+										</div>
+									</div>
+
+									<div class="level-right">
+										<div class="level-item">
+											<button onClick={this.transposeDown}>-</button>
+											<button onClick={this.transposeUp}>+</button>
+										</div>
+									</div>
+								</nav>
+								{parseSong( song, sections )}
 						</div>
-
-						<div class="level-right">
-							<div class="level-item is-hidden-mobile">
-
-								<Sections sections={sections}
-							    onClick={this.scrollToSection.bind( this )}/>
-							</div>
-							<div class="level-item">
-								<button onClick={this.transposeDown}>-</button>
-								<button onClick={this.transposeUp}>+</button>
-
-							</div>
-						</div>
-					</nav>
-					{parseSong( song, sections )}
+					</div>
 				</div>
+			</section>
 				: null
 		);
 
 	}
 }
+
+// is-hidden-mobile
+//											//<Sections sections={sections}
+//										    onClick={this.scrollToSection.bind( this )}/>
+
 
 export default Sheet;
 

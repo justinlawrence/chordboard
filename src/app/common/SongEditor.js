@@ -4,7 +4,7 @@ import PouchDB from 'pouchdb';
 import PouchDBFindPlugin from 'pouchdb-find';
 
 import {parseSong} from '../sheet/Sheet.js';
-import Song from './SongViewer.js';
+import Song from './Song.js';
 import './SongEditor.scss';
 
 PouchDB.plugin( PouchDBFindPlugin );
