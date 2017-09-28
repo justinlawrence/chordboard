@@ -1,3 +1,4 @@
+import {route} from 'preact-router';
 import PouchDB from 'pouchdb';
 import PouchDBFindPlugin from 'pouchdb-find';
 
@@ -96,12 +97,25 @@ class SetViewer extends PreactComponent {
 	onDeleteSet = () => {
 
 		const set = this.state.set;
-		if (alert("Are you very sure you want to delete this set?")) {
+
+		if ( confirm( 'Are you very sure you want to delete this set?' ) ) {
+
 			//1 delete from pouchDb
-			db.remove( set._id, set._rev );
-			//2. redirect to /sets
-			//href={`/sets`}
-		};
+			db.remove( set._id, set._rev )
+				.then( () => {
+
+					//2. redirect to /sets
+					route( '/sets' );
+
+				} )
+				.catch( err => {
+
+					alert('Failed to delete');
+					console.warn( err );
+
+				} );
+
+		}
 
 	};
 
@@ -152,19 +166,6 @@ class SetViewer extends PreactComponent {
 
 	};
 
-	/*
-		Array.prototype.move = function (old_index, new_index) {
-			if (new_index >= this.length) {
-				var k = new_index - this.length;
-				while ((k--) + 1) {
-					this.push(undefined);
-				}
-			}
-			this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-			return this; // for testing purposes
-		};
-	*/
-
 	render( {}, { songs, set } ) {
 		return (
 			<section class="set-viewer section">
@@ -213,11 +214,13 @@ class SetViewer extends PreactComponent {
 												</a>
 											</td>
 											<td>
-												<a onClick={() => this.onMoveSongUp(
-													song )}>
-														<span class="icon is-small is-left">
-		 		 						                <i class="fa fa-arrow-up"></i>
-		 		 						      </span>
+												{song.key}
+											</td>
+											<td>
+												<a onClick={() => this.onMoveSongUp(song )}>
+													<span class="icon is-small is-left">
+			                                            <i class="fa fa-arrow-up"></i>
+			                                        </span>
 												</a>
 											</td>
 										</tr>
