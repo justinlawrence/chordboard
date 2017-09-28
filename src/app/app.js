@@ -1,12 +1,13 @@
 import Router from 'preact-router';
 import {findIndex} from 'lodash';
 import Navbar from './common/Navbar/Navbar.js';
-import SetEditor from 'app/common/SetEditor.js';
-import SongList from './common/SongList.js';
-import SongEditor from './common/SongEditor.js';
-import SetList from './common/SetList.js';
-import SetViewer from './common/SetViewer.js';
-import Sheet from './sheet/Sheet.js';
+import SetEditor from './SetEditor/SetEditor.js';
+import SongList from './SongList/SongList.js';
+import SongEditor from './SongEditor/SongEditor.js';
+import SetList from './SetList/SetList.js';
+import SetViewer from './SetViewer/SetViewer.js';
+import SongViewer from './SongViewer/SongViewer.js';
+
 import PouchDB from 'pouchdb';
 import PouchDBFindPlugin from 'pouchdb-find';
 
@@ -148,7 +149,7 @@ class App extends PreactComponent {
 					<SetViewer path="/sets/:slug" slug={slug}/>
 					<SetEditor path="/sets/new"/>
 
-					<Sheet path="/songs/:slug" slug={slug}/>
+					<SongViewer path="/songs/:slug" slug={slug}/>
 				</Router>
 			</div>
 		);

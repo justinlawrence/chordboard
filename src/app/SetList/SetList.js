@@ -39,7 +39,7 @@ class SetList extends PreactComponent {
 										value={searchText}/>
 
 									<span class="icon is-small is-left">
-						                <i class="fa fa-search"></i>
+						        <i class="fa fa-search"></i>
 						      </span>
 								</p>
 

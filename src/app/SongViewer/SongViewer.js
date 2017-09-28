@@ -6,7 +6,7 @@ import ChordPair from "./lines/ChordPair.js";
 import Line from "./lines/Line.js";
 import Sections from "./Sections.js";
 import Song from 'app/common/Song.js';
-import './Sheet.scss';
+import './SongViewer.scss';
 
 PouchDB.plugin( PouchDBFindPlugin );
 
@@ -16,7 +16,7 @@ db.createIndex( {
 	index: { fields: [ 'type', 'slug' ] }
 } );
 
-class Sheet extends PreactComponent {
+class SongViewer extends PreactComponent {
 	state = {
 		isLoading: true,
 		song: null
@@ -52,7 +52,7 @@ class Sheet extends PreactComponent {
 
 			} ).catch( err => {
 
-				console.error( 'Sheet.handleProps -', err );
+				console.error( 'SongViewer.handleProps -', err );
 
 				this.setState( {
 					isLoading: false,
@@ -121,8 +121,17 @@ class Sheet extends PreactComponent {
 
 									<div class="level-right">
 										<div class="level-item">
-											<button onClick={this.transposeDown}>-</button>
-											<button onClick={this.transposeUp}>+</button>
+
+											<a class="button" onClick={this.transposeDown}>
+												 <span class="icon is-small">
+			 						         <i class="fa fa-minus"></i>
+			 						      </span>
+										 	</a>
+											<a class="button" onClick={this.transposeUp}>
+												 <span class="icon is-small">
+			 						         <i class="fa fa-plus"></i>
+			 						      </span>
+										 	</a>
 										</div>
 									</div>
 								</nav>
@@ -142,7 +151,7 @@ class Sheet extends PreactComponent {
 //										    onClick={this.scrollToSection.bind( this )}/>
 
 
-export default Sheet;
+export default SongViewer;
 
 //-----------------------------------------------------
 

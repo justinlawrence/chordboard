@@ -2,10 +2,9 @@ import {isNil} from 'lodash';
 import slugify from 'slugify';
 import PouchDB from 'pouchdb';
 import PouchDBFindPlugin from 'pouchdb-find';
-
-import {parseSong} from '../sheet/Sheet.js';
-import Song from './Song.js';
-import './SongEditor.scss';
+import {parseSong} from '../SongViewer/SongViewer.js';
+import Song from '../common/Song.js';
+import '../SongEditor/SongEditor.scss';
 
 PouchDB.plugin( PouchDBFindPlugin );
 
@@ -20,6 +19,7 @@ class SongEditor extends PreactComponent {
 		author:    '',
 		isLoading: false,
 		title:     '',
+		key:     	 '',
 		content:   '',
 		song:      null
 	};
@@ -53,18 +53,20 @@ class SongEditor extends PreactComponent {
 					author:    song.author,
 					isLoading: false,
 					title:     song.title,
+					key:	     song.key,
 					content:   song.content,
 					song:      song
 				} );
 
 			} ).catch( err => {
 
-				console.error( 'Sheet.handleProps -', err );
+				console.error( 'SongViewer.handleProps -', err );
 
 				this.setState( {
 					author:    '',
 					isLoading: false,
 					title:     '',
+					key:			 '',
 					content:   '',
 					song:      null
 				} );
@@ -89,9 +91,23 @@ class SongEditor extends PreactComponent {
 		this.setState( { title: event.target.value } );
 	};
 
+	onKeyInput = event => {
+		this.setState( { key: event.target.value } );
+	};
+
+	onDeleteSong = () => {
+		alert("Sorry, you can't delete songs yet.");
+		/*
+		if (alert("Are you very sure you want to delete this song?")) {
+			//TODO: delete from pouchDb and refresh to song list with a message saying song deleted
+		};
+		*/
+	};
+
+
 	onSaveSong = () => {
 
-		const { author, content, title, song } = this.state;
+		const { author, content, title, key, song } = this.state;
 		const isNew = isNil( song._id );
 
 		if ( isNew ) {
@@ -123,6 +139,7 @@ class SongEditor extends PreactComponent {
 						slug:    slugify( title ),
 						author:  author,
 						title:   title,
+						key: 	   key,
 						content: content
 					} ).then( () => {
 
@@ -147,6 +164,7 @@ class SongEditor extends PreactComponent {
 			data.content = content;
 			data.slug = slugify( title );
 			data.title = title;
+			data.key = key;
 
 			db.put( data ).then( ( data ) => {
 
@@ -173,7 +191,7 @@ class SongEditor extends PreactComponent {
 
 	};
 
-	render( {}, { author, title, content, song } ) {
+	render( {}, { author, title, key, content, song} ) {
 
 		return (
 			<section class="section">
@@ -212,28 +230,61 @@ class SongEditor extends PreactComponent {
 					      		<i class="fa fa-chevron-right"></i>
 					    		</span>
 								</p>
+
 							</div>
 
 							<div class="field">
 
-								<p class="control">
-									<textarea
-										class="textarea song-editor__content"
-										onInput={this.onContentInput}
-										placeholder="Type words and chords here."
-										rows="25"
-									>
-										{content}
-									</textarea>
+								<p class="control has-icons-left">
+									<input
+										type="text"
+										class="input"
+										onInput={this.onKeyInput}
+										placeholder="Key"
+										value={key}/>
+
+									<span class="icon is-small is-left">
+					      		<i class="fa fa-chevron-right"></i>
+					    		</span>
 								</p>
 
-							</div>
+						</div>
+
+						<div class="field">
+
+							<p class="control">
+								<textarea
+									class="textarea song-editor__content"
+									onInput={this.onContentInput}
+									placeholder="Type words and chords here."
+									rows="25"
+								>
+									{content}
+								</textarea>
+							</p>
+
+						</div>
+
 						</div>
 
 						<div class="column">
 
-							<a class="button is-primary"
-							   onClick={this.onSaveSong}>Save</a>
+							<div class="level-left">
+								<div class="level-item">
+
+										<a class="button is-outlined" onClick={this.onDeleteSong}>
+											 <span class="icon is-small is-left">
+												 <i class="fa fa-trash"></i>
+											</span>
+										</a>
+								</div>
+								<div class="level-item">
+
+										<a class="button is-primary"
+										   onClick={this.onSaveSong}>Save</a>
+
+								</div>
+							</div>
 
 							<div class="song-editor__preview">
 

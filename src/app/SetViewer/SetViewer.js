@@ -93,6 +93,33 @@ class SetViewer extends PreactComponent {
 
 	};
 
+	onDeleteSet = () => {
+		alert("Sorry, you can't delete sets yet.");
+		/*
+		if (alert("Are you very sure you want to delete this song?")) {
+			//TODO: delete from pouchDb and refresh to song list with a message saying song deleted
+		};
+
+		href={`/sets`}
+		*/
+	};
+
+	onMoveSongUp = () => {
+		alert("going up!");
+	}
+/*
+	Array.prototype.move = function (old_index, new_index) {
+	    if (new_index >= this.length) {
+	        var k = new_index - this.length;
+	        while ((k--) + 1) {
+	            this.push(undefined);
+	        }
+	    }
+	    this.splice(new_index, 0, this.splice(old_index, 1)[0]);
+	    return this; // for testing purposes
+	};
+*/
+
 	render( {}, { songs, set } ) {
 		return (
 			<section class="set-viewer section">
@@ -117,6 +144,15 @@ class SetViewer extends PreactComponent {
 										<a class="button is-primary"
 										   href={`/songs/add-to-set/${set.slug}`}>Add songs</a>}
 									</p>
+									<p class="level-item">
+										{set &&
+										<a class="button is-outlined" onClick={this.onDeleteSet}>
+											 <span class="icon is-small is-left">
+		 						                <i class="fa fa-trash"></i>
+		 						      </span>
+
+										 </a>}
+									</p>
 								</div>
 							</nav>
 
@@ -131,10 +167,20 @@ class SetViewer extends PreactComponent {
 														{song.title}
 													</a>
 												</td>
+												<td>
+													<a onClick={this.onMoveSongUp} >
+														<span class="icon is-small is-left">
+		 		 						                <i class="fa fa-arrow-up"></i>
+		 		 						      </span>
+													</a>
+												</td>
 											</tr>
 										) )
 										:
-										<div>This set has no songs</div>
+										<div>
+										<h1>This set has no songs</h1>
+										<p>Add some by clicking Add Songs above</p>
+										</div>
 									}
 								</tbody>
 

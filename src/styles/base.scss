@@ -27,12 +27,3 @@ fieldset {
 textarea {
 	resize: vertical;
 }
-a {
-	color:           $text-color;
-	text-decoration: none;
-
-	&:hover {
-		color:           $anchor-hover-color;
-		text-decoration: underline;
-	}
-}
