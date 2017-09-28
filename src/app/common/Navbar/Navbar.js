@@ -28,7 +28,14 @@ class Navbar extends PreactComponent {
 
 	};
 
-	render( { goToNextSong, goToPreviousSong }, { isViewingSong } ) {
+	setDefaultMode = () => {
+
+		this.context.setMode( '' );
+		Router.route( `/songs` );
+
+	};
+
+	render( { focusedSet, goToNextSong, goToPreviousSong, mode }, { isViewingSong } ) {
 
 		return (
 			<nav class="navbar is-light">
@@ -37,24 +44,26 @@ class Navbar extends PreactComponent {
 					<a class="navbar-item" href='/'>
 						<img src="/assets/chordboard-logo.png"
 						     alt="Chordboard: a chord manager for live musicians"
-						     width="142" />
+						     width="142"/>
 					</a>
 
+					{mode === 'live' && [
+						<p class="navbar-item">{focusedSet.title}</p>,
+						<a class="navbar-item" onClick={goToPreviousSong}>
+							<span class="icon"><i class="fa fa-angle-left"></i></span>
+						</a>,
+						<a class="navbar-item" onClick={goToNextSong}>
+							<span class="icon"><i class="fa fa-angle-right"></i></span>
+						</a>,
+						<a class="navbar-item" onClick={this.setDefaultMode}>
+							<span class="icon"><i class="fa fa-close"></i></span>
+						</a>
+					]}
 
-					<a class="navbar-item" href="/songs">Songs</a>
-					<a class="navbar-item" href="/sets">Sets</a>
-
-					<a class="navbar-item" onClick={goToPreviousSong}>
-						<span class="icon">
-							<i class="fa fa-angle-left"></i>
-						</span>
-					</a>
-
-					<a class="navbar-item" onClick={goToNextSong}>
-						<span class="icon">
-							<i class="fa fa-angle-right"></i>
-						</span>
-					</a>
+					{mode === '' && [
+						<a class="navbar-item" href="/songs">Songs</a>,
+						<a class="navbar-item" href="/sets">Sets</a>
+					]}
 
 					{isViewingSong ?
 						<a class="navbar-item" onClick={this.editCurrentSong}>
@@ -62,7 +71,7 @@ class Navbar extends PreactComponent {
 						</a>
 						: null}
 
-					</div>
+				</div>
 
 			</nav>
 		);

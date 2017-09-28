@@ -168,6 +168,17 @@ class SetViewer extends PreactComponent {
 
 	};
 
+	setLiveMode = () => {
+
+		const set = this.state.set;
+
+		this.context.setFocusedSet( set );
+		this.context.setMode( 'live' );
+
+		route( `/sets/${set.slug}/songs/${set.songs[ 0 ]._id}` );
+
+	};
+
 	changeKey = ( song, amount ) => {
 
 		const songs = this.state.songs.slice();
@@ -231,11 +242,8 @@ class SetViewer extends PreactComponent {
 
 					</td>
 					<td>
-						<a onClick={() => this.onMoveSongUp(
-							song )}>
-													<span class="icon is-small is-left">
-			                                            <i class="fa fa-arrow-up"></i>
-			                                        </span>
+						<a onClick={() => this.onMoveSongUp( song )}>
+							<span class="icon is-small is-left"><i class="fa fa-arrow-up"></i></span>
 						</a>
 					</td>
 				</tr>
@@ -261,20 +269,29 @@ class SetViewer extends PreactComponent {
 								</div>
 
 								<div class="level-right">
+									{set &&
 									<p class="level-item">
-										{set &&
 										<a class="button is-primary"
-										   href={`/songs/add-to-set/${set.slug}`}>Add songs</a>}
-									</p>
-									<p class="level-item">
-										{set &&
-										<a class="button is-outlined" onClick={this.onDeleteSet}>
-											 <span class="icon is-small is-left">
-		 						                <i class="fa fa-trash"></i>
-		 						      </span>
+										   href={`/songs/add-to-set/${set.slug}`}>
+											Add songs
+										</a>
+									</p>}
 
-										</a>}
-									</p>
+									{set &&
+									<p class="level-item">
+										<a class="button is-primary"
+										   onClick={this.setLiveMode}>
+											Go live
+										</a>
+									</p>}
+
+									{set &&
+									<p class="level-item">
+										<a class="button is-outlined"
+										   onClick={this.onDeleteSet}>
+											<span class="icon is-small is-left"><i class="fa fa-trash"></i></span>
+										</a>
+									</p>}
 								</div>
 							</nav>
 

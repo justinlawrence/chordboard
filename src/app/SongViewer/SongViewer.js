@@ -4,7 +4,6 @@ import PouchDBFindPlugin from 'pouchdb-find';
 import ChordLine from "./lines/ChordLine.js";
 import ChordPair from "./lines/ChordPair.js";
 import Line from "./lines/Line.js";
-import Sections from "./Sections.js";
 import Song from 'app/common/Song.js';
 import './SongViewer.scss';
 
@@ -19,7 +18,7 @@ db.createIndex( {
 class SongViewer extends PreactComponent {
 	state = {
 		isLoading: true,
-		song: null
+		song:      null
 	};
 
 	componentDidMount() {
@@ -34,32 +33,63 @@ class SongViewer extends PreactComponent {
 
 		this.setState( {
 			isLoading: true
-		});
+		} );
 
-		if ( props.slug ) {
+		if ( props.mode === 'live' ) {
 
-			db.find( {
-				selector: {
-					type:  'song',
-					slug: props.slug
-				}
-			} ).then( result => {
+			if ( props.id ) {
 
-				this.setState( {
-					isLoading: false,
-					song: new Song( result.docs[ 0 ] )
+				db.get( props.id )
+					.then( result => {
+
+						this.setState( {
+							isLoading: false,
+							song:      new Song( result )
+						} );
+
+					} )
+					.catch( err => {
+
+						console.error( 'SongViewer.handleProps live mode -',
+							err );
+
+						this.setState( {
+							isLoading: false,
+							song:      null
+						} );
+
+					} );
+
+			}
+
+		} else {
+
+			if ( props.slug && !props.id ) {
+
+				db.find( {
+					selector: {
+						type: 'song',
+						slug: props.slug
+					}
+				} ).then( result => {
+
+					this.setState( {
+						isLoading: false,
+						song:      new Song( result.docs[ 0 ] )
+					} );
+
+				} ).catch( err => {
+
+					console.error( 'SongViewer.handleProps -', err );
+
+					this.setState( {
+						isLoading: false,
+						song:      null
+					} );
+
 				} );
 
-			} ).catch( err => {
-
-				console.error( 'SongViewer.handleProps -', err );
-
-				this.setState( {
-					isLoading: false,
-					song:      null
-				} );
-
-			} );
+			}
 
 		}
 
@@ -86,8 +116,10 @@ class SongViewer extends PreactComponent {
 
 	changeKey = amount => {
 
-		this.state.song.transpose( amount );
-		this.forceUpdate();
+		const song = Object.assign( {}, this.state.song );
+		song.transpose( amount );
+
+		this.setState( { song } );
 
 	};
 
@@ -98,13 +130,15 @@ class SongViewer extends PreactComponent {
 
 		let sections = [];
 
+		console.log( 'song', song );
+
 		return (
 			song ?
-			<section class="section">
-				<div class="container">
-					<div class="columns">
+				<section class="section">
+					<div class="container">
+						<div class="columns">
 
-						<div class="column is-three-quarters">
+							<div class="column is-three-quarters">
 
 								<nav class="level">
 
@@ -126,20 +160,20 @@ class SongViewer extends PreactComponent {
 												 <span class="icon is-small">
 			 						         <i class="fa fa-minus"></i>
 			 						      </span>
-										 	</a>
+											</a>
 											<a class="button" onClick={this.transposeUp}>
 												 <span class="icon is-small">
 			 						         <i class="fa fa-plus"></i>
 			 						      </span>
-										 	</a>
+											</a>
 										</div>
 									</div>
 								</nav>
 								{parseSong( song, sections )}
+							</div>
 						</div>
 					</div>
-				</div>
-			</section>
+				</section>
 				: null
 		);
 
@@ -148,7 +182,8 @@ class SongViewer extends PreactComponent {
 
 // is-hidden-mobile
 //											//<Sections sections={sections}
-//										    onClick={this.scrollToSection.bind( this )}/>
+//										    onClick={this.scrollToSection.bind(
+// this )}/>
 
 
 export default SongViewer;
