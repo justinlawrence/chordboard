@@ -96,15 +96,13 @@ class SetViewer extends PreactComponent {
 	onDeleteSet = () => {
 
 		const set = this.state.set;
-		//db.remove( set._id, set._rev );
-		alert( "Sorry, you can't delete sets yet." );
-		/*
-		if (alert("Are you very sure you want to delete this song?")) {
-			//TODO: delete from pouchDb and refresh to song list with a message saying song deleted
+		if (alert("Are you very sure you want to delete this set?")) {
+			//1 delete from pouchDb
+			db.remove( set._id, set._rev );
+			//2. redirect to /sets
+			//href={`/sets`}
 		};
 
-		href={`/sets`}
-		*/
 	};
 
 	onMoveSongUp = song => {
