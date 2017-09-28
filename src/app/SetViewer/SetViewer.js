@@ -94,6 +94,9 @@ class SetViewer extends PreactComponent {
 	};
 
 	onDeleteSet = () => {
+
+		const set = this.state.set;
+		//db.remove( set._id, set._rev );
 		alert( "Sorry, you can't delete sets yet." );
 		/*
 		if (alert("Are you very sure you want to delete this song?")) {
