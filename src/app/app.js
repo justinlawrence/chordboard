@@ -1,5 +1,7 @@
-import Router from 'preact-router';
+import url from 'url';
 import {findIndex} from 'lodash';
+import Router from 'preact-router';
+
 import Navbar from './common/Navbar/Navbar.js';
 import SetEditor from './SetEditor/SetEditor.js';
 import SongList from './SongList/SongList.js';
@@ -42,13 +44,18 @@ const sync = localDB.sync( remoteDB, {
 
 class App extends PreactComponent {
 	state = {
-		slug:     "",
-		setList:  [],
-		songList: []
+		focusedSet: '',
+		mode:       '',
+		slug:       '',
+		setList:    [],
+		songList:   []
 	};
 
-	constructor( props ) {
-		super( props );
+	componentDidMount() {
+
+		const currentUrl = new URL( location.origin + Router.getCurrentUrl() );
+
+		this.setState( { mode: currentUrl.searchParams.get( 'mode' ) || '' } );
 
 		this._getListOfSongs().then( songList => {
 			this.setState( { songList } );
@@ -60,6 +67,8 @@ class App extends PreactComponent {
 		this.setSongFromUrl( Router.getCurrentUrl() );
 
 		Router.subscribers.push( url => {
+
+			this.updateModeInUrl();
 
 			this.setState( {
 				slug: ""
@@ -82,6 +91,15 @@ class App extends PreactComponent {
 		} );
 
 	}
+
+	getChildContext = () => {
+
+		return {
+			setFocusedSet: this.setFocusedSet,
+			setMode:       this.setMode
+		};
+
+	};
 
 	goToNextSong = () => {
 
@@ -119,6 +137,18 @@ class App extends PreactComponent {
 
 	};
 
+	setFocusedSet = focusedSet => {
+
+		this.setState( { focusedSet } );
+
+	};
+
+	setMode = mode => {
+
+		this.setState( { mode } );
+
+	};
+
 	setSongFromUrl = url => {
 
 		const slugMatch = url.match( /\/songs\/(.+)$/ );
@@ -133,12 +163,40 @@ class App extends PreactComponent {
 
 	};
 
-	render( {}, { slug, setList, songList } ) {
+	updateModeInUrl = () => {
+
+		const url = location.origin + Router.getCurrentUrl();
+		const mode = this.state.mode;
+		const currentUrl = new URL( url );
+
+		const newUrl = new URL( url );
+		newUrl.searchParams.delete( 'mode' );
+
+		if ( mode ) {
+
+			newUrl.searchParams.set( 'mode', mode );
+
+		}
+
+		if ( currentUrl.href !== newUrl.href ) {
+
+			setTimeout( () => {
+				Router.route( newUrl.pathname + newUrl.search );
+			} );
+
+		}
+
+	};
+
+	render( {}, { focusedSet, mode, slug, setList, songList } ) {
 
 		return (
 			<div>
-				<Navbar goToNextSong={this.goToNextSong}
-				        goToPreviousSong={this.goToPreviousSong}/>
+				<Navbar
+					focusedSet={focusedSet}
+					goToNextSong={this.goToNextSong}
+					goToPreviousSong={this.goToPreviousSong}
+					mode={mode}/>
 				<Router>
 					<SongList default path="/songs" songs={songList}/>
 					<SongList path="/songs/add-to-set/:slug" songs={songList}/>
@@ -148,8 +206,9 @@ class App extends PreactComponent {
 					<SetList path="/sets" sets={setList}/>
 					<SetViewer path="/sets/:slug" slug={slug}/>
 					<SetEditor path="/sets/new"/>
+					<SongViewer path="/sets/:slug/songs/:id" mode={mode}/>
 
-					<SongViewer path="/songs/:slug" slug={slug}/>
+					<SongViewer path="/songs/:slug" mode={mode}/>
 				</Router>
 			</div>
 		);
