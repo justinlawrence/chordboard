@@ -1,7 +1,9 @@
+import {find} from 'lodash'
 import {route} from 'preact-router';
 import PouchDB from 'pouchdb';
 import PouchDBFindPlugin from 'pouchdb-find';
 
+import transposeChord from '../common/transpose-chord';
 import './SetViewer.scss';
 
 PouchDB.plugin( PouchDBFindPlugin );
@@ -50,9 +52,12 @@ class SetViewer extends PreactComponent {
 						isLoading: true
 					} );
 
+					const keys = set.songs.map(
+						s => typeof s === 'string' ? s : s._id );
+
 					db.allDocs( {
 						include_docs: true,
-						keys:         set.songs
+						keys:         keys
 					} ).then( result => {
 
 						this.setState( {
@@ -110,7 +115,7 @@ class SetViewer extends PreactComponent {
 				} )
 				.catch( err => {
 
-					alert('Failed to delete');
+					alert( 'Failed to delete' );
 					console.warn( err );
 
 				} );
@@ -132,25 +137,22 @@ class SetViewer extends PreactComponent {
 			setSongs.splice( currentIndex, 1 );
 			songs.splice( currentIndex, 1 );
 
-			setSongs.splice( targetIndex, 0, song._id );
+			setSongs.splice( targetIndex, 0, { _id: song._id, key: song.key } );
 			songs.splice( targetIndex, 0, song );
 
-			this.saveSet( setSongs );
-			this.setState( {
-				set:   setSongs,
-				songs: songs
+			const set = Object.assign( {}, this.state.set, {
+				songs: setSongs
 			} );
+
+			this.saveSet( set );
+			this.setState( { set, songs } );
 
 
 		}
 
 	};
 
-	saveSet = setSongs => {
-
-		const set = Object.assign( {}, this.state.set, {
-			songs: setSongs
-		} );
+	saveSet = set => {
 
 		db.put( set )
 			.then( () => {
@@ -166,7 +168,81 @@ class SetViewer extends PreactComponent {
 
 	};
 
+	changeKey = ( song, amount ) => {
+
+		const songs = this.state.songs.slice();
+		const setSongs = this.state.set.songs.slice();
+		const setSong = find( setSongs, s => s._id === song._id );
+
+		const index = songs.indexOf( song );
+		const key = setSong ? setSong.key : song.key;
+
+		if ( index !== -1 ) {
+
+			const newKey = transposeChord( key, amount );
+
+			song.key = newKey;
+
+			setSongs.splice( index, 1 );
+			songs.splice( index, 1 );
+
+			setSongs.splice( index, 0, { _id: song._id, key: newKey } );
+			songs.splice( index, 0, song );
+
+			const set = Object.assign( {}, this.state.set, {
+				songs: setSongs
+			} );
+			this.saveSet( set );
+			this.setState( { set, songs } );
+
+		}
+
+	};
+
+	transposeDown = song => { this.changeKey( song, -1 ); };
+	transposeUp = song => { this.changeKey( song, 1 ); };
+
 	render( {}, { songs, set } ) {
+
+		const createRow = song => {
+
+			const setSong = find( set.songs, s => s._id === song._id );
+			const key = setSong ? setSong.key : song.key;
+
+			return (
+				<tr>
+					<td>
+						<a href={`/songs/${song.slug}`}>
+							{song.title}
+						</a>
+					</td>
+					<td>
+						{key}
+						<a class="button"
+						   onClick={() => this.transposeDown( song )}
+						>
+							<span class="icon is-small"><i class="fa fa-minus"></i></span>
+						</a>
+						<a class="button"
+						   onClick={() => this.transposeUp( song )}
+						>
+							<span class="icon is-small"><i class="fa fa-plus"></i></span>
+						</a>
+
+					</td>
+					<td>
+						<a onClick={() => this.onMoveSongUp(
+							song )}>
+													<span class="icon is-small is-left">
+			                                            <i class="fa fa-arrow-up"></i>
+			                                        </span>
+						</a>
+					</td>
+				</tr>
+			);
+
+		}
+
 		return (
 			<section class="set-viewer section">
 				<div class="container">
@@ -206,25 +282,7 @@ class SetViewer extends PreactComponent {
 
 								<tbody>
 								{songs.length ?
-									songs.map( song => (
-										<tr>
-											<td>
-												<a href={`/songs/${song.slug}`}>
-													{song.title}
-												</a>
-											</td>
-											<td>
-												{song.key}
-											</td>
-											<td>
-												<a onClick={() => this.onMoveSongUp(song )}>
-													<span class="icon is-small is-left">
-			                                            <i class="fa fa-arrow-up"></i>
-			                                        </span>
-												</a>
-											</td>
-										</tr>
-									) )
+									songs.map( createRow )
 									:
 									<div>
 										<h1>This set has no songs</h1>
