@@ -128,10 +128,18 @@ class SongList extends PreactComponent {
 
 												<a href={`/songs/${song.slug}`}>{song.title}</a>
 
-												<span class="help">
-													by {song.author}
-												</span>
+											</td>
 
+											<td>
+												<span class="help">
+													{song.author}
+												</span>
+											</td>
+
+											<td>
+												<span class="help">
+													{song.key}
+												</span>
 											</td>
 
 											{isAddToSet &&
