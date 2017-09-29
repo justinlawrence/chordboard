@@ -40,6 +40,9 @@ class SetContainer extends PreactComponent {
 					const prevSong = index >= 0 ? songs[ index - 1 ] : null;
 					const nextSong = index >= 0 ? songs[ index + 1 ] : null;
 
+					const currentKey = set && set.songs[ index ] ?
+						set.songs[ index ].key : null;
+
 					return (
 						<div>
 							{set && (
@@ -69,7 +72,9 @@ class SetContainer extends PreactComponent {
 									</div>
 								</div>
 							)}
-							<SongContainer slug={match.params.songSlug}/>
+							<SongContainer
+								currentKey={currentKey}
+								slug={match.params.songSlug}/>
 						</div>
 					);
 

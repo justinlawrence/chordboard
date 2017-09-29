@@ -18,7 +18,6 @@ class SongContainer extends PreactComponent {
 	}
 
 	handleProps = props => {
-
 		this._getSongBySlug( props.slug )
 			.then( song => {
 
@@ -28,10 +27,9 @@ class SongContainer extends PreactComponent {
 
 	};
 
-	render( {}, { song } ) {
-
+	render( { currentKey }, { song } ) {
 		return song && (
-			<SongViewer song={song}/>
+			<SongViewer currentKey={currentKey} song={song}/>
 		);
 
 	}

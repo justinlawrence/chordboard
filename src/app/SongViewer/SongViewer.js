@@ -27,6 +27,16 @@ class SongViewer extends PreactComponent {
 
 		}
 
+		if ( props.currentKey ) {
+
+			// TODO: Set song transpose with key
+			// `props.currentKey` is the overridden key from the set list
+			// need to figure out the difference in keys in an integer value to
+			// pass onto the changeKey method.
+			// this.changeKey( ? );
+
+		}
+
 	};
 
 	editCurrentSong = () => {
@@ -67,7 +77,7 @@ class SongViewer extends PreactComponent {
 	transposeDown = () => { this.changeKey( -1 ); };
 	transposeUp = () => { this.changeKey( 1 ); };
 
-	render( {}, { song } ) {
+	render( { currentKey }, { song } ) {
 
 		let sections = [];
 
