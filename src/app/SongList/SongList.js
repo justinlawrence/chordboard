@@ -1,4 +1,3 @@
-import Router from 'preact-router';
 import PouchDB from 'pouchdb';
 import PouchDBFindPlugin from 'pouchdb-find';
 import './SongList.scss';

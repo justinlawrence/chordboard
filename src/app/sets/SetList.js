@@ -1,3 +1,6 @@
+import {Link} from 'react-router-dom';
+import SetLink from './SetLink';
+
 import './SetList.scss';
 
 class SetList extends PreactComponent {
@@ -38,8 +41,8 @@ class SetList extends PreactComponent {
 										value={searchText}/>
 
 									<span class="icon is-small is-left">
-						        <i class="fa fa-search"></i>
-						      </span>
+							            <i class="fa fa-search"></i>
+							        </span>
 								</p>
 
 								<p class="control">
@@ -47,9 +50,9 @@ class SetList extends PreactComponent {
 								</p>
 
 								<p class="control">
-									<a href="/sets/new" class="button is-primary">
+									<Link to="/sets/new" class="button is-primary">
 										New set
-									</a>
+									</Link>
 								</p>
 
 							</div>
@@ -61,15 +64,15 @@ class SetList extends PreactComponent {
 								{sets.filter( this.filterSets ).map( set => (
 									<tr>
 										<td>
-											<a href={`/sets/${set.slug}`}>
+											<Link to={`/sets/${set.slug}`}>
 												{set.title}
-											</a>
+											</Link>
 										</td>
 										<td>
 											{set.author}
 										</td>
 										<td>
-											{set.key}
+											<SetLink set={set}>Live</SetLink>
 										</td>
 									</tr>
 								) )}

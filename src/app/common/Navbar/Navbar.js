@@ -1,38 +1,10 @@
-import Router from 'preact-router';
+import {Link} from 'react-router-dom';
 
 class Navbar extends PreactComponent {
-	state = {
-		isViewingSong: false
-	};
 
-	componentDidMount() {
-
-		this.setState( {
-			isViewingSong: this._isViewingSong( Router.getCurrentUrl() )
-		} );
-
-		Router.subscribers.push( url => {
-
-			this.setState( {
-				isViewingSong: this._isViewingSong( url )
-			} );
-
-		} );
-
-	}
-
-	setDefaultMode = () => {
-
-		this.context.setMode( '' );
-		Router.route( `/sets` );
-
-	};
-
-	render( { focusedSet, goToNextSong, goToPreviousSong, mode }, { isViewingSong } ) {
+	render( { focusedSet, goToNextSong, goToPreviousSong, mode } ) {
 
 		return (
-
-			// <nav class={mode === 'live' ? "navbar is-dark" : "navbar is-light"}>
 			<nav class="navbar is-light">
 
 				<div class="navbar-brand">
@@ -57,28 +29,23 @@ class Navbar extends PreactComponent {
 						</a>
 					]}
 
-					{mode === '' && [
-						<a class="navbar-item" href='/'>
-							<img src="/assets/chordboard-logo-long.png"
-							     alt="Chordboard: a chord manager for live musicians"
-							     width="142"/>
-						</a>,
-						<a class="navbar-item" href="/sets">Sets</a>,
-						<a class="navbar-item" href="/songs">Songs</a>
-					]}
+					<Link class="navbar-item" to='/'>
+						<img src="/assets/chordboard-logo-long.png"
+						     alt="Chordboard: a chord manager for live musicians"
+						     width="142"/>
+					</Link>
+					<Link class="navbar-item" to="/sets">Sets</Link>
+					<Link class="navbar-item" to="/songs">Songs</Link>
 
+					{focusedSet && focusedSet.slug && (
+						<Link class="navbar-item" to={`/sets/${focusedSet.slug}`}>Live</Link>
+					)}
 				</div>
 
 			</nav>
 		);
 
 	}
-
-	_isViewingSong = url => {
-
-		return /songs\/[^/]+$/.test( url );
-
-	};
 }
 
 export default Navbar;

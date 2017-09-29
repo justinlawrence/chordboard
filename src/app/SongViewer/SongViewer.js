@@ -1,24 +1,11 @@
-import PouchDB from 'pouchdb';
-import PouchDBFindPlugin from 'pouchdb-find';
-
 import ChordLine from "./lines/ChordLine.js";
 import ChordPair from "./lines/ChordPair.js";
 import Line from "./lines/Line.js";
 import Song from 'app/common/Song.js';
 import './SongViewer.scss';
-import Router from 'preact-router';
-
-PouchDB.plugin( PouchDBFindPlugin );
-
-const db = new PouchDB( 'chordboard' );
-
-db.createIndex( {
-	index: { fields: [ 'type', 'slug' ] }
-} );
 
 class SongViewer extends PreactComponent {
 	state = {
-		isLoading: true,
 		song:      null
 	};
 
@@ -32,65 +19,21 @@ class SongViewer extends PreactComponent {
 
 	handleProps = props => {
 
-		this.setState( {
-			isLoading: true
-		} );
+		if ( props.song ) {
 
-		if ( props.mode === 'live' ) {
+			this.setState( {
+				song: new Song( props.song )
+			} );
 
-			if ( props.id ) {
+		}
 
-				db.get( props.id )
-					.then( result => {
+		if ( props.currentKey ) {
 
-						this.setState( {
-							isLoading: false,
-							song:      new Song( result )
-						} );
-
-					} )
-					.catch( err => {
-
-						console.error( 'SongViewer.handleProps live mode -',
-							err );
-
-						this.setState( {
-							isLoading: false,
-							song:      null
-						} );
-
-					} );
-
-			}
-
-		} else {
-
-			if ( props.slug && !props.id ) {
-
-				db.find( {
-					selector: {
-						type: 'song',
-						slug: props.slug
-					}
-				} ).then( result => {
-
-					this.setState( {
-						isLoading: false,
-						song:      new Song( result.docs[ 0 ] )
-					} );
-
-				} ).catch( err => {
-
-					console.error( 'SongViewer.handleProps -', err );
-
-					this.setState( {
-						isLoading: false,
-						song:      null
-					} );
-
-				} );
-
-			}
+			// TODO: Set song transpose with key
+			// `props.currentKey` is the overridden key from the set list
+			// need to figure out the difference in keys in an integer value to
+			// pass onto the changeKey method.
+			// this.changeKey( ? );
 
 		}
 
@@ -98,11 +41,10 @@ class SongViewer extends PreactComponent {
 
 	editCurrentSong = () => {
 
-		const url = Router.getCurrentUrl();
-		Router.route( `${url}/edit` );
+		//const url = Router.getCurrentUrl();
+		//Router.route( `${url}/edit` );
 
 	};
-
 
 	scrollToSection( section ) {
 
@@ -125,7 +67,7 @@ class SongViewer extends PreactComponent {
 
 	changeKey = amount => {
 
-		const song = Object.assign( {}, this.state.song );
+		const song = this.state.song;
 		song.transpose( amount );
 
 		this.setState( { song } );
@@ -135,11 +77,9 @@ class SongViewer extends PreactComponent {
 	transposeDown = () => { this.changeKey( -1 ); };
 	transposeUp = () => { this.changeKey( 1 ); };
 
-	render( {}, { song } ) {
+	render( { currentKey }, { song } ) {
 
 		let sections = [];
-
-		console.log( 'song', song );
 
 		return (
 			song ?
@@ -209,12 +149,6 @@ class SongViewer extends PreactComponent {
 
 	}
 }
-
-// is-hidden-mobile
-//											//<Sections sections={sections}
-//										    onClick={this.scrollToSection.bind(
-// this )}/>
-
 
 export default SongViewer;
 
