@@ -7,15 +7,19 @@ module.exports = function () {
 
 	return {
 		context: path.resolve(),
-		entry: path.resolve( "src", "main.js" ),
+		entry:   path.resolve( "src", "index.js" ),
 		resolve: {
 			modules: [
 				path.resolve( "src" ),
 				"node_modules"
-			]
+			],
+			alias:   {
+				'react':     'preact-compat',
+				'react-dom': 'preact-compat'
+			}
 		},
 		output:  {
-			path: path.resolve( 'build' ),
+			path:              path.resolve( 'build' ),
 			filename:          '[name].js',
 			publicPath:        '/',
 			sourceMapFilename: '[name].map'

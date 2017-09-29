@@ -39,6 +39,8 @@ class Song {
 
 		// Save old state?
 
+		this.key = transposeChord( this.key, amount );
+
 		// Iterate through all chords in song.
 		this.lines.forEach( line => {
 
