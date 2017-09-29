@@ -127,13 +127,10 @@ class SongList extends PreactComponent {
 											<td>
 
 												<a href={`/songs/${song.slug}`}>{song.title}</a>
+													<span class="help">
+														{song.author}
+													</span>
 
-											</td>
-
-											<td>
-												<span class="help">
-													{song.author}
-												</span>
 											</td>
 
 											<td>

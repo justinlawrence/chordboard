@@ -40,9 +40,8 @@ $horiz-padding: 48px;
 	height: 16px;
 }
 .section {
-	position:     relative;
 	margin-top:   8px;
-	border-left:  4px solid #ddd;
+	// border-left:  4px solid #ddd;
 	padding-top: 0px;
 	padding-bottom: 0px;
 
@@ -137,7 +136,7 @@ $horiz-padding: 48px;
 }
 // The lyric lines, there are 2 types, the ones in chord-pairs and the ones that are found without chords
 .text-line {
-	font-size: 20px;
+	font-size: 1.1rem;
 	&:empty {
 		min-width: 20px;
 	}

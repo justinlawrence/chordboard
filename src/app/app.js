@@ -191,19 +191,19 @@ class App extends PreactComponent {
 	render( {}, { focusedSet, mode, slug, setList, songList } ) {
 
 		return (
-			<div>
+			<div class="container">
 				<Navbar
 					focusedSet={focusedSet}
 					goToNextSong={this.goToNextSong}
 					goToPreviousSong={this.goToPreviousSong}
 					mode={mode}/>
 				<Router>
-					<SongList default path="/songs" songs={songList}/>
+					<SongList path="/songs" songs={songList}/>
 					<SongList path="/songs/add-to-set/:slug" songs={songList}/>
 					<SongEditor path="/songs/new"/>
 					<SongEditor path="/songs/:slug/edit" slug={slug}/>
 
-					<SetList path="/sets" sets={setList}/>
+					<SetList default path="/sets" sets={setList}/>
 					<SetViewer path="/sets/:slug" slug={slug}/>
 					<SetEditor path="/sets/new"/>
 					<SongViewer path="/sets/:slug/songs/:id" mode={mode}/>

@@ -228,21 +228,25 @@ class SetViewer extends PreactComponent {
 						</a>
 					</td>
 					<td>
-						{key}
-						<a class="button"
-						   onClick={() => this.transposeDown( song )}
-						>
-							<span class="icon is-small"><i class="fa fa-minus"></i></span>
-						</a>
-						<a class="button"
-						   onClick={() => this.transposeUp( song )}
-						>
-							<span class="icon is-small"><i class="fa fa-plus"></i></span>
-						</a>
+						<div class="field is-grouped">
+
+							<a class="button is-small is-white">
+								{key}
+							</a>
+							<a class="button is-small is-white" title="transpose down"
+							   onClick={() => this.transposeDown( song )}>
+								<span class="icon is-small"><i class="fa fa-minus"></i></span>
+							</a>
+							<a class="button is-small is-white" title="transpose up"
+							   onClick={() => this.transposeUp( song )}>
+
+								<span class="icon is-small"><i class="fa fa-plus"></i></span>
+							</a>
+						</div>
 
 					</td>
 					<td>
-						<a onClick={() => this.onMoveSongUp( song )}>
+						<a onClick={() => this.onMoveSongUp( song )} title="move this song up the list">
 							<span class="icon is-small is-left"><i class="fa fa-arrow-up"></i></span>
 						</a>
 					</td>
@@ -252,7 +256,7 @@ class SetViewer extends PreactComponent {
 		}
 
 		return (
-			<section class="set-viewer section">
+			<section class="section set-viewer">
 				<div class="container">
 					<div class="columns">
 						<div class="column is-three-quarters">
@@ -260,7 +264,6 @@ class SetViewer extends PreactComponent {
 							<nav class="level">
 
 								<div class="level-left">
-
 									<div class="level-item">
 										<p class="subtitle is-5">
 											<strong>{set && set.title}</strong>
@@ -269,31 +272,37 @@ class SetViewer extends PreactComponent {
 								</div>
 
 								<div class="level-right">
-									{set &&
-									<p class="level-item">
-										<a class="button is-primary"
-										   href={`/songs/add-to-set/${set.slug}`}>
-											Add songs
-										</a>
-									</p>}
+									<div class="level-item">
 
-									{set &&
-									<p class="level-item">
-										<a class="button is-primary"
-										   onClick={this.setLiveMode}>
-											Go live
-										</a>
-									</p>}
+								{set &&
+								<div class="control">
+									<a class="button is-primary"
+									   href={`/songs/add-to-set/${set.slug}`}>
+										Add songs
+									</a>
+									&nbsp;
+								</div>}
 
-									{set &&
-									<p class="level-item">
-										<a class="button is-outlined"
-										   onClick={this.onDeleteSet}>
-											<span class="icon is-small is-left"><i class="fa fa-trash"></i></span>
-										</a>
-									</p>}
-								</div>
-							</nav>
+								{set &&
+								<div class="control">
+									<a class="button"
+									   onClick={this.setLiveMode}>
+										Go live!
+									</a>
+									&nbsp;
+								</div>}
+
+								{set &&
+								<div class="control">
+									<a class="button is-outlined"
+									   onClick={this.onDeleteSet}>
+										<span class="icon is-small is-left"><i class="fa fa-trash"></i></span>
+									</a>
+								</div>}
+
+							</div>
+						</div>
+					</nav>
 
 							<table class="table is-bordered is-striped is-fullwidth">
 

@@ -6,6 +6,7 @@ import ChordPair from "./lines/ChordPair.js";
 import Line from "./lines/Line.js";
 import Song from 'app/common/Song.js';
 import './SongViewer.scss';
+import Router from 'preact-router';
 
 PouchDB.plugin( PouchDBFindPlugin );
 
@@ -95,6 +96,14 @@ class SongViewer extends PreactComponent {
 
 	};
 
+	editCurrentSong = () => {
+
+		const url = Router.getCurrentUrl();
+		Router.route( `${url}/edit` );
+
+	};
+
+
 	scrollToSection( section ) {
 
 		let totalVertPadding = 32;
@@ -134,46 +143,67 @@ class SongViewer extends PreactComponent {
 
 		return (
 			song ?
-				<section class="section">
-					<div class="container">
-						<div class="columns">
+			<div>
 
-							<div class="column is-three-quarters">
+				<section class="hero is-small is-light">
+					<div class="hero-body">
+						<div class="container">
+							<div class="columns is-vcentered">
 
-								<nav class="level">
+								<div class="column is-half">
+									<h1 class="title">
+										{song.title}
+									</h1>
+									<h2 class="subtitle">
+										{song.author}
+									</h2>
+								</div>
 
-									<div class="level-left">
-										<div class="level-item">
-											<p class="subtitle is-5">
-												<strong>{song.title}</strong>
-											</p>
-											<div class="level-item">
-												<p class="subtitle is-6">&nbsp;by {song.author}&nbsp;</p>
-											</div>
-										</div>
-									</div>
+								<div class="column">
 
-									<div class="level-right">
-										<div class="level-item">
+									<h2 class="subtitle">
+										<a class="button">Key of {song.key}</a>
+										<a class="button" onClick={this.transposeDown} title="transpose down">
+											<span class="icon is-small">
+												 <i class="fa fa-minus"></i>
+											</span>
+										</a>
+										<a class="button" onClick={this.transposeUp} title="transpose up">
+											 <span class="icon is-small">
+												 <i class="fa fa-plus"></i>
+											</span>
+										</a>
+										<a class="button" onClick={this.editCurrentSong}>
+											<span class="icon is-small">
+												<i class="fa fa-pencil"></i>
+										 </span>
+										 <span>
+										 Edit Song
+									 </span>
+										</a>
+									</h2>
 
-											<a class="button" onClick={this.transposeDown}>
-												 <span class="icon is-small">
-			 						         <i class="fa fa-minus"></i>
-			 						      </span>
-											</a>
-											<a class="button" onClick={this.transposeUp}>
-												 <span class="icon is-small">
-			 						         <i class="fa fa-plus"></i>
-			 						      </span>
-											</a>
-										</div>
-									</div>
-								</nav>
-								{parseSong( song, sections )}
+
+								</div>
+
 							</div>
 						</div>
 					</div>
 				</section>
+
+
+				<div class="columns">
+
+					<div class="column is-three-quarters">
+						<section class="section">
+
+						{parseSong( song, sections )}
+
+						</section>
+					</div>
+
+				</div>
+			</div>
 				: null
 		);
 

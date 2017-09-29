@@ -29,7 +29,6 @@ class SetList extends PreactComponent {
 						<div class="column is-three-quarters">
 
 							<div class="field has-addons has-addons-right">
-
 								<p class="control has-icons-left">
 									<input
 										type="text"

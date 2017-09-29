@@ -21,33 +21,30 @@ class Navbar extends PreactComponent {
 
 	}
 
-	editCurrentSong = () => {
-
-		const url = Router.getCurrentUrl();
-		Router.route( `${url}/edit` );
-
-	};
-
 	setDefaultMode = () => {
 
 		this.context.setMode( '' );
-		Router.route( `/songs` );
+		Router.route( `/sets` );
 
 	};
 
 	render( { focusedSet, goToNextSong, goToPreviousSong, mode }, { isViewingSong } ) {
 
 		return (
+
+			// <nav class={mode === 'live' ? "navbar is-dark" : "navbar is-light"}>
 			<nav class="navbar is-light">
+
 				<div class="navbar-brand">
 
-					<a class="navbar-item" href='/'>
-						<img src="/assets/chordboard-logo.png"
-						     alt="Chordboard: a chord manager for live musicians"
-						     width="142"/>
-					</a>
-
 					{mode === 'live' && [
+
+						<a class="navbar-item" href='/'>
+							<img src="/assets/chordboard-logo-short.png"
+							     alt="Chordboard: a chord manager for live musicians"
+							     width="33"/>
+						</a>,
+
 						<p class="navbar-item">{focusedSet.title}</p>,
 						<a class="navbar-item" onClick={goToPreviousSong}>
 							<span class="icon"><i class="fa fa-angle-left"></i></span>
@@ -61,15 +58,14 @@ class Navbar extends PreactComponent {
 					]}
 
 					{mode === '' && [
-						<a class="navbar-item" href="/songs">Songs</a>,
-						<a class="navbar-item" href="/sets">Sets</a>
+						<a class="navbar-item" href='/'>
+							<img src="/assets/chordboard-logo-long.png"
+							     alt="Chordboard: a chord manager for live musicians"
+							     width="142"/>
+						</a>,
+						<a class="navbar-item" href="/sets">Sets</a>,
+						<a class="navbar-item" href="/songs">Songs</a>
 					]}
-
-					{isViewingSong ?
-						<a class="navbar-item" onClick={this.editCurrentSong}>
-							Edit song
-						</a>
-						: null}
 
 				</div>
 
