@@ -32,7 +32,7 @@ class SetViewer extends PreactComponent {
 				} )
 				.catch( err => {
 
-					alert( 'Failed to delete' );
+					alert( 'Unable to delete set' );
 					console.warn( err );
 
 				} );

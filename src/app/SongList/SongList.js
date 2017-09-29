@@ -24,7 +24,8 @@ class SongList extends PreactComponent {
 			selector: {
 				type: 'set',
 				slug: slug
-			}
+			},
+			sort: ['title']
 		} ).then( result => {
 
 			if ( result.docs.length ) {

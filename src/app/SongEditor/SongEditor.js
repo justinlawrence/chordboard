@@ -5,6 +5,7 @@ import PouchDBFindPlugin from 'pouchdb-find';
 import {parseSong} from '../SongViewer/SongViewer.js';
 import Song from '../common/Song.js';
 import '../SongEditor/SongEditor.scss';
+import {Link} from 'react-router-dom';
 
 PouchDB.plugin( PouchDBFindPlugin );
 
@@ -96,12 +97,25 @@ class SongEditor extends PreactComponent {
 	};
 
 	onDeleteSong = () => {
-		alert("Sorry, you can't delete songs yet.");
-		/*
-		if (alert("Are you very sure you want to delete this song?")) {
-			//TODO: delete from pouchDb and refresh to song list with a message saying song deleted
-		};
-		*/
+
+		if ( confirm( 'Are you very sure you want to delete this set?' ) ) {
+
+			//1 delete from pouchDb
+			db.remove( this.state.song._id, this.state.song._rev )
+				.then( () => {
+
+					//TODO redirect to /songs
+					//route( '/songs' );
+
+				} )
+				.catch( err => {
+
+					alert( 'Unable to delete song' );
+					console.warn( err );
+
+				} );
+
+		}
 	};
 
 
@@ -120,10 +134,10 @@ class SongEditor extends PreactComponent {
 				}
 			} ).then( result => {
 
-				if ( result.docs.length ) {
+				if ( result.docs.length ) { //new but slug already exists
 
 					// Slug already exists
-					alert( 'Slug already exists' );
+					alert( 'A song with this exact title exists. Give it a unique name please.' );
 
 					// TODO: make the slug unique by appending a number to the
 					// end Note: If we wanted to allow duplicate slugs across
@@ -131,7 +145,7 @@ class SongEditor extends PreactComponent {
 					// of user context in the url. Something like what GitHub
 					// do with the username first.
 
-				} else {
+				} else { //new and slug does not already exist
 
 					db.post( {
 						type:    'song',
@@ -143,20 +157,25 @@ class SongEditor extends PreactComponent {
 						content: content
 					} ).then( () => {
 
-						alert( 'Added new song!' );
 
 						//TODO
 						PouchDB.sync( 'chordboard', 'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' );
+
+						//TODO: route to /songs/title
+						//route( `/songs/` + slugify(title) );
 
 					} );
 
 				}
 
 			} ).catch( err => {
+
 				console.error( err );
+				alert( 'Something went wrong while adding :(' );
+
 			} );
 
-		} else {
+		} else { //existing
 
 			const data = Object.assign( {}, song );
 
@@ -166,13 +185,17 @@ class SongEditor extends PreactComponent {
 			data.title = title;
 			data.key = key;
 
-			db.put( data ).then( ( data ) => {
+			console.log('existing id', song._id, 'rev', song._rev);
 
-				alert( 'Updated successfully!' );
+
+
+			db.put( data ).then( ( data ) => {
 
 				this.setState( {
 					song: Object.assign( {}, this.state.song,
-						{ _rev: data.rev } )
+						{
+							_rev: data.rev
+						} )
 				} );
 
 				PouchDB.sync( 'chordboard', 'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' )
@@ -182,6 +205,12 @@ class SongEditor extends PreactComponent {
 							err );
 
 					} );
+
+					//TODO: add toast updated message
+					//alert( 'Updated successfully!' );
+					//TODO route to /songs
+					//route( `/songs/` + slugify(title) );
+
 
 			} ).catch( err => {
 				console.error( err );
