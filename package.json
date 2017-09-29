@@ -27,7 +27,6 @@
   "homepage": "https://github.com/justinlawrence/chordboard#readme",
   "dependencies": {
     "body-parser": "^1.17.2",
-    "bulma": "^0.5.3",
     "copy-webpack-plugin": "^4.0.1",
     "cors": "^2.8.4",
     "express": "^4.15.4",
