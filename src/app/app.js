@@ -4,7 +4,7 @@ import {Redirect, Route} from 'react-router-dom';
 import Navbar from './common/Navbar/Navbar';
 import SongList from './SongList/SongList';
 import SongEditor from './SongEditor/SongEditor';
-import SongViewer from './SongViewer/SongViewer';
+import SongContainer from './songs/SongContainer';
 import SetListContainer from './sets/SetListContainer';
 
 import {db, sync} from './common/database';
@@ -131,7 +131,7 @@ class App extends PreactComponent {
 					<SongEditor slug={slug}/>
 				)}/>
 				<Route exact path="/songs/:slug" render={( { match } ) => (
-					<SongViewer slug={match.params.slug}/>
+					<SongContainer slug={match.params.slug}/>
 				)}/>
 
 				<Route path="/sets" component={SetListContainer}/>
