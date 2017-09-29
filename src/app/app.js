@@ -123,13 +123,17 @@ class App extends PreactComponent {
 				<Route exact path="/songs" render={() => (
 					<SongList songs={songList}/>
 				)}/>
+
 				<Route exact path="/songs/add-to-set/:slug" render={() => (
 					<SongList songs={songList}/>
 				)}/>
+
 				<Route exact path="/songs/new" component={SongEditor}/>
-				<Route exact path="/songs/:slug/edit" render={() => (
-					<SongEditor slug={slug}/>
+
+				<Route exact path="/songs/:slug/edit" render={( { match } ) => (
+					<SongEditor slug={match.params.slug}/>
 				)}/>
+
 				<Route exact path="/songs/:slug" render={( { match } ) => (
 					<SongContainer slug={match.params.slug}/>
 				)}/>

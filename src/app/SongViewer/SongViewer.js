@@ -3,6 +3,7 @@ import ChordPair from "./lines/ChordPair.js";
 import Line from "./lines/Line.js";
 import Song from 'app/common/Song.js';
 import './SongViewer.scss';
+import {Link} from 'react-router-dom';
 
 class SongViewer extends PreactComponent {
 	state = {
@@ -113,14 +114,15 @@ class SongViewer extends PreactComponent {
 												 <i class="fa fa-plus"></i>
 											</span>
 										</a>
-										<a class="button" onClick={this.editCurrentSong}>
+
+										<Link class="button" to={`/songs/${song.slug}/edit`}>
 											<span class="icon is-small">
 												<i class="fa fa-pencil"></i>
 										 </span>
 										 <span>
 										 Edit Song
 									 </span>
-										</a>
+								 </Link>
 									</h2>
 
 
