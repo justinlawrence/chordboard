@@ -43,6 +43,10 @@ class SongViewer extends PreactComponent {
 
 		//const url = Router.getCurrentUrl();
 		//Router.route( `${url}/edit` );
+		
+		this.setState({
+			mode: 'edit'
+		});
 
 	};
 
