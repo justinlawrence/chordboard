@@ -9,6 +9,9 @@ const db = new PouchDB( 'chordboard' );
 db.createIndex( {
 	index: { fields: [ 'type', 'slug' ] }
 } );
+db.createIndex( {
+	index: { fields: [ 'type', 'title' ] }
+} );
 
 class SongList extends PreactComponent {
 	state = {
@@ -25,7 +28,7 @@ class SongList extends PreactComponent {
 				type: 'set',
 				slug: slug
 			},
-			sort: ['title']
+			sort: ['type', 'title']
 		} ).then( result => {
 
 			if ( result.docs.length ) {
@@ -80,7 +83,8 @@ class SongList extends PreactComponent {
 
 	render( { path, slug, songs }, { searchText } ) {
 
-		const isAddToSet = /\/add-to-set\//.test( path );
+		//const isAddToSet = /\/add-to-set\//.test( path );
+		const isAddToSet = /\/add-to-set\//.test( window.location.href );
 
 		return (
 			<section class="section">
@@ -142,8 +146,7 @@ class SongList extends PreactComponent {
 											{isAddToSet &&
 											<td>
 												<button class="button is-primary is-outlined"
-												        onClick={() => this.addToSet(
-													        song )}>
+												        onClick={() => this.addToSet( song )}>
 													<span>Add to set</span>
 													<span class="icon is-small">
 														<i class="fa fa-chevron-right"></i>

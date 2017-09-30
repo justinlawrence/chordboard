@@ -82,6 +82,7 @@ class SetViewer extends PreactComponent {
 			} )
 			.catch( err => {
 
+				alert("unable to save set!")
 				console.warn( 'saveSet error', err );
 
 			} );
@@ -93,7 +94,6 @@ class SetViewer extends PreactComponent {
 		const songs = this.props.songs.slice();
 		const setSongs = this.props.set.songs.slice();
 		const setSong = find( setSongs, s => s._id === song._id );
-
 		const index = songs.indexOf( song );
 		const key = setSong ? setSong.key : song.key;
 
@@ -134,7 +134,7 @@ class SetViewer extends PreactComponent {
 
 								<div class="level-left">
 									<div class="level-item">
-										<p class="subtitle is-5">
+										<p class="subtitle">
 											<strong>{set.title}</strong>
 										</p>
 									</div>
@@ -169,8 +169,14 @@ class SetViewer extends PreactComponent {
 									songs.map( this._createRow )
 									:
 									<div>
-										<h1>This set has no songs</h1>
-										<p>Add some by clicking Add Songs above</p>
+										<p class="subtitle">This set has no songs</p>
+
+											<a class="button is-primary"
+												 href={`/songs/add-to-set/${set.slug}`}>
+												Add songs
+											</a>
+
+
 									</div>
 								}
 								</tbody>
@@ -186,6 +192,8 @@ class SetViewer extends PreactComponent {
 	}
 
 	_createRow = song => {
+
+		console.log("song is ", song);
 
 		const { set } = this.props;
 		const { mode } = this.state;
