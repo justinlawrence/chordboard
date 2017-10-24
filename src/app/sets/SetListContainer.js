@@ -16,7 +16,9 @@ class SetListContainer extends PreactComponent {
 		this.updateListOfSets();
 
 		// Listen for any changes on the database
-		sync.on( "change", () => this.updateListOfSets );
+		sync.on( "change", () => {
+			this.updateListOfSets();
+		} );
 
 	}
 
@@ -37,8 +39,8 @@ class SetListContainer extends PreactComponent {
 					<SetList sets={setList} {...props}/>
 				)}/>
 				<Route exact path="/sets/new" component={SetEditor}/>
-				<Route path="/sets/:setSlug" render={( { match } ) => (
-					<SetContainer slug={match.params.setSlug}/>
+				<Route path="/sets/:id" render={props => (
+					<SetContainer id={props.match.params.id} {...props}/>
 				)}/>
 			</div>
 		);
@@ -46,6 +48,8 @@ class SetListContainer extends PreactComponent {
 	}
 
 	_getListOfSets = () => {
+
+		console.log( 'gets here' );
 
 		// This gets all sets
 		return db.find( {
@@ -56,9 +60,7 @@ class SetListContainer extends PreactComponent {
 			.then( result => result.docs )
 			.catch( err => {
 
-				console.warn(
-					'App.constructor - pouchdb query failed: _getListOfSets',
-					err );
+				console.warn( 'App.constructor - pouchdb query failed: _getListOfSets', err );
 
 			} );
 

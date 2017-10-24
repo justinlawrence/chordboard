@@ -1,5 +1,7 @@
+import {uniqBy} from 'lodash';
 import PouchDB from 'pouchdb';
 import PouchDBFindPlugin from 'pouchdb-find';
+
 import './SongList.scss';
 
 PouchDB.plugin( PouchDBFindPlugin );
@@ -20,43 +22,42 @@ class SongList extends PreactComponent {
 
 	addToSet = song => {
 
-		const slug = this.props.slug;
+		db.get( this.props.id ).then( doc => {
 
-		// First check to see if the slug already exists.
-		db.find( {
-			selector: {
-				type: 'set',
-				slug: slug
-			},
-			sort: ['type', 'title']
-		} ).then( result => {
+			const data = Object.assign( {}, doc );
 
-			if ( result.docs.length ) {
+			data.songs = data.songs || [];
+			data.songs.push( {
+				_id: song._id,
+				key: song.key
+			} );
+			console.log( data.songs );
+			data.songs = uniqBy( data.songs, '_id' );
+			console.log( data.songs );
 
-				const set = result.docs[ 0 ];
-				const data = Object.assign( {}, set );
+			db.put( data ).then( () => {
 
-				data.songs = data.songs || [];
-				data.songs.push( song._id );
+				PouchDB.sync( 'chordboard',
+					'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' )
+					.catch( err => {
 
-				db.put( data ).then( () => {
+						console.warn( 'Could not sync to remote database',
+							err );
 
-					PouchDB.sync( 'chordboard',
-						'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' )
-						.catch( err => {
+					} );
 
-							console.warn( 'Could not sync to remote database',
-								err );
+				if ( this.props.history ) {
 
-						} );
+					const location = {
+						pathname: `/sets/${doc._id}`
+					};
 
-					Router.route( `/sets/${set.slug}` );
+					this.props.history.push( location );
+				}
 
-				} ).catch( err => {
-					console.error( err );
-				} );
-
-			}
+			} ).catch( err => {
+				console.error( err );
+			} );
 
 		} ).catch( err => {
 			console.error( err );
@@ -81,7 +82,7 @@ class SongList extends PreactComponent {
 
 	};
 
-	render( { path, slug, songs }, { searchText } ) {
+	render( { songs }, { searchText } ) {
 
 		//const isAddToSet = /\/add-to-set\//.test( path );
 		const isAddToSet = /\/add-to-set\//.test( window.location.href );
@@ -130,8 +131,8 @@ class SongList extends PreactComponent {
 
 											<td>
 
-												<a href={`/songs/${song.slug}`}>{song.title}</a>
-													<span class="help">
+												<a href={`/songs/${song._id}`}>{song.title}</a>
+												<span class="help">
 														{song.author}
 													</span>
 

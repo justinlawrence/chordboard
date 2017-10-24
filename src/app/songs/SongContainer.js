@@ -12,18 +12,15 @@ class SongContainer extends PreactComponent {
 	}
 
 	componentWillReceiveProps( nextProps ) {
-		if ( this.props.slug !== nextProps.slug ) {
+		if ( this.props.id !== nextProps.id ) {
 			this.handleProps( nextProps );
 		}
 	}
 
 	handleProps = props => {
-		this._getSongBySlug( props.slug )
-			.then( song => {
 
-				this.setState( { song } );
-
-			} );
+		this._getSongById( props.id )
+			.then( song => this.setState( { song } ) );
 
 	};
 
@@ -34,20 +31,12 @@ class SongContainer extends PreactComponent {
 
 	}
 
-	_getSongBySlug = slug => {
+	_getSongById = id => {
 
-		return db.find( {
-			selector: {
-				type: 'song',
-				slug: slug
-			}
-		} )
-			.then( result => result.docs[ 0 ] )
+		return db.get( id )
 			.catch( err => {
 
-				console.warn(
-					'App.constructor - pouchdb query failed: _getSongBySlug',
-					err );
+				console.warn( 'App.constructor - pouchdb query failed: _getSongBySlug', err );
 
 			} );
 

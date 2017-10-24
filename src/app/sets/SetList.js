@@ -64,7 +64,7 @@ class SetList extends PreactComponent {
 								{sets.filter( this.filterSets ).map( set => (
 									<tr>
 										<td>
-											<Link to={`/sets/${set.slug}`}>
+											<Link to={`/sets/${set._id}`}>
 												{set.title}
 											</Link>
 										</td>

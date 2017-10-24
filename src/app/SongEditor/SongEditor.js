@@ -20,7 +20,7 @@ class SongEditor extends PreactComponent {
 		author:    '',
 		isLoading: false,
 		title:     '',
-		key:     	 '',
+		key:       '',
 		content:   '',
 		song:      null
 	};
@@ -39,40 +39,37 @@ class SongEditor extends PreactComponent {
 			isLoading: true
 		} );
 
-		if ( props.slug ) {
+		if ( props.id ) {
 
-			db.find( {
-				selector: {
-					type: 'song',
-					slug: props.slug
-				}
-			} ).then( result => {
+			db.get( props.id )
+				.then( doc => {
 
-				const song = new Song( result.docs[ 0 ] );
+					const song = new Song( doc );
 
-				this.setState( {
-					author:    song.author,
-					isLoading: false,
-					title:     song.title,
-					key:	     song.key,
-					content:   song.content,
-					song:      song
+					this.setState( {
+						author:    song.author,
+						isLoading: false,
+						title:     song.title,
+						key:       song.key,
+						content:   song.content,
+						song:      song
+					} );
+
+				} )
+				.catch( err => {
+
+					console.error( 'SongViewer.handleProps -', err );
+
+					this.setState( {
+						author:    '',
+						isLoading: false,
+						title:     '',
+						key:       '',
+						content:   '',
+						song:      null
+					} );
+
 				} );
-
-			} ).catch( err => {
-
-				console.error( 'SongViewer.handleProps -', err );
-
-				this.setState( {
-					author:    '',
-					isLoading: false,
-					title:     '',
-					key:			 '',
-					content:   '',
-					song:      null
-				} );
-
-			} );
 
 		}
 
@@ -127,7 +124,7 @@ class SongEditor extends PreactComponent {
 		if ( isNew ) {
 
 			// First check to see if the slug already exists.
-			db.find( {
+			db.get( {
 				selector: {
 					type: 'song',
 					slug: slugify( title )
@@ -153,13 +150,14 @@ class SongEditor extends PreactComponent {
 						slug:    slugify( title ),
 						author:  author,
 						title:   title,
-						key: 	   key,
+						key:     key,
 						content: content
 					} ).then( () => {
 
 
 						//TODO
-						PouchDB.sync( 'chordboard', 'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' );
+						PouchDB.sync( 'chordboard',
+							'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' );
 
 						//TODO: route to /songs/title
 						//route( `/songs/` + slugify(title) );
@@ -185,10 +183,8 @@ class SongEditor extends PreactComponent {
 			data.title = title;
 			data.key = key;
 
-			console.log('existing id', song._id, 'rev', song._rev);
-
-
-
+			console.log( 'existing: id', song._id, 'rev', song._rev );
+			console.log( this.props );
 			db.put( data ).then( ( data ) => {
 
 				this.setState( {
@@ -198,7 +194,8 @@ class SongEditor extends PreactComponent {
 						} )
 				} );
 
-				PouchDB.sync( 'chordboard', 'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' )
+				PouchDB.sync( 'chordboard',
+					'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' )
 					.catch( err => {
 
 						console.warn( 'Could not sync to remote database',
@@ -206,10 +203,12 @@ class SongEditor extends PreactComponent {
 
 					} );
 
-					//TODO: add toast updated message
-					//alert( 'Updated successfully!' );
-					//TODO route to /songs
-					//route( `/songs/` + slugify(title) );
+				//TODO: add toast updated message
+				//alert( 'Updated successfully!' );
+
+				if ( this.props.history ) {
+					this.props.history.goBack();
+				}
 
 
 			} ).catch( err => {
@@ -220,7 +219,7 @@ class SongEditor extends PreactComponent {
 
 	};
 
-	render( {}, { author, title, key, content, song} ) {
+	render( {}, { author, title, key, content, song } ) {
 
 		return (
 			<section class="section">
@@ -277,22 +276,22 @@ class SongEditor extends PreactComponent {
 					    		</span>
 								</p>
 
-						</div>
+							</div>
 
-						<div class="field">
+							<div class="field">
 
-							<p class="control">
-								<textarea
-									class="textarea song-editor__content"
-									onInput={this.onContentInput}
-									placeholder="Type words and chords here."
-									rows="25"
-								>
-									{content}
-								</textarea>
-							</p>
+								<p class="control">
+									<textarea
+										class="textarea song-editor__content"
+										onInput={this.onContentInput}
+										placeholder="Type words and chords here."
+										rows="25"
+									>
+										{content}
+									</textarea>
+								</p>
 
-						</div>
+							</div>
 
 						</div>
 
@@ -301,16 +300,16 @@ class SongEditor extends PreactComponent {
 							<div class="level-left">
 								<div class="level-item">
 
-										<a class="button is-outlined" onClick={this.onDeleteSong}>
+									<a class="button is-outlined" onClick={this.onDeleteSong}>
 											 <span class="icon is-small is-left">
 												 <i class="fa fa-trash"></i>
 											</span>
-										</a>
+									</a>
 								</div>
 								<div class="level-item">
 
-										<a class="button is-primary"
-										   onClick={this.onSaveSong}>Save</a>
+									<a class="button is-primary"
+									   onClick={this.onSaveSong}>Save</a>
 
 								</div>
 							</div>

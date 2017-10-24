@@ -115,7 +115,7 @@ class SongViewer extends PreactComponent {
 											</span>
 										</a>
 
-										<Link class="button" to={`/songs/${song.slug}/edit`}>
+										<Link class="button" to={`/songs/${song._id}/edit`}>
 											<span class="icon is-small">
 												<i class="fa fa-pencil"></i>
 										 </span>

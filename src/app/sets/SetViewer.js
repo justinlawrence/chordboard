@@ -1,126 +1,69 @@
-import {find} from 'lodash'
+import {find, findIndex} from 'lodash'
 import {Link} from 'react-router-dom';
 
 import {db, sync} from '../common/database';
 
-import transposeChord from '../common/transpose-chord';
 import './SetViewer.scss';
 
 class SetViewer extends PreactComponent {
 	state = {
 		isLoading: false,
-		mode:      '',
-		songs:     []
+		mode:      ''
 	};
+
+	editModeOff = () => this.setState( { mode: '' } );
+	editModeOn = () => this.setState( { mode: 'edit' } );
 
 	onDeleteSet = () => {
 
-		console.log( 'TODO: tell the parent that the song has been deleted' );
-		return;
-
-		const set = this.props.set;
-
-		if ( confirm( 'Are you very sure you want to delete this set?' ) ) {
-
-			//1 delete from pouchDb
-			db.remove( set._id, set._rev )
-				.then( () => {
-
-					//2. redirect to /sets
-					route( '/sets' );
-
-				} )
-				.catch( err => {
-
-					alert( 'Unable to delete set' );
-					console.warn( err );
-
-				} );
-
+		if ( this.props.onRemoveSet ) {
+			this.props.onRemoveSet();
 		}
 
 	};
 
-	onMoveSongUp = song => {
+	onMoveSongDown = songId => {
 
-		console.log( 'TODO: tell the parent that the song has moved');
-		return;
+		const index = findIndex( this.props.songs, { _id: songId } );
 
-		const songs = this.props.songs.slice();
-		const setSongs = this.props.set.songs.slice();
-
-		const currentIndex = songs.indexOf( song );
-		const targetIndex = currentIndex - 1;
-
-		if ( currentIndex !== -1 ) {
-
-			setSongs.splice( currentIndex, 1 );
-			songs.splice( currentIndex, 1 );
-
-			setSongs.splice( targetIndex, 0, { _id: song._id, key: song.key } );
-			songs.splice( targetIndex, 0, song );
-
-			const set = Object.assign( {}, this.props.set, {
-				songs: setSongs
-			} );
-
-			this.saveSet( set );
-			this.setState( { songs } );
-
-
+		if ( index > -1 ) {
+			if ( this.props.onSongMove ) {
+				this.props.onSongMove( songId, index + 1 );
+			}
 		}
 
 	};
 
-	saveSet = set => {
+	onMoveSongUp = songId => {
 
-		db.put( set )
-			.then( () => {
+		const index = findIndex( this.props.songs, { _id: songId } );
 
-				console.log( 'Saved set!', set._id );
-
-			} )
-			.catch( err => {
-
-				alert("unable to save set!")
-				console.warn( 'saveSet error', err );
-
-			} );
-
-	};
-
-	changeKey = ( song, amount ) => {
-
-		const songs = this.props.songs.slice();
-		const setSongs = this.props.set.songs.slice();
-		const setSong = find( setSongs, s => s._id === song._id );
-		const index = songs.indexOf( song );
-		const key = setSong ? setSong.key : song.key;
-
-		if ( index !== -1 ) {
-
-			const newKey = transposeChord( key, amount );
-
-			song.key = newKey;
-
-			setSongs.splice( index, 1 );
-			songs.splice( index, 1 );
-
-			setSongs.splice( index, 0, { _id: song._id, key: newKey } );
-			songs.splice( index, 0, song );
-
-			const set = Object.assign( {}, this.props.set, {
-				songs: setSongs
-			} );
-			this.saveSet( set );
-			this.setState( { songs } );
-
+		if ( index > -1 ) {
+			if ( this.props.onSongMove ) {
+				this.props.onSongMove( songId, index - 1 );
+			}
 		}
 
 	};
 
-	transposeDown = song => { this.changeKey( song, -1 ); };
-	transposeUp = song => { this.changeKey( song, 1 ); };
+	changeKey = ( songId, amount ) => {
+
+		if ( this.props.onChangeKey ) {
+			this.props.onChangeKey( songId, amount );
+		}
+
+	};
+
+	removeSong = songId => {
+
+		if ( this.props.onRemoveSong ) {
+			this.props.onRemoveSong( songId );
+		}
+
+	};
+
+	transposeDown = song => { this.changeKey( song._id, -1 ); };
+	transposeUp = song => { this.changeKey( song._id, 1 ); };
 
 	render( { set, songs }, { mode } ) {
 
@@ -140,13 +83,29 @@ class SetViewer extends PreactComponent {
 									</div>
 								</div>
 
+								<div>
+									{mode === 'edit' ? (
+										<a class="button is-primary" onClick={this.editModeOff}>
+											<span class="icon is-small">
+												<i class="fa fa-pencil"></i>
+											</span>
+										</a>
+									) : (
+										<a class="button" onClick={this.editModeOn}>
+											<span class="icon is-small">
+												<i class="fa fa-pencil"></i>
+											</span>
+										</a>
+									)}
+								</div>
+
 								<div class="level-right">
 									<div class="level-item">
 
 										{mode === 'edit' && [
 											<div class="control">
 												<a class="button is-primary"
-												   href={`/songs/add-to-set/${set.slug}`}>
+												   href={`/songs/add-to-set/${set._id}`}>
 													Add songs
 												</a>
 											</div>,
@@ -171,10 +130,10 @@ class SetViewer extends PreactComponent {
 									<div>
 										<p class="subtitle">This set has no songs</p>
 
-											<a class="button is-primary"
-												 href={`/songs/add-to-set/${set.slug}`}>
-												Add songs
-											</a>
+										<a class="button is-primary"
+										   href={`/songs/add-to-set/${set._id}`}>
+											Add songs
+										</a>
 
 
 									</div>
@@ -193,8 +152,6 @@ class SetViewer extends PreactComponent {
 
 	_createRow = song => {
 
-		console.log("song is ", song);
-
 		const { set } = this.props;
 		const { mode } = this.state;
 		const setSong = find( set.songs, s => s._id === song._id );
@@ -203,7 +160,7 @@ class SetViewer extends PreactComponent {
 		return (
 			<tr>
 				<td>
-					<Link to={`/sets/${set.slug}/songs/${song.slug}`}>
+					<Link to={`/sets/${set._id}/songs/${song._id}`}>
 						{song.title}
 					</Link>
 				</td>
@@ -230,9 +187,15 @@ class SetViewer extends PreactComponent {
 
 				{mode === 'edit' && (
 					<td>
-						<a onClick={() => this.onMoveSongUp(
-							song )} title="move this song up the list">
+						<a
+							onClick={() => this.onMoveSongUp( song._id )}
+							title="move this song up the list">
 							<span class="icon is-small is-left"><i class="fa fa-arrow-up"></i></span>
+						</a>
+						<a
+							onClick={() => this.removeSong( song._id )}
+							title="remove this song from the list">
+							<span class="icon is-small is-left"><i class="fa fa-trash"></i></span>
 						</a>
 					</td>
 				)}

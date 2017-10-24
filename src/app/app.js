@@ -1,5 +1,5 @@
 import {findIndex} from 'lodash';
-import {Redirect, Route} from 'react-router-dom';
+import {Redirect, Route, Switch} from 'react-router-dom';
 
 import Navbar from './common/Navbar/Navbar';
 import SongList from './SongList/SongList';
@@ -42,7 +42,7 @@ class App extends PreactComponent {
 
 					this.setState( {
 						focusedSet: result.docs[ 0 ]
-					});
+					} );
 
 				}
 
@@ -111,7 +111,7 @@ class App extends PreactComponent {
 
 	};
 
-	render( {}, { focusedSet, slug, songList } ) {
+	render( {}, { focusedSet, songList } ) {
 
 		return (
 			<div class="container">
@@ -120,29 +120,31 @@ class App extends PreactComponent {
 					goToNextSong={this.goToNextSong}
 					goToPreviousSong={this.goToPreviousSong}/>
 
-				<Route exact path="/songs" render={() => (
-					<SongList songs={songList}/>
-				)}/>
+				<Switch>
 
-				<Route exact path="/songs/add-to-set/:slug" render={() => (
-					<SongList songs={songList}/>
-				)}/>
+					<Route exact path="/songs" render={props => (
+						<SongList songs={songList} {...props}/>
+					)}/>
 
-				<Route exact path="/songs/new" component={SongEditor}/>
+					<Route exact path="/songs/add-to-set/:id" render={props => (
+						<SongList id={props.match.params.id} songs={songList} {...props}/>
+					)}/>
 
-				<Route exact path="/songs/:slug/edit" render={( { match } ) => (
-					<SongEditor slug={match.params.slug}/>
-				)}/>
+					<Route exact path="/songs/new" component={SongEditor}/>
 
-				<Route exact path="/songs/:slug" render={( { match } ) => (
-					<SongContainer slug={match.params.slug}/>
-				)}/>
+					<Route exact path="/songs/:id/edit" render={props => (
+						<SongEditor id={props.match.params.id} {...props}/>
+					)}/>
 
-				<Route path="/sets" component={SetListContainer}/>
+					<Route exact path="/songs/:id" render={( { match } ) => (
+						<SongContainer id={match.params.id}/>
+					)}/>
 
-				<Route exact path="/" render={() => (
+					<Route path="/sets" component={SetListContainer}/>
+
 					<Redirect to="/sets"/>
-				)}/>
+
+				</Switch>
 			</div>
 		);
 
@@ -153,15 +155,13 @@ class App extends PreactComponent {
 		// This gets docs linked to the user: justin
 		return db.find( {
 			selector: {
-				type:  'song'
+				type: 'song'
 			}
 		} )
 			.then( result => result.docs )
 			.catch( err => {
 
-				console.warn(
-					'App.constructor - pouchdb query failed: _getListOfSongs',
-					err );
+				console.warn( 'App.constructor - pouchdb query failed: _getListOfSongs', err );
 
 			} );
 

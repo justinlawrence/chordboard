@@ -25,47 +25,23 @@ class SetEditor extends PreactComponent {
 
 		const { title } = this.state;
 
-		// First check to see if the slug already exists.
-		db.find( {
-			selector: {
-				type: 'set',
-				slug: slugify( title )
-			}
-		} ).then( result => {
+		db.post( {
+			type:   'set',
+			author: 'justin',
+			slug:   slugify( title ),
+			title:  title,
+			songs:  []
+		} ).then( doc => {
 
-			if ( result.docs.length ) {
+			PouchDB.sync( 'chordboard',
+				'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' );
 
-				// Slug already exists
-				alert( 'Slug already exists' );
-
-				// TODO: make the slug unique by appending a number to the end
-				// Note: If we wanted to allow duplicate slugs across
-				// database but unique per user, we would require some kind
-				// of user context in the url. Something like what GitHub
-				// do with the username first.
-
-			} else {
-
-				db.post( {
-					type:   'set',
-					author: 'justin',
-					slug:   slugify( title ),
-					title:  title,
-					songs:  []
-				} ).then( () => {
-
-					alert( 'Added new set!' );
-
-					//TODO
-					PouchDB.sync( 'chordboard',
-						'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' );
-
+			if ( this.props.history ) {
+				this.props.history.push( {
+					pathname: `/sets/${doc.id}`
 				} );
-
 			}
 
-		} ).catch( err => {
-			console.error( err );
 		} );
 
 	};
