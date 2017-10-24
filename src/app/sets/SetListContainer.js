@@ -49,8 +49,6 @@ class SetListContainer extends PreactComponent {
 
 	_getListOfSets = () => {
 
-		console.log( 'gets here' );
-
 		// This gets all sets
 		return db.find( {
 			selector: {
