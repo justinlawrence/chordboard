@@ -3,8 +3,13 @@
 
 	.navbar-live {
 		align-items: stretch;
+		display:     flex;
 		flex:        1 1 0;
 		height:      52px;
+
+		.level-item {
+			margin-bottom: 0;
+		}
 	}
 
 	.navbar-item-stacked {
@@ -13,7 +18,7 @@
 		flex:            0 0 auto;
 		flex-direction:  column;
 		justify-content: center;
-		padding:  0.5rem 0.5rem 0;
+		padding:         0.5rem 0.5rem 0;
 
 		p {
 			height:        3em;
