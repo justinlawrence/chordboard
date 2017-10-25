@@ -11,7 +11,7 @@ const SyncStatus = ( { className, status } ) => {
 
 	return (
 		<div className={classes}>
-			syncStatus: {text}
+			Status: {text}
 		</div>
 	);
 

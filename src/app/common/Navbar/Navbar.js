@@ -1,5 +1,5 @@
 import {find} from 'lodash';
-import {Link, withRouter} from 'react-router-dom';
+import {Link, matchPath, withRouter} from 'react-router-dom';
 import {connect} from 'preact-redux'
 
 import {db} from 'app/common/database';
@@ -10,6 +10,7 @@ import './navbar.scss';
 
 class Navbar extends PreactComponent {
 	state = {
+		currentSong:       null,
 		nextSongKey:       '',
 		nextSongTitle:     '',
 		previousSongKey:   '',
@@ -26,23 +27,31 @@ class Navbar extends PreactComponent {
 
 	handleProps = props => {
 
-		const { focusedSet } = props;
+		const { focusedSet, location } = props;
 
 		if ( focusedSet ) {
 
 			const setSongs = focusedSet.songs;
 			const index = this.context.getCurrentSongIndex();
-			const keys = [ null, null ];
+			const keys = [ null, null, null ];
 
 			const nextSetSong = setSongs && setSongs[ index + 1 ];
 			const prevSetSong = setSongs && setSongs[ index - 1 ];
+
+			const match = matchPath( location.pathname, {
+				path: '/sets/:setId/songs/:songId'
+			} );
+
+			if ( match && match.params.songId ) {
+				keys[ 1 ] = match.params.songId;
+			}
 
 			if ( index > -1 ) {
 				if ( prevSetSong ) {
 					keys[ 0 ] = prevSetSong._id;
 				}
 				if ( nextSetSong ) {
-					keys[ 1 ] = nextSetSong._id;
+					keys[ 2 ] = nextSetSong._id;
 				}
 			}
 
@@ -55,17 +64,19 @@ class Navbar extends PreactComponent {
 					.map( r => r.doc )
 					.filter( r => !!r );
 
-				const nextSong = find( songs, { _id: keys[ 1 ] } );
+				const currentSong = find( songs, { _id: keys[ 1 ] } );
+				const nextSong = find( songs, { _id: keys[ 2 ] } );
 				const previousSong = find( songs, { _id: keys[ 0 ] } );
 
-				if ( nextSetSong ) {
+				if ( nextSong && nextSetSong ) {
 					nextSong.key = nextSetSong.key;
 				}
-				if ( prevSetSong ) {
+				if ( previousSong && prevSetSong ) {
 					previousSong.key = prevSetSong.key;
 				}
 
 				this.setState( {
+					currentSong,
 					nextSongKey:       nextSong ? nextSong.key : '',
 					nextSongTitle:     nextSong ? nextSong.title : '',
 					previousSongKey:   previousSong ? previousSong.key : '',
@@ -89,6 +100,7 @@ class Navbar extends PreactComponent {
 		} = this.props;
 
 		const {
+			currentSong,
 			nextSongKey,
 			nextSongTitle,
 			previousSongKey,
@@ -112,6 +124,9 @@ class Navbar extends PreactComponent {
 							)}
 						</a>
 						<div className="level-item">
+							{currentSong && (
+								<div>{currentSong.title}</div>
+							)}
 							<a className="navbar-item" onClick={onExitLiveMode}>
 								<span className="icon">
 									<i className="fa fa-close"/>
