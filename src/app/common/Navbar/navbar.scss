@@ -1,0 +1,12 @@
+.navbar {
+	box-shadow: 0 2px 4px rgba(10, 10, 10, .1);
+
+	.navbar-item-stacked {
+		flex-direction:  column;
+		justify-content: center;
+		overflow:        hidden;
+		max-width:       128px;
+		text-overflow:   ellipsis;
+		white-space:     nowrap;
+	}
+}

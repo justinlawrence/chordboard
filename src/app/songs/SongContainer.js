@@ -36,7 +36,7 @@ class SongContainer extends PreactComponent {
 		return db.get( id )
 			.catch( err => {
 
-				console.warn( 'App.constructor - pouchdb query failed: _getSongBySlug', err );
+				console.warn( 'App.constructor - pouchdb query failed: _getSongById', err );
 
 			} );
 

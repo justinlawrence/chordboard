@@ -1,6 +1,7 @@
 const webpackMerge = require( 'webpack-merge' );
 const commonConfig = require( './webpack.base.js' );
 const ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
+const OfflinePlugin = require( 'offline-plugin' );
 
 module.exports = function ( env ) {
 
@@ -41,7 +42,8 @@ module.exports = function ( env ) {
 			]
 		},
 		plugins: [
-			new ExtractTextPlugin( '[name].css' )
+			new ExtractTextPlugin( '[name].css' ),
+			new OfflinePlugin()
 		]
 	} );
 

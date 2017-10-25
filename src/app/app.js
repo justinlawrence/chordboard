@@ -1,5 +1,5 @@
 import {findIndex} from 'lodash';
-import {Redirect, Route, Switch} from 'react-router-dom';
+import {Redirect, Route, Switch, matchPath, withRouter} from 'react-router-dom';
 
 import Navbar from './common/Navbar/Navbar';
 import SongList from './SongList/SongList';
@@ -12,7 +12,6 @@ import {db, sync} from './common/database';
 class App extends PreactComponent {
 	state = {
 		focusedSet: {},
-		slug:       '',
 		setList:    [],
 		songList:   []
 	};
@@ -23,30 +22,12 @@ class App extends PreactComponent {
 			this.setState( { songList } );
 		} );
 
-		const focusedSetSlug = localStorage.getItem( 'focusedSetSlug' );
+		const setId = localStorage.getItem( 'focusedSetId' );
 
-		if ( focusedSetSlug ) {
+		if ( setId ) {
 
-			db.createIndex( {
-				index: { fields: [ 'type', 'slug' ] }
-			} );
-
-			return db.find( {
-				selector: {
-					type: 'set',
-					slug: focusedSetSlug
-				}
-			} ).then( result => {
-
-				if ( result.docs[ 0 ] ) {
-
-					this.setState( {
-						focusedSet: result.docs[ 0 ]
-					} );
-
-				}
-
-			} );
+			db.get( setId )
+				.then( doc => this.setState( { focusedSet: doc } ) );
 
 		}
 
@@ -60,35 +41,41 @@ class App extends PreactComponent {
 
 	}
 
-	getChildContext = () => {
+	getChildContext = () => ({
+		getCurrentSongIndex: this._getCurrentSongIndex,
+		setFocusedSet: this.setFocusedSet
+	});
 
-		return {
-			setFocusedSet: this.setFocusedSet
-		};
-
+	exitLiveMode = () => {
+		this.setFocusedSet( null );
 	};
 
 	goToNextSong = () => {
 
-		const index = findIndex( this.state.songList,
-			s => s.slug === this.state.slug );
+		if ( this.state.focusedSet ) {
 
-		this.goToSongIndex( index + 1 );
+			const index = this._getCurrentSongIndex();
+			this.goToSongIndex( index + 1 );
+
+		}
 
 	};
 
 	goToPreviousSong = () => {
 
-		const index = findIndex( this.state.songList,
-			s => s.slug === this.state.slug );
+		if ( this.state.focusedSet ) {
 
-		this.goToSongIndex( index - 1 );
+			const index = this._getCurrentSongIndex();
+			this.goToSongIndex( index - 1 );
+
+		}
 
 	};
 
 	goToSongIndex = index => {
 
-		const len = this.state.songList.length;
+		const { focusedSet } = this.state;
+		const len = focusedSet.songs.length;
 
 		// Set index range to between 0 and list length.
 		index = Math.min( Math.max( index, 0 ), len - 1 );
@@ -98,15 +85,17 @@ class App extends PreactComponent {
 		// Set index to wrap around at the ends.
 		//index = index < 0 ? len - 1 : index >= len ? 0 : index;
 
-		const song = this.state.songList[ index ];
+		const setSong = focusedSet.songs[ index ];
 
-		//Router.route( `/songs/${song.slug}` );
+		if ( this.props.history ) {
+			this.props.history.push( `/sets/${focusedSet._id}/songs/${setSong._id}` );
+		}
 
 	};
 
 	setFocusedSet = focusedSet => {
 
-		localStorage.setItem( 'focusedSetSlug', focusedSet.slug );
+		localStorage.setItem( 'focusedSetId', focusedSet ? focusedSet._id : '' );
 		this.setState( { focusedSet } );
 
 	};
@@ -114,41 +103,67 @@ class App extends PreactComponent {
 	render( {}, { focusedSet, songList } ) {
 
 		return (
-			<div class="container">
+			<div>
 				<Navbar
 					focusedSet={focusedSet}
-					goToNextSong={this.goToNextSong}
-					goToPreviousSong={this.goToPreviousSong}/>
+					onExitLiveMode={this.exitLiveMode}
+					onGoToNextSong={this.goToNextSong}
+					onGoToPreviousSong={this.goToPreviousSong}
+				/>
 
-				<Switch>
+				<div className="container">
+					<Switch>
 
-					<Route exact path="/songs" render={props => (
-						<SongList songs={songList} {...props}/>
-					)}/>
+						<Route exact path="/songs" render={props => (
+							<SongList songs={songList} {...props}/>
+						)}/>
 
-					<Route exact path="/songs/add-to-set/:id" render={props => (
-						<SongList id={props.match.params.id} songs={songList} {...props}/>
-					)}/>
+						<Route exact path="/songs/add-to-set/:id" render={props => (
+							<SongList id={props.match.params.id} songs={songList} {...props}/>
+						)}/>
 
-					<Route exact path="/songs/new" component={SongEditor}/>
+						<Route exact path="/songs/new" component={SongEditor}/>
 
-					<Route exact path="/songs/:id/edit" render={props => (
-						<SongEditor id={props.match.params.id} {...props}/>
-					)}/>
+						<Route exact path="/songs/:id/edit" render={props => (
+							<SongEditor id={props.match.params.id} {...props}/>
+						)}/>
 
-					<Route exact path="/songs/:id" render={( { match } ) => (
-						<SongContainer id={match.params.id}/>
-					)}/>
+						<Route exact path="/songs/:id" render={( { match } ) => (
+							<SongContainer id={match.params.id}/>
+						)}/>
 
-					<Route path="/sets" component={SetListContainer}/>
+						<Route path="/sets" component={SetListContainer}/>
 
-					<Redirect to="/sets"/>
+						<Redirect to="/sets"/>
 
-				</Switch>
+					</Switch>
+				</div>
 			</div>
 		);
 
 	}
+
+	_getCurrentSongIndex = () => {
+
+		if ( this.props.location ) {
+
+			const match = matchPath( location.pathname, {
+				path:  '/sets/:setId/songs/:songId',
+				exact: true
+			} );
+
+			if ( match ) {
+
+				const { focusedSet } = this.state;
+
+				return findIndex( focusedSet.songs, { _id: match.params.songId } );
+
+			}
+		}
+
+		return -1;
+
+	};
 
 	_getListOfSongs = () => {
 
@@ -169,4 +184,4 @@ class App extends PreactComponent {
 
 }
 
-export default App;
+export default withRouter( App );

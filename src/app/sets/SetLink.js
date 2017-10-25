@@ -12,7 +12,7 @@ class SetLink extends PreactComponent {
 		return (
 			<Link
 				onClick={this.handleClick}
-				to={`/sets/${set.slug}`}
+				to={`/sets/${set._id}`}
 			>
 				{children}
 			</Link>
