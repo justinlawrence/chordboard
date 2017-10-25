@@ -1,12 +1,34 @@
 .navbar {
 	box-shadow: 0 2px 4px rgba(10, 10, 10, .1);
 
+	.navbar-live {
+		align-items: stretch;
+		flex:        1 1 0;
+		height:      52px;
+	}
+
 	.navbar-item-stacked {
+		align-items:     center;
+		display:         flex;
+		flex:            0 0 auto;
 		flex-direction:  column;
 		justify-content: center;
-		overflow:        hidden;
-		max-width:       128px;
-		text-overflow:   ellipsis;
-		white-space:     nowrap;
+		padding:  0.5rem 0.5rem 0;
+
+		p {
+			height:        3em;
+			overflow:      hidden;
+			text-overflow: ellipsis;
+			white-space:   nowrap;
+			width:         8em;
+
+			.song-key {
+				margin-right: 0.5em;
+			}
+		}
+
+		&:hover {
+			background-color: rgba(10, 10, 10, 0.08);
+		}
 	}
 }

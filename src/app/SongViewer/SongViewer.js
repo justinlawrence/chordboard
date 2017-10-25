@@ -1,13 +1,17 @@
+import {Link} from 'react-router-dom';
+
+import Song from 'app/common/Song.js';
+import {octave} from 'app/common/transpose-chord';
+
 import ChordLine from "./lines/ChordLine.js";
 import ChordPair from "./lines/ChordPair.js";
 import Line from "./lines/Line.js";
-import Song from 'app/common/Song.js';
+
 import './SongViewer.scss';
-import {Link} from 'react-router-dom';
 
 class SongViewer extends PreactComponent {
 	state = {
-		song:      null
+		song: null
 	};
 
 	componentDidMount() {
@@ -28,22 +32,14 @@ class SongViewer extends PreactComponent {
 
 		}
 
-		if ( props.currentKey ) {
+		if ( props.currentKey && props.song && props.song.key &&
+			props.currentKey !== props.song.key ) {
 
-			// TODO: Set song transpose with key
-			// `props.currentKey` is the overridden key from the set list
-			// need to figure out the difference in keys in an integer value to
-			// pass onto the changeKey method.
-			// this.changeKey( ? );
+			// Calculate distance between keys
+			const amount = octave.indexOf( props.currentKey ) - octave.indexOf( props.song.key );
+			this.changeKey( amount );
 
 		}
-
-	};
-
-	editCurrentSong = () => {
-
-		//const url = Router.getCurrentUrl();
-		//Router.route( `${url}/edit` );
 
 	};
 
@@ -78,74 +74,73 @@ class SongViewer extends PreactComponent {
 	transposeDown = () => { this.changeKey( -1 ); };
 	transposeUp = () => { this.changeKey( 1 ); };
 
-	render( { currentKey }, { song } ) {
+	render( props, { song } ) {
 
 		let sections = [];
 
 		return (
 			song ?
-			<div>
+				<div>
+					<section class="hero is-small">
+						<div class="hero-body">
+							<div class="container">
+								<div class="columns is-vcentered">
 
-				<section class="hero is-small is-light">
-					<div class="hero-body">
-						<div class="container">
-							<div class="columns is-vcentered">
+									<div class="column is-half">
+										<h1 class="title">
+											{song.title}
+										</h1>
+										<h2 class="subtitle">
+											{song.author}
+										</h2>
+									</div>
 
-								<div class="column is-half">
-									<h1 class="title">
-										{song.title}
-									</h1>
-									<h2 class="subtitle">
-										{song.author}
-									</h2>
-								</div>
+									<div class="column">
 
-								<div class="column">
-
-									<h2 class="subtitle">
-										<a class="button">Key of {song.key}</a>
-										<a class="button" onClick={this.transposeDown} title="transpose down">
+										<h2 class="subtitle">
+											<a class="button">Key of {song.key}</a>
+											<a class="button" onClick={this.transposeDown} title="transpose down">
 											<span class="icon is-small">
 												 <i class="fa fa-minus"></i>
 											</span>
-										</a>
-										<a class="button" onClick={this.transposeUp} title="transpose up">
+											</a>
+											<a class="button" onClick={this.transposeUp} title="transpose up">
 											 <span class="icon is-small">
 												 <i class="fa fa-plus"></i>
 											</span>
-										</a>
+											</a>
 
-										<Link class="button" to={`/songs/${song._id}/edit`}>
+											<Link class="button" to={`/songs/${song._id}/edit`}>
 											<span class="icon is-small">
 												<i class="fa fa-pencil"></i>
 										 </span>
-										 <span>
+												<span>
 										 Edit Song
 									 </span>
-								 </Link>
-									</h2>
+											</Link>
+										</h2>
 
+
+									</div>
 
 								</div>
-
 							</div>
 						</div>
+					</section>
+
+
+					<div class="columns">
+
+						<div class="column is-three-quarters">
+							<section class="section">
+
+								{parseSong( song, sections )}
+
+							</section>
+						</div>
+
 					</div>
-				</section>
-
-
-				<div class="columns">
-
-					<div class="column is-three-quarters">
-						<section class="section">
-
-						{parseSong( song, sections )}
-
-						</section>
-					</div>
-
 				</div>
-			</div>
 				: null
 		);
 

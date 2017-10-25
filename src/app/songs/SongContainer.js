@@ -25,6 +25,7 @@ class SongContainer extends PreactComponent {
 	};
 
 	render( { currentKey }, { song } ) {
+
 		return song && (
 			<SongViewer currentKey={currentKey} song={song}/>
 		);

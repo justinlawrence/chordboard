@@ -1,28 +1,30 @@
-//credit: https://codepen.io/Grilly86/pen/rwRYYM
 
-export default function transposeChord( chord, transpose ) {
+export const octave = [
+	"A",
+	"Bb",
+	"B",
+	"C",
+	"C#",
+	"D",
+	"Eb",
+	"E",
+	"F",
+	"F#",
+	"G",
+	"G#"
+];
 
-	const octave = [
-		"A",
-		"Bb",
-		"B",
-		"C",
-		"C#",
-		"D",
-		"Eb",
-		"E",
-		"F",
-		"F#",
-		"G",
-		"G#"
-	];
+export default function transposeChord( chord, amount ) {
+
+	//credit: https://codepen.io/Grilly86/pen/rwRYYM
+
+	let matches = chord.match( /[A-Ga-g][#b]?(.*)/ );
 
 	// Make chords uppercase
 	let newChord = chord.toUpperCase()
 		.replace( /([A-G])([BM])/g, ( m, p1, p2 ) => p1 + p2.toLowerCase() );
 
-	let mod = "";
-	let isMinor = /[A-G]m/.test( newChord );
+	let mod = '';
 
 	if ( newChord.length > 1 ) {
 
@@ -34,7 +36,7 @@ export default function transposeChord( chord, transpose ) {
 	let chordNr = parseInt( octave.indexOf( newChord ) );
 
 	if ( chordNr >= 0 ) {
-		chordNr += parseInt( transpose );
+		chordNr += parseInt( amount );
 
 		if ( mod === "#" ) {
 			chordNr += 1;
@@ -53,13 +55,12 @@ export default function transposeChord( chord, transpose ) {
 
 	if ( octave[ chordNr ] === undefined ) {
 
-		console.warn( "ERROR octave does not contain chordNr", chordNr, "chord",
-			newChord );
+		console.warn( "ERROR octave does not contain chordNr", chordNr, "chord", newChord );
 		return '';
 
 	} else {
 
-		return octave[ chordNr ] + (isMinor ? 'm' : '');
+		return octave[ chordNr ] + (matches && matches[ 1 ] ? matches[ 1 ] : '');
 
 	}
 
@@ -73,8 +74,14 @@ if ( module.hot ) {
 		[ transposeChord( "A", -1 ), "G#" ],
 		[ transposeChord( "a", 1 ), "Bb" ],
 		[ transposeChord( "a", -1 ), "G#" ],
-		[ transposeChord( "bb", 1 ), "B" ],
-		[ transposeChord( "bm", 1 ), "Cm" ],
+		[ transposeChord( "Bb", 1 ), "B" ],
+		[ transposeChord( "Bm", 1 ), "Cm" ],
+		[ transposeChord( "C#m7", -2 ), "Bm7" ],
+		[ transposeChord( "Dadd2", 2 ), "Eadd2" ],
+		[ transposeChord( "Ddim2", 2 ), "Edim2" ],
+		[ transposeChord( "Dsus4", 2 ), "Esus4" ],
+		[ transposeChord( "Didontcare", -2 ), "Cidontcare" ],
+		[ transposeChord( "Bb7sus", 2 ), "C7sus" ],
 	];
 
 	tests.forEach( ( test, i ) => {

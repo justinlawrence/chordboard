@@ -1,0 +1,10 @@
+.song-key {
+	$size: 1.75em;
+	align-items:      center;
+	background-color: rgba(0, 0, 0, 0.1);
+	border-radius:    $size;
+	display:          inline-flex;
+	height:           $size;
+	justify-content:  center;
+	width:            $size;
+}

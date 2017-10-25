@@ -135,41 +135,11 @@ class SetContainer extends PreactComponent {
 					const songId = match.params.songId;
 
 					const index = findIndex( songs, { _id: songId } );
-					const prevSong = index >= 0 ? songs[ index - 1 ] : null;
-					const nextSong = index >= 0 ? songs[ index + 1 ] : null;
-
 					const currentKey = set && set.songs[ index ] ?
 						set.songs[ index ].key : null;
 
 					return (
 						<div>
-							{set && (
-								<div class="level">
-									<div class="level-left">
-										<p class="level-item">{set.title}</p>
-
-										{prevSong && (
-											<Link
-												class="level-item"
-												to={`/sets/${set._id}/songs/${prevSong._id}`}
-											>
-												<span class="icon"><i class="fa fa-angle-left"></i></span>
-												{prevSong.title}
-											</Link>
-										)}
-
-										{nextSong && (
-											<Link
-												class="level-item"
-												to={`/sets/${set._id}/songs/${nextSong._id}`}
-											>
-												{nextSong.title}
-												<span class="icon"><i class="fa fa-angle-right"></i></span>
-											</Link>
-										)}
-									</div>
-								</div>
-							)}
 							<SongContainer
 								currentKey={currentKey}
 								id={songId}/>
