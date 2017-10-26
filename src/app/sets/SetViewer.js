@@ -1,5 +1,9 @@
 import {find, findIndex} from 'lodash'
 import {Link} from 'react-router-dom';
+import SetLink from './SetLink';
+import SongKey from 'app/common/SongKey';
+
+
 
 import {db, sync} from '../common/database';
 
@@ -111,7 +115,6 @@ class SetViewer extends PreactComponent {
 											</span>
 										</a>
 									)}
-
 								</div>
 							</nav>
 
@@ -161,20 +164,25 @@ class SetViewer extends PreactComponent {
 				<td>
 					<div class="field is-grouped">
 
-						<a class="button is-small is-white">
-							{key}
-						</a>
 						{mode === 'edit' && [
 							<a class="button is-small is-white" title="transpose down"
 							   onClick={() => this.transposeDown( song )}>
 								<span class="icon is-small"><i class="fa fa-minus"></i></span>
-							</a>,
+							</a>
+						]}
+
+						<SongKey value={key}></SongKey>
+
+						{mode === 'edit' && [
+
 							<a class="button is-small is-white" title="transpose up"
 							   onClick={() => this.transposeUp( song )}>
 
 								<span class="icon is-small"><i class="fa fa-plus"></i></span>
 							</a>
 						]}
+
+
 					</div>
 
 				</td>

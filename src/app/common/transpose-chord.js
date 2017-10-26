@@ -90,6 +90,8 @@ if ( module.hot ) {
 		[ transposeChord( "Bb7sus", 2 ), "C7sus" ],
 		[ transposeChord( "C/E", 2 ), "D/F#" ],
 		[ transposeChord( "Cmaj7/E", 2 ), "Dmaj7/F#" ],
+		[ transposeChord( "G2", 2 ), "A2" ],
+		[ transposeChord( "Gmaj7", 4 ), "Bmaj7" ],
 	];
 
 	tests.forEach( ( test, i ) => {
@@ -99,3 +101,56 @@ if ( module.hot ) {
 	} );
 
 }
+
+
+/*
+
+	nashville number reference:
+
+	https://en.wikipedia.org/wiki/Nashville_number_system
+
+	sample structure:
+
+	data types
+
+	header
+
+		title
+		subtitle
+		author
+		copyright
+		ccli
+		key
+		bpm
+		highestnote
+		recommendedKeys
+		versions
+		links (youtube, spotify etc.)
+		comments
+		fontSize
+		similar
+
+	detail
+
+		line
+			type
+				section
+				words
+			content
+			chords
+				position
+				chord /
+
+//chord colours as assigned by Isaac Newton
+Pitch	Solfège	Colour
+C	do (or doh in tonic sol-fa)	Red
+D	re	Orange
+E	mi	Yellow
+F	fa	Green
+G	sol (or so in tonic sol-fa)	Blue
+A	la	Indigo
+Blue Violet
+B	ti/si	Purple
+Red Violet
+
+*/

@@ -46,8 +46,8 @@ $chord-gap: .75em;
 .section {
 	margin-top:     8px;
 	// border-left:  4px solid #ddd;
-	padding-top:    0px;
-	padding-bottom: 0px;
+	padding-top:    0;
+	padding-bottom: 0;
 
 	&[data-section]:before {
 		color:            white;
