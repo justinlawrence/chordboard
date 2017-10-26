@@ -1,5 +1,6 @@
 import {findIndex} from 'lodash';
 import {Redirect, Route, Switch, matchPath, withRouter} from 'react-router-dom';
+import cx from 'classnames';
 
 import Navbar from './common/Navbar/Navbar';
 import SongList from './SongList/SongList';
@@ -8,10 +9,11 @@ import SongContainer from './songs/SongContainer';
 import SetListContainer from './sets/SetListContainer';
 
 import {db, sync} from './common/database';
+import './app.scss';
 
 class App extends PreactComponent {
 	state = {
-		focusedSet: {},
+		focusedSet: null,
 		setList:    [],
 		songList:   []
 	};
@@ -111,7 +113,10 @@ class App extends PreactComponent {
 					onGoToPreviousSong={this.goToPreviousSong}
 				/>
 
-				<div className="container">
+				<div className={cx(
+					'container',
+					{ 'has-fixed-navbar': focusedSet }
+				)}>
 					<Switch>
 
 						<Route exact path="/songs" render={props => (

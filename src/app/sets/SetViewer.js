@@ -83,41 +83,35 @@ class SetViewer extends PreactComponent {
 									</div>
 								</div>
 
-								<div>
-									{mode === 'edit' ? (
-										<a class="button is-primary" onClick={this.editModeOff}>
-											<span class="icon is-small">
-												<i class="fa fa-pencil"></i>
-											</span>
-										</a>
-									) : (
+								<div class="level-right">
+									{mode === 'edit' ? [
+										<div class="level-item">
+											<a class="button is-outlined"
+											   onClick={this.onDeleteSet}>
+												<span class="icon is-small is-left"><i class="fa fa-trash"></i></span>
+											</a>
+										</div>,
+										<div class="level-item">
+											<a class="button is-primary"
+											   href={`/songs/add-to-set/${set._id}`}>
+												Add songs
+											</a>
+										</div>,
+										<div class="level-item">
+											<a class="button is-primary" onClick={this.editModeOff}>
+												<span class="icon is-small">
+													<i class="fa fa-pencil"></i>
+												</span>
+											</a>
+										</div>
+									] : (
 										<a class="button" onClick={this.editModeOn}>
 											<span class="icon is-small">
 												<i class="fa fa-pencil"></i>
 											</span>
 										</a>
 									)}
-								</div>
 
-								<div class="level-right">
-									<div class="level-item">
-
-										{mode === 'edit' && [
-											<div class="control">
-												<a class="button is-primary"
-												   href={`/songs/add-to-set/${set._id}`}>
-													Add songs
-												</a>
-											</div>,
-											<div class="control">
-												<a class="button is-outlined"
-												   onClick={this.onDeleteSet}>
-													<span class="icon is-small is-left"><i class="fa fa-trash"></i></span>
-												</a>
-											</div>
-										]}
-
-									</div>
 								</div>
 							</nav>
 

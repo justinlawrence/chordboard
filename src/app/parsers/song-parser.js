@@ -25,8 +25,7 @@ class Parser {
 
 		// White-list a bunch of characters so we can clean out any invisible
 		// characters.
-		return line.replace(
-				/[^a-zA-Z0-9+-._,:<>/?’'"+=%@#!$%*&();\s\r\n\t{}\[\]\\]/g, "" );
+		return line.replace( /[^a-zA-Z0-9+-._,:<>/?’'"+=%@#!$%*&();\s\r\n\t{}\[\]\\]/g, "" );
 
 
 	}

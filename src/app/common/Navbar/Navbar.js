@@ -1,6 +1,7 @@
 import {find} from 'lodash';
 import {Link, matchPath, withRouter} from 'react-router-dom';
 import {connect} from 'preact-redux'
+import cx from 'classnames';
 
 import {db} from 'app/common/database';
 import SongKey from 'app/common/SongKey';
@@ -11,6 +12,7 @@ import './navbar.scss';
 class Navbar extends PreactComponent {
 	state = {
 		currentSong:       null,
+		isMenuVisible:     false,
 		nextSongKey:       '',
 		nextSongTitle:     '',
 		previousSongKey:   '',
@@ -89,6 +91,14 @@ class Navbar extends PreactComponent {
 
 	};
 
+	toggleNavbarMenu = () => {
+
+		this.setState( {
+			isMenuVisible: !this.state.isMenuVisible
+		} );
+
+	};
+
 	render() {
 
 		const {
@@ -101,14 +111,39 @@ class Navbar extends PreactComponent {
 
 		const {
 			currentSong,
+			isMenuVisible,
 			nextSongKey,
 			nextSongTitle,
 			previousSongKey,
 			previousSongTitle
 		} = this.state;
 
+		let sections = [];
+		let section = '';
+		let sectionIndex = 0;
+
+		if ( currentSong ) {
+
+			currentSong.lines.forEach( line => {
+
+				if ( line.type === 'section' ) {
+
+					sections.push( {
+						index: ++sectionIndex,
+						text:  line.text
+					} );
+
+				}
+
+			} );
+
+		}
+
 		return (
-			<nav className="navbar is-light">
+			<nav className={cx(
+				'navbar is-light',
+				{ 'navbar_fixed': focusedSet }
+			)}>
 				{focusedSet ? (
 					<div className="level navbar-live">
 						<a className="navbar-item navbar-item-stacked"
@@ -124,9 +159,13 @@ class Navbar extends PreactComponent {
 							)}
 						</a>
 						<div className="level-item">
-							{currentSong && (
-								<div>{currentSong.title}</div>
-							)}
+							{sections.map( section => (
+								<a
+									href={`#section-${section.index}`}
+									className="navbar__section-link section"
+									data-section={section.text}
+								/>
+							) )}
 							<a className="navbar-item" onClick={onExitLiveMode}>
 								<span className="icon">
 									<i className="fa fa-close"/>
@@ -154,13 +193,15 @@ class Navbar extends PreactComponent {
 								     alt="Chordboard: a chord manager for live musicians"
 								     width="142"/>
 							</Link>
-							<div className="navbar-burger">
+							<div
+								className="navbar-burger"
+								onClick={this.toggleNavbarMenu}>
 								<span></span><span></span><span></span>
 							</div>
 
 						</div>
 
-						<div className="navbar-menu is-active">
+						<div className={cx( 'navbar-menu', { 'is-active': isMenuVisible } )}>
 							<div className="navbar-start">
 
 								<Link class="navbar-item" to="/sets">Sets</Link>

@@ -39,8 +39,40 @@ export default dataTypes;
 function isChords( input ) {
 
 	let output = input.replace(
-		/(\s|[A-G](#|b)?|m|[0-9]|(sus|maj|min|aug|dim|add)\d?|\/|-|\|)/g, "" );
+		/(\s|[A-G]|(#|b)|(sus|maj|min|aug|dim|add|m)|[0-9]|\/|-|\||[()]|x\d)/g, '' );
 
 	return !(output);
+
+}
+
+// Test chords.
+if ( module.hot ) {
+
+	const tests = [
+		[ "A", true ],
+		[ "B", true ],
+		[ "C", true ],
+		[ "D", true ],
+		[ "E", true ],
+		[ "F", true ],
+		[ "G", true ],
+		[ "H", false ],
+		[ "A#", true ],
+		[ "Ab", true ],
+		[ "Am", true ],
+		[ "A#m", true ],
+		[ "Abm", true ],
+		[ "Gmaj7", true ],
+		[ "Dmaj7", true ],
+		[ "G2", true ],
+		[ "Dsus", true ],
+	];
+
+	tests.forEach( ( test, i ) => {
+
+		console.assert( isChords( test[ 0 ] ) === test[ 1 ],
+			`isChords(${test[ 0 ]}) - expected: ${test[ 1 ]}, actual: ${isChords( test[ 0 ] )}` );
+
+	} );
 
 }

@@ -1,5 +1,5 @@
-import {h} from "preact";
 import {range} from "lodash";
+import cx from 'classnames';
 
 const ChordPair = ( { chords, text } ) => {
 
@@ -10,20 +10,14 @@ const ChordPair = ( { chords, text } ) => {
 		const nextIndex = chords._sort[ i + 1 ] || Infinity;
 		let slice = text.slice( index, nextIndex );
 
-		// Pad the sliced text with spaces so overhanging chords will be
-		// positioned correctly.
-		if ( slice.length < nextIndex - index && nextIndex - index !== Infinity ) {
-
-			range( (nextIndex - index) - slice.length ).forEach( () => {
-
-				slice += " ";
-
-			} );
-
-		}
-
 		children.push(
-			<span class="text-line" data-content={chords[ index ]}>
+			<span
+				className={cx(
+					'text-line',
+					{ 'text-line_empty': !slice.trim() }
+				)}
+				data-content={chords[ index ]}
+			>
 				{slice}
 			</span>
 		);

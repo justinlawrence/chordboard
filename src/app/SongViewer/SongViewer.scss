@@ -1,9 +1,10 @@
 $horiz-padding: 48px;
-
+$chord-gap: .75em;
 .sheet {
 	padding-left:  $horiz-padding;
 	padding-right: $horiz-padding;
 }
+
 .chord-pair .text-line,
 .chord-line .text-line {
 	margin-top:     24px;
@@ -19,6 +20,7 @@ $horiz-padding: 48px;
 		top:      -18px;
 	}
 }
+
 .chord-pair .text-line:before,
 .chord-line .text-line:before {
 	color:     #03a9f4;
@@ -28,21 +30,23 @@ $horiz-padding: 48px;
 // These are chords that are found on a separate line
 .chord-line .text-line {
 	height:       0;
-	margin-right: 8px;
+	margin-right: $chord-gap;
 	visibility:   hidden;
 
 	&:before {
 		visibility: visible;
 	}
 }
+
 // Blank whitespace lines
 .empty-line {
 	height: 16px;
 }
+
 .section {
-	margin-top:   8px;
+	margin-top:     8px;
 	// border-left:  4px solid #ddd;
-	padding-top: 0px;
+	padding-top:    0px;
 	padding-bottom: 0px;
 
 	&[data-section]:before {
@@ -75,7 +79,9 @@ $horiz-padding: 48px;
 		}
 	}
 
-	&[data-section*="Pre-chorus"] {
+	&[data-section*="Pre-chorus"],
+	&[data-section*="Pre chorus"],
+	&[data-section*="Prechorus"] {
 		border-left: 4px solid #ff9800;
 
 		&:before {
@@ -101,7 +107,6 @@ $horiz-padding: 48px;
 			background-color: #444;
 		}
 	}
-
 
 	&[data-section*="Interlude"],
 	&[data-section*="Instrumental"] {
@@ -132,12 +137,13 @@ $horiz-padding: 48px;
 	&[data-section*="Verse 9"]:before { content: "9"; }
 	&[data-section*="Verse 10"]:before { content: "10"; }
 
-
 }
+
 // The lyric lines, there are 2 types, the ones in chord-pairs and the ones that are found without chords
 .text-line {
 	font-size: 1.1rem;
-	&:empty {
-		min-width: 20px;
+	&.text-line_empty {
+		margin-left: $chord-gap;
+		min-width:   2em;
 	}
 }

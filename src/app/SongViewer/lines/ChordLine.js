@@ -1,4 +1,3 @@
-import {h} from "preact";
 import {range} from "lodash";
 
 export default ( { chords } ) => {

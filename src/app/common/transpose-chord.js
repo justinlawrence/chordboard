@@ -1,4 +1,3 @@
-
 export const octave = [
 	"A",
 	"Bb",
@@ -17,6 +16,13 @@ export const octave = [
 export default function transposeChord( chord, amount ) {
 
 	//credit: https://codepen.io/Grilly86/pen/rwRYYM
+
+	const chords = chord.split( '/' );
+	if ( chords.length > 1 ) {
+
+		return chords.map( c => transposeChord( c, amount ) ).join( '/' );
+
+	}
 
 	let matches = chord.match( /[A-Ga-g][#b]?(.*)/ );
 
@@ -82,6 +88,8 @@ if ( module.hot ) {
 		[ transposeChord( "Dsus4", 2 ), "Esus4" ],
 		[ transposeChord( "Didontcare", -2 ), "Cidontcare" ],
 		[ transposeChord( "Bb7sus", 2 ), "C7sus" ],
+		[ transposeChord( "C/E", 2 ), "D/F#" ],
+		[ transposeChord( "Cmaj7/E", 2 ), "Dmaj7/F#" ],
 	];
 
 	tests.forEach( ( test, i ) => {
