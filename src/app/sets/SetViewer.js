@@ -167,7 +167,7 @@ class SetViewer extends PreactComponent {
 						{mode === 'edit' && [
 							<a class="button is-small is-white" title="transpose down"
 							   onClick={() => this.transposeDown( song )}>
-								<span class="icon is-small"><i class="fa fa-minus"></i></span>
+								<span class="icon is-small"><i class="fa fa-minus"/></span>
 							</a>
 						]}
 
@@ -178,7 +178,7 @@ class SetViewer extends PreactComponent {
 							<a class="button is-small is-white" title="transpose up"
 							   onClick={() => this.transposeUp( song )}>
 
-								<span class="icon is-small"><i class="fa fa-plus"></i></span>
+								<span class="icon is-small"><i class="fa fa-plus"/></span>
 							</a>
 						]}
 
@@ -192,12 +192,12 @@ class SetViewer extends PreactComponent {
 						<a
 							onClick={() => this.onMoveSongUp( song._id )}
 							title="move this song up the list">
-							<span class="icon is-small is-left"><i class="fa fa-arrow-up"></i></span>
+							<span class="icon is-small is-left"><i class="fa fa-arrow-up"/></span>
 						</a>
 						<a
 							onClick={() => this.removeSong( song._id )}
 							title="remove this song from the list">
-							<span class="icon is-small is-left"><i class="fa fa-trash"></i></span>
+							<span class="icon is-small is-left"><i class="fa fa-trash"/></span>
 						</a>
 					</td>
 				)}

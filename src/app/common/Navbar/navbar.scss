@@ -1,12 +1,6 @@
 .navbar {
 	box-shadow: 0 2px 4px rgba(10, 10, 10, .1);
 
-	&_fixed {
-		position: fixed;
-		width:    100%;
-		z-index:  2;
-	}
-
 	.navbar-live {
 		align-items: stretch;
 		display:     flex;

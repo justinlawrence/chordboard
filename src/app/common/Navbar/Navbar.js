@@ -1,5 +1,5 @@
-import {find} from 'lodash';
-import {Link, matchPath, withRouter} from 'react-router-dom';
+import {find, findIndex} from 'lodash';
+import {Link, Route, Switch, matchPath, withRouter} from 'react-router-dom';
 import {connect} from 'preact-redux'
 import cx from 'classnames';
 
@@ -8,6 +8,7 @@ import SongKey from 'app/common/SongKey';
 import SyncStatus from 'app/common/SyncStatus';
 
 import './navbar.scss';
+import * as React from "react";
 
 class Navbar extends PreactComponent {
 	state = {
@@ -29,60 +30,63 @@ class Navbar extends PreactComponent {
 
 	handleProps = props => {
 
-		const { focusedSet, location } = props;
+		const { location } = props;
+		const match = matchPath( location.pathname, {
+			path: '/sets/:setId/songs/:songId'
+		} );
 
-		if ( focusedSet ) {
+		if ( match ) {
 
-			const setSongs = focusedSet.songs;
-			const index = this.context.getCurrentSongIndex();
-			const keys = [ null, null, null ];
+			db.get( match.params.setId ).then( set => {
 
-			const nextSetSong = setSongs && setSongs[ index + 1 ];
-			const prevSetSong = setSongs && setSongs[ index - 1 ];
+				const setSongs = set.songs;
+				const index = findIndex( set.songs, { _id: match.params.songId } );
+				const keys = [ null, null, null ];
 
-			const match = matchPath( location.pathname, {
-				path: '/sets/:setId/songs/:songId'
-			} );
+				const nextSetSong = setSongs && setSongs[ index + 1 ];
+				const prevSetSong = setSongs && setSongs[ index - 1 ];
 
-			if ( match && match.params.songId ) {
-				keys[ 1 ] = match.params.songId;
-			}
-
-			if ( index > -1 ) {
-				if ( prevSetSong ) {
-					keys[ 0 ] = prevSetSong._id;
-				}
-				if ( nextSetSong ) {
-					keys[ 2 ] = nextSetSong._id;
-				}
-			}
-
-			db.allDocs( {
-				include_docs: true,
-				keys:         keys.filter( k => k )
-			} ).then( result => {
-
-				const songs = result.rows
-					.map( r => r.doc )
-					.filter( r => !!r );
-
-				const currentSong = find( songs, { _id: keys[ 1 ] } );
-				const nextSong = find( songs, { _id: keys[ 2 ] } );
-				const previousSong = find( songs, { _id: keys[ 0 ] } );
-
-				if ( nextSong && nextSetSong ) {
-					nextSong.key = nextSetSong.key;
-				}
-				if ( previousSong && prevSetSong ) {
-					previousSong.key = prevSetSong.key;
+				if ( match && match.params.songId ) {
+					keys[ 1 ] = match.params.songId;
 				}
 
-				this.setState( {
-					currentSong,
-					nextSongKey:       nextSong ? nextSong.key : '',
-					nextSongTitle:     nextSong ? nextSong.title : '',
-					previousSongKey:   previousSong ? previousSong.key : '',
-					previousSongTitle: previousSong ? previousSong.title : ''
+				if ( index > -1 ) {
+					if ( prevSetSong ) {
+						keys[ 0 ] = prevSetSong._id;
+					}
+					if ( nextSetSong ) {
+						keys[ 2 ] = nextSetSong._id;
+					}
+				}
+
+				db.allDocs( {
+					include_docs: true,
+					keys:         keys.filter( k => k )
+				} ).then( result => {
+
+					const songs = result.rows
+						.map( r => r.doc )
+						.filter( r => !!r );
+
+					const currentSong = find( songs, { _id: keys[ 1 ] } );
+					const nextSong = find( songs, { _id: keys[ 2 ] } );
+					const previousSong = find( songs, { _id: keys[ 0 ] } );
+
+					if ( nextSong && nextSetSong ) {
+						nextSong.key = nextSetSong.key;
+					}
+					if ( previousSong && prevSetSong ) {
+						previousSong.key = prevSetSong.key;
+					}
+
+					this.setState( {
+						currentSong,
+						nextSongKey:       nextSong ? nextSong.key : '',
+						nextSongTitle:     nextSong ? nextSong.title : '',
+						previousSongKey:   previousSong ? previousSong.key : '',
+						previousSongTitle: previousSong ? previousSong.title : ''
+					} );
+
 				} );
 
 			} );
@@ -119,7 +123,6 @@ class Navbar extends PreactComponent {
 		} = this.state;
 
 		let sections = [];
-		let section = '';
 		let sectionIndex = 0;
 
 		if ( currentSong ) {
@@ -140,90 +143,98 @@ class Navbar extends PreactComponent {
 		}
 
 		return (
-			<nav className={cx(
-				'navbar is-light',
-				{ 'navbar_fixed': focusedSet }
-			)}>
-				{focusedSet ? (
-					<div className="level navbar-live">
-						<a className="navbar-item navbar-item-stacked"
-						   onClick={onGoToPreviousSong}>
-							<span className="icon">
-								<i className="fa fa-angle-left fa-lg"/>
-							</span>
-							{previousSongTitle && (
-								<p className="is-size-7">
-									<SongKey value={previousSongKey}/>
-									{previousSongTitle}
-								</p>
-							)}
-						</a>
-						<div className="level-item">
-							{sections.map( section => (
-								<a
-									href={`#section-${section.index}`}
-									className="navbar__section-link section"
-									data-section={section.text}
-								/>
-							) )}
-							<a className="navbar-item" onClick={onExitLiveMode}>
+			<nav className="navbar is-light">
+				<Switch>
+					<Route exact path="/sets/:setId/songs/:songsId" render={props => (
+						<div className="level navbar-live">
+							<a className="navbar-item navbar-item-stacked"
+							   onClick={onGoToPreviousSong}>
+								<span className="icon">
+									<i className="fa fa-angle-left fa-lg"/>
+								</span>
+								{previousSongTitle && (
+									<p className="is-size-7">
+										<SongKey value={previousSongKey}/>
+										{previousSongTitle}
+									</p>
+								)}
+							</a>
+							<div className="level-item">
+								<Link
+									className="navbar-item"
+									to={`/sets/${props.match.params.setId}`}
+								>
+									<span className="icon">
+										<i className="fa fa-list-ul"/>
+									</span>
+								</Link>
+								{sections.map( section => (
+									<a
+										href={`#section-${section.index}`}
+										className="navbar__section-link section"
+										data-section={section.text}
+									/>
+								) )}
+								<a className="navbar-item" onClick={onExitLiveMode}>
 								<span className="icon">
 									<i className="fa fa-close"/>
 								</span>
+								</a>
+							</div>
+							<a className="navbar-item navbar-item-stacked"
+							   onClick={onGoToNextSong}>
+								<span className="icon">
+									<i className="fa fa-angle-right fa-lg"/>
+								</span>
+								{nextSongTitle && (
+									<p className="is-size-7">
+										<SongKey value={nextSongKey}/>
+										{nextSongTitle}
+									</p>
+								)}
 							</a>
 						</div>
-						<a className="navbar-item navbar-item-stacked"
-						   onClick={onGoToNextSong}>
-							<span className="icon">
-								<i className="fa fa-angle-right fa-lg"/>
-							</span>
-							{nextSongTitle && (
-								<p className="is-size-7">
-									<SongKey value={nextSongKey}/>
-									{nextSongTitle}
-								</p>
-							)}
-						</a>
-					</div>
-				) : (
-					<div className="container">
-						<div className="navbar-brand">
-							<Link class="navbar-item" to='/'>
-								<img src="/assets/chordboard-logo-long.png"
-								     alt="Chordboard: a chord manager for live musicians"
-								     width="142"/>
-							</Link>
-							<div
-								className="navbar-burger"
-								onClick={this.toggleNavbarMenu}>
-								<span></span><span></span><span></span>
+					)}/>
+					<Route render={props => (
+						<div className="container">
+							<div className="navbar-brand">
+								<Link class="navbar-item" to='/'>
+									<img src="/assets/chordboard-logo-long.png"
+									     alt="Chordboard: a chord manager for live musicians"
+									     width="142"/>
+								</Link>
+								<div
+									className="navbar-burger"
+									onClick={this.toggleNavbarMenu}>
+									<span></span><span></span><span></span>
+								</div>
+
 							</div>
 
-						</div>
+							<div className={cx( 'navbar-menu', { 'is-active': isMenuVisible } )}>
+								<div className="navbar-start">
 
-						<div className={cx( 'navbar-menu', { 'is-active': isMenuVisible } )}>
-							<div className="navbar-start">
+									<Link class="navbar-item" to="/sets">Sets</Link>
+									<Link class="navbar-item" to="/songs">Songs</Link>
 
-								<Link class="navbar-item" to="/sets">Sets</Link>
-								<Link class="navbar-item" to="/songs">Songs</Link>
-
-								{focusedSet && (
-									<Link
-										class="navbar-item"
-										to={`/sets/${focusedSet._id}`}
-									>Live</Link>
-								)}
-							</div>
-							<div className="navbar-end">
-								<p className="navbar-item">
-									<SyncStatus
-										className="is-size-7 has-text-grey-light"
-										status={syncState}/>
-								</p>
+									{focusedSet && (
+										<Link
+											class="navbar-item"
+											to={`/sets/${focusedSet._id}`}
+										>Live</Link>
+									)}
+								</div>
+								<div className="navbar-end">
+									<p className="navbar-item">
+										<SyncStatus
+											className="is-size-7 has-text-grey-light"
+											status={syncState}/>
+									</p>
+								</div>
 							</div>
 						</div>
-					</div>
-				)}
+					)}/>
+				</Switch>
 			</nav>
 		);
 

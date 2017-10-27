@@ -25,31 +25,31 @@ class SetList extends PreactComponent {
 	render( { sets = [] }, { searchText } ) {
 
 		return (
-			<section class="section">
-				<div class="container">
-					<div class="columns">
+			<section className="section">
+				<div className="container">
+					<div className="columns">
 
-						<div class="column is-three-quarters">
+						<div className="column is-three-quarters">
 
-							<div class="field has-addons has-addons-right">
-								<p class="control has-icons-left">
+							<div className="field has-addons has-addons-right">
+								<p className="control has-icons-left">
 									<input
 										type="text"
-										class="input"
+										className="input"
 										onInput={this.handleSearchInput}
 										placeholder="Titles, authors"
 										value={searchText}/>
 
-									<span class="icon is-small is-left">
-							            <i class="fa fa-search"></i>
+									<span className="icon is-small is-left">
+							            <i className="fa fa-search"/>
 							        </span>
 								</p>
 
-								<p class="control">
+								<p className="control">
 									&nbsp;
 								</p>
 
-								<p class="control">
+								<p className="control">
 									<Link to="/sets/new" class="button is-primary">
 										New set
 									</Link>
@@ -57,22 +57,19 @@ class SetList extends PreactComponent {
 
 							</div>
 
-							<table class="table is-bordered is-striped is-fullwidth">
+							<table className="table is-bordered is-striped is-fullwidth">
 
 								<tbody>
 
 								{sets.filter( this.filterSets ).map( set => (
 									<tr>
 										<td>
-											<Link to={`/sets/${set._id}`}>
+											<SetLink set={set}>
 												{set.title}
-											</Link>
+											</SetLink>
 										</td>
 										<td>
 											{set.author}
-										</td>
-										<td>
-											<SetLink set={set}>Live</SetLink>
 										</td>
 									</tr>
 								) )}

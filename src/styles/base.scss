@@ -1,3 +1,8 @@
+html, body, main {
+	height: 100%;
+	overflow: hidden;
+}
+
 // Remove the gap between audio, canvas, iframes, images, videos and the bottom
 // of their containers.
 audio,
@@ -8,6 +13,7 @@ svg,
 video {
 	vertical-align: middle;
 }
+
 // A better looking default horizontal rule
 hr {
 	display:    block;
@@ -17,12 +23,14 @@ hr {
 	margin:     1em 0;
 	padding:    0;
 }
+
 // Remove default fieldset styles.
 fieldset {
 	border:  0;
 	margin:  0;
 	padding: 0;
 }
+
 // Allow only vertical resizing of textareas.
 textarea {
 	resize: vertical;

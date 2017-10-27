@@ -28,8 +28,12 @@ class SetContainer extends PreactComponent {
 		const songs = this.state.songs.slice();
 		const song = find( songs, s => s._id === songId );
 
+		console.log( song.key, amount );
+
 		song.key = transposeChord( song.key, amount );
 		set.songs = songs;
+
+		console.log( song.key );
 
 		this.setState( { set, songs } );
 
@@ -197,10 +201,10 @@ class SetContainer extends PreactComponent {
 
 			doc.songs = songs.map( s => ({ _id: s._id, key: s.key }) );
 
-			db.put( doc ).then( () => {
+			db.put( doc, { conflicts: true, force: true } ).then( () => {
 
 				PouchDB.sync( 'chordboard',
-					'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' )
+					'https://justinlawrence:cXcmbbLFO   8@couchdb.cloudno.de/chordboard' )
 					.catch( err => {
 
 						console.warn( 'Could not sync to remote database', err );

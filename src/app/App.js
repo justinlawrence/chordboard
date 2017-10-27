@@ -44,8 +44,7 @@ class App extends PreactComponent {
 	}
 
 	getChildContext = () => ({
-		getCurrentSongIndex: this._getCurrentSongIndex,
-		setFocusedSet: this.setFocusedSet
+		setFocusedSet:       this.setFocusedSet
 	});
 
 	exitLiveMode = () => {
@@ -97,7 +96,7 @@ class App extends PreactComponent {
 
 	setFocusedSet = focusedSet => {
 
-		localStorage.setItem( 'focusedSetId', focusedSet ? focusedSet._id : '' );
+		//localStorage.setItem( 'focusedSetId', focusedSet ? focusedSet._id : '' );
 		this.setState( { focusedSet } );
 
 	};
@@ -105,43 +104,41 @@ class App extends PreactComponent {
 	render( {}, { focusedSet, songList } ) {
 
 		return (
-			<div>
+			<div className="app">
 				<Navbar
-					focusedSet={focusedSet}
 					onExitLiveMode={this.exitLiveMode}
 					onGoToNextSong={this.goToNextSong}
 					onGoToPreviousSong={this.goToPreviousSong}
 				/>
 
-				<div className={cx(
-					'container',
-					{ 'has-fixed-navbar': focusedSet }
-				)}>
-					<Switch>
+				<div className="app__content">
+					<div className="container">
+						<Switch>
 
-						<Route exact path="/songs" render={props => (
-							<SongList songs={songList} {...props}/>
-						)}/>
+							<Route exact path="/songs" render={props => (
+								<SongList songs={songList} {...props}/>
+							)}/>
 
-						<Route exact path="/songs/add-to-set/:id" render={props => (
-							<SongList id={props.match.params.id} songs={songList} {...props}/>
-						)}/>
+							<Route exact path="/songs/add-to-set/:id" render={props => (
+								<SongList id={props.match.params.id} songs={songList} {...props}/>
+							)}/>
 
-						<Route exact path="/songs/new" component={SongEditor}/>
+							<Route exact path="/songs/new" component={SongEditor}/>
 
-						<Route exact path="/songs/:id/edit" render={props => (
-							<SongEditor id={props.match.params.id} {...props}/>
-						)}/>
+							<Route exact path="/songs/:id/edit" render={props => (
+								<SongEditor id={props.match.params.id} {...props}/>
+							)}/>
 
-						<Route exact path="/songs/:id" render={( { match } ) => (
-							<SongContainer id={match.params.id}/>
-						)}/>
+							<Route exact path="/songs/:id" render={( { match } ) => (
+								<SongContainer id={match.params.id}/>
+							)}/>
 
-						<Route path="/sets" component={SetListContainer}/>
+							<Route path="/sets" component={SetListContainer}/>
 
-						<Redirect to="/sets"/>
+							<Redirect to="/sets"/>
 
-					</Switch>
+						</Switch>
+					</div>
 				</div>
 			</div>
 		);
@@ -159,14 +156,16 @@ class App extends PreactComponent {
 
 			if ( match ) {
 
-				const { focusedSet } = this.state;
+				return db.get( match.params.setId ).then( set => {
 
-				return findIndex( focusedSet.songs, { _id: match.params.songId } );
+					return findIndex( set.songs, { _id: match.params.songId } );
+
+				});
 
 			}
 		}
 
-		return -1;
+		return Promise.resolve( -1 );
 
 	};
 
