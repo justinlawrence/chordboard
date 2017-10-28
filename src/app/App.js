@@ -1,6 +1,5 @@
 import {findIndex} from 'lodash';
 import {Redirect, Route, Switch, matchPath, withRouter} from 'react-router-dom';
-import cx from 'classnames';
 
 import Navbar from './common/Navbar/Navbar';
 import SongList from './SongList/SongList';
@@ -44,7 +43,7 @@ class App extends PreactComponent {
 	}
 
 	getChildContext = () => ({
-		setFocusedSet:       this.setFocusedSet
+		setFocusedSet: this.setFocusedSet
 	});
 
 	exitLiveMode = () => {
@@ -53,44 +52,43 @@ class App extends PreactComponent {
 
 	goToNextSong = () => {
 
-		if ( this.state.focusedSet ) {
-
-			const index = this._getCurrentSongIndex();
+		this._getCurrentSongIndex().then( index => {
 			this.goToSongIndex( index + 1 );
-
-		}
+		} );
 
 	};
 
 	goToPreviousSong = () => {
 
-		if ( this.state.focusedSet ) {
-
-			const index = this._getCurrentSongIndex();
+		this._getCurrentSongIndex().then( index => {
 			this.goToSongIndex( index - 1 );
-
-		}
+		} );
 
 	};
 
 	goToSongIndex = index => {
 
-		const { focusedSet } = this.state;
-		const len = focusedSet.songs.length;
+		this._getSet().then( set => {
 
-		// Set index range to between 0 and list length.
-		index = Math.min( Math.max( index, 0 ), len - 1 );
+			const len = set.songs.length;
 
-		// OR
+			// Set index range to between 0 and list length.
+			index = Math.min( Math.max( index, 0 ), len - 1 );
 
-		// Set index to wrap around at the ends.
-		//index = index < 0 ? len - 1 : index >= len ? 0 : index;
+			// OR
 
-		const setSong = focusedSet.songs[ index ];
+			// Set index to wrap around at the ends.
+			//index = index < 0 ? len - 1 : index >= len ? 0 : index;
 
-		if ( this.props.history ) {
-			this.props.history.push( `/sets/${focusedSet._id}/songs/${setSong._id}` );
-		}
+			const setSong = set.songs[ index ];
+			
+			if ( !setSong ) { return; }
+
+			if ( this.props.history ) {
+				this.props.history.push( `/sets/${set._id}/songs/${setSong._id}` );
+			}
+
+		} );
 
 	};
 
@@ -145,27 +143,37 @@ class App extends PreactComponent {
 
 	}
 
-	_getCurrentSongIndex = () => {
+	_getSet = () => {
 
 		if ( this.props.location ) {
 
-			const match = matchPath( location.pathname, {
+			const match = matchPath( this.props.location.pathname, {
 				path:  '/sets/:setId/songs/:songId',
 				exact: true
 			} );
 
 			if ( match ) {
 
-				return db.get( match.params.setId ).then( set => {
-
-					return findIndex( set.songs, { _id: match.params.songId } );
-
-				});
+				return db.get( match.params.setId );
 
 			}
+
 		}
 
-		return Promise.resolve( -1 );
+	};
+
+	_getCurrentSongIndex = () => {
+
+		return this._getSet().then( set => {
+
+			const match = matchPath( this.props.location.pathname, {
+				path:  '/sets/:setId/songs/:songId',
+				exact: true
+			} );
+
+			return set ? findIndex( set.songs, { _id: match.params.songId } ) : -1;
+
+		} );
 
 	};
 
