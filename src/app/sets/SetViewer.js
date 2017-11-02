@@ -4,7 +4,6 @@ import SetLink from './SetLink';
 import SongKey from 'app/common/SongKey';
 
 
-
 import {db, sync} from '../common/database';
 
 import './SetViewer.scss';
@@ -162,23 +161,29 @@ class SetViewer extends PreactComponent {
 					</Link>
 				</td>
 				<td>
-					<div class="field is-grouped">
+					<div className="field is-grouped">
 
 						{mode === 'edit' && [
-							<a class="button is-small is-white" title="transpose down"
+							<a className="button is-small is-white" title="transpose down"
 							   onClick={() => this.transposeDown( song )}>
-								<span class="icon is-small"><i class="fa fa-minus"/></span>
+								<span className="icon is-small"><i className="fa fa-minus"/></span>
 							</a>
 						]}
 
-						<SongKey value={key}></SongKey>
+						<SongKey
+							onSelect={newKey => {
+								console.log( `key changed to ${newKey}... now what?` );
+								this.changeKey( song.id, 0 );
+							}}
+							value={key}
+						/>
 
 						{mode === 'edit' && [
 
-							<a class="button is-small is-white" title="transpose up"
+							<a className="button is-small is-white" title="transpose up"
 							   onClick={() => this.transposeUp( song )}>
 
-								<span class="icon is-small"><i class="fa fa-plus"/></span>
+								<span className="icon is-small"><i className="fa fa-plus"/></span>
 							</a>
 						]}
 

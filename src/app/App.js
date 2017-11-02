@@ -81,7 +81,7 @@ class App extends PreactComponent {
 			//index = index < 0 ? len - 1 : index >= len ? 0 : index;
 
 			const setSong = set.songs[ index ];
-			
+
 			if ( !setSong ) { return; }
 
 			if ( this.props.history ) {
