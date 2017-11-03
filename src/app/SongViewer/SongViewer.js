@@ -1,7 +1,8 @@
 import {Link} from 'react-router-dom';
 
-import Song from 'app/common/Song.js';
-import {octave} from 'app/common/transpose-chord';
+import Song from 'app/common/Song';
+import KeySelector from 'app/common/KeySelector';
+import getKeyDiff from 'app/common/getKeyDiff';
 
 import ChordLine from "./lines/ChordLine.js";
 import ChordPair from "./lines/ChordPair.js";
@@ -36,8 +37,7 @@ class SongViewer extends PreactComponent {
 			props.currentKey !== props.song.key ) {
 
 			// Calculate distance between keys
-			const amount = octave.indexOf( props.currentKey ) - octave.indexOf( props.song.key );
-			this.changeKey( amount );
+			this.changeKey( getKeyDiff( props.currentKey, props.song.key ) );
 
 		}
 
@@ -67,6 +67,8 @@ class SongViewer extends PreactComponent {
 		const song = this.state.song;
 		song.transpose( amount );
 
+		console.log( amount );
+
 		this.setState( { song } );
 
 	};
@@ -81,42 +83,42 @@ class SongViewer extends PreactComponent {
 		return (
 			song ?
 				<div>
-					<section class="hero is-small">
-						<div class="hero-body">
-							<div class="container">
-								<div class="columns is-vcentered">
+					<section className="hero is-small">
+						<div className="hero-body">
+							<div className="container">
+								<div className="columns is-vcentered">
 
-									<div class="column is-half">
-										<h1 class="title">
+									<div className="column is-half">
+										<h1 className="title">
 											{song.title}
 										</h1>
-										<h2 class="subtitle">
+										<h2 className="subtitle">
 											{song.author}
 										</h2>
 									</div>
 
-									<div class="column">
+									<div className="column">
 
-										<h2 class="subtitle">
-											<a class="button">Key of {song.key}</a>
-											<a class="button" onClick={this.transposeDown} title="transpose down">
-											<span class="icon is-small">
-												 <i class="fa fa-minus"></i>
+										<h2 className="subtitle">
+											<KeySelector
+												onSelect={( key, amount ) =>
+													this.changeKey( amount )}
+												value={song.key}/>
+											{/*<a className="button">Key of {song.key}</a>*/}
+											<a className="button" onClick={this.transposeDown} title="transpose down">
+											<span className="icon is-small">
+												 <i className="fa fa-minus"></i>
 											</span>
 											</a>
-											<a class="button" onClick={this.transposeUp} title="transpose up">
-											 <span class="icon is-small">
-												 <i class="fa fa-plus"></i>
+											<a className="button" onClick={this.transposeUp} title="transpose up">
+											 <span className="icon is-small">
+												 <i className="fa fa-plus"></i>
 											</span>
 											</a>
 
-											<Link class="button" to={`/songs/${song._id}/edit`}>
-											<span class="icon is-small">
-												<i class="fa fa-pencil"></i>
-										 </span>
-												<span>
-										 Edit Song
-									 </span>
+											<Link className="button" to={`/songs/${song._id}/edit`}>
+												<span className="icon is-small"><i className="fa fa-pencil"/></span>
+												<span>Edit Song</span>
 											</Link>
 										</h2>
 
@@ -129,10 +131,10 @@ class SongViewer extends PreactComponent {
 					</section>
 
 
-					<div class="columns">
+					<div className="columns">
 
-						<div class="column is-three-quarters">
-							<section class="section">
+						<div className="column is-three-quarters">
+							<section className="section">
 
 								{parseSong( song, sections )}
 
@@ -175,7 +177,7 @@ export function parseSong( song, sections ) {
 				break;
 
 			case 'empty':
-				children.push( <div class="empty-line"></div> );
+				children.push( <div className="empty-line"></div> );
 				break;
 
 			case 'line':
@@ -187,9 +189,13 @@ export function parseSong( song, sections ) {
 				if ( section ) {
 
 					// Finish off last section
-					result.push( <section id={`section-${sectionIndex}`}
-					                      class="section"
-					                      data-section={section}>{children}</section> );
+					result.push(
+						<section
+							id={`section-${sectionIndex}`}
+							className="section"
+							data-section={section}
+						>{children}</section>
+					);
 					children = [];
 
 				} else {
@@ -215,7 +221,7 @@ export function parseSong( song, sections ) {
 	if ( section ) {
 
 		result.push( <section id={`section-${sectionIndex}`}
-		                      class="section"
+		                      className="section"
 		                      data-section={section}>{children}</section> );
 
 	}

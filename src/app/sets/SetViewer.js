@@ -1,10 +1,7 @@
 import {find, findIndex} from 'lodash'
 import {Link} from 'react-router-dom';
-import SetLink from './SetLink';
-import SongKey from 'app/common/SongKey';
 
-
-import {db, sync} from '../common/database';
+import KeySelector from 'app/common/KeySelector';
 
 import './SetViewer.scss';
 
@@ -170,11 +167,8 @@ class SetViewer extends PreactComponent {
 							</a>
 						]}
 
-						<SongKey
-							onSelect={newKey => {
-								console.log( `key changed to ${newKey}... now what?` );
-								this.changeKey( song.id, 0 );
-							}}
+						<KeySelector
+							onSelect={( key, amount ) => this.changeKey( song.id, amount )}
 							value={key}
 						/>
 

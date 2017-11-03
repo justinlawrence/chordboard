@@ -1,6 +1,8 @@
 import {findIndex} from 'lodash';
+import {connect} from 'preact-redux';
 import {Redirect, Route, Switch, matchPath, withRouter} from 'react-router-dom';
 
+import Login from './login/Login';
 import Navbar from './common/Navbar/Navbar';
 import SongList from './SongList/SongList';
 import SongEditor from './SongEditor/SongEditor';
@@ -24,7 +26,6 @@ class App extends PreactComponent {
 		} );
 
 		const setId = localStorage.getItem( 'focusedSetId' );
-
 		if ( setId ) {
 
 			db.get( setId )
@@ -99,7 +100,7 @@ class App extends PreactComponent {
 
 	};
 
-	render( {}, { focusedSet, songList } ) {
+	render( { user }, { focusedSet, songList } ) {
 
 		return (
 			<div className="app">
@@ -112,6 +113,11 @@ class App extends PreactComponent {
 				<div className="app__content">
 					<div className="container">
 						<Switch>
+
+							<Route exact path="/login" component={Login}/>
+
+							{!user.name &&
+							<Redirect to="/login"/>}
 
 							<Route exact path="/songs" render={props => (
 								<SongList songs={songList} {...props}/>
@@ -196,4 +202,8 @@ class App extends PreactComponent {
 
 }
 
-export default withRouter( App );
+const mapStateToProps = state => ({
+	user: state.user
+});
+
+export default withRouter( connect( mapStateToProps, null )( App ) );
