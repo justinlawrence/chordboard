@@ -143,7 +143,7 @@ class Navbar extends PreactComponent {
 		}
 
 		return (
-			<nav className="navbar is-light">
+			<nav className="navbar">
 				<Switch>
 					<Route exact path="/sets/:setId/songs/:songsId" render={props => (
 						<div className="level navbar-live">

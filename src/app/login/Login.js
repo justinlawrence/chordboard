@@ -31,10 +31,62 @@ class Login extends PreactComponent {
 
 	render( props, { name } ) {
 		return (
-			<form onSubmit={this.handleLogin}>
-				<input type="text" onInput={this.handleInput} value={name}/>
-				<button>Login</button>
-			</form>
+
+			<div>
+
+				<section class="hero is-dark">
+					<div class="hero-body">
+						<div class="container">
+							<div class="columns is-vcentered">
+								<div class="column">
+									<h1 class="title is-1">Chordboard</h1>
+									<h2 class="subtitle">The live setlist</h2>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="section">
+					<div class="container has-text centered">
+						<article class="card is-rounded">
+							<div class="card-content">
+								<h1 class="title">
+									Login
+								</h1>
+
+								<form onSubmit={this.handleLogin}>
+
+								<p class="control has-icons-left">
+									<input class="input is-medium" type="text" placeholder="Your Name"  onInput={this.handleInput}  value={name}/>
+									<span class="icon is-small is-left">
+										<i class="fa fa-envelope"></i>
+									</span>
+								</p>
+
+								<p class="control has-icons-left">
+									<input class="input is-medium" type="password" placeholder="Password"/>
+									<span class="icon is-small is-left">
+										<i class="fa fa-lock"></i>
+									</span>
+								</p>
+
+								<p class="control">
+									<button class="button is-primary is-medium is-fullwidth">
+										Login
+									</button>
+								</p>
+
+							</form>
+
+							</div>
+						</article>
+
+					</div>
+
+				</section>
+
+			</div>
 		);
 	}
 }
