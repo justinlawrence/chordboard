@@ -83,7 +83,7 @@ class SongViewer extends PreactComponent {
 		return (
 			song ?
 				<div>
-					<section className="hero is-small">
+					<section className="hero is-small is-light">
 						<div className="hero-body">
 							<div className="container">
 								<div className="columns is-vcentered">
@@ -99,29 +99,44 @@ class SongViewer extends PreactComponent {
 
 									<div className="column">
 
-										<h2 className="subtitle">
-											<KeySelector
-												onSelect={( key, amount ) =>
-													this.changeKey( amount )}
-												value={song.key}/>
+
 											{/*<a className="button">Key of {song.key}</a>*/}
-											<a className="button" onClick={this.transposeDown} title="transpose down">
-											<span className="icon is-small">
-												 <i className="fa fa-minus"></i>
-											</span>
-											</a>
-											<a className="button" onClick={this.transposeUp} title="transpose up">
-											 <span className="icon is-small">
-												 <i className="fa fa-plus"></i>
-											</span>
-											</a>
 
-											<Link className="button" to={`/songs/${song._id}/edit`}>
-												<span className="icon is-small"><i className="fa fa-pencil"/></span>
-												<span>Edit Song</span>
-											</Link>
-										</h2>
+											<div class="field has-addons">
+												<p class="control">
 
+													<a className="button" onClick={this.transposeDown} title="transpose down">
+														<span className="icon is-small">
+															 <i className="fa fa-minus"></i>
+														</span>
+													</a>
+
+												</p>
+												<p class="control">
+
+													<KeySelector
+														onSelect={( key, amount ) =>
+															this.changeKey( amount )}
+														value={song.key}/>
+												</p>
+
+												<p class="control">
+
+													<a className="button" onClick={this.transposeUp} title="transpose up">
+														<span className="icon is-small">
+														 <i className="fa fa-plus"></i>
+														</span>
+													</a>
+												</p>
+
+												<p class="control">
+													<Link className="button" to={`/songs/${song._id}/edit`}>
+														<span className="icon is-small"><i className="fa fa-pencil"/></span>
+														<span>Edit Song</span>
+													</Link>
+												</p>
+												
+											</div>
 
 									</div>
 

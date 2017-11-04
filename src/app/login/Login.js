@@ -40,7 +40,7 @@ class Login extends PreactComponent {
 							<div class="columns is-vcentered">
 								<div class="column">
 									<h1 class="title is-1">Chordboard</h1>
-									<h2 class="subtitle">The live setlist</h2>
+									<h2 class="subtitle">The setlist for live musicians.</h2>
 								</div>
 							</div>
 						</div>
