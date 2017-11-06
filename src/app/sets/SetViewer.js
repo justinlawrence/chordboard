@@ -168,7 +168,7 @@ class SetViewer extends PreactComponent {
 						]}
 
 						<KeySelector
-							onSelect={( key, amount ) => this.changeKey( song.id, amount )}
+							onSelect={( key, amount ) => this.changeKey( song._id, amount )}
 							value={key}
 						/>
 

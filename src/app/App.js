@@ -111,38 +111,35 @@ class App extends PreactComponent {
 				/>
 
 				<div className="app__content">
-					<div className="container">
-						<Switch>
+					<Switch>
+						<Route exact path="/login" component={Login}/>
 
-							<Route exact path="/login" component={Login}/>
+						{!user.name &&
+						<Redirect to="/login"/>}
 
-							{!user.name &&
-							<Redirect to="/login"/>}
+						<Route exact path="/songs" render={props => (
+							<SongList songs={songList} {...props}/>
+						)}/>
 
-							<Route exact path="/songs" render={props => (
-								<SongList songs={songList} {...props}/>
-							)}/>
+						<Route exact path="/songs/add-to-set/:id" render={props => (
+							<SongList id={props.match.params.id} songs={songList} {...props}/>
+						)}/>
 
-							<Route exact path="/songs/add-to-set/:id" render={props => (
-								<SongList id={props.match.params.id} songs={songList} {...props}/>
-							)}/>
+						<Route exact path="/songs/new" component={SongEditor}/>
 
-							<Route exact path="/songs/new" component={SongEditor}/>
+						<Route exact path="/songs/:id/edit" render={props => (
+							<SongEditor id={props.match.params.id} {...props}/>
+						)}/>
 
-							<Route exact path="/songs/:id/edit" render={props => (
-								<SongEditor id={props.match.params.id} {...props}/>
-							)}/>
+						<Route exact path="/songs/:id" render={( { match } ) => (
+							<SongContainer id={match.params.id}/>
+						)}/>
 
-							<Route exact path="/songs/:id" render={( { match } ) => (
-								<SongContainer id={match.params.id}/>
-							)}/>
+						<Route path="/sets" component={SetListContainer}/>
 
-							<Route path="/sets" component={SetListContainer}/>
+						<Redirect to="/sets"/>
 
-							<Redirect to="/sets"/>
-
-						</Switch>
-					</div>
+					</Switch>
 				</div>
 			</div>
 		);

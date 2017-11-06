@@ -28,18 +28,24 @@ class SetContainer extends PreactComponent {
 		const songs = this.state.songs.slice();
 		const song = find( songs, s => s._id === songId );
 
-		console.log( song.key, amount );
+		console.log( this.state.songs );
+		console.log( songId );
 
-		song.key = transposeChord( song.key, amount );
-		set.songs = songs;
+		if ( song ) {
+			console.log( song.key, amount );
 
-		console.log( song.key );
+			song.key = transposeChord( song.key, amount );
+			set.songs = songs;
 
-		this.setState( { set, songs } );
+			console.log( song.key );
 
-		if ( set ) {
+			this.setState( { set, songs } );
 
-			this._saveSet( set, songs );
+			if ( set ) {
+
+				this._saveSet( set, songs );
+
+			}
 
 		}
 

@@ -31,53 +31,52 @@ class Login extends PreactComponent {
 
 	render( props, { name } ) {
 		return (
-
 			<div>
-
-				<section class="hero is-dark">
-					<div class="hero-body">
-						<div class="container">
-							<div class="columns is-vcentered">
-								<div class="column">
-									<h1 class="title is-1">Chordboard</h1>
-									<h2 class="subtitle">The setlist for live musicians.</h2>
+				<section className="hero is-dark">
+					<div className="hero-body">
+						<div className="container">
+							<div className="columns is-vcentered">
+								<div className="column">
+									<h1 className="title is-1">Chordboard</h1>
+									<h2 className="subtitle">The setlist for live musicians.</h2>
 								</div>
 							</div>
 						</div>
 					</div>
 				</section>
 
-				<section class="section">
-					<div class="container has-text centered">
-						<article class="card is-rounded">
-							<div class="card-content">
-								<h1 class="title">
-									Login
-								</h1>
-
+				<section className="section columns">
+					<div className="column is-one-third is-offset-one-third">
+						<article className="card is-rounded">
+							<div className="card-content">
 								<form onSubmit={this.handleLogin}>
-
-								<p class="control has-icons-left">
-									<input class="input is-medium" type="text" placeholder="Your Name"  onInput={this.handleInput}  value={name}/>
-									<span class="icon is-small is-left">
-										<i class="fa fa-envelope"></i>
-									</span>
-								</p>
-
-								<p class="control has-icons-left">
-									<input class="input is-medium" type="password" placeholder="Password"/>
-									<span class="icon is-small is-left">
-										<i class="fa fa-lock"></i>
-									</span>
-								</p>
-
-								<p class="control">
-									<button class="button is-primary is-medium is-fullwidth">
+									<h1 className="title">
 										Login
-									</button>
-								</p>
+									</h1>
 
-							</form>
+									<div className="field">
+										<p className="control has-icons-left">
+											<input className="input is-medium" type="text" placeholder="Your Name" onInput={this.handleInput} value={name}/>
+											<span className="icon is-small is-left"><i className="fa fa-envelope"/></span>
+										</p>
+									</div>
+
+									<div className="field">
+										<p className="control has-icons-left">
+											<input className="input is-medium" type="password" placeholder="Password"/>
+											<span className="icon is-small is-left"><i className="fa fa-lock"/></span>
+										</p>
+									</div>
+
+									<div className="field">
+										<p className="control">
+											<button className="button is-primary is-medium is-fullwidth">
+												Login
+											</button>
+										</p>
+									</div>
+
+								</form>
 
 							</div>
 						</article>
