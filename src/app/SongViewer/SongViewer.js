@@ -82,7 +82,7 @@ class SongViewer extends PreactComponent {
 
 		return (
 			song ?
-				<div>
+				<div class="song-viewer">
 					<section className="hero is-small is-light">
 						<div className="hero-body">
 							<div className="container">
@@ -100,43 +100,43 @@ class SongViewer extends PreactComponent {
 									<div className="column">
 
 
-											{/*<a className="button">Key of {song.key}</a>*/}
+										{/*<a className="button">Key of {song.key}</a>*/}
 
-											<div class="field has-addons">
-												<p class="control">
+										<div class="field has-addons">
+											<p class="control">
 
-													<a className="button" onClick={this.transposeDown} title="transpose down">
+												<a className="button" onClick={this.transposeDown} title="transpose down">
 														<span className="icon is-small">
 															 <i className="fa fa-minus"></i>
 														</span>
-													</a>
+												</a>
 
-												</p>
-												<p class="control">
+											</p>
+											<p class="control">
 
-													<KeySelector
-														onSelect={( key, amount ) =>
-															this.changeKey( amount )}
-														value={song.key}/>
-												</p>
+												<KeySelector
+													onSelect={( key, amount ) =>
+														this.changeKey( amount )}
+													value={song.key}/>
+											</p>
 
-												<p class="control">
+											<p class="control">
 
-													<a className="button" onClick={this.transposeUp} title="transpose up">
+												<a className="button" onClick={this.transposeUp} title="transpose up">
 														<span className="icon is-small">
 														 <i className="fa fa-plus"></i>
 														</span>
-													</a>
-												</p>
+												</a>
+											</p>
 
-												<p class="control">
-													<Link className="button" to={`/songs/${song._id}/edit`}>
-														<span className="icon is-small"><i className="fa fa-pencil"/></span>
-														<span>Edit Song</span>
-													</Link>
-												</p>
-												
-											</div>
+											<p class="control">
+												<Link className="button" to={`/songs/${song._id}/edit`}>
+													<span className="icon is-small"><i className="fa fa-pencil"/></span>
+													<span>Edit Song</span>
+												</Link>
+											</p>
+
+										</div>
 
 									</div>
 
@@ -145,18 +145,15 @@ class SongViewer extends PreactComponent {
 						</div>
 					</section>
 
-
-					<div className="columns">
-
-						<div className="column is-three-quarters">
-							<section className="section">
-
-								{parseSong( song, sections )}
-
-							</section>
+					<section className="section">
+						<div className="columns">
+							<div className="column is-three-quarters">
+								<div class="song-viewer__song">
+									{parseSong( song, sections )}
+								</div>
+							</div>
 						</div>
-
-					</div>
+					</section>
 				</div>
 				: null
 		);
@@ -207,7 +204,7 @@ export function parseSong( song, sections ) {
 					result.push(
 						<section
 							id={`section-${sectionIndex}`}
-							className="section"
+							className="song-viewer__section"
 							data-section={section}
 						>{children}</section>
 					);

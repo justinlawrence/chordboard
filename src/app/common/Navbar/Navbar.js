@@ -171,7 +171,7 @@ class Navbar extends PreactComponent {
 								{sections.map( section => (
 									<a
 										href={`#section-${section.index}`}
-										className="navbar__section-link section"
+										className="navbar__section-link song-viewer__section"
 										data-section={section.text}
 									/>
 								) )}
