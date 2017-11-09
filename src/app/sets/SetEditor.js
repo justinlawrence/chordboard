@@ -1,3 +1,4 @@
+import {connect} from 'preact-redux';
 import slugify from 'slugify';
 import PouchDB from 'pouchdb';
 import PouchDBFindPlugin from 'pouchdb-find';
@@ -23,11 +24,12 @@ class SetEditor extends PreactComponent {
 
 	onSaveSet = () => {
 
+		const { user } = this.props;
 		const { title } = this.state;
 
 		db.post( {
 			type:   'set',
-			author: 'justin',
+			author: user.name,
 			slug:   slugify( title ),
 			title:  title,
 			songs:  []
@@ -80,4 +82,8 @@ class SetEditor extends PreactComponent {
 	}
 }
 
-export default SetEditor;
+const mapStateToProps = state => ({
+	user: state.user
+});
+
+export default connect( mapStateToProps, null )( SetEditor );

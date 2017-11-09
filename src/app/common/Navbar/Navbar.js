@@ -144,97 +144,43 @@ class Navbar extends PreactComponent {
 
 		return (
 			<nav className="navbar">
-				<Switch>
-					<Route exact path="/sets/:setId/songs/:songsId" render={props => (
-						<div className="level navbar-live">
-							<a className="navbar-item navbar-item-stacked"
-							   onClick={onGoToPreviousSong}>
-								<span className="icon">
-									<i className="fa fa-angle-left fa-lg"/>
-								</span>
-								{previousSongTitle && (
-									<p className="is-size-7">
-										<SongKey value={previousSongKey}/>
-										{previousSongTitle}
-									</p>
-								)}
-							</a>
-							<div className="level-item">
+				<div className="container">
+					<div className="navbar-brand">
+						<Link class="navbar-item" to='/'>
+							<img src="/assets/chordboard-logo-long.png"
+							     alt="Chordboard: a chord manager for live musicians"
+							     width="142"/>
+						</Link>
+						<div
+							className="navbar-burger"
+							onClick={this.toggleNavbarMenu}>
+							<span></span><span></span><span></span>
+						</div>
+
+					</div>
+
+					<div className={cx( 'navbar-menu', { 'is-active': isMenuVisible } )}>
+						<div className="navbar-start">
+
+							<Link class="navbar-item" to="/sets">Sets</Link>
+							<Link class="navbar-item" to="/songs">Songs</Link>
+
+							{focusedSet && (
 								<Link
-									className="navbar-item"
-									to={`/sets/${props.match.params.setId}`}
-								>
-									<span className="icon">
-										<i className="fa fa-list-ul"/>
-									</span>
-								</Link>
-								{sections.map( section => (
-									<a
-										href={`#section-${section.index}`}
-										className="navbar__section-link song-viewer__section"
-										data-section={section.text}
-									/>
-								) )}
-								<a className="navbar-item" onClick={onExitLiveMode}>
-								<span className="icon">
-									<i className="fa fa-close"/>
-								</span>
-								</a>
-							</div>
-							<a className="navbar-item navbar-item-stacked"
-							   onClick={onGoToNextSong}>
-								<span className="icon">
-									<i className="fa fa-angle-right fa-lg"/>
-								</span>
-								{nextSongTitle && (
-									<p className="is-size-7">
-										<SongKey value={nextSongKey}/>
-										{nextSongTitle}
-									</p>
-								)}
-							</a>
+									class="navbar-item"
+									to={`/sets/${focusedSet._id}`}
+								>Live</Link>
+							)}
 						</div>
-					)}/>
-					<Route render={props => (
-						<div className="container">
-							<div className="navbar-brand">
-								<Link class="navbar-item" to='/'>
-									<img src="/assets/chordboard-logo-long.png"
-									     alt="Chordboard: a chord manager for live musicians"
-									     width="142"/>
-								</Link>
-								<div
-									className="navbar-burger"
-									onClick={this.toggleNavbarMenu}>
-									<span></span><span></span><span></span>
-								</div>
-
-							</div>
-
-							<div className={cx( 'navbar-menu', { 'is-active': isMenuVisible } )}>
-								<div className="navbar-start">
-
-									<Link class="navbar-item" to="/sets">Sets</Link>
-									<Link class="navbar-item" to="/songs">Songs</Link>
-
-									{focusedSet && (
-										<Link
-											class="navbar-item"
-											to={`/sets/${focusedSet._id}`}
-										>Live</Link>
-									)}
-								</div>
-								<div className="navbar-end">
-									<p className="navbar-item">
-										<SyncStatus
-											className="is-size-7 has-text-grey-light"
-											status={syncState}/>
-									</p>
-								</div>
-							</div>
+						<div className="navbar-end">
+							<p className="navbar-item">
+								<SyncStatus
+									className="is-size-7 has-text-grey-light"
+									status={syncState}/>
+							</p>
 						</div>
-					)}/>
-				</Switch>
+					</div>
+				</div>
 			</nav>
 		);
 
