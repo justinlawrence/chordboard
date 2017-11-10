@@ -2,6 +2,7 @@ import {findIndex} from 'lodash';
 import {connect} from 'preact-redux';
 import {Redirect, Route, Switch, matchPath, withRouter} from 'react-router-dom';
 
+import LiveBar from './common/LiveBar';
 import Login from './login/Login';
 import Navbar from './common/Navbar/Navbar';
 import SongList from './SongList/SongList';
@@ -104,13 +105,8 @@ class App extends PreactComponent {
 
 		return (
 			<div className="app">
-				<Navbar
-					onExitLiveMode={this.exitLiveMode}
-					onGoToNextSong={this.goToNextSong}
-					onGoToPreviousSong={this.goToPreviousSong}
-				/>
-
 				<div className="app__content">
+					<Navbar/>
 					<Switch>
 						<Route exact path="/login" component={Login}/>
 
@@ -135,63 +131,18 @@ class App extends PreactComponent {
 							<SongContainer id={match.params.id}/>
 						)}/>
 
-						<Route exact path="/sets/:setId/songs/:songsId" render={props => (
-							<div className="level navbar-live">
-								<a className="navbar-item navbar-item-stacked"
-								   onClick={onGoToPreviousSong}>
-								<span className="icon">
-									<i className="fa fa-angle-left fa-lg"/>
-								</span>
-									{previousSongTitle && (
-										<p className="is-size-7">
-											<SongKey value={previousSongKey}/>
-											{previousSongTitle}
-										</p>
-									)}
-								</a>
-								<div className="level-item">
-									<Link
-										className="navbar-item"
-										to={`/sets/${props.match.params.setId}`}
-									>
-									<span className="icon">
-										<i className="fa fa-list-ul"/>
-									</span>
-									</Link>
-									{sections.map( section => (
-										<a
-											href={`#section-${section.index}`}
-											className="navbar__section-link song-viewer__section"
-											data-section={section.text}
-										/>
-									) )}
-									<a className="navbar-item" onClick={onExitLiveMode}>
-								<span className="icon">
-									<i className="fa fa-close"/>
-								</span>
-									</a>
-								</div>
-								<a className="navbar-item navbar-item-stacked"
-								   onClick={onGoToNextSong}>
-								<span className="icon">
-									<i className="fa fa-angle-right fa-lg"/>
-								</span>
-									{nextSongTitle && (
-										<p className="is-size-7">
-											<SongKey value={nextSongKey}/>
-											{nextSongTitle}
-										</p>
-									)}
-								</a>
-							</div>
-						)}/>
-
 						<Route path="/sets" component={SetListContainer}/>
 
 						<Redirect to="/sets"/>
 
 					</Switch>
 				</div>
+
+				<LiveBar
+					onExitLiveMode={this.exitLiveMode}
+					onGoToNextSong={this.goToNextSong}
+					onGoToPreviousSong={this.goToPreviousSong}
+				/>
 			</div>
 		);
 

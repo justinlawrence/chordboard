@@ -233,7 +233,7 @@ export function parseSong( song, sections ) {
 	if ( section ) {
 
 		result.push( <section id={`section-${sectionIndex}`}
-		                      className="section"
+		                      className="song-viewer__section"
 		                      data-section={section}>{children}</section> );
 
 	}

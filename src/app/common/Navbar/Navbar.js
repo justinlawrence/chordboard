@@ -1,98 +1,14 @@
-import {find, findIndex} from 'lodash';
-import {Link, Route, Switch, matchPath, withRouter} from 'react-router-dom';
+import {Link, Route, Switch, withRouter} from 'react-router-dom';
 import {connect} from 'preact-redux'
 import cx from 'classnames';
 
-import {db} from 'app/common/database';
-import SongKey from 'app/common/SongKey';
 import SyncStatus from 'app/common/SyncStatus';
 
 import './navbar.scss';
-import * as React from "react";
 
 class Navbar extends PreactComponent {
 	state = {
-		currentSong:       null,
-		isMenuVisible:     false,
-		nextSongKey:       '',
-		nextSongTitle:     '',
-		previousSongKey:   '',
-		previousSongTitle: ''
-	};
-
-	componentDidMount() {
-		this.handleProps( this.props );
-	}
-
-	componentWillReceiveProps( nextProps ) {
-		this.handleProps( nextProps );
-	}
-
-	handleProps = props => {
-
-		const { location } = props;
-		const match = matchPath( location.pathname, {
-			path: '/sets/:setId/songs/:songId'
-		} );
-
-		if ( match ) {
-
-			db.get( match.params.setId ).then( set => {
-
-				const setSongs = set.songs;
-				const index = findIndex( set.songs, { _id: match.params.songId } );
-				const keys = [ null, null, null ];
-
-				const nextSetSong = setSongs && setSongs[ index + 1 ];
-				const prevSetSong = setSongs && setSongs[ index - 1 ];
-
-				if ( match && match.params.songId ) {
-					keys[ 1 ] = match.params.songId;
-				}
-
-				if ( index > -1 ) {
-					if ( prevSetSong ) {
-						keys[ 0 ] = prevSetSong._id;
-					}
-					if ( nextSetSong ) {
-						keys[ 2 ] = nextSetSong._id;
-					}
-				}
-
-				db.allDocs( {
-					include_docs: true,
-					keys:         keys.filter( k => k )
-				} ).then( result => {
-
-					const songs = result.rows
-						.map( r => r.doc )
-						.filter( r => !!r );
-
-					const currentSong = find( songs, { _id: keys[ 1 ] } );
-					const nextSong = find( songs, { _id: keys[ 2 ] } );
-					const previousSong = find( songs, { _id: keys[ 0 ] } );
-
-					if ( nextSong && nextSetSong ) {
-						nextSong.key = nextSetSong.key;
-					}
-					if ( previousSong && prevSetSong ) {
-						previousSong.key = prevSetSong.key;
-					}
-
-					this.setState( {
-						currentSong,
-						nextSongKey:       nextSong ? nextSong.key : '',
-						nextSongTitle:     nextSong ? nextSong.title : '',
-						previousSongKey:   previousSong ? previousSong.key : '',
-						previousSongTitle: previousSong ? previousSong.title : ''
-					} );
-
-				} );
-
-			} );
-
-		}
-
+		isMenuVisible: false
 	};
 
 	toggleNavbarMenu = () => {
@@ -107,40 +23,12 @@ class Navbar extends PreactComponent {
 
 		const {
 			focusedSet,
-			onExitLiveMode,
-			onGoToNextSong,
-			onGoToPreviousSong,
 			syncState
 		} = this.props;
 
 		const {
-			currentSong,
 			isMenuVisible,
-			nextSongKey,
-			nextSongTitle,
-			previousSongKey,
-			previousSongTitle
 		} = this.state;
-
-		let sections = [];
-		let sectionIndex = 0;
-
-		if ( currentSong ) {
-
-			currentSong.lines.forEach( line => {
-
-				if ( line.type === 'section' ) {
-
-					sections.push( {
-						index: ++sectionIndex,
-						text:  line.text
-					} );
-
-				}
-
-			} );
-
-		}
 
 		return (
 			<nav className="navbar">
@@ -187,14 +75,8 @@ class Navbar extends PreactComponent {
 	}
 }
 
-const mapStateToProps = state => {
-	return {
-		syncState: state.syncState
-	};
-};
+const mapStateToProps = state => ({
+	syncState: state.syncState
+});
 
-const mapDispatchToProps = dispatch => {
-	return {};
-};
-
-export default withRouter( connect( mapStateToProps, mapDispatchToProps )( Navbar ) );
+export default withRouter( connect( mapStateToProps, null )( Navbar ) );
