@@ -20,9 +20,9 @@ module.exports = function () {
 		},
 		output:  {
 			path:              path.resolve( 'build' ),
-			filename:          '[name].[chunkhash].js',
+			filename:          '[name].js',
 			publicPath:        '/',
-			sourceMapFilename: '[name].[chunkhash].map'
+			sourceMapFilename: '[name].map'
 		},
 		module:  {
 			loaders: [
