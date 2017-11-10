@@ -64,12 +64,12 @@ class SetList extends PreactComponent {
 								{sets.filter( this.filterSets ).map( set => (
 									<tr>
 										<td>
+											{set.author}
+										</td>
+										<td>
 											<SetLink set={set}>
 												{set.title}
 											</SetLink>
-										</td>
-										<td>
-											{set.author}
 										</td>
 									</tr>
 								) )}
