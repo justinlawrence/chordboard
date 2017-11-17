@@ -42,7 +42,7 @@ class Navbar extends PreactComponent {
 						<div
 							className="navbar-burger"
 							onClick={this.toggleNavbarMenu}>
-							<span></span><span></span><span></span>
+							<span/><span/><span/>
 						</div>
 
 					</div>

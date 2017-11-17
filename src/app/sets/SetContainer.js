@@ -1,8 +1,7 @@
 import {find, findIndex, remove} from 'lodash';
 import {Link, Route} from 'react-router-dom';
-import PouchDB from 'pouchdb';
 
-import {db, sync} from '../common/database';
+import {db} from '../common/database';
 import SongContainer from '../songs/SongContainer';
 import transposeChord from '../common/transpose-chord';
 
@@ -28,16 +27,13 @@ class SetContainer extends PreactComponent {
 		const songs = this.state.songs.slice();
 		const song = find( songs, s => s._id === songId );
 
-		console.log( this.state.songs );
-		console.log( songId );
+		const setSongs = set.songs.slice();
+		const setSong = find( setSongs, s => s._id === songId );
 
 		if ( song ) {
-			console.log( song.key, amount );
 
-			song.key = transposeChord( song.key, amount );
-			set.songs = songs;
-
-			console.log( song.key );
+			setSong.key = transposeChord( setSong.key, amount );
+			song.key = setSong.key;
 
 			this.setState( { set, songs } );
 
@@ -205,20 +201,21 @@ class SetContainer extends PreactComponent {
 
 		db.get( set._id ).then( doc => {
 
-			doc.songs = songs.map( s => ({ _id: s._id, key: s.key }) );
+			set.songs = songs.map( s => ({ _id: s._id, key: s.key }) );
+			set._rev = doc._rev;
 
-			db.put( doc, { conflicts: true, force: true } ).then( () => {
+			return db.put( set ).catch( err => {
 
-				PouchDB.sync( 'chordboard',
-					'https://justinlawrence:cXcmbbLFO   8@couchdb.cloudno.de/chordboard' )
-					.catch( err => {
+				if ( err.name === 'conflict' ) {
 
-						console.warn( 'Could not sync to remote database', err );
+					console.error( 'SetContainer._saveSet: conflict -', err );
 
-					} );
+				} else {
 
-			} ).catch( err => {
-				console.error( err );
+					console.error( 'SetContainer._saveSet -', err );
+
+				}
+
 			} );
 
 		} );

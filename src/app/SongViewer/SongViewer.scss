@@ -46,7 +46,6 @@ $chord-gap: .75em;
 .song-viewer {
 
 	&__song {
-		padding-left: 3em;
 		position:     relative;
 	}
 
@@ -93,7 +92,7 @@ $chord-gap: .75em;
 			border-left: 4px solid #ff9800;
 
 			&:before {
-				content:          "PCH";
+				content:          "PC";
 				background-color: #ff9800;
 			}
 		}
@@ -111,7 +110,7 @@ $chord-gap: .75em;
 			border-left: 4px solid #444;
 
 			&:before {
-				content:          "OUT";
+				content:          "OU";
 				background-color: #444;
 			}
 		}
@@ -121,7 +120,7 @@ $chord-gap: .75em;
 			border-left: 4px solid silver;
 
 			&:before {
-				content:          "INT";
+				content:          "IN";
 				background-color: silver;
 			}
 		}

@@ -37,7 +37,7 @@ class SongViewer extends PreactComponent {
 			props.currentKey !== props.song.key ) {
 
 			// Calculate distance between keys
-			this.changeKey( getKeyDiff( props.currentKey, props.song.key ) );
+			this.changeKey( getKeyDiff( props.song.key, props.currentKey ) );
 
 		}
 
@@ -66,8 +66,6 @@ class SongViewer extends PreactComponent {
 
 		const song = this.state.song;
 		song.transpose( amount );
-
-		console.log( amount );
 
 		this.setState( { song } );
 
@@ -105,7 +103,8 @@ class SongViewer extends PreactComponent {
 										<div className="field has-addons">
 											<p className="control">
 
-												<a className="button" onClick={this.transposeDown} title="transpose down">
+												<a className="button" onClick={this.transposeDown}
+												   title="transpose down">
 														<span className="icon is-small">
 															 <i className="fa fa-minus"/>
 														</span>
@@ -122,7 +121,8 @@ class SongViewer extends PreactComponent {
 
 											<p class="control">
 
-												<a className="button" onClick={this.transposeUp} title="transpose up">
+												<a className="button" onClick={this.transposeUp}
+												   title="transpose up">
 														<span className="icon is-small">
 														 <i className="fa fa-plus"/>
 														</span>
@@ -130,8 +130,10 @@ class SongViewer extends PreactComponent {
 											</p>
 
 											<p class="control">
-												<Link className="button" to={`/songs/${song._id}/edit`}>
-													<span className="icon is-small"><i className="fa fa-pencil"/></span>
+												<Link className="button"
+												      to={`/songs/${song._id}/edit`}>
+													<span className="icon is-small"><i
+														className="fa fa-pencil"/></span>
 													<span>Edit Song</span>
 												</Link>
 											</p>
@@ -146,11 +148,9 @@ class SongViewer extends PreactComponent {
 					</section>
 
 					<section className="section">
-						<div className="columns">
-							<div className="column is-three-quarters">
-								<div class="song-viewer__song">
-									{parseSong( song, sections )}
-								</div>
+						<div className="container">
+							<div class="song-viewer__song">
+								{parseSong( song, sections )}
 							</div>
 						</div>
 					</section>

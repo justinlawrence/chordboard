@@ -3,6 +3,7 @@ import {Link, matchPath, withRouter} from 'react-router-dom';
 
 import {db} from 'app/common/database';
 import SongKey from 'app/common/SongKey';
+import Song from 'app/common/Song.js';
 
 import './live-bar.scss';
 
@@ -74,7 +75,7 @@ class LiveBar extends PreactComponent {
 					}
 
 					this.setState( {
-						currentSong,
+						currentSong:       currentSong ? new Song( currentSong ) : null,
 						nextSongKey:       nextSong ? nextSong.key : '',
 						nextSongTitle:     nextSong ? nextSong.title : '',
 						previousSongKey:   previousSong ? previousSong.key : '',

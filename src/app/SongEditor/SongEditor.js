@@ -1,19 +1,12 @@
 import {isNil} from 'lodash';
 import slugify from 'slugify';
 import PouchDB from 'pouchdb';
-import PouchDBFindPlugin from 'pouchdb-find';
 import {parseSong} from '../SongViewer/SongViewer.js';
 import Song from '../common/Song.js';
 import '../SongEditor/SongEditor.scss';
 import {Link} from 'react-router-dom';
 
-PouchDB.plugin( PouchDBFindPlugin );
-
-const db = new PouchDB( 'chordboard' );
-
-db.createIndex( {
-	index: { fields: [ 'type', 'slug' ] }
-} );
+import {db} from '../common/database';
 
 class SongEditor extends PreactComponent {
 	state = {
@@ -135,14 +128,23 @@ class SongEditor extends PreactComponent {
 				content: content
 			} ).then( () => {
 
-				PouchDB.sync( 'chordboard',
-					'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' );
-
 				if ( this.props.history ) {
 					this.props.history.goBack();
 				}
 
-			} );
+			} ).catch(err => {
+
+				if ( err.name === 'conflict' ) {
+
+					console.error( 'SongEditor.onSaveSong: conflict -', err );
+
+				} else {
+
+					console.error( 'SongEditor.onSaveSong -', err );
+
+				}
+
+			});
 
 		} else { //existing
 
@@ -164,15 +166,6 @@ class SongEditor extends PreactComponent {
 					} )
 				} );
 
-				PouchDB.sync( 'chordboard',
-					'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' )
-					.catch( err => {
-
-						console.warn( 'Could not sync to remote database',
-							err );
-
-					} );
-
 				//TODO: add toast updated message
 				//alert( 'Updated successfully!' );
 
@@ -182,7 +175,17 @@ class SongEditor extends PreactComponent {
 
 
 			} ).catch( err => {
-				console.error( err );
+
+				if ( err.name === 'conflict' ) {
+
+					console.error( 'SongEditor.onSaveSong: conflict -', err );
+
+				} else {
+
+					console.error( 'SongEditor.onSaveSong -', err );
+
+				}
+
 			} );
 
 		}

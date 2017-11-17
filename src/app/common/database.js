@@ -17,8 +17,7 @@ const remoteDbSettings = {
 	}
 };
 const localDB = new PouchDB( 'chordboard' );
-const remoteDB = new PouchDB( 'https://couchdb.cloudno.de/chordboard',
-	remoteDbSettings );
+const remoteDB = new PouchDB( 'https://couchdb.cloudno.de/chordboard', remoteDbSettings );
 
 export const sync = localDB.sync( remoteDB, {
 	live:  true,

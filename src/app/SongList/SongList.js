@@ -1,19 +1,8 @@
 import {uniqBy} from 'lodash';
-import PouchDB from 'pouchdb';
-import PouchDBFindPlugin from 'pouchdb-find';
+
+import {db} from 'app/common/database';
 
 import './SongList.scss';
-
-PouchDB.plugin( PouchDBFindPlugin );
-
-const db = new PouchDB( 'chordboard' );
-
-db.createIndex( {
-	index: { fields: [ 'type', 'slug' ] }
-} );
-db.createIndex( {
-	index: { fields: [ 'type', 'title' ] }
-} );
 
 class SongList extends PreactComponent {
 	state = {
@@ -37,15 +26,6 @@ class SongList extends PreactComponent {
 
 			db.put( data ).then( () => {
 
-				PouchDB.sync( 'chordboard',
-					'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' )
-					.catch( err => {
-
-						console.warn( 'Could not sync to remote database',
-							err );
-
-					} );
-
 				if ( this.props.history ) {
 
 					const location = {
@@ -56,7 +36,17 @@ class SongList extends PreactComponent {
 				}
 
 			} ).catch( err => {
-				console.error( err );
+
+				if ( err.name === 'conflict' ) {
+
+					console.error( 'SongList.addToSet: conflict -', err );
+
+				} else {
+
+					console.error( 'SongList.addToSet -', err );
+
+				}
+
 			} );
 
 		} ).catch( err => {
