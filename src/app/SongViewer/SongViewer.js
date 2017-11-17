@@ -82,7 +82,7 @@ class SongViewer extends PreactComponent {
 
 		return (
 			song ?
-				<div class="song-viewer">
+				<div className="song-viewer">
 					<section className="hero is-small is-light">
 						<div className="hero-body">
 							<div className="container">
@@ -102,17 +102,17 @@ class SongViewer extends PreactComponent {
 
 										{/*<a className="button">Key of {song.key}</a>*/}
 
-										<div class="field has-addons">
-											<p class="control">
+										<div className="field has-addons">
+											<p className="control">
 
 												<a className="button" onClick={this.transposeDown} title="transpose down">
 														<span className="icon is-small">
-															 <i className="fa fa-minus"></i>
+															 <i className="fa fa-minus"/>
 														</span>
 												</a>
 
 											</p>
-											<p class="control">
+											<p className="control">
 
 												<KeySelector
 													onSelect={( key, amount ) =>
@@ -124,7 +124,7 @@ class SongViewer extends PreactComponent {
 
 												<a className="button" onClick={this.transposeUp} title="transpose up">
 														<span className="icon is-small">
-														 <i className="fa fa-plus"></i>
+														 <i className="fa fa-plus"/>
 														</span>
 												</a>
 											</p>

@@ -5,7 +5,7 @@ const commonConfig = require( './webpack.base.js' );
 module.exports = function ( env ) {
 
 	return webpackMerge( commonConfig(), {
-		devtool:   'source-map',
+		devtool:   false,
 		devServer: {
 			compress: true,
 			hot:      true,
