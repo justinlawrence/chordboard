@@ -68,78 +68,99 @@ class SetViewer extends PreactComponent {
 	render( { set, songs }, { mode } ) {
 
 		return set && (
-			<section class="section set-viewer">
-				<div class="container">
-					<div class="columns">
-						<div class="column is-three-quarters">
+			<div class="set-viewer">
 
-							<nav class="level">
 
-								<div class="level-left">
-									<div class="level-item">
-										<p class="subtitle">
-											<strong>{set.title}</strong>
-										</p>
-									</div>
-								</div>
+				<section className="hero is-small is-light">
 
-								<div class="level-right">
-									{mode === 'edit' ? [
-										<div class="level-item">
-											<a class="button is-outlined"
-											   onClick={this.onDeleteSet}>
-												<span class="icon is-small is-left"><i class="fa fa-trash"></i></span>
-											</a>
-										</div>,
-										<div class="level-item">
-											<a class="button is-primary"
-											   href={`/songs/add-to-set/${set._id}`}>
-												Add songs
-											</a>
-										</div>,
-										<div class="level-item">
-											<a class="button is-primary" onClick={this.editModeOff}>
-												<span class="icon is-small">
-													<i class="fa fa-pencil"></i>
-												</span>
-											</a>
+					<div className="hero-body">
+
+							<div class="container">
+
+								<div class="columns is-vcentered">
+
+									<div class="column is-three-quarters">
+
+										<nav class="level">
+
+											<div class="level-left">
+												<div class="level-item">
+													<p class="subtitle">
+														<strong>{set.title}</strong>
+													</p>
+												</div>
+											</div>
+
+											<div class="level-right">
+												{mode === 'edit' ? [
+													<div class="level-item">
+														<a class="button is-outlined"
+											   				onClick={this.onDeleteSet}>
+															<span class="icon is-small is-left"><i class="fa fa-trash"></i></span>
+														</a>
+													</div>,
+													<div class="level-item">
+														<a class="button is-primary"
+											   			href={`/songs/add-to-set/${set._id}`}>
+															Add songs
+														</a>
+													</div>,
+													<div class="level-item">
+														<a class="button is-primary" onClick={this.editModeOff}>
+															<span class="icon is-small">
+																<i class="fa fa-pencil"></i>
+															</span>
+														</a>
+													</div>
+											] : (
+												<a class="button" onClick={this.editModeOn}>
+													<span class="icon is-small">
+														<i class="fa fa-pencil"></i>
+													</span>
+												</a>
+											)}
 										</div>
-									] : (
-										<a class="button" onClick={this.editModeOn}>
-											<span class="icon is-small">
-												<i class="fa fa-pencil"></i>
-											</span>
-										</a>
-									)}
+
+									</nav>
 								</div>
-							</nav>
-
-							<table class="table is-bordered is-striped is-fullwidth">
-
-								<tbody>
-								{songs.length ?
-									songs.map( this._createRow )
-									:
-									<div>
-										<p class="subtitle">This set has no songs</p>
-
-										<a class="button is-primary"
-										   href={`/songs/add-to-set/${set._id}`}>
-											Add songs
-										</a>
-
-
-									</div>
-								}
-								</tbody>
-
-							</table>
-
+							</div>
 						</div>
 
 					</div>
-				</div>
-			</section>
+				</section>
+
+
+
+
+				<section className="section">
+					<div className="container">
+
+						<table class="table is-bordered is-striped is-fullwidth">
+
+							<tbody>
+							{songs.length ?
+								songs.map( this._createRow )
+								:
+								<div>
+									<p class="subtitle">This set has no songs</p>
+
+									<a class="button is-primary"
+									   href={`/songs/add-to-set/${set._id}`}>
+										Add songs
+									</a>
+
+
+								</div>
+							}
+							</tbody>
+
+						</table>
+
+					</div>
+
+				</section>
+
+			</div>
 		);
 	}
 
@@ -153,9 +174,11 @@ class SetViewer extends PreactComponent {
 		return (
 			<tr>
 				<td>
+					<p class="title is-4">
 					<Link to={`/sets/${set._id}/songs/${song._id}`}>
 						{song.title}
 					</Link>
+				</p>
 				</td>
 				<td>
 					<div className="field is-grouped">
