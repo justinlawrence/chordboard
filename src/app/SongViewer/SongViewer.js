@@ -173,8 +173,6 @@ export function parseSong( song, sections ) {
 	let section = '';
 	let sectionIndex = 0;
 
-	console.log( song );
-
 	for ( let i = 0; i < lines.length; i++ ) {
 
 		let line = lines[ i ];
