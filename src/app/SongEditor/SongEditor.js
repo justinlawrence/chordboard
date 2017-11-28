@@ -1,21 +1,22 @@
 import {isNil} from 'lodash';
-import slugify from 'slugify';
-import PouchDB from 'pouchdb';
-import {parseSong} from '../SongViewer/SongViewer.js';
-import Song from '../common/Song.js';
-import '../SongEditor/SongEditor.scss';
 import {Link} from 'react-router-dom';
+import slugify from 'slugify';
 
+import {parseSong} from '../SongViewer/SongViewer.js';
 import {db} from '../common/database';
+import Song from '../common/Song.js';
+import chordproParser from 'app/parsers/chordpro-parser.js';
+import '../SongEditor/SongEditor.scss';
 
 class SongEditor extends PreactComponent {
 	state = {
-		author:    '',
-		isLoading: false,
-		title:     '',
-		key:       '',
-		content:   '',
-		song:      null
+		author:     '',
+		isLoading:  false,
+		title:      '',
+		key:        '',
+		content:    '',
+		parserType: 'chords-above-words',
+		song:       null
 	};
 
 	componentDidMount() {
@@ -25,6 +26,14 @@ class SongEditor extends PreactComponent {
 	componentWillReceiveProps( nextProps ) {
 		this.handleProps( nextProps );
 	}
+
+	handleParserChange = event => {
+
+		this.setState( {
+			parserType: event.target.value
+		} );
+
+	};
 
 	handleProps = props => {
 
@@ -132,7 +141,7 @@ class SongEditor extends PreactComponent {
 					this.props.history.goBack();
 				}
 
-			} ).catch(err => {
+			} ).catch( err => {
 
 				if ( err.name === 'conflict' ) {
 
@@ -144,7 +153,7 @@ class SongEditor extends PreactComponent {
 
 				}
 
-			});
+			} );
 
 		} else { //existing
 
@@ -192,7 +201,17 @@ class SongEditor extends PreactComponent {
 
 	};
 
-	render( {}, { author, title, key, content, song } ) {
+	render( {}, { author, title, key, content, parserType, song } ) {
+
+		const songCopy = Object.assign( {}, song );
+
+		if ( parserType === 'chordpro' ) {
+
+			songCopy.content = chordproParser( songCopy.content );
+
+		}
+
+		const previewSong = parseSong( new Song( songCopy ), [] );
 
 		return (
 			<section class="section">
@@ -251,6 +270,20 @@ class SongEditor extends PreactComponent {
 
 							</div>
 
+							<div class="field has-addons has-addons-right">
+								<p class="control">
+									<select
+										onChange={this.handleParserChange}
+										value={this.state.parserType}
+									>
+										<option value="chords-above-words">
+											Chords above words
+										</option>
+										<option value="chordpro">Onsong</option>
+									</select>
+								</p>
+							</div>
+
 							<div class="field">
 
 								<p class="control">
@@ -297,7 +330,7 @@ class SongEditor extends PreactComponent {
 								</h2>
 
 								<div class="song-editor__preview-content">
-									{parseSong( new Song( song ), [] )}
+									{previewSong}
 								</div>
 
 							</div>

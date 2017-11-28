@@ -173,6 +173,8 @@ export function parseSong( song, sections ) {
 	let section = '';
 	let sectionIndex = 0;
 
+	console.log( song );
+
 	for ( let i = 0; i < lines.length; i++ ) {
 
 		let line = lines[ i ];
@@ -189,7 +191,7 @@ export function parseSong( song, sections ) {
 				break;
 
 			case 'empty':
-				children.push( <div className="empty-line"></div> );
+				children.push( <div className="empty-line"/> );
 				break;
 
 			case 'line':

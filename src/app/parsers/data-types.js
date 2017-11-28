@@ -9,9 +9,7 @@ const dataTypes = {
 	chordPair:       {
 		type: "chord-pair",
 		test: ( line, prevLine ) => {
-
 			return prevLine && isChords( prevLine ) && !isChords( line );
-
 		}
 	},
 	empty:           {
