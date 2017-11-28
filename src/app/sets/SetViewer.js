@@ -68,54 +68,53 @@ class SetViewer extends PreactComponent {
 	render( { set, songs }, { mode } ) {
 
 		return set && (
-			<div class="set-viewer">
-
+			<div className="set-viewer">
 
 				<section className="hero is-small is-light">
 
 					<div className="hero-body">
 
-							<div class="container">
+							<div className="container">
 
-								<div class="columns is-vcentered">
+								<div className="columns is-vcentered">
 
-									<div class="column is-three-quarters">
+									<div className="column is-three-quarters">
 
-										<nav class="level">
+										<nav className="level">
 
-											<div class="level-left">
-												<div class="level-item">
-													<p class="subtitle">
+											<div className="level-left">
+												<div className="level-item">
+													<p className="subtitle">
 														<strong>{set.title}</strong>
 													</p>
 												</div>
 											</div>
 
-											<div class="level-right">
+											<div className="level-right">
 												{mode === 'edit' ? [
-													<div class="level-item">
-														<a class="button is-outlined"
+													<div className="level-item">
+														<a className="button is-outlined"
 											   				onClick={this.onDeleteSet}>
-															<span class="icon is-small is-left"><i class="fa fa-trash"></i></span>
+															<span className="icon is-small is-left"><i className="fa fa-trash"/></span>
 														</a>
 													</div>,
-													<div class="level-item">
-														<a class="button is-primary"
+													<div className="level-item">
+														<a className="button is-primary"
 											   			href={`/songs/add-to-set/${set._id}`}>
 															Add songs
 														</a>
 													</div>,
-													<div class="level-item">
-														<a class="button is-primary" onClick={this.editModeOff}>
-															<span class="icon is-small">
-																<i class="fa fa-pencil"></i>
+													<div className="level-item">
+														<a className="button is-primary" onClick={this.editModeOff}>
+															<span className="icon is-small">
+																<i className="fa fa-pencil"/>
 															</span>
 														</a>
 													</div>
 											] : (
-												<a class="button" onClick={this.editModeOn}>
-													<span class="icon is-small">
-														<i class="fa fa-pencil"></i>
+												<a className="button" onClick={this.editModeOn}>
+													<span className="icon is-small">
+														<i className="fa fa-pencil"/>
 													</span>
 												</a>
 											)}
@@ -135,16 +134,16 @@ class SetViewer extends PreactComponent {
 				<section className="section">
 					<div className="container">
 
-						<table class="table is-bordered is-striped is-fullwidth">
+						<table className="table is-bordered is-striped is-fullwidth">
 
 							<tbody>
 							{songs.length ?
 								songs.map( this._createRow )
 								:
 								<div>
-									<p class="subtitle">This set has no songs</p>
+									<p className="subtitle">This set has no songs</p>
 
-									<a class="button is-primary"
+									<a className="button is-primary"
 									   href={`/songs/add-to-set/${set._id}`}>
 										Add songs
 									</a>
@@ -174,7 +173,7 @@ class SetViewer extends PreactComponent {
 		return (
 			<tr>
 				<td>
-					<p class="title is-4">
+					<p className="title is-4">
 					<Link to={`/sets/${set._id}/songs/${song._id}`}>
 						{song.title}
 					</Link>
@@ -214,12 +213,12 @@ class SetViewer extends PreactComponent {
 						<a
 							onClick={() => this.onMoveSongUp( song._id )}
 							title="move this song up the list">
-							<span class="icon is-small is-left"><i class="fa fa-arrow-up"/></span>
+							<span className="icon is-small is-left"><i className="fa fa-arrow-up"/></span>
 						</a>
 						<a
 							onClick={() => this.removeSong( song._id )}
 							title="remove this song from the list">
-							<span class="icon is-small is-left"><i class="fa fa-trash"/></span>
+							<span className="icon is-small is-left"><i className="fa fa-trash"/></span>
 						</a>
 					</td>
 				)}

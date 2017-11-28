@@ -119,7 +119,7 @@ class SongViewer extends PreactComponent {
 													value={song.key}/>
 											</p>
 
-											<p class="control">
+											<p className="control">
 
 												<a className="button" onClick={this.transposeUp}
 												   title="transpose up">
@@ -129,7 +129,7 @@ class SongViewer extends PreactComponent {
 												</a>
 											</p>
 
-											<p class="control">
+											<p className="control">
 												<Link className="button"
 												      to={`/songs/${song._id}/edit`}>
 													<span className="icon is-small"><i
@@ -149,7 +149,7 @@ class SongViewer extends PreactComponent {
 
 					<section className="section">
 						<div className="container">
-							<div class="song-viewer__song">
+							<div className="song-viewer__song">
 								{parseSong( song, sections )}
 							</div>
 						</div>

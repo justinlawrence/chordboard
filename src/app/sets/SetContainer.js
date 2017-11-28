@@ -1,4 +1,4 @@
-import {find, findIndex, remove} from 'lodash';
+import {find, findIndex, remove, sortBy} from 'lodash';
 import {Link, Route} from 'react-router-dom';
 
 import {db} from '../common/database';
@@ -24,22 +24,24 @@ class SetContainer extends PreactComponent {
 	handleChangeKey = ( songId, amount ) => {
 
 		const set = Object.assign( {}, this.state.set );
-		const songs = this.state.songs.slice();
-		const song = find( songs, s => s._id === songId );
+		//const songs = this.state.songs.slice();
+		//const song = find( songs, s => s._id === songId );
 
 		const setSongs = set.songs.slice();
 		const setSong = find( setSongs, s => s._id === songId );
 
-		if ( song ) {
+		if ( setSong ) {
 
 			setSong.key = transposeChord( setSong.key, amount );
-			song.key = setSong.key;
+			//song.key = setSong.key;
 
-			this.setState( { set, songs } );
+			set.songs = setSongs;
+
+			this.setState( { set } );
 
 			if ( set ) {
 
-				this._saveSet( set, songs );
+				this._saveSet( set );
 
 			}
 
@@ -50,19 +52,21 @@ class SetContainer extends PreactComponent {
 	handleSongMove = ( songId, targetIndex = 0 ) => {
 
 		const set = Object.assign( {}, this.state.set );
-		const songs = this.state.songs.slice();
-		const index = findIndex( songs, { _id: songId } );
-		const song = songs[ index ];
-		const newIndex = Math.max( Math.min( targetIndex, songs.length ), 0 );
+		const setSongs = set.songs.slice();
+		const index = findIndex( setSongs, { _id: songId } );
+		const song = setSongs[ index ];
+		const newIndex = Math.max( Math.min( targetIndex, setSongs.length ), 0 );
 
-		songs.splice( index, 1 );
-		songs.splice( newIndex, 0, song );
+		setSongs.splice( index, 1 );
+		setSongs.splice( newIndex, 0, song );
 
-		this.setState( { songs } );
+		set.songs = setSongs;
+
+		this.setState( { set } );
 
 		if ( set ) {
 
-			this._saveSet( set, songs );
+			this._saveSet( set );
 
 		}
 
@@ -109,21 +113,28 @@ class SetContainer extends PreactComponent {
 	handleRemoveSong = songId => {
 
 		const set = Object.assign( {}, this.state.set );
+		const setSongs = set.songs.slice();
 		const songs = this.state.songs.slice();
 
+		remove( setSongs, { _id: songId } );
 		remove( songs, { _id: songId } );
 
-		this.setState( { songs } );
+		set.songs = setSongs;
+
+		this.setState( { set, songs } );
 
 		if ( set ) {
 
-			this._saveSet( set, songs );
+			this._saveSet( set );
 
 		}
 
 	};
 
 	render( props, { set, songs } ) {
+
+		const orderedSongs = sortBy( songs, song => findIndex( set.songs, { _id: song._id } ) );
+
 		return (
 			<div>
 				<Route exact path="/sets/:id" render={props => (
@@ -133,7 +144,7 @@ class SetContainer extends PreactComponent {
 						onRemoveSet={this.handleRemoveSet}
 						onRemoveSong={this.handleRemoveSong}
 						set={set}
-						songs={songs}
+						songs={orderedSongs}
 						{...props}/>
 				)}/>
 				<Route exact path="/sets/:setId/songs/:songId" render={( { match } ) => {
@@ -197,11 +208,10 @@ class SetContainer extends PreactComponent {
 
 	};
 
-	_saveSet = ( set, songs ) => {
+	_saveSet = ( set ) => {
 
 		db.get( set._id ).then( doc => {
 
-			set.songs = songs.map( s => ({ _id: s._id, key: s.key }) );
 			set._rev = doc._rev;
 
 			return db.put( set ).catch( err => {
