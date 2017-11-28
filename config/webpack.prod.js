@@ -6,6 +6,9 @@ const OfflinePlugin = require( 'offline-plugin' );
 module.exports = function ( env ) {
 
 	return webpackMerge( commonConfig(), {
+		output:  {
+			filename: '[name].[chunkhash].js'
+		},
 		module:  {
 			loaders: [
 				{

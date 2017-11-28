@@ -24,8 +24,6 @@ class SetContainer extends PreactComponent {
 	handleChangeKey = ( songId, amount ) => {
 
 		const set = Object.assign( {}, this.state.set );
-		//const songs = this.state.songs.slice();
-		//const song = find( songs, s => s._id === songId );
 
 		const setSongs = set.songs.slice();
 		const setSong = find( setSongs, s => s._id === songId );
@@ -33,7 +31,6 @@ class SetContainer extends PreactComponent {
 		if ( setSong ) {
 
 			setSong.key = transposeChord( setSong.key, amount );
-			//song.key = setSong.key;
 
 			set.songs = setSongs;
 
