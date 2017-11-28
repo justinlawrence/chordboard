@@ -42,7 +42,7 @@ REPEAT CHORUS DOWN`;
 
 export default function chordproParser( text ) {
 
-	const lines = text ? text.split( /\n/ ) : ;
+	const lines = text ? text.split( /\n/ ) : [];
 	let result = '';
 
 	lines.forEach( line => {
