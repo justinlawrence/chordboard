@@ -4,7 +4,7 @@ import {render} from 'preact';
 import {BrowserRouter} from 'react-router-dom';
 import {Provider} from 'preact-redux';
 
-import configureStore from 'app/configureStore'
+import configureStore from 'app/configureStore';
 import App from 'app/app';
 
 import './styles/main.scss';
