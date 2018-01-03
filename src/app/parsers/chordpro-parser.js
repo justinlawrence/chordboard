@@ -79,7 +79,12 @@ export default function chordproParser( text ) {
 
 		}
 
-		result += `${chordLine}\n`;
+		const hasChords = chordLine.trim() !== '';
+
+		if ( hasChords ) {
+			result += `${chordLine}\n`;
+		}
+
 		result += `${textLine}\n`;
 
 	} );

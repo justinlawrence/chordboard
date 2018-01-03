@@ -1,4 +1,5 @@
-import Parser from '../parsers/song-parser.js';
+import Parser from 'app/parsers/song-parser.js';
+
 import transposeChord from './transpose-chord';
 
 class Song {
@@ -49,7 +50,7 @@ class Song {
 				line.chords._sort.forEach( chordIndex => {
 
 					line.chords[ chordIndex ] =
-						transposeChord(line.chords[ chordIndex ], amount );
+						transposeChord( line.chords[ chordIndex ], amount );
 
 				} )
 

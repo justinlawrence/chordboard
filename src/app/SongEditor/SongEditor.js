@@ -213,6 +213,7 @@ class SongEditor extends PreactComponent {
 
 		const previewSong = parseSong( new Song( songCopy ), [] );
 
+
 		return (
 			<section class="section">
 				<div class="container">
