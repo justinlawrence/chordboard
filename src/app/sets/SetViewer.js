@@ -69,58 +69,68 @@ class SetViewer extends PreactComponent {
 
 		return set && (
 			<div className="set-viewer">
-
 				<section className="hero is-small is-light">
-
 					<div className="hero-body">
-
 							<div className="container">
-
 								<div className="columns is-vcentered">
 
 									<div className="column is-three-quarters">
+											<p className="title">
+												{set.title}
+											</p>
+											<h2 className="subtitle">
+												{set.author}
+											</h2>
+									</div>
+									<div className="column">
 
-										<nav className="level">
+										<div className="field has-addons">
+											<p className="control">
+											{mode === 'edit' ? [
+												<a className="button is-primary" onClick={this.editModeOff}>
+													<span className="icon is-small">
+														<i className="fa fa-sliders"/>
+													</span>
+												</a>
+												] : (
+													<a className="button" onClick={this.editModeOn}>
+														<span className="icon is-small">
+															<i className="fa fa-sliders"/>
+														</span>
+													</a>
+											)}
+											</p>
+											<p className="control">
+												<a className="button"
+													href={`/songs/add-to-set/${set._id}`}>
+													Add songs
+												</a>
+											</p>
 
-											<div className="level-left">
-												<div className="level-item">
-													<p className="subtitle">
-														<strong>{set.title}</strong>
-													</p>
-												</div>
-											</div>
+										</div>
+									</div>
+								</div>
+								<div className="columns is-vcentered">
 
-											<div className="level-right">
+									<div className="column no-print">
+
+											<div className="field has-addons">
 												{mode === 'edit' ? [
-													<div className="level-item">
+													<p className="control">
+
 														<a className="button is-outlined"
 											   				onClick={this.onDeleteSet}>
 															<span className="icon is-small is-left"><i className="fa fa-trash"/></span>
 														</a>
-													</div>,
-													<div className="level-item">
-														<a className="button is-primary"
-											   			href={`/songs/add-to-set/${set._id}`}>
-															Add songs
-														</a>
-													</div>,
-													<div className="level-item">
-														<a className="button is-primary" onClick={this.editModeOff}>
-															<span className="icon is-small">
-																<i className="fa fa-pencil"/>
-															</span>
-														</a>
-													</div>
+
+													</p>
+
 											] : (
-												<a className="button" onClick={this.editModeOn}>
-													<span className="icon is-small">
-														<i className="fa fa-pencil"/>
-													</span>
-												</a>
+												<p className="control">
+												</p>
 											)}
 										</div>
 
-									</nav>
 								</div>
 							</div>
 						</div>
@@ -209,19 +219,24 @@ class SetViewer extends PreactComponent {
 				</td>
 
 				{mode === 'edit' && (
-					<td>
+				<td>
 						<a
 							onClick={() => this.onMoveSongUp( song._id )}
 							title="move this song up the list">
 							<span className="icon is-small is-left"><i className="fa fa-arrow-up"/></span>
 						</a>
+				</td>
+				)}
+				{mode === 'edit' && (
+				<td>
 						<a
 							onClick={() => this.removeSong( song._id )}
 							title="remove this song from the list">
 							<span className="icon is-small is-left"><i className="fa fa-trash"/></span>
 						</a>
-					</td>
+				</td>
 				)}
+
 			</tr>
 		);
 
