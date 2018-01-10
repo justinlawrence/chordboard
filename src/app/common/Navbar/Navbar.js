@@ -31,7 +31,7 @@ class Navbar extends PreactComponent {
 		} = this.state;
 
 		return (
-			<nav className="navbar">
+			<nav className="navbar no-print">
 				<div className="container">
 					<div className="navbar-brand">
 						<Link class="navbar-item" to='/'>

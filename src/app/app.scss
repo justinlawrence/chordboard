@@ -12,3 +12,11 @@
 		-webkit-overflow-scrolling: touch;
 	}
 }
+
+@media print
+{
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+}

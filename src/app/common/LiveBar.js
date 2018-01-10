@@ -146,7 +146,7 @@ class LiveBar extends PreactComponent {
 		} );
 
 		return show ? (
-			<div className="level live-bar">
+			<div className="level live-bar no-print">
 				<a className="navbar-item live-bar-item-stacked"
 				   onClick={onGoToPreviousSong}>
 					<span className="icon">

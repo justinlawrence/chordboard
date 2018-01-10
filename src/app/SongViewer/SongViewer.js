@@ -107,16 +107,16 @@ class SongViewer extends PreactComponent {
 							<div className="container">
 								<div className="columns is-vcentered">
 
-									<div className="column is-half">
-										<h1 className="title">
+									<div className="column">
+										<p className="title">
 											{song.title}
-										</h1>
+										</p>
 										<h2 className="subtitle">
 											{song.author}
 										</h2>
 									</div>
 
-									<div className="column">
+									<div className="column no-print">
 
 
 										{/*<a className="button">Key of {song.key}</a>*/}

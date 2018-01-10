@@ -21,10 +21,12 @@ $chord-gap: .75em;
 	}
 }
 
+
 .chord-pair .text-line:before,
 .chord-line .text-line:before {
 	color:     #03a9f4;
-	font-size: 15px;
+	font-size: 16px;
+	font-weight: 600;
 }
 
 // These are chords that are found on a separate line
@@ -55,6 +57,12 @@ $chord-gap: .75em;
 		padding-top:    0;
 		padding-bottom: 0;
 		padding-left:   1em;
+
+		@media print {
+			margin-left: 3px;
+		}
+
+
 
 		&[data-section]:before {
 			color:            white;
