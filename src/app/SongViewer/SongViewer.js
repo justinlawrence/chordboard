@@ -1,5 +1,7 @@
 import {Link} from 'react-router-dom';
+import cx from 'classnames';
 
+import {Sets, sync} from 'app/common/database';
 import Song from 'app/common/Song';
 import KeySelector from 'app/common/KeySelector';
 import getKeyDiff from 'app/common/getKeyDiff';
@@ -7,21 +9,32 @@ import getKeyDiff from 'app/common/getKeyDiff';
 import ChordLine from "./lines/ChordLine.js";
 import ChordPair from "./lines/ChordPair.js";
 import Line from "./lines/Line.js";
-
 import './SongViewer.scss';
 
 class SongViewer extends PreactComponent {
 	state = {
-		song: null
+		isSetListDropdownVisible: false,
+		setList:                  [],
+		song:                     null
 	};
 
 	componentDidMount() {
+
+		// Update an initial list when the component mounts.
+		this.updateListOfSets();
+
+		// Listen for any changes on the database.
+		sync.on( "change", () => this.updateListOfSets() );
+
 		this.handleProps( this.props );
+
 	}
 
 	componentWillReceiveProps( nextProps ) {
 		this.handleProps( nextProps );
 	}
+
+	addToSet = set => Sets.addSongToSet( set._id, this.props.song );
 
 	handleProps = props => {
 
@@ -71,10 +84,18 @@ class SongViewer extends PreactComponent {
 
 	};
 
+
+	setListDropdownHide = () => this.setState( { isSetListDropdownVisible: false } );
+	setListDropdownShow = () => this.setState( { isSetListDropdownVisible: true } );
+	setListDropdownToggle = () => this.state.isSetListDropdownVisible ?
+		this.setListDropdownHide() : this.setListDropdownShow();
+
 	transposeDown = () => { this.changeKey( -1 ); };
 	transposeUp = () => { this.changeKey( 1 ); };
 
-	render( props, { song } ) {
+	updateListOfSets = () => Sets.getAll().then( setList => this.setState( { setList } ) );
+
+	render( props, { isSetListDropdownVisible, setList, song } ) {
 
 		let sections = [];
 
@@ -120,7 +141,6 @@ class SongViewer extends PreactComponent {
 											</p>
 
 											<p className="control">
-
 												<a className="button" onClick={this.transposeUp}
 												   title="transpose up">
 														<span className="icon is-small">
@@ -136,6 +156,43 @@ class SongViewer extends PreactComponent {
 														className="fa fa-pencil"/></span>
 													<span>Edit Song</span>
 												</Link>
+											</p>
+
+											<p className="control">
+												<div className={cx(
+													'dropdown',
+													{ 'is-active': isSetListDropdownVisible }
+												)}>
+													<div className="dropdown-trigger"
+													     onClick={this.setListDropdownToggle}>
+														<button className="button"
+														        aria-haspopup="true"
+														        aria-controls="dropdown-menu">
+															<span className="icon is-small">
+																<i className="fa fa-plus-square-o"/>
+															</span>
+															<span>Add to set</span>
+															<span className="icon is-small">
+													            <i className="fa fa-angle-down"
+													               aria-hidden="true"/>
+													        </span>
+														</button>
+													</div>
+													<div className="dropdown-menu"
+													     id="set-list-dropdown-menu"
+													     onClick={this.setListDropdownHide}
+													     role="menu"
+													>
+														<div className="dropdown-content">
+															{setList.map( set => (
+																<a className="dropdown-item"
+																   onClick={() => this.addToSet( set )}>
+																	{set.title}
+																</a>
+															) )}
+														</div>
+													</div>
+												</div>
 											</p>
 
 										</div>

@@ -1,6 +1,6 @@
 import {Route} from 'react-router-dom';
 
-import {db, sync} from '../common/database';
+import {Sets, db, sync} from '../common/database';
 import SetEditor from './SetEditor';
 import SetList from './SetList';
 import SetContainer from './SetContainer';
@@ -15,22 +15,14 @@ class SetListContainer extends PreactComponent {
 		// Update an initial list when the component mounts.
 		this.updateListOfSets();
 
-		// Listen for any changes on the database
+		// Listen for any changes on the database.
 		sync.on( "change", () => {
 			this.updateListOfSets();
 		} );
 
 	}
 
-	updateListOfSets = () => {
-
-		this._getListOfSets().then( setList => {
-
-			this.setState( { setList } );
-
-		} );
-
-	};
+	updateListOfSets = () => Sets.getAll().then( setList => this.setState( { setList } ) );
 
 	render( props, { setList } ) {
 		return (
@@ -46,23 +38,6 @@ class SetListContainer extends PreactComponent {
 		);
 
 	}
-
-	_getListOfSets = () => {
-
-		// This gets all sets
-		return db.find( {
-			selector: {
-				type: 'set'
-			}
-		} )
-			.then( result => result.docs )
-			.catch( err => {
-
-				console.warn( 'App.constructor - pouchdb query failed: _getListOfSets', err );
-
-			} );
-
-	};
 }
 
 export default SetListContainer;

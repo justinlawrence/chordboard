@@ -122,8 +122,15 @@ class SongEditor extends PreactComponent {
 
 	onSaveSong = () => {
 
-		const { author, content, title, key, song } = this.state;
+		const { author, parserType, title, key, song } = this.state;
 		const isNew = !song || isNil( song._id );
+		let content = this.state.content;
+
+		if ( parserType === 'chordpro' ) {
+
+			content = chordproParser( content );
+
+		}
 
 		if ( isNew ) {
 
