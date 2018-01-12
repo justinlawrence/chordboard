@@ -173,9 +173,10 @@ class LiveBar extends PreactComponent {
 							data-section={section.text}
 						/>
 					) )}
-					<a className="navbar-item" onClick={onExitLiveMode}>
+					{/* JL: hide the close icon to make room for more song structure.
+						<a className="navbar-item" onClick={onExitLiveMode}>
 						<span className="icon"><i className="fa fa-close"/></span>
-					</a>
+					</a> */}
 				</div>
 				<a className="navbar-item live-bar-item-stacked"
 				   onClick={onGoToNextSong}>

@@ -9,14 +9,7 @@
 
 	&__content {
 		flex:                       1 1 0;
+		overflow-y:                 auto; //so the live bar shows
 		-webkit-overflow-scrolling: touch;
 	}
-}
-
-@media print
-{
-    .no-print, .no-print *
-    {
-        display: none !important;
-    }
 }

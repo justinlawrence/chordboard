@@ -1,5 +1,6 @@
 html, body, main {
 	height: 100%;
+	overflow: hidden; // so the livebar shows
 }
 
 // Remove the gap between audio, canvas, iframes, images, videos and the bottom
