@@ -144,19 +144,12 @@ class LiveBar extends PreactComponent {
 		} );
 
 		const match = matchPath( location.pathname, { path: '/sets/:setId/songs/:songsId' } );
-		
+
 		return show ? (
 			<div className="level live-bar no-print">
 
 
 				<div className="level-item">
-
-					<Link
-						className="navbar-item"
-						to={`/sets/${match.params.setId}`}
-					>
-						<span className="icon"><i className="fa fa-list-ul"/></span>
-					</Link>
 					{sections.map( section => (
 						<a
 							href={`#section-${section.index}`}
