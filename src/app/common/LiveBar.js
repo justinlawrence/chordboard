@@ -130,11 +130,11 @@ class LiveBar extends PreactComponent {
 			//'/songs/:id',
 			'/sets/:setId/songs/:songsId'
 		];
+		const { location } = this.props;
 		let show = false;
 
 		routes.forEach( path => {
 
-			const { location } = this.props;
 			const match = matchPath( location.pathname, { path } );
 
 			if ( match ) {
@@ -144,6 +144,8 @@ class LiveBar extends PreactComponent {
 			}
 
 		} );
+
+		const match = matchPath( location.pathname, { path: '/sets/:setId/songs/:songsId' } );
 
 		return show ? (
 			<div className="level live-bar no-print">
@@ -162,7 +164,7 @@ class LiveBar extends PreactComponent {
 				<div className="level-item">
 					<Link
 						className="navbar-item"
-						to={`/sets/${this.props.match.params.setId}`}
+						to={`/sets/${match.params.setId}`}
 					>
 						<span className="icon"><i className="fa fa-list-ul"/></span>
 					</Link>
