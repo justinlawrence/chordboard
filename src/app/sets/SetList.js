@@ -8,6 +8,13 @@ class SetList extends PreactComponent {
 		searchText: ''
 	};
 
+	componentDidMount() {
+
+		//Set the page title to make it easier to locate
+		document.title = 'Setlist';
+
+	}
+
 	filterSets = set => {
 
 		return set.title.toLowerCase().includes( this.state.searchText );

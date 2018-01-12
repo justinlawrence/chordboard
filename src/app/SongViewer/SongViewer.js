@@ -23,6 +23,9 @@ class SongViewer extends PreactComponent {
 		// Update an initial list when the component mounts.
 		this.updateListOfSets();
 
+		//Set the page title to the song title
+		document.title = this.props.song.title;
+
 		// Listen for any changes on the database.
 		sync.on( "change", () => this.updateListOfSets() );
 
