@@ -138,30 +138,19 @@ class LiveBar extends PreactComponent {
 			const match = matchPath( location.pathname, { path } );
 
 			if ( match ) {
-
 				show = true;
-
 			}
 
 		} );
 
 		const match = matchPath( location.pathname, { path: '/sets/:setId/songs/:songsId' } );
-
+		
 		return show ? (
 			<div className="level live-bar no-print">
-				<a className="navbar-item live-bar-item-stacked"
-				   onClick={onGoToPreviousSong}>
-					<span className="icon">
-						<i className="fa fa-angle-left fa-lg"/>
-					</span>
-					{previousSongTitle && (
-						<p className="is-size-7">
-							<SongKey value={previousSongKey}/>
-							{previousSongTitle}
-						</p>
-					)}
-				</a>
+
+
 				<div className="level-item">
+
 					<Link
 						className="navbar-item"
 						to={`/sets/${match.params.setId}`}
@@ -180,6 +169,29 @@ class LiveBar extends PreactComponent {
 						<span className="icon"><i className="fa fa-close"/></span>
 					</a> */}
 				</div>
+
+				<Link
+					className="navbar-item"
+					to={`/sets/${this.props.match.params.setId}`}
+				>
+					<span className="icon"><i className="fa fa-list-ul"/></span>
+				</Link>
+
+				<a className="navbar-item live-bar-item-stacked"
+				   onClick={onGoToPreviousSong}>
+
+					<span className="icon">
+						<i className="fa fa-angle-left fa-lg"/>
+					</span>
+
+					{previousSongTitle && (
+						<p className="is-size-7">
+							<SongKey value={previousSongKey}/>
+							{previousSongTitle}
+						</p>
+					)}
+				</a>
+
 				<a className="navbar-item live-bar-item-stacked"
 				   onClick={onGoToNextSong}>
 					<span className="icon"><i className="fa fa-angle-right fa-lg"/></span>
@@ -190,6 +202,7 @@ class LiveBar extends PreactComponent {
 						</p>
 					)}
 				</a>
+
 			</div>
 		) : null;
 	}
