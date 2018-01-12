@@ -1,18 +1,13 @@
 @media print {
 
-  .no-print, .no-print * {
-      display: none !important;
-  }
-
-	html, body, main {
-		overflow: auto; // hide the livebar for printing
+	.no-print, .no-print * {
+		display: none !important;
 	}
 
 	.app {
 		&__content {
-			overflow-y: inherit; //hide the livebar for printing? play with this try (auto, show, hidden, inherit)
+			overflow-y: visible; //hide the livebar for printing? play with this try (auto, show, hidden, inherit)
 		}
 	}
-
 
 }
