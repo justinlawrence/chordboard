@@ -9,7 +9,7 @@ import App from 'app/app';
 
 import './styles/main.scss';
 
-const noSleep = new NoSleep();
+// const noSleep = new NoSleep();
 const store = configureStore();
 
 noSleep.enable();
@@ -21,4 +21,3 @@ render(
 		</BrowserRouter>
 	</Provider>,
 	document.querySelector( 'main' ) );
-
