@@ -12,7 +12,7 @@ import './styles/main.scss';
 // const noSleep = new NoSleep();
 const store = configureStore();
 
-noSleep.enable();
+//noSleep.enable();
 
 render(
 	<Provider store={store}>
