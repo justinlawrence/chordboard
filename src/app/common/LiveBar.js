@@ -166,16 +166,16 @@ class LiveBar extends PreactComponent {
 				<Link
 					className="navbar-item"
 					to={`/sets/${this.props.match.params.setId}`}
+					title="Setlist"
 				>
 					<span className="icon"><i className="fa fa-list-ul"/></span>
 				</Link>
 
+
 				<a className="navbar-item live-bar-item-stacked"
 				   onClick={onGoToPreviousSong}>
 
-					<span className="icon">
-						<i className="fa fa-angle-left fa-lg"/>
-					</span>
+					<span className="icon"><i className="fa fa-angle-left fa-lg"/></span>
 
 					{previousSongTitle && (
 						<p className="is-size-7">
@@ -185,9 +185,12 @@ class LiveBar extends PreactComponent {
 					)}
 				</a>
 
+
 				<a className="navbar-item live-bar-item-stacked"
 				   onClick={onGoToNextSong}>
+
 					<span className="icon"><i className="fa fa-angle-right fa-lg"/></span>
+
 					{nextSongTitle && (
 						<p className="is-size-7">
 							<SongKey value={nextSongKey}/>

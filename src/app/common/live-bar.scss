@@ -11,10 +11,10 @@
 
 	.live-bar-item-stacked {
 		border: 1px solid rgba(10, 10, 10, 0.05);
-		align-items:     center;
+		align-items:     centre;
 		display:         flex;
 		flex:            0 0 auto;
-		flex-direction:  column;
+		// flex-direction:  column;
 		justify-content: center;
 		padding:         0.5rem 0.5rem 0;
 
@@ -23,7 +23,8 @@
 			overflow:      hidden;
 			text-overflow: ellipsis;
 			white-space:   nowrap;
-			width:         8em;
+			min-width:         8em;
+			max-width: 90%;
 
 			.song-key {
 				margin-right: 0.5em;
