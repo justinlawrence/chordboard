@@ -10,8 +10,8 @@
 	}
 
 	.live-bar-item-stacked {
-		border: 1px solid rgba(10, 10, 10, 0.05);
-		align-items:     centre;
+		border:          1px solid rgba(10, 10, 10, 0.05);
+		align-items:     center;
 		display:         flex;
 		flex:            0 0 auto;
 		flex-direction:  row;
@@ -23,8 +23,8 @@
 			overflow:      hidden;
 			text-overflow: ellipsis;
 			white-space:   nowrap;
-			min-width:         8em;
-			max-width: 90%;
+			min-width:     8em;
+			max-width:     90%;
 
 			.song-key {
 				margin-right: 0.5em;
@@ -36,9 +36,16 @@
 		}
 	}
 
-	.live-bar__section-link {
+	&__sections {
+		align-items: center;
+		display:     flex;
+		flex:        1 1 0;
+		overflow-x:  auto;
+	}
+
+	&__section-link {
 		border:   0 !important;
-		margin:   0 .5em 0 0 !important;
+		margin:   0 .25em 0 0 !important;
 		padding:  0 !important;
 		position: relative !important;
 		width:    3em !important;
@@ -54,4 +61,21 @@
 		}
 	}
 
+	&__navigation-actions {
+		align-items: center;
+		display:     flex;
+		flex-wrap:   nowrap;
+		padding:     0 .25em;
+
+		&__item {
+			background-color: #eee;
+			border-radius:    .25em;
+			color:            black;
+			padding:          .5em;
+
+			& + & {
+				margin-left: .25em;
+			}
+		}
+	}
 }

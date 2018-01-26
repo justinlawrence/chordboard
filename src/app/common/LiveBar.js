@@ -146,65 +146,57 @@ class LiveBar extends PreactComponent {
 		const match = matchPath( location.pathname, { path: '/sets/:setId/songs/:songsId' } );
 
 		return show ? (
-			<nav className="level live-bar no-print">
+			<nav className="live-bar no-print">
 
-				<div className="level-left">
+				<div className="live-bar__sections">
 
-						{sections.map( section => (
-							<div className="level-item">
-								<a
-									href={`#section-${section.index}`}
-									className="live-bar__section-link song-viewer__section"
-									data-section={section.text}
-								/>
-							</div>
-						) )}
-						{/* JL: hide the close icon to make room for more song structure.
+					{sections.map( section => (
+						<a
+							href={`#section-${section.index}`}
+							className="live-bar__section-link song-viewer__section"
+							data-section={section.text}
+						/>
+					) )}
+					{/* JL: hide the close icon to make room for more song structure.
 							<a className="navbar-item" onClick={onExitLiveMode}>
 							<span className="icon"><i className="fa fa-close"/></span>
 						</a> */}
 
-						<div className="level-item">
-							<Link className="navbar-item" to={`/sets/${this.props.match.params.setId}`} title="Setlist">
-								<span className="icon"><i className="fa fa-list-ul"/></span>
-							</Link>
-						</div>
+				</div>
 
-					</div>
+				<Link
+					className="navbar-item"
+					to={`/sets/${this.props.match.params.setId}`}
+				    title="Setlist">
+					<span className="icon"><i className="fa fa-list-ul"/></span>
+				</Link>
 
+				<div className="live-bar__navigation-actions">
+					<a className="live-bar__navigation-actions__item"
+					   onClick={onGoToPreviousSong}>
 
-					<div className="level-right">
+						<span className="icon"><i className="fa fa-angle-left fa-lg"/></span>
 
-						<div className="level-item">
-							<a className="navbar-item live-bar-item-stacked" onClick={onGoToPreviousSong}>
+						{previousSongTitle && (
+							<p className="is-size-7 is-hidden-touch">
+								<SongKey value={previousSongKey}/>
+								{previousSongTitle}
+							</p>
+						)}
 
-								<span className="icon"><i className="fa fa-angle-left fa-lg"/></span>
+					</a>
+					<a className="live-bar__navigation-actions__item" onClick={onGoToNextSong}>
 
-								{previousSongTitle && (
-									<p className="is-size-7">
-										<SongKey value={previousSongKey}/>
-										{previousSongTitle}
-									</p>
-								)}
+						<span className="icon"><i className="fa fa-angle-right fa-lg"/></span>
 
-							</a>
-						</div>
-
-						<div className="level-item">
-							<a className="navbar-item live-bar-item-stacked" onClick={onGoToNextSong}>
-
-								<span className="icon"><i className="fa fa-angle-right fa-lg"/></span>
-
-								{nextSongTitle && (
-									<p className="is-size-7">
-										<SongKey value={nextSongKey}/>
-										{nextSongTitle}
-									</p>
-								)}
-							</a>
-						</div>
-
-					</div>
+						{nextSongTitle && (
+							<p className="is-size-7 is-hidden-touch">
+								<SongKey value={nextSongKey}/>
+								{nextSongTitle}
+							</p>
+						)}
+					</a>
+				</div>
 
 			</nav>
 		) : null;
