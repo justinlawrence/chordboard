@@ -175,10 +175,9 @@ class LiveBar extends PreactComponent {
 					<a className="live-bar__navigation-actions__item"
 					   onClick={onGoToPreviousSong}>
 
-						<span className="icon"><i className="fa fa-angle-left fa-lg"/></span>
-
 						{previousSongTitle && (
-							<p className="is-size-7 is-hidden-touch">
+							<p className="is-size-7">
+								<span className="icon"><i className="fa fa-angle-left fa-lg"/></span>
 								<SongKey value={previousSongKey}/>
 								{previousSongTitle}
 							</p>
@@ -187,10 +186,9 @@ class LiveBar extends PreactComponent {
 					</a>
 					<a className="live-bar__navigation-actions__item" onClick={onGoToNextSong}>
 
-						<span className="icon"><i className="fa fa-angle-right fa-lg"/></span>
-
 						{nextSongTitle && (
-							<p className="is-size-7 is-hidden-touch">
+							<p className="is-size-7">
+								<span className="icon"><i className="fa fa-angle-right fa-lg"/></span>
 								<SongKey value={nextSongKey}/>
 								{nextSongTitle}
 							</p>
