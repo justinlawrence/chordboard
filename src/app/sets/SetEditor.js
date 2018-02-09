@@ -1,4 +1,5 @@
-import {connect} from 'preact-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import slugify from 'slugify';
 import PouchDB from 'pouchdb';
 import PouchDBFindPlugin from 'pouchdb-find';
@@ -13,7 +14,7 @@ db.createIndex( {
 	index: { fields: [ 'type', 'slug' ] }
 } );
 
-class SetEditor extends PreactComponent {
+class SetEditor extends Component {
 	state = {
 		title: ''
 	};
@@ -50,29 +51,29 @@ class SetEditor extends PreactComponent {
 
 	render( {}, { title } ) {
 		return (
-			<section class="section">
-				<div class="container">
-					<div class="columns">
-						<div class="column is-three-quarters">
-							<div class="field">
-								<p class="control has-icons-left">
+			<section className="section">
+				<div className="container">
+					<div className="columns">
+						<div className="column is-three-quarters">
+							<div className="field">
+								<p className="control has-icons-left">
 
 									<input
 										type="text"
-										class="input"
+										className="input"
 										onInput={this.onTitleInput}
 										placeholder="Title"
 										value={title}/>
 
-									<span class="icon is-small is-left">
-						                <i class="fa fa-chevron-right"></i>
+									<span className="icon is-small is-left">
+						                <i className="fa fa-chevron-right"></i>
 						            </span>
 
 								</p>
 							</div>
 						</div>
-						<div class="column">
-							<a class="button is-primary"
+						<div className="column">
+							<a className="button is-primary"
 							   onClick={this.onSaveSet}>Save</a>
 						</div>
 					</div>

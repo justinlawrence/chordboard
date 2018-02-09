@@ -1,11 +1,12 @@
-import {Route} from 'react-router-dom';
+import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
 
-import {Sets, db, sync} from '../common/database';
+import { Sets, db, sync } from '../common/database';
 import SetEditor from './SetEditor';
 import SetList from './SetList';
 import SetContainer from './SetContainer';
 
-class SetListContainer extends PreactComponent {
+class SetListContainer extends Component {
 	state = {
 		setList: []
 	};
@@ -24,11 +25,14 @@ class SetListContainer extends PreactComponent {
 
 	updateListOfSets = () => Sets.getAll().then( setList => this.setState( { setList } ) );
 
-	render( props, { setList } ) {
+	render() {
+		const { setFocusedSet } = this.props;
+		const { setList } = this.state;
+
 		return (
 			<div>
 				<Route exact path="/sets" render={props => (
-					<SetList sets={setList} {...props}/>
+					<SetList setFocusedSet={setFocusedSet} sets={setList} {...props}/>
 				)}/>
 				<Route exact path="/sets/new" component={SetEditor}/>
 				<Route path="/sets/:id" render={props => (

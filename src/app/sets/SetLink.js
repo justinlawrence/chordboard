@@ -1,10 +1,9 @@
+import React, {Component} from 'react';
 import {Link, Route} from 'react-router-dom';
 
-class SetLink extends PreactComponent {
+class SetLink extends Component {
 	handleClick = () => {
-
-		this.context.setFocusedSet( this.props.set );
-
+		this.props.setFocusedSet( this.props.set );
 	};
 
 	render( { children, set } ) {

@@ -1,7 +1,8 @@
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import cx from 'classnames';
 
-import {Sets, sync} from 'app/common/database';
+import { Sets, sync } from 'app/common/database';
 import Song from 'app/common/Song';
 import KeySelector from 'app/common/KeySelector';
 import getKeyDiff from 'app/common/getKeyDiff';
@@ -11,7 +12,7 @@ import ChordPair from "./lines/ChordPair.js";
 import Line from "./lines/Line.js";
 import './SongViewer.scss';
 
-class SongViewer extends PreactComponent {
+class SongViewer extends Component {
 	state = {
 		isSetListDropdownVisible: false,
 		setList:                  [],
@@ -98,7 +99,9 @@ class SongViewer extends PreactComponent {
 
 	updateListOfSets = () => Sets.getAll().then( setList => this.setState( { setList } ) );
 
-	render( props, { isSetListDropdownVisible, setList, song } ) {
+	render() {
+
+		const { isSetListDropdownVisible, setList, song } = this.state;
 
 		let sections = [];
 
@@ -189,6 +192,7 @@ class SongViewer extends PreactComponent {
 														<div className="dropdown-content">
 															{setList.map( set => (
 																<a className="dropdown-item"
+																   key={set._id}
 																   onClick={() => this.addToSet( set )}>
 																	{set.title}
 																</a>
@@ -240,20 +244,20 @@ export function parseSong( song, sections ) {
 		switch ( lines[ i ].type ) {
 
 			case 'chord-line':
-				children.push( <ChordLine chords={line.chords}/> );
+				children.push( <ChordLine key={i} chords={line.chords}/> );
 				break;
 
 			case 'chord-pair':
 				children.push(
-					<ChordPair chords={line.chords} text={line.text}/> );
+					<ChordPair key={i} chords={line.chords} text={line.text}/> );
 				break;
 
 			case 'empty':
-				children.push( <div className="empty-line"/> );
+				children.push( <div key={i} className="empty-line"/> );
 				break;
 
 			case 'line':
-				children.push( <Line text={line.text}/> );
+				children.push( <Line key={i} text={line.text}/> );
 				break;
 
 			case 'section':
@@ -264,6 +268,7 @@ export function parseSong( song, sections ) {
 					result.push(
 						<section
 							id={`section-${sectionIndex}`}
+							key={`section-${sectionIndex}`}
 							className="song-viewer__section"
 							data-section={section}
 						>{children}</section>
@@ -293,6 +298,7 @@ export function parseSong( song, sections ) {
 	if ( section ) {
 
 		result.push( <section id={`section-${sectionIndex}`}
+		                      key={`section-${sectionIndex}`}
 		                      className="song-viewer__section"
 		                      data-section={section}>{children}</section> );
 

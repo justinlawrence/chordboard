@@ -1,3 +1,4 @@
+import React, {Component} from 'react';
 import {find, findIndex} from 'lodash';
 import {Link, matchPath, withRouter} from 'react-router-dom';
 
@@ -7,7 +8,7 @@ import Song from 'app/common/Song.js';
 
 import './live-bar.scss';
 
-class LiveBar extends PreactComponent {
+class LiveBar extends Component {
 	state = {
 		nextSongKey:       '',
 		nextSongTitle:     '',

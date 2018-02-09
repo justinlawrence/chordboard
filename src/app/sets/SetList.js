@@ -1,9 +1,10 @@
+import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import SetLink from './SetLink';
 
 import './SetList.scss';
 
-class SetList extends PreactComponent {
+class SetList extends Component {
 	state = {
 		searchText: ''
 	};
@@ -29,7 +30,7 @@ class SetList extends PreactComponent {
 
 	};
 
-	render( { sets = [] }, { searchText } ) {
+	render( { setFocusedSet, sets = [] }, { searchText } ) {
 
 		return (
 			<section className="section">
@@ -57,7 +58,7 @@ class SetList extends PreactComponent {
 								</p>
 
 								<p className="control">
-									<Link to="/sets/new" class="button is-primary">
+									<Link to="/sets/new" className="button is-primary">
 										New set
 									</Link>
 								</p>
@@ -74,7 +75,7 @@ class SetList extends PreactComponent {
 											{set.author}
 										</td>
 										<td>
-											<SetLink set={set}>
+											<SetLink setFocusedSet={setFocusedSet} set={set}>
 												{set.title}
 											</SetLink>
 										</td>

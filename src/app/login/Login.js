@@ -1,11 +1,12 @@
-import {connect} from 'preact-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 
 import {setUser} from 'app/actions/user';
 
 import './login.scss';
 
-class Login extends PreactComponent {
+class Login extends Component {
 	state = {
 		name: ''
 	};

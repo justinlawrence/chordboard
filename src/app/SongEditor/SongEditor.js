@@ -1,3 +1,4 @@
+import React, {Component} from 'react';
 import {isNil} from 'lodash';
 import {Link} from 'react-router-dom';
 import slugify from 'slugify';
@@ -8,7 +9,7 @@ import Song from '../common/Song.js';
 import chordproParser from 'app/parsers/chordpro-parser.js';
 import '../SongEditor/SongEditor.scss';
 
-class SongEditor extends PreactComponent {
+class SongEditor extends Component {
 	state = {
 		author:     '',
 		isLoading:  false,
@@ -222,64 +223,64 @@ class SongEditor extends PreactComponent {
 
 
 		return (
-			<section class="section">
-				<div class="container">
-					<div class="columns">
-						<div class="column is-three-quarters">
+			<section className="section">
+				<div className="container">
+					<div className="columns">
+						<div className="column is-three-quarters">
 
-							<div class="field">
+							<div className="field">
 
-								<p class="control has-icons-left">
+								<p className="control has-icons-left">
 									<input
 										type="text"
-										class="input"
+										className="input"
 										onInput={this.onTitleInput}
 										placeholder="Title"
 										value={title}/>
 
-									<span class="icon is-small is-left">
-						                <i class="fa fa-chevron-right"></i>
+									<span className="icon is-small is-left">
+						                <i className="fa fa-chevron-right"></i>
 						            </span>
 
 								</p>
 							</div>
 
-							<div class="field">
+							<div className="field">
 
-								<p class="control has-icons-left">
+								<p className="control has-icons-left">
 									<input
 										type="text"
-										class="input"
+										className="input"
 										onInput={this.onAuthorInput}
 										placeholder="Author"
 										value={author}/>
 
-									<span class="icon is-small is-left">
-					      		<i class="fa fa-chevron-right"></i>
+									<span className="icon is-small is-left">
+					      		<i className="fa fa-chevron-right"></i>
 					    		</span>
 								</p>
 
 							</div>
 
-							<div class="field">
+							<div className="field">
 
-								<p class="control has-icons-left">
+								<p className="control has-icons-left">
 									<input
 										type="text"
-										class="input"
+										className="input"
 										onInput={this.onKeyInput}
 										placeholder="Key"
 										value={key}/>
 
-									<span class="icon is-small is-left">
-					      		<i class="fa fa-chevron-right"></i>
+									<span className="icon is-small is-left">
+					      		<i className="fa fa-chevron-right"></i>
 					    		</span>
 								</p>
 
 							</div>
 
-							<div class="field has-addons has-addons-right">
-								<p class="control">
+							<div className="field has-addons has-addons-right">
+								<p className="control">
 									<select
 										onChange={this.handleParserChange}
 										value={this.state.parserType}
@@ -292,11 +293,11 @@ class SongEditor extends PreactComponent {
 								</p>
 							</div>
 
-							<div class="field">
+							<div className="field">
 
-								<p class="control">
+								<p className="control">
 									<textarea
-										class="textarea song-editor__content"
+										className="textarea song-editor__content"
 										onInput={this.onContentInput}
 										placeholder="Type words and chords here."
 										rows="25"
@@ -309,35 +310,35 @@ class SongEditor extends PreactComponent {
 
 						</div>
 
-						<div class="column">
+						<div className="column">
 
-							<div class="level-left">
-								<div class="level-item">
+							<div className="level-left">
+								<div className="level-item">
 
-									<a class="button is-outlined" onClick={this.onDeleteSong}>
-											 <span class="icon is-small is-left">
-												 <i class="fa fa-trash"></i>
+									<a className="button is-outlined" onClick={this.onDeleteSong}>
+											 <span className="icon is-small is-left">
+												 <i className="fa fa-trash"></i>
 											</span>
 									</a>
 								</div>
-								<div class="level-item">
+								<div className="level-item">
 
-									<a class="button is-primary"
+									<a className="button is-primary"
 									   onClick={this.onSaveSong}>Save</a>
 
 								</div>
 							</div>
 
-							<div class="song-editor__preview">
+							<div className="song-editor__preview">
 
-								<h1 class="title">
+								<h1 className="title">
 									{title}
 								</h1>
-								<h2 class="subtitle">
+								<h2 className="subtitle">
 									{author}
 								</h2>
 
-								<div class="song-editor__preview-content">
+								<div className="song-editor__preview-content">
 									{previewSong}
 								</div>
 

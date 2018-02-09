@@ -1,6 +1,8 @@
+import React, { Component } from 'react';
+
 import getKeyDiff from 'app/common/getKeyDiff';
 
-class KeySelector extends PreactComponent {
+class KeySelector extends Component {
 	handleChange = event => {
 		if ( this.props.onSelect ) {
 			this.props.onSelect( event.target.value,

@@ -1,3 +1,4 @@
+const path = require( 'path' );
 const config = require( './../package.json' ).config;
 const webpackMerge = require( 'webpack-merge' );
 const commonConfig = require( './webpack.base.js' );
@@ -22,17 +23,15 @@ module.exports = function ( env ) {
 				{
 					test: /\.scss$/,
 					use:  [
-						'style-loader?sourceMap',
+						'style-loader',
 						'css-loader?importLoaders=1&sourceMap',
 						{
 							loader:  'postcss-loader',
 							options: {
-								sourceMap: 'inline',
-								plugins:   function () {
-									return [
-										require( 'autoprefixer' )
-									];
-								}
+								config:    {
+									path: path.resolve( 'postcss.config.js' )
+								},
+								sourceMap: true,
 							}
 						},
 						'sass-loader?sourceMap'

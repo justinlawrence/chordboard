@@ -25,7 +25,7 @@ const ChordPair = ( { chords, text } ) => {
 	} );
 
 	return (
-		<div class="chord-pair">{children}</div>
+		<div className="chord-pair">{children}</div>
 	);
 
 };

@@ -1,5 +1,4 @@
 const path = require( 'path' );
-const webpack = require( 'webpack' );
 const CopyWebpackPlugin = require( "copy-webpack-plugin" );
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
 
@@ -12,11 +11,7 @@ module.exports = function () {
 			modules: [
 				path.resolve( "src" ),
 				"node_modules"
-			],
-			alias:   {
-				'react':     'preact-compat',
-				'react-dom': 'preact-compat'
-			}
+			]
 		},
 		output:  {
 			path:              path.resolve( 'build' ),
@@ -59,10 +54,6 @@ module.exports = function () {
 				chunkSortMode: 'dependency',
 				filename:      'index.html',
 				template:      'src/index.html'
-			} ),
-			new webpack.ProvidePlugin( {
-				PreactComponent: path.resolve( 'src/globals/component.js' ),
-				jsx:             path.resolve( 'src/globals/jsx.js' )
 			} )
 		]
 	};

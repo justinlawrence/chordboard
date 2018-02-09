@@ -1,3 +1,4 @@
+import React from 'react';
 import './song-key.scss';
 
 const SongKey = ( { value } ) => (

@@ -1,3 +1,4 @@
+import React, {Component} from 'react';
 import {find, findIndex} from 'lodash'
 import {Link} from 'react-router-dom';
 
@@ -5,7 +6,7 @@ import KeySelector from 'app/common/KeySelector';
 
 import './SetViewer.scss';
 
-class SetViewer extends PreactComponent {
+class SetViewer extends Component {
 	state = {
 		isLoading: false,
 		mode:      ''

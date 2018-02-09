@@ -22,13 +22,13 @@ export default ( { chords } ) => {
 		}
 
 		children.push(
-			<span class="text-line" data-content={chords[ index ]}>
+			<span className="text-line" data-content={chords[ index ]}>
 				{chords[ index ]}
 			</span>
 		);
 
 	} );
 
-	return <div class="chord-line">{ children }</div>;
+	return <div className="chord-line">{ children }</div>;
 
 };

@@ -1,3 +1,4 @@
+import React, {Component} from 'react';
 import {find, findIndex, remove, sortBy} from 'lodash';
 import {Link, Route} from 'react-router-dom';
 
@@ -7,7 +8,7 @@ import transposeChord from '../common/transpose-chord';
 
 import SetViewer from './SetViewer';
 
-class SetContainer extends PreactComponent {
+class SetContainer extends Component {
 	state = {
 		set:   null,
 		songs: []
@@ -128,8 +129,9 @@ class SetContainer extends PreactComponent {
 
 	};
 
-	render( props, { set, songs } ) {
+	render() {
 
+		const { set, songs } = this.state;
 		const orderedSongs = sortBy( songs, song => findIndex( set.songs, { _id: song._id } ) );
 
 		return (

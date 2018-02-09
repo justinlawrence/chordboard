@@ -1,8 +1,9 @@
-import {db, sync} from '../common/database';
+import React, { Component } from 'react';
+import { db, sync } from '../common/database';
 
 import SongViewer from '../SongViewer/SongViewer';
 
-class SongContainer extends PreactComponent {
+class SongContainer extends Component {
 	state = {
 		song: null
 	};
@@ -24,7 +25,10 @@ class SongContainer extends PreactComponent {
 
 	};
 
-	render( { currentKey }, { song } ) {
+	render() {
+
+		const { currentKey } = this.props;
+		const { song } = this.state;
 
 		return song && (
 			<SongViewer currentKey={currentKey} song={song}/>

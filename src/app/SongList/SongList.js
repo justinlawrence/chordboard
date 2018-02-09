@@ -1,10 +1,11 @@
+import React, {Component} from 'react';
 import {uniqBy} from 'lodash';
 
 import {db} from 'app/common/database';
 
 import './SongList.scss';
 
-class SongList extends PreactComponent {
+class SongList extends Component {
 	state = {
 		searchText: ''
 	};
@@ -78,40 +79,40 @@ class SongList extends PreactComponent {
 		const isAddToSet = /\/add-to-set\//.test( window.location.href );
 
 		return (
-			<section class="section">
-				<div class="container">
-					<div class="columns">
+			<section className="section">
+				<div className="container">
+					<div className="columns">
 
-						<div class="column is-three-quarters">
+						<div className="column is-three-quarters">
 
 
-							<div class="field has-addons has-addons-right">
+							<div className="field has-addons has-addons-right">
 
-								<p class="control has-icons-left">
+								<p className="control has-icons-left">
 									<input
 										type="text"
-										class="input"
+										className="input"
 										onInput={this.handleSearchInput}
 										placeholder="Titles, words, authors"
 										value={searchText}/>
 
-									<span class="icon is-small is-left">
-					                <i class="fa fa-search"></i>
+									<span className="icon is-small is-left">
+					                <i className="fa fa-search"></i>
 					            </span>
 								</p>
-								<p class="control">
+								<p className="control">
 									&nbsp;
 								</p>
 
-								<p class="control">
-									<a href="/songs/new" class="button is-primary">
+								<p className="control">
+									<a href="/songs/new" className="button is-primary">
 										New song
 									</a>
 								</p>
 
 							</div>
 
-							<table class="table is-bordered is-striped is-fullwidth">
+							<table className="table is-bordered is-striped is-fullwidth">
 
 								<tbody>
 
@@ -122,25 +123,25 @@ class SongList extends PreactComponent {
 											<td>
 
 												<a href={`/songs/${song._id}`}>{song.title}</a>
-												<span class="help">
+												<span className="help">
 														{song.author}
 													</span>
 
 											</td>
 
 											<td>
-												<span class="help">
+												<span className="help">
 													{song.key}
 												</span>
 											</td>
 
 											{isAddToSet &&
 											<td>
-												<button class="button is-primary is-outlined"
+												<button className="button is-primary is-outlined"
 												        onClick={() => this.addToSet( song )}>
 													<span>Add to set</span>
-													<span class="icon is-small">
-														<i class="fa fa-chevron-right"></i>
+													<span className="icon is-small">
+														<i className="fa fa-chevron-right"></i>
 												    </span>
 												</button>
 											</td>

@@ -1,12 +1,13 @@
+import React, {Component} from 'react';
 import {Link, Route, Switch, withRouter} from 'react-router-dom';
-import {connect} from 'preact-redux'
+import {connect} from 'react-redux'
 import cx from 'classnames';
 
 import SyncStatus from 'app/common/SyncStatus';
 
 import './navbar.scss';
 
-class Navbar extends PreactComponent {
+class Navbar extends Component {
 	state = {
 		isMenuVisible: false
 	};
@@ -34,7 +35,7 @@ class Navbar extends PreactComponent {
 			<nav className="navbar no-print">
 				<div className="container">
 					<div className="navbar-brand">
-						<Link class="navbar-item" to='/'>
+						<Link className="navbar-item" to='/'>
 							<img src="/assets/chordboard-logo-long.png"
 							     alt="Chordboard: a chord manager for live musicians"
 							     width="142"/>
@@ -50,12 +51,12 @@ class Navbar extends PreactComponent {
 					<div className={cx( 'navbar-menu', { 'is-active': isMenuVisible } )}>
 						<div className="navbar-start">
 
-							<Link class="navbar-item" to="/sets">Sets</Link>
-							<Link class="navbar-item" to="/songs">Songs</Link>
+							<Link className="navbar-item" to="/sets">Sets</Link>
+							<Link className="navbar-item" to="/songs">Songs</Link>
 
 							{focusedSet && (
 								<Link
-									class="navbar-item"
+									className="navbar-item"
 									to={`/sets/${focusedSet._id}`}
 								>Live</Link>
 							)}

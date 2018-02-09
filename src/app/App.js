@@ -1,6 +1,7 @@
-import {findIndex} from 'lodash';
-import {connect} from 'preact-redux';
-import {Redirect, Route, Switch, matchPath, withRouter} from 'react-router-dom';
+import React, { Component } from 'react';
+import { findIndex } from 'lodash';
+import { connect } from 'react-redux';
+import { Redirect, Route, Switch, matchPath, withRouter } from 'react-router-dom';
 
 import LiveBar from './common/LiveBar';
 import Login from './login/Login';
@@ -10,10 +11,10 @@ import SongEditor from './SongEditor/SongEditor';
 import SongContainer from './songs/SongContainer';
 import SetListContainer from './sets/SetListContainer';
 
-import {db, sync} from './common/database';
+import { db, sync } from './common/database';
 import './app.scss';
 
-class App extends PreactComponent {
+class App extends Component {
 	state = {
 		focusedSet: null,
 		setList:    [],
@@ -43,10 +44,6 @@ class App extends PreactComponent {
 		} );
 
 	}
-
-	getChildContext = () => ({
-		setFocusedSet: this.setFocusedSet
-	});
 
 	exitLiveMode = () => {
 		this.setFocusedSet( null );
@@ -101,7 +98,10 @@ class App extends PreactComponent {
 
 	};
 
-	render( { user }, { focusedSet, songList } ) {
+	render() {
+
+		const { user } = this.props;
+		const { focusedSet, songList } = this.props;
 
 		return (
 			<div className="app">
@@ -131,7 +131,9 @@ class App extends PreactComponent {
 							<SongContainer id={match.params.id}/>
 						)}/>
 
-						<Route path="/sets" component={SetListContainer}/>
+						<Route path="/sets" render={props => (
+							<SetListContainer setFocusedSet={this.setFocusedSet}/>
+						)}/>
 
 						<Redirect to="/sets"/>
 

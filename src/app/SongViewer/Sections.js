@@ -1,4 +1,4 @@
-import {h} from "preact";
+import React from 'react';
 
 export default ( { onClick, sections } ) => {
 
@@ -15,12 +15,12 @@ export default ( { onClick, sections } ) => {
 		);
 
 		if ( index < sections.length - 1 ) {
-			children.push( <span class="separator">&nbsp;</span> );
+			children.push( <span className="separator">&nbsp;</span> );
 		}
 
 
 	} );
 
-	return <div class="level-item">{ children }</div>;
+	return <div className="level-item">{ children }</div>;
 
 };
