@@ -153,6 +153,7 @@ class LiveBar extends Component {
 
 					{sections.map( section => (
 						<a
+							key={`section-${section.index}`}
 							href={`#section-${section.index}`}
 							className="live-bar__section-link song-viewer__section"
 							data-section={section.text}
@@ -179,10 +180,10 @@ class LiveBar extends Component {
 						<span className="icon"><i className="fa fa-angle-left fa-lg"/></span>
 
 						{previousSongTitle && (
-							<p className="is-size-7 is-hidden-touch">
+							<div className="is-size-7 is-hidden-touch">
 								<SongKey value={previousSongKey}/>
 								{previousSongTitle}
-							</p>
+							</div>
 						)}
 
 					</a>
@@ -191,10 +192,10 @@ class LiveBar extends Component {
 						<span className="icon"><i className="fa fa-angle-right fa-lg"/></span>
 
 						{nextSongTitle && (
-							<p className="is-size-7 is-hidden-touch">
+							<div className="is-size-7 is-hidden-touch">
 								<SongKey value={nextSongKey}/>
 								{nextSongTitle}
-							</p>
+							</div>
 						)}
 					</a>
 				</div>

@@ -73,7 +73,10 @@ class SongList extends Component {
 
 	};
 
-	render( { songs }, { searchText } ) {
+	render() {
+
+		const { songs } = this.props;
+		const { searchText } = this.state;
 
 		//const isAddToSet = /\/add-to-set\//.test( path );
 		const isAddToSet = /\/add-to-set\//.test( window.location.href );

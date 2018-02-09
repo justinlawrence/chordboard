@@ -10,7 +10,8 @@ class KeySelector extends Component {
 		}
 	};
 
-	render( { value } ) {
+	render() {
+		const { value } = this.props;
 
 		return (
 			<div className="control is-primary">

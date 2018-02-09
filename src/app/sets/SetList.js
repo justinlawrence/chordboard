@@ -30,7 +30,10 @@ class SetList extends Component {
 
 	};
 
-	render( { setFocusedSet, sets = [] }, { searchText } ) {
+	render() {
+
+		const { setFocusedSet, sets = [] } = this.props;
+		const { searchText } = this.state;
 
 		return (
 			<section className="section">
@@ -70,7 +73,8 @@ class SetList extends Component {
 								<tbody>
 
 								{sets.filter( this.filterSets ).map( set => (
-									<tr>
+
+									<tr key={set._id}>
 										<td>
 											{set.author}
 										</td>

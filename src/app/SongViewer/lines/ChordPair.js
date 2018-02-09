@@ -1,3 +1,4 @@
+import React from 'react';
 import {range} from "lodash";
 import cx from 'classnames';
 
@@ -11,7 +12,7 @@ const ChordPair = ( { chords, text } ) => {
 		let slice = text.slice( index, nextIndex );
 
 		children.push(
-			<span
+			<span key={i}
 				className={cx(
 					'text-line',
 					{ 'text-line_empty': !slice.trim() }

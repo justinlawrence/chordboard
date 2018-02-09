@@ -209,7 +209,9 @@ class SongEditor extends Component {
 
 	};
 
-	render( {}, { author, title, key, content, parserType, song } ) {
+	render() {
+
+		const { author, title, key, content, parserType, song } = this.state;
 
 		const songCopy = Object.assign( {}, song );
 
@@ -300,9 +302,9 @@ class SongEditor extends Component {
 										className="textarea song-editor__content"
 										onInput={this.onContentInput}
 										placeholder="Type words and chords here."
+										value={content}
 										rows="25"
-									>
-										{content}
+									>										
 									</textarea>
 								</p>
 

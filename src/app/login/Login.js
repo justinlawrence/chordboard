@@ -30,7 +30,11 @@ class Login extends Component {
 
 	};
 
-	render( props, { name } ) {
+	render() {
+
+		 const props = this.props;
+		 const { name } = this.state;
+
 		return (
 			<div>
 				<section className="hero is-dark">

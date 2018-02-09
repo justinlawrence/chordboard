@@ -66,7 +66,10 @@ class SetViewer extends Component {
 	transposeDown = song => { this.changeKey( song._id, -1 ); };
 	transposeUp = song => { this.changeKey( song._id, 1 ); };
 
-	render( { set, songs }, { mode } ) {
+	render() {
+
+		const { set, songs } = this.props;
+		const { mode } = this.state;
 
 		return set && (
 			<div className="set-viewer">
@@ -151,16 +154,17 @@ class SetViewer extends Component {
 							{songs.length ?
 								songs.map( this._createRow )
 								:
-								<div>
-									<p className="subtitle">This set has no songs</p>
+								<tr>
+									<td>
+										<p className="subtitle">This set has no songs</p>
 
-									<a className="button is-primary"
-									   href={`/songs/add-to-set/${set._id}`}>
-										Add songs
-									</a>
+										<a className="button is-primary"
+										   href={`/songs/add-to-set/${set._id}`}>
+											Add songs
+										</a>
+									</td>
 
-
-								</div>
+								</tr>
 							}
 							</tbody>
 
@@ -182,7 +186,7 @@ class SetViewer extends Component {
 		const key = setSong ? setSong.key : song.key;
 
 		return (
-			<tr>
+			<tr key={song._id}>
 				<td>
 					<p className="title is-4">
 					<Link to={`/sets/${set._id}/songs/${song._id}`}>

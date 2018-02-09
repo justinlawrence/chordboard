@@ -128,7 +128,8 @@ class SongViewer extends Component {
 										{/*<a className="button">Key of {song.key}</a>*/}
 
 										<div className="field has-addons">
-											<p className="control">
+
+											<div className="control">
 
 												<a className="button" onClick={this.transposeDown}
 												   title="transpose down">
@@ -137,34 +138,34 @@ class SongViewer extends Component {
 														</span>
 												</a>
 
-											</p>
-											<p className="control">
+											</div>
+											<div className="control">
 
 												<KeySelector
 													onSelect={( key, amount ) =>
 														this.changeKey( amount )}
 													value={song.key}/>
-											</p>
+											</div>
 
-											<p className="control">
+											<div className="control">
 												<a className="button" onClick={this.transposeUp}
 												   title="transpose up">
 														<span className="icon is-small">
 														 <i className="fa fa-plus"/>
 														</span>
 												</a>
-											</p>
+											</div>
 
-											<p className="control">
+											<div className="control">
 												<Link className="button"
 												      to={`/songs/${song._id}/edit`}>
 													<span className="icon is-small"><i
 														className="fa fa-pencil"/></span>
 													<span>Edit Song</span>
 												</Link>
-											</p>
+											</div>
 
-											<p className="control">
+											<div className="control">
 												<div className={cx(
 													'dropdown',
 													{ 'is-active': isSetListDropdownVisible }
@@ -200,7 +201,7 @@ class SongViewer extends Component {
 														</div>
 													</div>
 												</div>
-											</p>
+											</div>
 
 										</div>
 

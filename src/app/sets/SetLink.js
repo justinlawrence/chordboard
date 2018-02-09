@@ -6,7 +6,9 @@ class SetLink extends Component {
 		this.props.setFocusedSet( this.props.set );
 	};
 
-	render( { children, set } ) {
+	render() {
+
+		const { children, set } = this.props;
 
 		return (
 			<Link

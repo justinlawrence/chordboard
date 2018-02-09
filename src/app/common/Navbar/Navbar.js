@@ -62,11 +62,11 @@ class Navbar extends Component {
 							)}
 						</div>
 						<div className="navbar-end">
-							<p className="navbar-item">
+							<div className="navbar-item">
 								<SyncStatus
 									className="is-size-7 has-text-grey-light"
 									status={syncState}/>
-							</p>
+							</div>
 						</div>
 					</div>
 				</div>
