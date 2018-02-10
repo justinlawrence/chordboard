@@ -190,15 +190,7 @@ class SongViewer extends Component {
 													     onClick={this.setListDropdownHide}
 													     role="menu"
 													>
-														<div className="dropdown-content">
-															{setList.map( set => (
-																<a className="dropdown-item"
-																   key={set._id}
-																   onClick={() => this.addToSet( set )}>
-																	{set.title}
-																</a>
-															) )}
-														</div>
+														
 													</div>
 												</div>
 											</div>
@@ -245,7 +237,8 @@ export function parseSong( song, sections ) {
 		switch ( lines[ i ].type ) {
 
 			case 'chord-line':
-				children.push( <ChordLine key={i} chords={line.chords}/> );
+				children.push(
+					<ChordLine key={i} chords={line.chords}/> );
 				break;
 
 			case 'chord-pair':
@@ -254,11 +247,13 @@ export function parseSong( song, sections ) {
 				break;
 
 			case 'empty':
-				children.push( <div key={i} className="empty-line"/> );
+				children.push(
+					<div key={i} className="empty-line"/> );
 				break;
 
 			case 'line':
-				children.push( <Line key={i} text={line.text}/> );
+				children.push(
+					<Line key={i} text={line.text}/> );
 				break;
 
 			case 'section':
@@ -294,7 +289,7 @@ export function parseSong( song, sections ) {
 
 		}
 
-	}
+	} //end of loop through lines
 
 	if ( section ) {
 

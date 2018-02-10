@@ -78,6 +78,8 @@ class SongList extends Component {
 		const { songs } = this.props;
 		const { searchText } = this.state;
 
+
+
 		//const isAddToSet = /\/add-to-set\//.test( path );
 		const isAddToSet = /\/add-to-set\//.test( window.location.href );
 
@@ -118,10 +120,12 @@ class SongList extends Component {
 							<table className="table is-bordered is-striped is-fullwidth">
 
 								<tbody>
+									
+									{console.log("songs are", songs)}
 
 								{songs.filter( this.filterSongs ).map(
 									( song, i ) => (
-										<tr>
+										<tr key={song._id}>
 
 											<td>
 

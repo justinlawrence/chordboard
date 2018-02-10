@@ -101,7 +101,7 @@ class App extends Component {
 	render() {
 
 		const { user } = this.props;
-		const { focusedSet, songList } = this.props;
+		const { focusedSet, songList } = this.state;
 
 		return (
 			<div className="app">

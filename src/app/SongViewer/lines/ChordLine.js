@@ -1,3 +1,4 @@
+import React from 'react';
 import {range} from "lodash";
 
 export default ( { chords } ) => {
@@ -22,7 +23,7 @@ export default ( { chords } ) => {
 		}
 
 		children.push(
-			<span className="text-line" data-content={chords[ index ]}>
+			<span className="text-line" key={`chord-${i}`} data-content={chords[ index ]}>
 				{chords[ index ]}
 			</span>
 		);

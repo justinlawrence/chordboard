@@ -26,6 +26,7 @@ class SetListContainer extends Component {
 	updateListOfSets = () => Sets.getAll().then( setList => this.setState( { setList } ) );
 
 	render() {
+		
 		const { setFocusedSet } = this.props;
 		const { setList } = this.state;
 

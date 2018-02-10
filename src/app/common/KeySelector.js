@@ -11,6 +11,7 @@ class KeySelector extends Component {
 	};
 
 	render() {
+		
 		const { value } = this.props;
 
 		return (
