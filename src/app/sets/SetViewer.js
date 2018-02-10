@@ -69,7 +69,7 @@ class SetViewer extends Component {
 	render() {
 
 		const { set, songs } = this.props;
-		const { mode } = this.state;
+		const { mode, songCount } = this.state;
 
 		return set && (
 			<div className="set-viewer">
@@ -183,10 +183,16 @@ class SetViewer extends Component {
 		const { set } = this.props;
 		const { mode } = this.state;
 		const setSong = find( set.songs, s => s._id === song._id );
+		const songCount = findIndex( set.songs, s => s._id === song._id );
 		const key = setSong ? setSong.key : song.key;
 
 		return (
 			<tr key={song._id}>
+
+				<td className = "title is-4">
+						{songCount+1}
+				</td>
+
 				<td>
 					<p className="title is-4">
 					<Link to={`/sets/${set._id}/songs/${song._id}`}>
@@ -194,6 +200,7 @@ class SetViewer extends Component {
 					</Link>
 				</p>
 				</td>
+
 				<td>
 					<div className="field is-grouped">
 

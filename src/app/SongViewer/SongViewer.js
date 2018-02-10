@@ -190,6 +190,15 @@ class SongViewer extends Component {
 													     onClick={this.setListDropdownHide}
 													     role="menu"
 													>
+														<div className="dropdown-content">
+															{setList.map( set => (
+																<a className="dropdown-item"
+																   key={set._id}
+																   onClick={() => this.addToSet( set )}>
+																	{set.title}
+																</a>
+															) )}
+														</div>
 														
 													</div>
 												</div>
