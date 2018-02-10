@@ -187,18 +187,16 @@ class SetViewer extends Component {
 		const key = setSong ? setSong.key : song.key;
 
 		return (
-			<tr key={song._id}>
+			<tr key={songCount}>
 
 				<td className = "title is-4">
 						{songCount+1}
 				</td>
 
-				<td>
-					<p className="title is-4">
+				<td className="title is-4">
 					<Link to={`/sets/${set._id}/songs/${song._id}`}>
 						{song.title}
 					</Link>
-				</p>
 				</td>
 
 				<td>
@@ -236,6 +234,16 @@ class SetViewer extends Component {
 							onClick={() => this.onMoveSongUp( song._id )}
 							title="move this song up the list">
 							<span className="icon is-small is-left"><i className="fa fa-arrow-up"/></span>
+						</a>
+				</td>
+				)}
+				
+				{mode === 'edit' && (
+				<td>
+						<a
+							onClick={() => this.onMoveSongDown( song._id )}
+							title="move this song down the list">
+							<span className="icon is-small is-left"><i className="fa fa-arrow-down"/></span>
 						</a>
 				</td>
 				)}
