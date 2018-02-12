@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import {isNil} from 'lodash';
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react';
+import { isNil } from 'lodash';
+import { Link } from 'react-router-dom';
 import slugify from 'slugify';
 
-import {parseSong} from '../SongViewer/SongViewer.js';
-import {db} from '../common/database';
+import { parseSong } from '../SongViewer/SongViewer.js';
+import { db } from '../common/database';
 import Song from '../common/Song.js';
 import chordproParser from 'app/parsers/chordpro-parser.js';
 import '../SongEditor/SongEditor.scss';

@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {find, findIndex, remove, sortBy} from 'lodash';
-import {Link, Route} from 'react-router-dom';
+import React, { Component } from 'react';
+import { find, findIndex, remove, sortBy } from 'lodash';
+import { Link, Route } from 'react-router-dom';
 
-import {db} from '../common/database';
+import { db } from '../common/database';
 import SongContainer from '../songs/SongContainer';
 import transposeChord from '../common/transpose-chord';
 

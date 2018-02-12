@@ -63,8 +63,8 @@ class SetViewer extends Component {
 
 	};
 
-	transposeDown = song => { this.changeKey( song._id, -1 ); };
-	transposeUp = song => { this.changeKey( song._id, 1 ); };
+	transposeDown = song => this.changeKey( song._id, -1 );
+	transposeUp = song => this.changeKey( song._id, 1 );
 
 	render() {
 

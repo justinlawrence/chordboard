@@ -28,7 +28,7 @@ class SongViewer extends Component {
 		document.title = this.props.song.title;
 
 		// Listen for any changes on the database.
-		sync.on( "change", () => this.updateListOfSets() );
+		sync.on( "change", this.updateListOfSets.bind( this ) );
 
 		this.handleProps( this.props );
 
@@ -38,7 +38,9 @@ class SongViewer extends Component {
 		this.handleProps( nextProps );
 	}
 
-	addToSet = set => Sets.addSongToSet( set._id, this.props.song );
+	componentWillUnmount() {
+		sync.cancel();
+	}
 
 	handleProps = props => {
 
@@ -94,8 +96,8 @@ class SongViewer extends Component {
 	setListDropdownToggle = () => this.state.isSetListDropdownVisible ?
 		this.setListDropdownHide() : this.setListDropdownShow();
 
-	transposeDown = () => { this.changeKey( -1 ); };
-	transposeUp = () => { this.changeKey( 1 ); };
+	transposeDown = () => this.changeKey( -1 );
+	transposeUp = () => this.changeKey( 1 );
 
 	updateListOfSets = () => Sets.getAll().then( setList => this.setState( { setList } ) );
 
@@ -199,7 +201,7 @@ class SongViewer extends Component {
 																</a>
 															) )}
 														</div>
-														
+
 													</div>
 												</div>
 											</div>

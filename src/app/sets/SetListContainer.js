@@ -17,16 +17,18 @@ class SetListContainer extends Component {
 		this.updateListOfSets();
 
 		// Listen for any changes on the database.
-		sync.on( "change", () => {
-			this.updateListOfSets();
-		} );
+		sync.on( "change", this.updateListOfSets.bind( this ) );
 
+	}
+
+	componentWillUnmount() {
+		sync.cancel();
 	}
 
 	updateListOfSets = () => Sets.getAll().then( setList => this.setState( { setList } ) );
 
 	render() {
-		
+
 		const { setFocusedSet } = this.props;
 		const { setList } = this.state;
 
