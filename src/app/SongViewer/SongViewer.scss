@@ -94,8 +94,29 @@ $chord-gap: .75em;
 			}
 		}
 
+		&[data-section*="Chorus 2"] {
+			border-left: 4px solid #ff5252;
+
+			&:before {
+				content:          "CH 2";
+				background-color: #ff5252;
+			}
+		}
+
+		&[data-section*="Chorus 3"] {
+			border-left: 4px solid #ff5252;
+
+			&:before {
+				content:          "CH 3";
+				background-color: #ff5252;
+			}
+		}
+
+
 		&[data-section*="Pre-chorus"],
+		&[data-section*="Pre-Chorus"],
 		&[data-section*="Pre chorus"],
+		&[data-section*="Pre Chorus"],
 		&[data-section*="Prechorus"] {
 			border-left: 4px solid #ff9800;
 
@@ -114,11 +135,12 @@ $chord-gap: .75em;
 			}
 		}
 
-		&[data-section*="Out"] {
+		&[data-section*="Out"],
+		&[data-section*="Outtro"] {
 			border-left: 4px solid #444;
 
 			&:before {
-				content:          "OU";
+				content:          "OUT";
 				background-color: #444;
 			}
 		}
@@ -128,7 +150,7 @@ $chord-gap: .75em;
 			border-left: 4px solid silver;
 
 			&:before {
-				content:          "IN";
+				content:          "INST";
 				background-color: silver;
 			}
 		}
@@ -141,6 +163,16 @@ $chord-gap: .75em;
 			}
 		}
 
+		&[data-section*="Tag"] {
+			border-left: 4px solid #444;
+
+			&:before {
+				background-color: #444;
+				content: "Tag";
+			}
+		}
+
+		&[data-section*="Verse"]:before { content: "V"; }
 		&[data-section*="Verse 1"]:before { content: "1"; }
 		&[data-section*="Verse 2"]:before { content: "2"; }
 		&[data-section*="Verse 3"]:before { content: "3"; }
