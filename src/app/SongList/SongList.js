@@ -10,6 +10,7 @@ class SongList extends Component {
 		searchText: ''
 	};
 
+
 	addToSet = song => {
 
 		db.get( this.props.id ).then( doc => {
@@ -21,9 +22,7 @@ class SongList extends Component {
 				_id: song._id,
 				key: song.key
 			} );
-			console.log( data.songs );
 			data.songs = uniqBy( data.songs, '_id' );
-			console.log( data.songs );
 
 			db.put( data ).then( () => {
 
@@ -120,21 +119,28 @@ class SongList extends Component {
 							<table className="table is-bordered is-striped is-fullwidth">
 
 								<tbody>
-									
-									{console.log("songs are", songs)}
 
 								{songs.filter( this.filterSongs ).map(
 									( song, i ) => (
 										<tr key={song._id}>
 
+
 											<td>
 
-												<a href={`/songs/${song._id}`}>{song.title}</a>
-												<span className="help">
-														{song.author}
-													</span>
+												<a href={`/songs/${song._id}`}> {song.title}</a>
 
 											</td>
+
+
+											<td  className="is-hidden-mobile">
+
+												<span>
+													{song.author}
+												</span>
+
+											</td>
+
+
 
 											<td>
 												<span className="help">

@@ -171,6 +171,15 @@ $chord-gap: .75em;
 				content: "Tag";
 			}
 		}
+		&[data-section*="Hook"] {
+			border-left: 4px solid #444;
+
+			&:before {
+				background-color: #444;
+				content: "Hk";
+			}
+		}
+
 
 		&[data-section*="Verse"]:before { content: "V"; }
 		&[data-section*="Verse 1"]:before { content: "1"; }

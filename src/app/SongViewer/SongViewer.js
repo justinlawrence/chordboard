@@ -10,6 +10,7 @@ import getKeyDiff from 'app/common/getKeyDiff';
 import ChordLine from "./lines/ChordLine.js";
 import ChordPair from "./lines/ChordPair.js";
 import Line from "./lines/Line.js";
+
 import './SongViewer.scss';
 
 class SongViewer extends Component {
