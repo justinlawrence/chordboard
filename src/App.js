@@ -3,15 +3,15 @@ import { findIndex } from 'lodash';
 import { connect } from 'react-redux';
 import { Redirect, Route, Switch, matchPath, withRouter } from 'react-router-dom';
 
-import LiveBar from './common/LiveBar';
-import Login from './login/Login';
-import Navbar from './common/Navbar/Navbar';
-import SongList from './SongList/SongList';
-import SongEditor from './SongEditor/SongEditor';
-import SongContainer from './songs/SongContainer';
-import SetListContainer from './sets/SetListContainer';
+import LiveBar from './app/common/LiveBar';
+import Login from './app/login/Login';
+import Navbar from './app/common/Navbar/Navbar';
+import SongList from './app/SongList/SongList';
+import SongEditor from './app/SongEditor/SongEditor';
+import SongContainer from './app/songs/SongContainer';
+import SetListContainer from './app/sets/SetListContainer';
 
-import { db, sync } from './common/database';
+import { db, sync } from 'database';
 import './app.scss';
 
 class App extends Component {
@@ -117,8 +117,8 @@ class App extends Component {
 							<SongList songs={songList} {...props}/>
 						)}/>
 
-						<Route exact path="/songs/add-to-set/:id" render={props => (
-							<SongList id={props.match.params.id} songs={songList} {...props}/>
+						<Route exact path="/songs/add-to-set/:setId" render={props => (
+							<SongList setId={props.match.params.setId} songs={songList} {...props}/>
 						)}/>
 
 						<Route exact path="/songs/new" component={SongEditor}/>
@@ -186,7 +186,6 @@ class App extends Component {
 
 	_getListOfSongs = () => {
 
-		// This gets docs linked to the user: justin
 		return db.find( {
 			selector: {
 				type: 'song'

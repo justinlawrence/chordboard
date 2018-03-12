@@ -1,9 +1,11 @@
-import {composeWithDevTools} from 'redux-devtools-extension';
-import {createStore} from 'redux';
-import {persistentStore} from 'redux-pouchdb';
+import { applyMiddleware, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { persistentStore } from 'redux-pouchdb';
 import PouchDB from 'pouchdb';
+import createSagaMiddleware from 'redux-saga'
 
 import * as types from './constants/action-types.js'
+import { initSagas } from './init-sagas'
 import rootReducer from './reducers'
 
 const syncEvents = [
@@ -15,13 +17,11 @@ const syncEvents = [
 	'paused'
 ];
 
-const initialState = {};
-
 const configureStore = () => {
 
 	const remoteDbSettings = {
 		adapter: 'http',
-		auth:    {
+		auth: {
 			username: 'justinlawrence',
 			password: 'cXcmbbLFO8'
 		}
@@ -38,12 +38,16 @@ const configureStore = () => {
 	const remoteDB = new PouchDB( 'https://couchdb.cloudno.de/chordboard', remoteDbSettings );
 
 	const sync = localDB.sync( remoteDB, {
-		live:  true,
+		live: true,
 		retry: true
 	} );
-	const store = createStore( rootReducer, initialState, composeWithDevTools(
+	const sagaMiddleware = createSagaMiddleware();
+	const middlewareChain = [ sagaMiddleware ];
+	const store = createStore( rootReducer, composeWithDevTools(
+		applyMiddleware( ...middlewareChain ),
 		persistentStore( localDB )
 	) );
+	initSagas( sagaMiddleware )
 
 	syncEvents.forEach( syncEvent => {
 

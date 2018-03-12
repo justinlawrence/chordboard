@@ -68,7 +68,7 @@ class SetViewer extends Component {
 
 	render() {
 
-		const { set, songs } = this.props;
+		const { set } = this.props;
 		const { mode, songCount } = this.state;
 
 		return set && (
@@ -151,8 +151,8 @@ class SetViewer extends Component {
 						<table className="table is-bordered is-striped is-fullwidth">
 
 							<tbody>
-							{songs.length ?
-								songs.map( this._createRow )
+							{set.songs.length ?
+								set.songs.map( this._createRow )
 								:
 								<tr>
 									<td>

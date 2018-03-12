@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {uniqBy} from 'lodash';
 
-import {db} from 'app/common/database';
+import {db} from 'database';
 
 import './SongList.scss';
 
@@ -10,10 +10,9 @@ class SongList extends Component {
 		searchText: ''
 	};
 
-
 	addToSet = song => {
 
-		db.get( this.props.id ).then( doc => {
+		db.get( this.props.setId ).then( doc => {
 
 			const data = Object.assign( {}, doc );
 

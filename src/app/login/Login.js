@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
-import {setUser} from 'app/actions/user';
+import { setCurrentUser } from 'actions';
 
 import './login.scss';
 
@@ -18,7 +18,7 @@ class Login extends Component {
 		event.preventDefault();
 
 		localStorage.setItem( 'user', this.state.name );
-		this.props.setUser( {
+		this.props.setCurrentUser( {
 			name: this.state.name
 		} );
 
@@ -32,8 +32,8 @@ class Login extends Component {
 
 	render() {
 
-		 const props = this.props;
-		 const { name } = this.state;
+		const props = this.props;
+		const { name } = this.state;
 
 		return (
 			<div>
@@ -61,21 +61,27 @@ class Login extends Component {
 
 									<div className="field">
 										<p className="control has-icons-left">
-											<input className="input is-medium" type="text" placeholder="Your Name" onInput={this.handleInput} value={name}/>
-											<span className="icon is-small is-left"><i className="fa fa-envelope"/></span>
+											<input className="input is-medium" type="text"
+											       placeholder="Your Name"
+											       onInput={this.handleInput} value={name}/>
+											<span className="icon is-small is-left"><i
+												className="fa fa-envelope"/></span>
 										</p>
 									</div>
 
 									<div className="field">
 										<p className="control has-icons-left">
-											<input className="input is-medium" type="password" placeholder="Password"/>
-											<span className="icon is-small is-left"><i className="fa fa-lock"/></span>
+											<input className="input is-medium" type="password"
+											       placeholder="Password"/>
+											<span className="icon is-small is-left"><i
+												className="fa fa-lock"/></span>
 										</p>
 									</div>
 
 									<div className="field">
 										<p className="control">
-											<button className="button is-primary is-medium is-fullwidth">
+											<button
+												className="button is-primary is-medium is-fullwidth">
 												Login
 											</button>
 										</p>
@@ -95,11 +101,8 @@ class Login extends Component {
 	}
 }
 
-const mapDispatchToProps = dispatch => ({
-	setUser: user => {
-		dispatch( setUser( user ) );
-	}
-});
-
+const mapDispatchToProps = {
+	setCurrentUser
+};
 
 export default withRouter( connect( null, mapDispatchToProps )( Login ) );

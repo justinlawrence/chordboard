@@ -1,6 +1,6 @@
 import slugify from 'slugify';
 
-import * as types from 'app/constants/action-types';
+import * as types from 'constants/action-types';
 
 export const addSong = ( { author, content, key, title } ) => {
 	return {

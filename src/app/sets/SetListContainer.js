@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 
-import { Sets, db, sync } from '../common/database';
+import { Sets, db, sync } from 'database';
 import SetEditor from './SetEditor';
 import SetList from './SetList';
 import SetContainer from './SetContainer';
@@ -38,8 +38,8 @@ class SetListContainer extends Component {
 					<SetList setFocusedSet={setFocusedSet} sets={setList} {...props}/>
 				)}/>
 				<Route exact path="/sets/new" component={SetEditor}/>
-				<Route path="/sets/:id" render={props => (
-					<SetContainer id={props.match.params.id} {...props}/>
+				<Route path="/sets/:setId" render={props => (
+					<SetContainer setId={props.match.params.setId} {...props}/>
 				)}/>
 			</div>
 		);

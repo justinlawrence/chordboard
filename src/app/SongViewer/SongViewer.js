@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { uniqBy } from 'lodash';
 import { Link } from 'react-router-dom';
 import cx from 'classnames';
 
-import { Sets, sync } from 'app/common/database';
+import { Sets, db, sync } from 'database';
 import Song from 'app/common/Song';
 import KeySelector from 'app/common/KeySelector';
 import getKeyDiff from 'app/common/getKeyDiff';
@@ -16,8 +17,8 @@ import './SongViewer.scss';
 class SongViewer extends Component {
 	state = {
 		isSetListDropdownVisible: false,
-		setList:                  [],
-		song:                     null
+		setList: [],
+		song: null
 	};
 
 	componentDidMount() {
@@ -42,6 +43,52 @@ class SongViewer extends Component {
 	componentWillUnmount() {
 		sync.cancel();
 	}
+
+	addToSet = set => {
+
+		const { song } = this.props;
+
+		db.get( set._id ).then( doc => {
+
+			const data = { ...doc };
+
+			data.songs = data.songs || [];
+			data.songs.push( {
+				_id: song._id,
+				key: song.key
+			} );
+			data.songs = uniqBy( data.songs, '_id' );
+
+			db.put( data ).then( () => {
+
+				if ( this.props.history ) {
+
+					const location = {
+						pathname: `/sets/${doc._id}`
+					};
+
+					this.props.history.push( location );
+				}
+
+			} ).catch( err => {
+
+				if ( err.name === 'conflict' ) {
+
+					console.error( 'SongList.addToSet: conflict -', err );
+
+				} else {
+
+					console.error( 'SongList.addToSet -', err );
+
+				}
+
+			} );
+
+		} ).catch( err => {
+			console.error( err );
+		} );
+
+	};
 
 	handleProps = props => {
 

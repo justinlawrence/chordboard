@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { find, findIndex, remove, sortBy } from 'lodash';
+import { connect } from 'react-redux';
 import { Link, Route } from 'react-router-dom';
 
-import { db } from '../common/database';
+import * as actions from 'actions';
+import { db } from 'database';
 import SongContainer from '../songs/SongContainer';
 import transposeChord from '../common/transpose-chord';
 
@@ -10,7 +12,7 @@ import SetViewer from './SetViewer';
 
 class SetContainer extends Component {
 	state = {
-		set:   null,
+		set: null,
 		songs: []
 	};
 
@@ -24,7 +26,7 @@ class SetContainer extends Component {
 
 	handleChangeKey = ( songId, amount ) => {
 
-		const set = Object.assign( {}, this.state.set );
+		const set = { ...this.state.set };
 
 		const setSongs = set.songs.slice();
 		const setSong = find( setSongs, s => s._id === songId );
@@ -71,9 +73,12 @@ class SetContainer extends Component {
 	};
 
 	handleProps = props => {
-
-		this._getSet( props.id );
-
+		if ( !this.state.set || this.state.set._id !== props.setId ) {
+			props.fetchCurrentSet( props.setId );
+		}
+		if ( this.props.currentSet ) {
+			this.setState( { set: this.props.currentSet } );
+		}
 	};
 
 	handleRemoveSet = () => {
@@ -131,26 +136,24 @@ class SetContainer extends Component {
 
 	render() {
 
-		const { set, songs } = this.state;
-		const orderedSongs = sortBy( songs, song => findIndex( set.songs, { _id: song._id } ) );
+		const { set } = this.state;
 
 		return (
 			<div>
-				<Route exact path="/sets/:id" render={props => (
+				<Route exact path="/sets/:setId" render={props => (
 					<SetViewer
 						onChangeKey={this.handleChangeKey}
 						onSongMove={this.handleSongMove}
 						onRemoveSet={this.handleRemoveSet}
 						onRemoveSong={this.handleRemoveSong}
 						set={set}
-						songs={orderedSongs}
 						{...props}/>
 				)}/>
 				<Route exact path="/sets/:setId/songs/:songId" render={( { match } ) => {
 
 					const songId = match.params.songId;
 
-					const index = findIndex( songs, { _id: songId } );
+					const index = findIndex( set.songs, { _id: songId } );
 					const currentKey = set && set.songs[ index ] ?
 						set.songs[ index ].key : null;
 
@@ -168,46 +171,7 @@ class SetContainer extends Component {
 		);
 	}
 
-	_getSet = id => {
-
-		// This gets all sets
-		return db.get( id ).then( doc => {
-
-			const set = doc;
-
-			this.setState( { set } );
-			this._getSongs( set );
-
-		} ).catch( err => {
-
-			console.warn( 'SetContainer._getSet - fetching set', err );
-
-		} );
-
-	};
-
-	_getSongs = set => {
-
-		const keys = set.songs.map( s => typeof s === 'string' ? s : s._id );
-
-		db.allDocs( {
-			include_docs: true,
-			keys:         keys
-		} ).then( result => {
-
-			this.setState( {
-				songs: result.rows.map( r => r.doc ).filter( r => !!r ) || []
-			} );
-
-		} ).catch( err => {
-
-			console.warn( 'SetContainer._getSongs - fetching songs', err );
-
-		} );
-
-	};
-
-	_saveSet = ( set ) => {
+	_saveSet = set => {
 
 		db.get( set._id ).then( doc => {
 
@@ -232,4 +196,8 @@ class SetContainer extends Component {
 	};
 }
 
-export default SetContainer;
+const mapStateToProps = state => ({
+	currentSet: state.currentSet
+});
+
+export default connect( mapStateToProps, actions )( SetContainer );

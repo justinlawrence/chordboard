@@ -6,11 +6,11 @@ const commonConfig = require( './webpack.base.js' );
 module.exports = function ( env ) {
 
 	return webpackMerge( commonConfig(), {
-		devtool:   false,
+		devtool: false,
 		devServer: {
 			compress: true,
-			hot:      true,
-			port:     config.port,
+			hot: true,
+			port: config.port,
 
 			// Serves /index.html in place of 404's on dev-server requests.
 			// Therefore allowing the angular router to handle the request.
@@ -18,17 +18,17 @@ module.exports = function ( env ) {
 				index: "/"
 			}
 		},
-		module:    {
+		module: {
 			loaders: [
 				{
 					test: /\.scss$/,
-					use:  [
+					use: [
 						'style-loader',
 						'css-loader?importLoaders=1&sourceMap',
 						{
-							loader:  'postcss-loader',
+							loader: 'postcss-loader',
 							options: {
-								config:    {
+								config: {
 									path: path.resolve( 'postcss.config.js' )
 								},
 								sourceMap: true,

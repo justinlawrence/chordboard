@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {find, findIndex} from 'lodash';
 import {Link, matchPath, withRouter} from 'react-router-dom';
 
-import {db} from 'app/common/database';
+import {db} from 'database';
 import SongKey from 'app/common/SongKey';
 import Song from 'app/common/Song.js';
 

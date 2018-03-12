@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { db, sync } from '../common/database';
+import { db, sync } from 'database';
 
 import SongViewer from '../SongViewer/SongViewer';
 
