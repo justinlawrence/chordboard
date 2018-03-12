@@ -10,10 +10,25 @@ const SyncStatus = ( { className, status } ) => {
 		className
 	);
 
+	let statusClass = 'icon ';
+	let statusText = '';
+
+	if (text === 'paused') {
+		statusClass += 'has-text-success';
+		statusText = 'online';
+	} else {
+		statusClass += 'has-text-warning';
+		statusText = 'offline';
+	}
+
 	return (
-		<div className={classes}>
-			Status: {text}
+		<div className={classes} title={text}>
+			<span className={statusClass}>
+			  <i className="fa fa-circle"></i>
+			</span>
+			{statusText}
 		</div>
+
 	);
 
 };
