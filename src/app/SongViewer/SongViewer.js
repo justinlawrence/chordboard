@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { uniqBy } from 'lodash';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import cx from 'classnames';
 
 import { Sets, db, sync } from 'database';
@@ -33,6 +34,13 @@ class SongViewer extends Component {
 		sync.on( "change", this.updateListOfSets.bind( this ) );
 
 		this.handleProps( this.props );
+
+		const songId = this.props.song._id;
+		const setId = this.props.currentSet._id;
+		if ( setId && songId ) {
+			const capoAmount = localStorage.getItem( `transpose.set.${setId}.song.${songId}.amount` );
+			this.changeKey( capoAmount );
+		}
 
 	}
 
@@ -129,6 +137,19 @@ class SongViewer extends Component {
 
 	}
 
+	changeCapo = amount => {
+
+		const songId = this.props.song._id;
+		const setId = this.props.currentSet._id;
+
+		if ( setId && songId ) {
+			localStorage.setItem( `transpose.set.${setId}.song.${songId}.amount`, amount );
+		}
+
+		this.changeKey( amount );
+
+	};
+
 	changeKey = amount => {
 
 		const song = this.state.song;
@@ -137,7 +158,6 @@ class SongViewer extends Component {
 		this.setState( { song } );
 
 	};
-
 
 	setListDropdownHide = () => this.setState( { isSetListDropdownVisible: false } );
 	setListDropdownShow = () => this.setState( { isSetListDropdownVisible: true } );
@@ -190,10 +210,14 @@ class SongViewer extends Component {
 
 											</div>
 											<div className="control">
-
 												<KeySelector
-													onSelect={( key, amount ) =>
-														this.changeKey( amount )}
+													onSelect={( key, amount ) => this.changeKey( amount )}
+													value={song.key}/>
+											</div>
+
+											<div className="control">
+												<KeySelector
+													onSelect={( key, amount ) => this.changeCapo( amount )}
 													value={song.key}/>
 											</div>
 
@@ -277,7 +301,11 @@ class SongViewer extends Component {
 	}
 }
 
-export default SongViewer;
+const mapStateToProps = state => ({
+	currentSet: state.currentSet
+});
+
+export default connect( mapStateToProps )( SongViewer );
 
 //-----------------------------------------------------
 

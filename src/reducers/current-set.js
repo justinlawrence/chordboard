@@ -1,6 +1,7 @@
 import { SET_CURRENT_SET } from 'actions';
 
 const initialState = {
+	_id: null,
 	songs: []
 };
 
