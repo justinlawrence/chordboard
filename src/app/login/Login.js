@@ -60,71 +60,23 @@ class Login extends Component {
 
 		return (
 			<div>
-				<section className="hero is-dark">
+				<section className="hero is-dark is-fullheight">
 					<div className="hero-body">
-						<div className="container">
-							<div className="columns is-vcentered">
-								<div className="column">
+						<div className="container has-text-centered">
 									<h1 className="title is-1">Chordboard</h1>
-									<h2 className="subtitle">The setlist for live musicians.</h2>
-								</div>
-							</div>
+									<h2 className="subtitle">On the same page</h2>
+									<form onSubmit={this.handleLogin}>
+
+											<div className="field">
+												<FacebookLogin
+													appId="2075514469393369"
+													autoLoad={true}
+													callback={this.responseFacebook}
+												/>
+											</div>
+									</form>
 						</div>
 					</div>
-				</section>
-
-				<section className="section columns">
-					<div className="column is-one-third is-offset-one-third">
-						<article className="card is-rounded">
-							<div className="card-content">
-								<form onSubmit={this.handleLogin}>
-									<h1 className="title">
-										Login
-									</h1>
-
-									<div className="field">
-										<FacebookLogin
-											appId="2075514469393369"
-											autoLoad={true}
-											callback={this.responseFacebook}
-										/>
-									</div>
-
-									{/*<div className="field">
-										<p className="control has-icons-left">
-											<input className="input is-medium" type="text"
-											       placeholder="Your Name"
-											       onInput={this.handleInput} value={name}/>
-											<span className="icon is-small is-left"><i
-												className="fa fa-envelope"/></span>
-										</p>
-									</div>
-
-									<div className="field">
-										<p className="control has-icons-left">
-											<input className="input is-medium" type="password"
-											       placeholder="Password"/>
-											<span className="icon is-small is-left"><i
-												className="fa fa-lock"/></span>
-										</p>
-									</div>
-
-									<div className="field">
-										<p className="control">
-											<button
-												className="button is-primary is-medium is-fullwidth">
-												Login
-											</button>
-										</p>
-									</div>*/}
-
-								</form>
-
-							</div>
-						</article>
-
-					</div>
-
 				</section>
 
 			</div>
