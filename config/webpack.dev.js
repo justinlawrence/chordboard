@@ -10,6 +10,7 @@ module.exports = function ( env ) {
 		devServer: {
 			compress: true,
 			hot: true,
+			https: true,
 			port: config.port,
 
 			// Serves /index.html in place of 404's on dev-server requests.

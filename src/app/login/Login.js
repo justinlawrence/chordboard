@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import FacebookLogin from 'react-facebook-login';
 
 import { setCurrentUser } from 'actions';
 
@@ -13,7 +14,7 @@ class Login extends Component {
 
 	handleInput = event => this.setState( { name: event.target.value } );
 
-	handleLogin = event => {
+	/*handleLogin = event => {
 
 		event.preventDefault();
 
@@ -28,6 +29,28 @@ class Login extends Component {
 			} );
 		}
 
+	};*/
+
+	responseFacebook = response => {
+		if ( response && response.userID ) {
+			const user = {
+				id: response.userID,
+				name: response.name
+			};
+
+			this.props.setCurrentUser( user );
+			try {
+				localStorage.setItem( 'user', JSON.stringify( user ) );
+			} catch ( err ) {
+				console.error( 'Could not set `user` in localStorage' );
+			}
+
+			if ( this.props.history ) {
+				this.props.history.push( {
+					pathname: '/sets'
+				} );
+			}
+		}
 	};
 
 	render() {
@@ -60,6 +83,14 @@ class Login extends Component {
 									</h1>
 
 									<div className="field">
+										<FacebookLogin
+											appId="2075514469393369"
+											autoLoad={true}
+											callback={this.responseFacebook}
+										/>
+									</div>
+
+									{/*<div className="field">
 										<p className="control has-icons-left">
 											<input className="input is-medium" type="text"
 											       placeholder="Your Name"
@@ -85,7 +116,7 @@ class Login extends Component {
 												Login
 											</button>
 										</p>
-									</div>
+									</div>*/}
 
 								</form>
 

@@ -17,6 +17,7 @@ import './SongViewer.scss';
 
 class SongViewer extends Component {
 	state = {
+		capoAmount: 0,
 		isSetListDropdownVisible: false,
 		setList: [],
 		song: null
@@ -40,6 +41,7 @@ class SongViewer extends Component {
 		if ( setId && songId ) {
 			const capoAmount = localStorage.getItem( `transpose.set.${setId}.song.${songId}.amount` );
 			this.changeKey( capoAmount );
+			this.setState( { capoAmount } )
 		}
 
 	}

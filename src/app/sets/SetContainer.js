@@ -138,7 +138,7 @@ class SetContainer extends Component {
 
 		const { set } = this.state;
 
-		return (
+		return set && (
 			<div>
 				<Route exact path="/sets/:setId" render={props => (
 					<SetViewer
