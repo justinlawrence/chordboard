@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
-import {Link, Route, Switch, withRouter} from 'react-router-dom';
-import {connect} from 'react-redux'
+import React, { Component } from 'react';
+import { Link, Route, Switch, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux'
 import cx from 'classnames';
 
+import * as actions from 'actions';
 import SyncStatus from 'app/common/SyncStatus';
 
 import './navbar.scss';
@@ -10,6 +11,14 @@ import './navbar.scss';
 class Navbar extends Component {
 	state = {
 		isMenuVisible: false
+	};
+
+	setUserTextSize = () => {
+
+		this.props.setCurrentUser( {
+			textSize: 82
+		} );
+
 	};
 
 	toggleNavbarMenu = () => {
@@ -80,4 +89,4 @@ const mapStateToProps = state => ({
 	syncState: state.syncState
 });
 
-export default withRouter( connect( mapStateToProps, null )( Navbar ) );
+export default withRouter( connect( mapStateToProps, actions )( Navbar ) );

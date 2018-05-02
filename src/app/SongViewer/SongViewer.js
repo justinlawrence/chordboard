@@ -38,8 +38,11 @@ class SongViewer extends Component {
 
 		const songId = this.props.song._id;
 		const setId = this.props.currentSet._id;
+		console.log( 'songId', songId );
+		console.log( 'setId', setId );
 		if ( setId && songId ) {
 			const capoAmount = localStorage.getItem( `transpose.set.${setId}.song.${songId}.amount` );
+			console.log( 'capoAmount from localStorage', capoAmount );
 			this.changeKey( capoAmount );
 			this.setState( { capoAmount } )
 		}
@@ -155,7 +158,9 @@ class SongViewer extends Component {
 	changeKey = amount => {
 
 		const song = this.state.song;
-		song.transpose( amount );
+		if ( song ) {
+			song.transpose( amount );
+		}
 
 		this.setState( { song } );
 
@@ -172,6 +177,8 @@ class SongViewer extends Component {
 	updateListOfSets = () => Sets.getAll().then( setList => this.setState( { setList } ) );
 
 	render() {
+
+		//const { song } = this.props;
 
 		const { isSetListDropdownVisible, setList, song } = this.state;
 
@@ -304,7 +311,9 @@ class SongViewer extends Component {
 }
 
 const mapStateToProps = state => ({
-	currentSet: state.currentSet
+	currentSet: state.currentSet,
+	//song: state.currentSong,
+	user: state.user
 });
 
 export default connect( mapStateToProps )( SongViewer );

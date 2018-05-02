@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import slugify from 'slugify';
 import PouchDB from 'pouchdb';
 import PouchDBFindPlugin from 'pouchdb-find';
@@ -29,11 +29,11 @@ class SetEditor extends Component {
 		const { title } = this.state;
 
 		db.post( {
-			type:   'set',
+			type: 'set',
 			author: user.name,
-			slug:   slugify( title ),
-			title:  title,
-			songs:  []
+			slug: slugify( title ),
+			title: title,
+			songs: []
 		} ).then( doc => {
 
 			PouchDB.sync( 'chordboard',
@@ -52,7 +52,6 @@ class SetEditor extends Component {
 	render() {
 
 		//JL TODO: props was {}, not sure whether it should be below
-		const props = this.props;
 		const { title } = this.state;
 
 		return (
@@ -71,7 +70,7 @@ class SetEditor extends Component {
 										value={title}/>
 
 									<span className="icon is-small is-left">
-						                <i className="fa fa-chevron-right"></i>
+						                <i className="fa fa-chevron-right"/>
 						            </span>
 
 								</p>
@@ -92,4 +91,4 @@ const mapStateToProps = state => ({
 	user: state.user
 });
 
-export default connect( mapStateToProps, null )( SetEditor );
+export default connect( mapStateToProps )( SetEditor );

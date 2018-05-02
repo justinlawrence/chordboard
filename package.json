@@ -55,7 +55,7 @@
     "fauxton": "^1.1.13",
     "html-webpack-plugin": "^2.30.1",
     "img-loader": "^2.0.0",
-    "node-sass": "^4.5.3",
+    "node-sass": "^4.9.0",
     "offline-plugin": "4.8.4",
     "postcss-loader": "^2.0.6",
     "raw-loader": "^0.5.1",

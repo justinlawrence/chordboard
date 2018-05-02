@@ -22,8 +22,7 @@ export const user = ( state = initialUser, action = {} ) => {
 		case SET_CURRENT_USER:
 			return {
 				...state,
-				id: action.id,
-				name: action.name
+				...action
 			};
 
 		default:
