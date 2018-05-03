@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import cx from 'classnames';
 
 import { Sets, db, sync } from 'database';
-import Song from 'app/common/Song';
+//import Song from 'app/common/Song';
 import KeySelector from 'app/common/KeySelector';
 import getKeyDiff from 'app/common/getKeyDiff';
 
@@ -20,7 +20,6 @@ class SongViewer extends Component {
 		capoAmount: 0,
 		isSetListDropdownVisible: false,
 		setList: [],
-		song: null
 	};
 
 	componentDidMount() {
@@ -107,9 +106,10 @@ class SongViewer extends Component {
 
 		if ( props.song ) {
 
-			this.setState( {
+			// TODO: Dispatch action
+			/*this.setState( {
 				song: new Song( props.song )
-			} );
+			} );*/
 
 		}
 
@@ -157,12 +157,13 @@ class SongViewer extends Component {
 
 	changeKey = amount => {
 
-		const song = this.state.song;
+		const song = this.props.song;
 		if ( song ) {
 			song.transpose( amount );
 		}
 
-		this.setState( { song } );
+		// TODO: Dispatch action
+		//this.setState( { song } );
 
 	};
 
@@ -178,9 +179,8 @@ class SongViewer extends Component {
 
 	render() {
 
-		//const { song } = this.props;
-
-		const { isSetListDropdownVisible, setList, song } = this.state;
+		const { song } = this.props;
+		const { isSetListDropdownVisible, setList } = this.state;
 
 		let sections = [];
 
@@ -312,7 +312,7 @@ class SongViewer extends Component {
 
 const mapStateToProps = state => ({
 	currentSet: state.currentSet,
-	//song: state.currentSong,
+	song: state.currentSong,
 	user: state.user
 });
 
