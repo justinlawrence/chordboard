@@ -79,6 +79,9 @@ class SetList extends Component {
 											{set.author}
 										</td>
 										<td>
+											{set.setdate}
+										</td>
+										<td>
 											<SetLink setFocusedSet={setFocusedSet} set={set}>
 												{set.title}
 											</SetLink>

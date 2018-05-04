@@ -185,8 +185,6 @@ class SongViewer extends Component {
 
 										<div className="field has-addons">
 
-											song key: {this.props.song.key}
-											set key: {this.props.setKey}
 
 											<div className="control">
 
@@ -213,7 +211,6 @@ class SongViewer extends Component {
 												</a>
 											</div>
 
-											{capo}
 
 											<div className="control">
 												<Link className="button"
@@ -262,6 +259,11 @@ class SongViewer extends Component {
 													</div>
 												</div>
 											</div>
+
+											<div className="control">
+												<p>Song key: {this.props.song.key}<br />Set key: {this.props.setKey}<br />Capo: {capo}</p>
+											</div>
+
 
 										</div>
 

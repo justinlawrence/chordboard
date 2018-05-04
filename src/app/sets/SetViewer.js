@@ -79,13 +79,25 @@ class SetViewer extends Component {
 							<div className="columns is-vcentered">
 
 								<div className="column is-three-quarters">
+
+									{mode === 'edit' ? [
+
 									<p className="title">
 										{set.title}
-									</p>
+									</p>,
+
 									<h2 className="subtitle">
 										{set.author}
 									</h2>
+
+									] : (
+
+									<p>Edit mode</p>
+
+									)}
+
 								</div>
+
 								<div className="column">
 
 									<div className="field has-addons">

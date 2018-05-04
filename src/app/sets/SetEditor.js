@@ -16,7 +16,8 @@ db.createIndex( {
 
 class SetEditor extends Component {
 	state = {
-		title: ''
+		title: '',
+		setdate: ''
 	};
 
 	onTitleInput = event => {
@@ -33,6 +34,7 @@ class SetEditor extends Component {
 			author: user.name,
 			slug: slugify( title ),
 			title: title,
+			setdate: setdate,
 			songs: []
 		} ).then( doc => {
 
@@ -68,6 +70,22 @@ class SetEditor extends Component {
 										onInput={this.onTitleInput}
 										placeholder="Title"
 										value={title}/>
+
+									<span className="icon is-small is-left">
+						                <i className="fa fa-chevron-right"/>
+						            </span>
+
+								</p>
+							</div>
+							<div className="field">
+								<p className="control has-icons-left">
+
+									<input
+										type="date"
+										className="input"
+										onInput={this.onTitleInput}
+										placeholder="Set Date"
+										value={setdate}/>
 
 									<span className="icon is-small is-left">
 						                <i className="fa fa-chevron-right"/>
