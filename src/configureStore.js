@@ -4,7 +4,7 @@ import { persistentStore } from 'redux-pouchdb';
 import PouchDB from 'pouchdb';
 import createSagaMiddleware from 'redux-saga'
 
-import * as types from './constants/action-types.js'
+import { setSyncState } from './actions';
 import { initSagas } from './init-sagas'
 import rootReducer from './reducers'
 
@@ -53,7 +53,7 @@ const configureStore = () => {
 
 		sync.on( syncEvent, () => {
 
-			store.dispatch( { type: types.SET_SYNC_STATE, text: syncEvent } );
+			store.dispatch( setSyncState( syncEvent ) );
 
 		} );
 

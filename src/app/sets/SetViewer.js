@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {find, findIndex} from 'lodash'
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react';
+import { find, findIndex } from 'lodash'
+import { Link } from 'react-router-dom';
 
 import KeySelector from 'app/common/KeySelector';
 
@@ -9,7 +9,7 @@ import './SetViewer.scss';
 class SetViewer extends Component {
 	state = {
 		isLoading: false,
-		mode:      ''
+		mode: ''
 	};
 
 	editModeOff = () => this.setState( { mode: '' } );
@@ -75,65 +75,67 @@ class SetViewer extends Component {
 			<div className="set-viewer">
 				<section className="hero is-small is-light">
 					<div className="hero-body">
-							<div className="container">
-								<div className="columns is-vcentered">
+						<div className="container">
+							<div className="columns is-vcentered">
 
-									<div className="column is-three-quarters">
-											<p className="title">
-												{set.title}
-											</p>
-											<h2 className="subtitle">
-												{set.author}
-											</h2>
-									</div>
-									<div className="column">
+								<div className="column is-three-quarters">
+									<p className="title">
+										{set.title}
+									</p>
+									<h2 className="subtitle">
+										{set.author}
+									</h2>
+								</div>
+								<div className="column">
 
-										<div className="field has-addons">
-											<p className="control">
+									<div className="field has-addons">
+										<p className="control">
 											{mode === 'edit' ? [
-												<a className="button is-primary" onClick={this.editModeOff}>
+												<a className="button is-primary"
+												   onClick={this.editModeOff}>
 													<span className="icon is-small">
 														<i className="fa fa-sliders"/>
 													</span>
 												</a>
-												] : (
-													<a className="button" onClick={this.editModeOn}>
+											] : (
+												<a className="button" onClick={this.editModeOn}>
 														<span className="icon is-small">
 															<i className="fa fa-sliders"/>
 														</span>
-													</a>
-											)}
-											</p>
-											<p className="control">
-												<a className="button"
-													href={`/songs/add-to-set/${set._id}`}>
-													Add songs
 												</a>
-											</p>
+											)}
+										</p>
+										<p className="control">
+											<a className="button"
+											   href={`/songs/add-to-set/${set._id}`}>
+												Add songs
+											</a>
+										</p>
 
-										</div>
 									</div>
 								</div>
-								<div className="columns is-vcentered">
+							</div>
+							<div className="columns is-vcentered">
 
-									<div className="column no-print">
+								<div className="column no-print">
 
-											<div className="field has-addons">
-												{mode === 'edit' ? [
-													<p className="control">
+									<div className="field has-addons">
+										{mode === 'edit' ? [
+											<p className="control">
 
-														<a className="button is-outlined"
-											   				onClick={this.onDeleteSet}>
-															<span className="icon is-small is-left"><i className="fa fa-trash"/></span>
-														</a>
+												<a className="button is-outlined"
+												   onClick={this.onDeleteSet}>
+													<span className="icon is-small is-left"><i
+														className="fa fa-trash"/></span>
+												</a>
 
-													</p>
+											</p>
 
-											] : (
-												<p className="control">
-												</p>
-											)}
-										</div>
+										] : (
+											<p className="control">
+											</p>
+										)}
+									</div>
 
 								</div>
 							</div>
@@ -141,8 +143,6 @@ class SetViewer extends Component {
 
 					</div>
 				</section>
-
-
 
 
 				<section className="section">
@@ -189,8 +189,8 @@ class SetViewer extends Component {
 		return (
 			<tr key={songCount}>
 
-				<td className = "title is-4">
-						{songCount+1}
+				<td className="title is-4">
+					{songCount + 1}
 				</td>
 
 				<td className="title is-4">
@@ -229,32 +229,34 @@ class SetViewer extends Component {
 				</td>
 
 				{mode === 'edit' && (
-				<td>
+					<td>
 						<a
 							onClick={() => this.onMoveSongUp( song._id )}
 							title="move this song up the list">
 							<span className="icon is-small is-left"><i className="fa fa-arrow-up"/></span>
 						</a>
-				</td>
+					</td>
 				)}
-				
+
 				{mode === 'edit' && (
-				<td>
+					<td>
 						<a
 							onClick={() => this.onMoveSongDown( song._id )}
 							title="move this song down the list">
-							<span className="icon is-small is-left"><i className="fa fa-arrow-down"/></span>
+							<span className="icon is-small is-left"><i
+								className="fa fa-arrow-down"/></span>
 						</a>
-				</td>
+					</td>
 				)}
 				{mode === 'edit' && (
-				<td>
+					<td>
 						<a
 							onClick={() => this.removeSong( song._id )}
 							title="remove this song from the list">
-							<span className="icon is-small is-left"><i className="fa fa-trash"/></span>
+							<span className="icon is-small is-left"><i
+								className="fa fa-trash"/></span>
 						</a>
-				</td>
+					</td>
 				)}
 
 			</tr>

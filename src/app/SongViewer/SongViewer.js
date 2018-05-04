@@ -1,24 +1,31 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { uniqBy } from 'lodash';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 
+import * as actions from '../../actions';
 import { Sets, db, sync } from 'database';
-//import Song from 'app/common/Song';
 import KeySelector from 'app/common/KeySelector';
 import getKeyDiff from 'app/common/getKeyDiff';
-
 import ChordLine from "./lines/ChordLine.js";
 import ChordPair from "./lines/ChordPair.js";
 import Line from "./lines/Line.js";
+import transposeChord from '../common/transpose-chord';
+import transposeLines from '../common/transpose-lines';
 
 import './SongViewer.scss';
 
 class SongViewer extends Component {
+	static propTypes = {
+		setKey: PropTypes.string
+	};
+
 	state = {
 		capoAmount: 0,
 		isSetListDropdownVisible: false,
+		key: '',
 		setList: [],
 	};
 
@@ -39,12 +46,6 @@ class SongViewer extends Component {
 		const setId = this.props.currentSet._id;
 		console.log( 'songId', songId );
 		console.log( 'setId', setId );
-		if ( setId && songId ) {
-			const capoAmount = localStorage.getItem( `transpose.set.${setId}.song.${songId}.amount` );
-			console.log( 'capoAmount from localStorage', capoAmount );
-			this.changeKey( capoAmount );
-			this.setState( { capoAmount } )
-		}
 
 	}
 
@@ -104,22 +105,15 @@ class SongViewer extends Component {
 
 	handleProps = props => {
 
-		if ( props.song ) {
+		const songUser = props.song.users && props.song.users.find( u => u.id === props.user.id ) || {};
 
-			// TODO: Dispatch action
-			/*this.setState( {
-				song: new Song( props.song )
-			} );*/
+		console.log( 'song key', props.song.key );
+		console.log( 'set key', props.setKey );
+		console.log( 'user key', songUser.key );
 
-		}
+		const key = songUser.key || props.setKey || props.song.key;
 
-		if ( props.currentKey && props.song && props.song.key &&
-			props.currentKey !== props.song.key ) {
-
-			// Calculate distance between keys
-			this.changeKey( getKeyDiff( props.song.key, props.currentKey ) );
-
-		}
+		this.setState( { key } );
 
 	};
 
@@ -142,29 +136,9 @@ class SongViewer extends Component {
 
 	}
 
-	changeCapo = amount => {
-
-		const songId = this.props.song._id;
-		const setId = this.props.currentSet._id;
-
-		if ( setId && songId ) {
-			localStorage.setItem( `transpose.set.${setId}.song.${songId}.amount`, amount );
-		}
-
-		this.changeKey( amount );
-
-	};
-
 	changeKey = amount => {
-
-		const song = this.props.song;
-		if ( song ) {
-			song.transpose( amount );
-		}
-
-		// TODO: Dispatch action
-		//this.setState( { song } );
-
+		const key = transposeChord( this.state.key, amount );
+		this.props.setCurrentSongUserKey( key );
 	};
 
 	setListDropdownHide = () => this.setState( { isSetListDropdownVisible: false } );
@@ -179,8 +153,12 @@ class SongViewer extends Component {
 
 	render() {
 
-		const { song } = this.props;
-		const { isSetListDropdownVisible, setList } = this.state;
+		const { isSetListDropdownVisible, key, setList } = this.state;
+
+		const song = { ...this.props.song };
+		const setKey = this.props.setKey || song.key;
+		const capo = getKeyDiff( setKey, key );
+		const lines = song.lines ? transposeLines( song.lines, capo ) : [];
 
 		let sections = [];
 
@@ -203,10 +181,12 @@ class SongViewer extends Component {
 
 									<div className="column no-print">
 
-
 										{/*<a className="button">Key of {song.key}</a>*/}
 
 										<div className="field has-addons">
+
+											song key: {this.props.song.key}
+											set key: {this.props.setKey}
 
 											<div className="control">
 
@@ -221,13 +201,7 @@ class SongViewer extends Component {
 											<div className="control">
 												<KeySelector
 													onSelect={( key, amount ) => this.changeKey( amount )}
-													value={song.key}/>
-											</div>
-
-											<div className="control">
-												<KeySelector
-													onSelect={( key, amount ) => this.changeCapo( amount )}
-													value={song.key}/>
+													value={key}/>
 											</div>
 
 											<div className="control">
@@ -238,6 +212,8 @@ class SongViewer extends Component {
 														</span>
 												</a>
 											</div>
+
+											{capo}
 
 											<div className="control">
 												<Link className="button"
@@ -299,7 +275,7 @@ class SongViewer extends Component {
 					<section className="section">
 						<div className="container">
 							<div className="song-viewer__song">
-								{parseSong( song, sections )}
+								{parseSong( lines, sections )}
 							</div>
 						</div>
 					</section>
@@ -316,13 +292,12 @@ const mapStateToProps = state => ({
 	user: state.user
 });
 
-export default connect( mapStateToProps )( SongViewer );
+export default connect( mapStateToProps, actions )( SongViewer );
 
 //-----------------------------------------------------
 
-export function parseSong( song, sections ) {
+export function parseSong( lines, sections ) {
 
-	let lines = song.lines;
 	let children = [];
 	let result = [];
 	let section = '';

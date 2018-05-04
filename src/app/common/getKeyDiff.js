@@ -1,8 +1,10 @@
-import {octave} from 'app/common/transpose-chord';
+import { octave } from 'app/common/transpose-chord';
 
 const getKeyDiff = ( keyFrom, keyTo ) => {
 
-	return octave.indexOf( keyTo ) - octave.indexOf( keyFrom );
+	const diff = octave.indexOf( keyTo ) - octave.indexOf( keyFrom );
+
+	return diff < 0 ? diff + octave.length : diff;
 
 };
 

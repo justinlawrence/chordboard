@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { db, sync } from 'database';
+import { connect } from 'react-redux';
 
+import * as actions from '../../actions';
 import SongViewer from '../SongViewer/SongViewer';
 
 class SongContainer extends Component {
-	state = {
-		song: null
-	};
 
 	componentDidMount() {
 		this.handleProps( this.props );
@@ -21,17 +20,16 @@ class SongContainer extends Component {
 	handleProps = props => {
 
 		this._getSongById( props.id )
-			.then( song => this.setState( { song } ) );
+			.then( song => this.props.setCurrentSong( song ) );
 
 	};
 
 	render() {
 
 		const { currentKey } = this.props;
-		const { song } = this.state;
 
-		return song && (
-			<SongViewer currentKey={currentKey} song={song}/>
+		return (
+			<SongViewer setKey={currentKey}/>
 		);
 
 	}
@@ -48,4 +46,4 @@ class SongContainer extends Component {
 	};
 }
 
-export default SongContainer;
+export default connect( null, actions )( SongContainer );

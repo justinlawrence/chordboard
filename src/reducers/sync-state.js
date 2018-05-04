@@ -1,4 +1,4 @@
-import { SET_SYNC_STATE } from 'constants/action-types';
+import { SET_SYNC_STATE } from '../actions';
 
 const initialState = {
 	text: 'unknown'
