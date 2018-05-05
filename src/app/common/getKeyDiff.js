@@ -4,6 +4,8 @@ const getKeyDiff = ( keyFrom, keyTo ) => {
 
 	const diff = octave.indexOf( keyTo ) - octave.indexOf( keyFrom );
 
+	console.log("transposing from " + keyFrom + " to " + keyTo);
+
 	return diff < 0 ? diff + octave.length : diff;
 
 };

@@ -157,6 +157,8 @@ class SetContainer extends Component {
 					const currentKey = set && set.songs[ index ] ?
 						set.songs[ index ].key : null;
 
+						//TODO: catch errors where the set song key is empty
+
 					return (
 						<div>
 							<SongContainer
