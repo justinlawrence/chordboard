@@ -163,7 +163,7 @@ class SongViewer extends Component {
 		const song = { ...this.props.song };
 		const setKey = this.props.setKey || song.key;
 
-		const capo = getKeyDiff( setKey, key ); //this is only for display purposes, telling the user where to put the capo
+		const capo = getKeyDiff( key, setKey ); //this is only for display purposes, telling the user where to put the capo
 		const transposeAmount = getKeyDiff( song.key, key ); //this is how much to transpose by
 
 		const lines = transposeLines( linesState, transposeAmount );
@@ -269,8 +269,7 @@ class SongViewer extends Component {
 											</div>
 
 											<div className="control">
-												<p>Original Song key: {this.props.song.key}<br/>Set
-													key: {this.props.setKey}<br/>Capo: {capo}</p>
+												<p>Set key: {this.props.setKey}<br/>Capo: {capo}</p>
 											</div>
 
 
