@@ -12,6 +12,7 @@ import getKeyDiff from 'app/common/getKeyDiff';
 import ChordLine from "./lines/ChordLine.js";
 import ChordPair from "./lines/ChordPair.js";
 import Line from "./lines/Line.js";
+import Parser from 'app/parsers/song-parser.js';
 import transposeChord from '../common/transpose-chord';
 import transposeLines from '../common/transpose-lines';
 
@@ -26,6 +27,7 @@ class SongViewer extends Component {
 		capoAmount: 0,
 		isSetListDropdownVisible: false,
 		key: '',
+		lines: [],
 		setList: [],
 	};
 
@@ -113,7 +115,10 @@ class SongViewer extends Component {
 
 		const key = songUser.key || props.setKey || props.song.key;
 
-		this.setState( { key } );
+		const parser = new Parser();
+		const lines = parser.parse( props.song.content );
+
+		this.setState( { key, lines } );
 
 	};
 
@@ -153,7 +158,7 @@ class SongViewer extends Component {
 
 	render() {
 
-		const { isSetListDropdownVisible, key, setList } = this.state;
+		const { isSetListDropdownVisible, key, lines: linesState, setList } = this.state;
 
 		const song = { ...this.props.song };
 		const setKey = this.props.setKey || song.key;
@@ -161,7 +166,7 @@ class SongViewer extends Component {
 		const capo = getKeyDiff( setKey, key ); //this is only for display purposes, telling the user where to put the capo
 		const transposeAmount = getKeyDiff( song.key, key ); //this is how much to transpose by
 
-		const lines = song.lines ? transposeLines( song.lines, transposeAmount ) : [];
+		const lines = transposeLines( linesState, transposeAmount );
 
 		let sections = [];
 
@@ -264,7 +269,8 @@ class SongViewer extends Component {
 											</div>
 
 											<div className="control">
-												<p>Original Song key: {this.props.song.key}<br />Set key: {this.props.setKey}<br />Capo: {capo}</p>
+												<p>Original Song key: {this.props.song.key}<br/>Set
+													key: {this.props.setKey}<br/>Capo: {capo}</p>
 											</div>
 
 
