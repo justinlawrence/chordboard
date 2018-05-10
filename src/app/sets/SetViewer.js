@@ -1,76 +1,88 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { find, findIndex } from 'lodash'
 import { Link } from 'react-router-dom';
 
 
 import KeySelector from 'app/common/KeySelector';
 
-// transferred from SetEditor - start
-
 import PouchDB from 'pouchdb';
-import PouchDBFindPlugin from 'pouchdb-find';
-PouchDB.plugin( PouchDBFindPlugin );
-
-const db = new PouchDB( 'chordboard' );
-
-// transferred from SetEditor - end
-
 
 import './SetViewer.scss';
 
+const db = new PouchDB( 'chordboard' );
+
 class SetViewer extends Component {
+	static propTypes = {
+		history: PropTypes.object,
+		onChangeKey: PropTypes.func,
+		onRemoveSet: PropTypes.func,
+		onRemoveSong: PropTypes.func,
+		onSongMove: PropTypes.func,
+		set: PropTypes.object.isRequired,
+		songs: PropTypes.array,
+		user: PropTypes.object
+	}
+
 	state = {
 		isLoading: false,
 		mode: '',
-		title: '', // transferred from SetEditor
-		setdate: '' // transferred from SetEditor
-
+		title: '',
+		setDate: ''
 	};
 
+	componentDidMount() {
+		this.handleProps( this.props );
+	}
 
-// transferred from SetEditor - start
+	componentWillReceiveProps( nextProps ) {
+		this.handleProps( nextProps );
+	}
+
+	handleProps = props => {
+		const { set } = props;
+		console.log( set );
+		this.setState( {
+			title: set.title,
+			setDate: set.setDate
+		} );
+	};
 
 	onTitleInput = event => {
 		this.setState( { title: event.target.value } );
 	};
 
 	onSetDateInput = event => {
-		this.setState( { date: event.target.value } );
+		this.setState( { setDate: event.target.value } );
 	};
 
 	onSaveSet = () => {
 
-		const { user } = this.props;
-		const { title } = this.state;
-		const { setdate } = this.state;
+		const { title, setDate } = this.state;
 
-		db.post( {
-			type: 'set',
-			author: user.name,
-			slug: slugify( title ),
-			title: title,
-			setdate: setdate,
-			songs: []
-		} ).then( doc => {
+		db.get( this.props.set._id ).then( doc => {
 
-			PouchDB.sync( 'chordboard',
-				'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' );
+			db.put( {
+				...doc,
+				title: title,
+				setDate: setDate
+			} ).catch( err => {
 
-			if ( this.props.history ) {
-				this.props.history.push( {
-					pathname: `/sets/${doc.id}`
-				} );
-			}
+				if ( err.name === 'conflict' ) {
+
+					console.error( 'SetViewer.onSaveSet: conflict -', err );
+
+				} else {
+
+					console.error( 'SetViewer.onSaveSet-', err );
+
+				}
+
+			} );
 
 		} );
 
 	};
-
-	// transferred from SetEditor - end
-
-
-
-
 
 
 	editModeOff = () => this.setState( { mode: '' } );
@@ -130,15 +142,7 @@ class SetViewer extends Component {
 	render() {
 
 		const { set } = this.props;
-		const { mode, songCount } = this.state;
-
-		// transferred from SetEditor - start
-
-		const { title } = this.state;
-		const { setdate } = this.state;
-
-		// transferred from SetEditor - end
-
+		const { mode, songCount, setDate, title } = this.state;
 
 		return set && (
 			<div className="set-viewer">
@@ -149,7 +153,7 @@ class SetViewer extends Component {
 
 								<div className="column is-three-quarters">
 
-									{mode === 'edit' ? [
+									{mode === 'edit' ? (
 
 										<div>
 											<div className="field">
@@ -159,12 +163,12 @@ class SetViewer extends Component {
 													<input
 														type="text"
 														className="input"
-														onInput={this.onTitleInput}
+														onChange={this.onTitleInput}
 														placeholder="Title"
-														value={set.title}/>
+														value={title}/>
 
 													<span className="icon is-small is-left">
-															<i className="fa fa-chevron-right"/>
+														<i className="fa fa-chevron-right"/>
 													</span>
 
 												</p>
@@ -172,20 +176,20 @@ class SetViewer extends Component {
 											</div>
 
 											<div className="field">
-													<p className="control has-icons-left">
+												<p className="control has-icons-left">
 
-														<input
-															type="date"
-															className="input"
-															onInput={this.onSetDateInput}
-															placeholder="Set Date"
-															value={set.setdate}/>
+													<input
+														type="date"
+														className="input"
+														onChange={this.onSetDateInput}
+														placeholder="Set Date"
+														value={setDate}/>
 
-														<span className="icon is-small is-left">
-															 <i className="fa fa-chevron-right"/>
-														</span>
+													<span className="icon is-small is-left">
+														 <i className="fa fa-chevron-right"/>
+													</span>
 
-													</p>
+												</p>
 
 											</div>
 
@@ -193,11 +197,9 @@ class SetViewer extends Component {
 												<a className="button is-primary"
 												   onClick={this.onSaveSet}>Save</a>
 											</div>
-
-
 										</div>
 
-									] : (
+									) : (
 
 										<div>
 											<p className="title">
@@ -206,6 +208,9 @@ class SetViewer extends Component {
 
 											<h2 className="subtitle">
 												{set.author}
+											</h2>
+											<h2 className="subtitle">
+												{set.setDate}
 											</h2>
 										</div>
 
@@ -217,14 +222,14 @@ class SetViewer extends Component {
 
 									<div className="field has-addons">
 										<p className="control">
-											{mode === 'edit' ? [
+											{mode === 'edit' ? (
 												<a className="button is-primary"
 												   onClick={this.editModeOff}>
 													<span className="icon is-small">
 														<i className="fa fa-sliders"/>
 													</span>
 												</a>
-											] : (
+											) : (
 												<a className="button" onClick={this.editModeOn}>
 														<span className="icon is-small">
 															<i className="fa fa-sliders"/>
@@ -247,7 +252,7 @@ class SetViewer extends Component {
 								<div className="column no-print">
 
 									<div className="field has-addons">
-										{mode === 'edit' ? [
+										{mode === 'edit' ? (
 											<p className="control">
 
 												<a className="button is-outlined"
@@ -258,7 +263,7 @@ class SetViewer extends Component {
 
 											</p>
 
-										] : (
+										) : (
 											<p className="control">
 											</p>
 										)}
@@ -283,7 +288,7 @@ class SetViewer extends Component {
 								:
 								<tr>
 									<td>
-										<p className="subtitle" >This set has no songs</p>
+										<p className="subtitle">This set has no songs</p>
 
 										<a className="button is-primary"
 										   href={`/songs/add-to-set/${set._id}`}>
@@ -314,7 +319,7 @@ class SetViewer extends Component {
 		const key = setSong ? setSong.key : song.key;
 
 		return (
-			<tr key={songCount}>
+			<tr key={song._id}>
 
 				<td className="title is-4">
 					{songCount + 1}
@@ -329,43 +334,37 @@ class SetViewer extends Component {
 				<td>
 					<div className="field is-grouped">
 
-						{mode === 'edit' && [
-							<a className="button is-small is-white" title="transpose down"
-							   onClick={() => this.transposeDown( song )}>
-								<span className="icon is-small"><i className="fa fa-minus"/></span>
-							</a>
-						]}
+						{mode === 'edit' &&
+						<a className="button is-small is-white" title="transpose down"
+						   onClick={() => this.transposeDown( song )}>
+							<span className="icon is-small"><i className="fa fa-minus"/></span>
+						</a>}
 
 						<KeySelector
 							onSelect={( key, amount ) => this.changeKey( song._id, amount )}
 							value={key}
 						/>
 
-						{mode === 'edit' && [
+						{mode === 'edit' &&
+						<a className="button is-small is-white" title="transpose up"
+						   onClick={() => this.transposeUp( song )}>
 
-							<a className="button is-small is-white" title="transpose up"
-							   onClick={() => this.transposeUp( song )}>
-
-								<span className="icon is-small"><i className="fa fa-plus"/></span>
-							</a>
-						]}
-
+							<span className="icon is-small"><i className="fa fa-plus"/></span>
+						</a>}
 
 					</div>
-
 				</td>
 
-				{mode === 'edit' && (
+				{mode === 'edit' &&
+				<React.Fragment>
 					<td>
 						<a
 							onClick={() => this.onMoveSongUp( song._id )}
 							title="move this song up the list">
-							<span className="icon is-small is-left"><i className="fa fa-arrow-up"/></span>
+								<span className="icon is-small is-left"><i
+									className="fa fa-arrow-up"/></span>
 						</a>
 					</td>
-				)}
-
-				{mode === 'edit' && (
 					<td>
 						<a
 							onClick={() => this.onMoveSongDown( song._id )}
@@ -374,8 +373,6 @@ class SetViewer extends Component {
 								className="fa fa-arrow-down"/></span>
 						</a>
 					</td>
-				)}
-				{mode === 'edit' && (
 					<td>
 						<a
 							onClick={() => this.removeSong( song._id )}
@@ -384,7 +381,7 @@ class SetViewer extends Component {
 								className="fa fa-trash"/></span>
 						</a>
 					</td>
-				)}
+				</React.Fragment>}
 
 			</tr>
 		);

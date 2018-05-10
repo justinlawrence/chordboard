@@ -73,9 +73,9 @@ class SetContainer extends Component {
 	};
 
 	handleProps = props => {
-		if ( !this.state.set || this.state.set._id !== props.setId ) {
+		/*if ( !this.state.set || this.state.set._id !== props.setId ) {
 			props.fetchCurrentSet( props.setId );
-		}
+		}*/
 		if ( this.props.currentSet ) {
 			this.setState( { set: this.props.currentSet } );
 		}
