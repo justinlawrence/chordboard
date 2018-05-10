@@ -2,15 +2,76 @@ import React, { Component } from 'react';
 import { find, findIndex } from 'lodash'
 import { Link } from 'react-router-dom';
 
+
 import KeySelector from 'app/common/KeySelector';
+
+// transferred from SetEditor - start
+
+import PouchDB from 'pouchdb';
+import PouchDBFindPlugin from 'pouchdb-find';
+PouchDB.plugin( PouchDBFindPlugin );
+
+const db = new PouchDB( 'chordboard' );
+
+// transferred from SetEditor - end
+
 
 import './SetViewer.scss';
 
 class SetViewer extends Component {
 	state = {
 		isLoading: false,
-		mode: ''
+		mode: '',
+		title: '', // transferred from SetEditor
+		setdate: '' // transferred from SetEditor
+
 	};
+
+
+// transferred from SetEditor - start
+
+	onTitleInput = event => {
+		this.setState( { title: event.target.value } );
+	};
+
+	onSetDateInput = event => {
+		this.setState( { date: event.target.value } );
+	};
+
+	onSaveSet = () => {
+
+		const { user } = this.props;
+		const { title } = this.state;
+		const { setdate } = this.state;
+
+		db.post( {
+			type: 'set',
+			author: user.name,
+			slug: slugify( title ),
+			title: title,
+			setdate: setdate,
+			songs: []
+		} ).then( doc => {
+
+			PouchDB.sync( 'chordboard',
+				'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard' );
+
+			if ( this.props.history ) {
+				this.props.history.push( {
+					pathname: `/sets/${doc.id}`
+				} );
+			}
+
+		} );
+
+	};
+
+	// transferred from SetEditor - end
+
+
+
+
+
 
 	editModeOff = () => this.setState( { mode: '' } );
 	editModeOn = () => this.setState( { mode: 'edit' } );
@@ -71,6 +132,14 @@ class SetViewer extends Component {
 		const { set } = this.props;
 		const { mode, songCount } = this.state;
 
+		// transferred from SetEditor - start
+
+		const { title } = this.state;
+		const { setdate } = this.state;
+
+		// transferred from SetEditor - end
+
+
 		return set && (
 			<div className="set-viewer">
 				<section className="hero is-small is-light">
@@ -82,17 +151,63 @@ class SetViewer extends Component {
 
 									{mode === 'edit' ? [
 
-									<p className="title">
-										{set.title}
-									</p>,
+										<div>
+											<div className="field">
 
-									<h2 className="subtitle">
-										{set.author}
-									</h2>
+												<p className="control has-icons-left">
+
+													<input
+														type="text"
+														className="input"
+														onInput={this.onTitleInput}
+														placeholder="Title"
+														value={set.title}/>
+
+													<span className="icon is-small is-left">
+															<i className="fa fa-chevron-right"/>
+													</span>
+
+												</p>
+
+											</div>
+
+											<div className="field">
+													<p className="control has-icons-left">
+
+														<input
+															type="date"
+															className="input"
+															onInput={this.onSetDateInput}
+															placeholder="Set Date"
+															value={set.setdate}/>
+
+														<span className="icon is-small is-left">
+															 <i className="fa fa-chevron-right"/>
+														</span>
+
+													</p>
+
+											</div>
+
+											<div className="column">
+												<a className="button is-primary"
+												   onClick={this.onSaveSet}>Save</a>
+											</div>
+
+
+										</div>
 
 									] : (
 
-									<p>Edit mode</p>
+										<div>
+											<p className="title">
+												{set.title}
+											</p>
+
+											<h2 className="subtitle">
+												{set.author}
+											</h2>
+										</div>
 
 									)}
 
@@ -168,7 +283,7 @@ class SetViewer extends Component {
 								:
 								<tr>
 									<td>
-										<p className="subtitle">This set has no songs</p>
+										<p className="subtitle" >This set has no songs</p>
 
 										<a className="button is-primary"
 										   href={`/songs/add-to-set/${set._id}`}>

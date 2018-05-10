@@ -24,10 +24,15 @@ class SetEditor extends Component {
 		this.setState( { title: event.target.value } );
 	};
 
+	onSetDateInput = event => {
+		this.setState( { date: event.target.value } );
+	};
+
 	onSaveSet = () => {
 
 		const { user } = this.props;
 		const { title } = this.state;
+		const { setdate } = this.state;
 
 		db.post( {
 			type: 'set',
@@ -55,6 +60,7 @@ class SetEditor extends Component {
 
 		//JL TODO: props was {}, not sure whether it should be below
 		const { title } = this.state;
+		const { setdate } = this.state;
 
 		return (
 			<section className="section">
@@ -72,8 +78,8 @@ class SetEditor extends Component {
 										value={title}/>
 
 									<span className="icon is-small is-left">
-						                <i className="fa fa-chevron-right"/>
-						            </span>
+					          	<i className="fa fa-chevron-right"/>
+						      </span>
 
 								</p>
 							</div>
@@ -83,13 +89,13 @@ class SetEditor extends Component {
 									<input
 										type="date"
 										className="input"
-										onInput={this.onTitleInput}
+										onInput={this.onSetDateInput}
 										placeholder="Set Date"
 										value={setdate}/>
 
 									<span className="icon is-small is-left">
-						                <i className="fa fa-chevron-right"/>
-						            </span>
+						         <i className="fa fa-chevron-right"/>
+						      </span>
 
 								</p>
 							</div>

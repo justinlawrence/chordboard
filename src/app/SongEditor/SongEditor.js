@@ -304,7 +304,7 @@ class SongEditor extends Component {
 										placeholder="Type words and chords here."
 										value={content}
 										rows="25"
-									>										
+									>
 									</textarea>
 								</p>
 
