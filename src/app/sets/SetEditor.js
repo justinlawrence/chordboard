@@ -17,7 +17,7 @@ db.createIndex( {
 class SetEditor extends Component {
 	state = {
 		title: '',
-		setdate: ''
+		setDate: ''
 	};
 
 	onTitleInput = event => {
@@ -25,21 +25,21 @@ class SetEditor extends Component {
 	};
 
 	onSetDateInput = event => {
-		this.setState( { date: event.target.value } );
+		this.setState( { setDate: event.target.value } );
 	};
 
 	onSaveSet = () => {
 
 		const { user } = this.props;
 		const { title } = this.state;
-		const { setdate } = this.state;
+		const { setDate } = this.state;
 
 		db.post( {
 			type: 'set',
 			author: user.name,
 			slug: slugify( title ),
 			title: title,
-			setdate: setdate,
+			setDate: setDate,
 			songs: []
 		} ).then( doc => {
 
@@ -60,7 +60,7 @@ class SetEditor extends Component {
 
 		//JL TODO: props was {}, not sure whether it should be below
 		const { title } = this.state;
-		const { setdate } = this.state;
+		const { setDate } = this.state;
 
 		return (
 			<section className="section">
@@ -91,7 +91,7 @@ class SetEditor extends Component {
 										className="input"
 										onInput={this.onSetDateInput}
 										placeholder="Set Date"
-										value={setdate}/>
+										value={setDate}/>
 
 									<span className="icon is-small is-left">
 						         <i className="fa fa-chevron-right"/>
