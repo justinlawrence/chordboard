@@ -1,4 +1,4 @@
-import {uniqBy} from 'lodash';
+import { uniqBy } from 'lodash';
 import PouchDB from 'pouchdb';
 import PouchDBFindPlugin from 'pouchdb-find';
 
@@ -12,7 +12,7 @@ db.createIndex( {
 
 const remoteDbSettings = {
 	adapter: 'http',
-	auth:    {
+	auth: {
 		username: 'justinlawrence',
 		password: 'cXcmbbLFO8'
 	}
@@ -20,7 +20,7 @@ const remoteDbSettings = {
 const remoteDB = new PouchDB( 'https://couchdb.cloudno.de/chordboard', remoteDbSettings );
 
 export const sync = db.sync( remoteDB, {
-	live:  true,
+	live: true,
 	retry: true
 } );
 
@@ -52,7 +52,7 @@ export const Sets = {
 		} );
 
 	},
-	getAll:       () => {
+	getAll: () => {
 
 		return db
 			.find( {
