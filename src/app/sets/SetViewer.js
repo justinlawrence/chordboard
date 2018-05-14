@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { find, findIndex } from 'lodash'
 import { Link } from 'react-router-dom';
 
+import Grid from 'material-ui/Grid';
 
+import DateSignifier from '../../components/DateSignifier';
 import KeySelector from 'app/common/KeySelector';
 
 import PouchDB from 'pouchdb';
@@ -200,20 +202,19 @@ class SetViewer extends Component {
 										</div>
 
 									) : (
-
-										<div>
-											<p className="title">
-												{set.title}
-											</p>
-
-											<h2 className="subtitle">
-												{set.author}
-											</h2>
-											<h2 className="subtitle">
-												{set.setDate}
-											</h2>
-										</div>
-
+										<Grid container spacing={24}>
+											<Grid item>
+												<DateSignifier date={set.setDate}/>
+											</Grid>
+											<Grid item>
+												<p className="title">
+													{set.title}
+												</p>
+												<h2 className="subtitle">
+													{set.author}
+												</h2>
+											</Grid>
+										</Grid>
 									)}
 
 								</div>
