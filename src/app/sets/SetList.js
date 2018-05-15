@@ -1,7 +1,16 @@
 import React, {Component} from 'react';
+import DateSignifier from '../../components/DateSignifier';
 import {Link} from 'react-router-dom';
 import SetLink from './SetLink';
-import DateSignifier from '../../components/DateSignifier';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import Typography from '@material-ui/core/Typography';
+import { withStyles } from 'material-ui/styles';
 
 class SetList extends Component {
 	state = {
@@ -67,28 +76,47 @@ class SetList extends Component {
 
 							</div>
 
-							<table className="table is-bordered is-striped is-fullwidth">
+							<Table>
+								<TableHead>
+									<TableRow>
+										<TableCell>Date</TableCell>
+										<TableCell>Set</TableCell>
+									</TableRow>
+								</TableHead>
 
-								<tbody>
+								<TableBody>
 
 								{sets.filter( this.filterSets ).map( set => (
 
-									<tr key={set._id}>
-										<td>
+									<TableRow key={set._id}>
+
+										<TableCell>
 											<DateSignifier date={set.setDate}/>
-										</td>
-										<td>
+										</TableCell>
+
+										<TableCell>
+
 											<SetLink setFocusedSet={setFocusedSet} set={set}>
-												<p>{set.title}</p>
+
+												<Typography variant="title" gutterBottom>
+														{set.title}
+												</Typography>
+
+												<Typography gutterBottom>
+													{set.author}
+												</Typography>
+
 											</SetLink>
-											<p>{set.author}</p>
-										</td>
-									</tr>
+
+										</TableCell>
+
+									</TableRow>
+
 								) )}
 
-								</tbody>
+								</TableBody>
 
-							</table>
+							</Table>
 
 						</div>
 
