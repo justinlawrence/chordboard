@@ -77,6 +77,7 @@ class SetList extends Component {
 							</div>
 
 							<Table>
+								
 								<TableHead>
 									<TableRow>
 										<TableCell>Date</TableCell>

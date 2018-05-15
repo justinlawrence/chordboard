@@ -3,7 +3,14 @@ import {uniqBy} from 'lodash';
 
 import {db} from 'database';
 
-import './SongList.scss';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import Typography from '@material-ui/core/Typography';
 
 class SongList extends Component {
 	state = {
@@ -86,7 +93,7 @@ class SongList extends Component {
 				<div className="container">
 					<div className="columns">
 
-						<div className="column is-three-quarters">
+						<div className="column">
 
 
 							<div className="field has-addons has-addons-right">
@@ -115,40 +122,44 @@ class SongList extends Component {
 
 							</div>
 
-							<table className="table is-bordered is-striped is-fullwidth">
+							<Table>
 
-								<tbody>
+								<TableHead>
+									<TableRow>
+										<TableCell>Song</TableCell>
+										<TableCell className="is-hidden-mobile">Author</TableCell>
+										<TableCell className="is-hidden-mobile">Key</TableCell>
+									</TableRow>
+								</TableHead>
+
+								<TableBody>
 
 								{songs.filter( this.filterSongs ).map(
 									( song, i ) => (
-										<tr key={song._id}>
+										<TableRow key={song._id}>
 
 
-											<td>
+											<TableCell>
+												<Typography variant="title" gutterBottom>
+													<a href={`/songs/${song._id}`}> {song.title}</a>
+												</Typography>
+											</TableCell>
 
-												<a href={`/songs/${song._id}`}> {song.title}</a>
 
-											</td>
-
-
-											<td  className="is-hidden-mobile">
-
-												<span>
+											<TableCell className="is-hidden-mobile">
 													{song.author}
-												</span>
-
-											</td>
+											</TableCell>
 
 
 
-											<td>
-												<span className="help">
+											<TableCell className="is-hidden-mobile">
+												<Typography variant="title" gutterBottom>
 													{song.key}
-												</span>
-											</td>
+												</Typography>
+											</TableCell>
 
 											{isAddToSet &&
-											<td>
+											<TableCell>
 												<button className="button is-primary is-outlined"
 												        onClick={() => this.addToSet( song )}>
 													<span>Add to set</span>
@@ -156,14 +167,14 @@ class SongList extends Component {
 														<i className="fa fa-chevron-right"></i>
 												    </span>
 												</button>
-											</td>
+											</TableCell>
 											}
-										</tr>
+										</TableRow>
 									) )}
 
-								</tbody>
+								</TableBody>
 
-							</table>
+							</Table>
 
 						</div>
 
