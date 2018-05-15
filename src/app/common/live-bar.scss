@@ -25,10 +25,6 @@
 			white-space:   nowrap;
 			min-width:     8em;
 			max-width:     90%;
-
-			.song-key {
-				margin-right: 0.5em;
-			}
 		}
 
 		&:hover {
@@ -67,16 +63,29 @@
 		flex-wrap:   nowrap;
 		padding:     0 .25em;
 		overflow-y:hidden ;
+		text-transform: uppercase;
+		font-size:.9em;
 
 		&__item {
 			background-color: #eee;
 			border-radius:    .25em;
 			color:            black;
 			padding:          .5em;
+			height: 					40px;
 
 			& + & {
 				margin-left: .25em;
 			}
+
+			&:hover {
+				background-color: darken(#eee, 3%);
+			}
+
+			.song-key {
+				margin-right: 0.5em;
+			}
+
 		}
+
 	}
 }

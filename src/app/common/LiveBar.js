@@ -11,12 +11,6 @@ import './live-bar.scss';
 
 import { withStyles } from 'material-ui/styles';
 
-import Button from '@material-ui/core/Button';
-
-import SetlistIcon from 'mdi-material-ui/FormatListBulleted';
-import ChevronRightIcon from 'mdi-material-ui/ChevronRight';
-import ChevronLeftIcon from 'mdi-material-ui/ChevronRight';
-
 
 const styles = theme => ({
 	container: {
@@ -225,7 +219,7 @@ class LiveBar extends Component {
 								{nextSongTitle}
 							</React.Fragment>
 						)}
-						
+
 						<span className="icon"><i className="fa fa-angle-right fa-lg"/></span>
 
 					</a>
