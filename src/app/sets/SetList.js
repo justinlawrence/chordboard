@@ -48,7 +48,7 @@ class SetList extends Component {
 				<div className="container">
 					<div className="columns">
 
-						<div className="column is-three-quarters">
+						<div className="column">
 
 							<div className="field has-addons has-addons-right">
 								<p className="control has-icons-left">
@@ -77,7 +77,7 @@ class SetList extends Component {
 							</div>
 
 							<Table>
-								
+
 								<TableHead>
 									<TableRow>
 										<TableCell>Date</TableCell>
