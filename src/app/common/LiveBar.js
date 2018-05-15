@@ -50,6 +50,9 @@ class LiveBar extends Component {
 	handleProps = props => {
 
 		const { location } = props;
+
+		//see if we're currently on a song and therefore need to show the livebar
+
 		const match = matchPath( location.pathname, {
 			path: '/sets/:setId/songs/:songId'
 		} );
@@ -103,7 +106,8 @@ class LiveBar extends Component {
 						nextSongKey:       nextSong ? nextSong.key : '',
 						nextSongTitle:     nextSong ? nextSong.title : '',
 						previousSongKey:   previousSong ? previousSong.key : '',
-						previousSongTitle: previousSong ? previousSong.title : ''
+						previousSongTitle: previousSong ? previousSong.title : '',
+						currentSetId: set._id
 					} );
 
 				} );
@@ -128,7 +132,8 @@ class LiveBar extends Component {
 			nextSongKey,
 			nextSongTitle,
 			previousSongKey,
-			previousSongTitle
+			previousSongTitle,
+			currentSetId
 		} = this.state;
 
 		const sections = [];
@@ -181,6 +186,7 @@ class LiveBar extends Component {
 							href={`#section-${section.index}`}
 							className="live-bar__section-link song-viewer__section"
 							data-section={section.text}
+							title={`Jump to the ${section.text}`}
 						/>
 					) )}
 
@@ -191,14 +197,19 @@ class LiveBar extends Component {
 
 					<Link
 						className="live-bar__navigation-actions__item"
-						to={`/sets/${this.props.match.params.setId}`}
-					    title="Setlist">
+						to={`/sets/${currentSetId}`}
+					    title="Go back to the setlist">
 							<span className="icon"><i className="fa fa-list-ul"/></span>
 							Setlist
 					</Link>
 
-					<a className="live-bar__navigation-actions__item"
-					   onClick={onGoToPreviousSong}>
+
+					<a
+						className="live-bar__navigation-actions__item"
+					  onClick={onGoToPreviousSong}
+						title="Jump to the previous song"
+						>
+
 
 						<span className="icon"><i className="fa fa-angle-left fa-lg"/></span>
 
@@ -210,7 +221,12 @@ class LiveBar extends Component {
 						)}
 
 					</a>
-					<a className="live-bar__navigation-actions__item" onClick={onGoToNextSong}>
+
+					<a
+						className="live-bar__navigation-actions__item"
+						onClick={onGoToNextSong}
+						title="Jump to the next song"
+						>
 
 
 						{nextSongTitle && (
