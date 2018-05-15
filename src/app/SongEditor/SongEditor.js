@@ -7,17 +7,18 @@ import { parseSong } from '../SongViewer/SongViewer.js';
 import { db } from 'database';
 import Song from '../common/Song.js';
 import chordproParser from 'app/parsers/chordpro-parser.js';
+import Parser from 'app/parsers/song-parser.js';
 import '../SongEditor/SongEditor.scss';
 
 class SongEditor extends Component {
 	state = {
-		author:     '',
-		isLoading:  false,
-		title:      '',
-		key:        '',
-		content:    '',
+		author: '',
+		isLoading: false,
+		title: '',
+		key: '',
+		content: '',
 		parserType: 'chords-above-words',
-		song:       null
+		song: null
 	};
 
 	componentDidMount() {
@@ -50,12 +51,12 @@ class SongEditor extends Component {
 					const song = new Song( doc );
 
 					this.setState( {
-						author:    song.author,
+						author: song.author,
 						isLoading: false,
-						title:     song.title,
-						key:       song.key,
-						content:   song.content,
-						song:      song
+						title: song.title,
+						key: song.key,
+						content: song.content,
+						song: song
 					} );
 
 				} )
@@ -64,12 +65,12 @@ class SongEditor extends Component {
 					console.error( 'SongViewer.handleProps -', err );
 
 					this.setState( {
-						author:    '',
+						author: '',
 						isLoading: false,
-						title:     '',
-						key:       '',
-						content:   '',
-						song:      null
+						title: '',
+						key: '',
+						content: '',
+						song: null
 					} );
 
 				} );
@@ -136,12 +137,12 @@ class SongEditor extends Component {
 		if ( isNew ) {
 
 			db.post( {
-				type:    'song',
-				users:   [ 'justin' ], //TODO
-				slug:    slugify( title ),
-				author:  author,
-				title:   title,
-				key:     key,
+				type: 'song',
+				users: [ 'justin' ], //TODO
+				slug: slugify( title ),
+				author: author,
+				title: title,
+				key: key,
 				content: content
 			} ).then( () => {
 
@@ -220,8 +221,8 @@ class SongEditor extends Component {
 			songCopy.content = chordproParser( songCopy.content );
 
 		}
-
-		const previewSong = parseSong( new Song( songCopy ), [] );
+		const parser = new Parser();
+		const previewSong = parseSong( parser.parse( songCopy.content ), [] );
 
 
 		return (

@@ -12,23 +12,20 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import MenuIcon from 'mdi-material-ui/Menu';
 import Button from 'material-ui/Button';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-//import Menu from 'material-ui/Menu';
 
 const styles = theme => ({
-
 	root: {
-	    flexGrow: 1,
-	  },
-	  flex: {
-	    flex: 1,
-	  },
-	  menuButton: {
-	    marginLeft: -12,
-	    marginRight: 20,
-	  }
+		flexGrow: 1,
+	},
+	flex: {
+		flex: 1,
+	},
+	menuButton: {
+		marginLeft: -12,
+		marginRight: 20,
+	}
 });
 
 
@@ -64,21 +61,21 @@ class Navbar extends React.Component {
 
 		return (
 			<div className={classes.root}>
-				<AppBar position="static" className="no-print">
+				<AppBar color="secondary" position="static" className="no-print">
 					<Toolbar>
-	          <IconButton className={classes.menuButton} aria-label="Menu">
-	            <MenuIcon />
-	          </IconButton>
-	          <Typography variant="title" color="inherit" className={classes.flex}>
-	            Chordboard
-	          </Typography>
+						<IconButton className={classes.menuButton} aria-label="Menu">
+							<MenuIcon/>
+						</IconButton>
+						<Typography variant="title" color="inherit" className={classes.flex}>
+							Chordboard
+						</Typography>
 
 						<Button component={Link} color="inherit" to="/sets">Sets</Button>
 						<Button component={Link} color="inherit" to="/songs">Songs</Button>
 
 						<Button color="inherit">Login</Button>
 
-	        </Toolbar>
+					</Toolbar>
 				</AppBar>
 			</div>
 		);
@@ -129,7 +126,7 @@ class Navbar extends React.Component {
 }
 
 Navbar.propTypes = {
-  classes: PropTypes.object,
+	classes: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
@@ -138,4 +135,4 @@ const mapStateToProps = state => ({
 
 //TODO: Brett please check this is right, thanks
 //export default withRouter( connect( mapStateToProps, actions )( Navbar ) );
-export default withStyles(styles)(Navbar);
+export default withStyles( styles )( Navbar );

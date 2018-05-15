@@ -2,34 +2,36 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { find, findIndex } from 'lodash'
 import { Link } from 'react-router-dom';
-
-import Grid from 'material-ui/Grid';
-
-import DateSignifier from '../../components/DateSignifier';
-import KeySelector from 'app/common/KeySelector';
-
 import PouchDB from 'pouchdb';
 
-
-import TextField from '@material-ui/core/TextField';
 import { withStyles } from 'material-ui/styles';
+import Button from 'material-ui/Button';
+import Grid from 'material-ui/Grid';
+import Paper from 'material-ui/Paper';
+import TextField from 'material-ui/TextField';
+import PencilIcon from 'mdi-material-ui/Pencil';
+
+import DateSignifier from '../../components/DateSignifier';
+import Hero from '../../components/Hero';
+import KeySelector from 'app/common/KeySelector';
 
 const styles = theme => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 500,
-		stroke: 'red'
-  },
-  menu: {
-    width: 500,
-  },
+	container: {
+		display: 'flex',
+		flexWrap: 'wrap',
+	},
+	form: theme.mixins.gutters( {
+		paddingBottom: theme.spacing.unit * 2,
+		paddingTop: theme.spacing.unit * 2,
+		width: 500
+	} ),
+	formFooter: {
+		marginTop: theme.spacing.unit * 2
+	},
+	deleteButton: {
+		color: theme.palette.error.main
+	}
 });
-
 
 
 const db = new PouchDB( 'chordboard' );
@@ -70,15 +72,15 @@ class SetViewer extends Component {
 		} );
 	};
 
+	handleDateChange = event => {
+		this.setState( { setDate: event.target.value } );
+	};
+
 	onTitleInput = event => {
 		this.setState( { title: event.target.value } );
 	};
 
-	onSetDateInput = event => {
-		this.setState( { setDate: event.target.value } );
-	};
-
-	onSaveSet = () => {
+	handleSaveSet = () => {
 
 		const { title, setDate } = this.state;
 
@@ -92,11 +94,11 @@ class SetViewer extends Component {
 
 				if ( err.name === 'conflict' ) {
 
-					console.error( 'SetViewer.onSaveSet: conflict -', err );
+					console.error( 'SetViewer.handleSaveSet: conflict -', err );
 
 				} else {
 
-					console.error( 'SetViewer.onSaveSet-', err );
+					console.error( 'SetViewer.handleSaveSet-', err );
 
 				}
 
@@ -106,11 +108,7 @@ class SetViewer extends Component {
 
 	};
 
-
-	editModeOff = () => this.setState( { mode: '' } );
-	editModeOn = () => this.setState( { mode: 'edit' } );
-
-	onDeleteSet = () => {
+	handleDeleteSet = () => {
 
 		if ( this.props.onRemoveSet ) {
 			this.props.onRemoveSet();
@@ -158,6 +156,8 @@ class SetViewer extends Component {
 
 	};
 
+	toggleEditMode = value => () => this.setState( { mode: value ? 'edit' : '' } );
+
 	transposeDown = song => this.changeKey( song._id, -1 );
 	transposeUp = song => this.changeKey( song._id, 1 );
 
@@ -168,156 +168,103 @@ class SetViewer extends Component {
 
 		return set && (
 			<div className="set-viewer">
-				<section className="hero is-small is-light">
-					<div className="hero-body">
-						<div className="container">
-							<div className="columns is-vcentered">
+				<Hero>
+					<Grid container justify="space-between">
+						<Grid item>
+							{mode === 'edit' ? (
+								<Paper className={classes.form} component="form">
+									<TextField
+										id="title"
+										label="Set title"
+										className={classes.textField}
+										fullWidth
+										value={title}
+										onChange={this.onTitleInput}
+										margin="normal"
+									/>
 
-								<div className="column is-three-quarters">
+									<TextField
+										id="date"
+										label="Set date"
+										type="date"
+										className={classes.textField}
+										fullWidth
+										onChange={this.handleDateChange}
+										InputLabelProps={{
+											shrink: true,
+										}}
+										value={setDate}
+									/>
 
-									{mode === 'edit' ? (
-
-
-										<div>
-											<div className="field">
-
-												<TextField
-																	id="title"
-																	label="Set title"
-																	className={classes.textField}
-																	value={title}
-																	onChange={this.onTitleInput}
-																	margin="normal"
-																/>
-
-												<TextField
-												        id="date"
-												        label="Set date"
-												        type="date"
-												        defaultValue="2017-05-24"
-												        className={classes.textField}
-												        InputLabelProps={{
-												          shrink: true,
-												        }}
-												      />
-
-
-												<p className="control has-icons-left">
-
-													<input
-														type="text"
-														className="input"
-														onChange={this.onTitleInput}
-														placeholder="Title"
-														value={title}/>
-
-													<span className="icon is-small is-left">
-														<i className="fa fa-chevron-right"/>
-													</span>
-
-												</p>
-
-											</div>
-
-											<div className="field">
-												<p className="control has-icons-left">
-
-													<input
-														type="date"
-														className="input"
-														onChange={this.onSetDateInput}
-														placeholder="Set Date"
-														value={setDate}/>
-
-													<span className="icon is-small is-left">
-														 <i className="fa fa-chevron-right"/>
-													</span>
-
-												</p>
-
-											</div>
-
-
-											<div className="field">
-												<p className="control">
-
-													{mode === 'edit' ? (
-
-															<a className="button is-outlined"
-															   onClick={this.onDeleteSet}>
-																<span className="icon is-small is-left"><i
-																	className="fa fa-trash"/></span>
-															</a>
-
-
-													) : (
-														<span></span>
-													)}
-
-													<a className="button is-primary" onClick={this.onSaveSet}>Save</a>
-
-												</p>
-
-												</div>
-
-										</div>
-
-									) : (
-										<Grid container spacing={24}>
-											<Grid item>
-												<DateSignifier date={set.setDate}/>
-											</Grid>
-											<Grid item>
-												<p className="title">
-													{set.title}
-												</p>
-												<h2 className="subtitle">
-													{set.author}
-												</h2>
-											</Grid>
+									<Grid
+										container
+										className={classes.formFooter}
+										justify="flex-end"
+									>
+										<Grid item>
+											<Button
+												className={classes.deleteButton}
+												onClick={this.handleDeleteSet}
+											>
+												Delete this set
+											</Button>
+											<Button
+												onClick={this.toggleEditMode( false )}
+											>
+												Cancel
+											</Button>
+											<Button
+												color="primary"
+												onClick={this.handleSaveSet}
+											>
+												Save
+											</Button>
 										</Grid>
-									)}
-
-								</div>
-
-								<div className="column">
-
-									<div className="field has-addons">
-										<p className="control">
-											{mode === 'edit' ? (
-												<a className="button is-primary"
-												   onClick={this.editModeOff}>
-													<span className="icon is-small">
-														<i className="fa fa-sliders"/>
-													</span>
-												</a>
-											) : (
-												<a className="button" onClick={this.editModeOn}>
-														<span className="icon is-small">
-															<i className="fa fa-sliders"/>
-														</span>
-												</a>
-											)}
+									</Grid>
+								</Paper>
+							) : (
+								<Grid container spacing={24}>
+									<Grid item>
+										<DateSignifier date={set.setDate}/>
+									</Grid>
+									<Grid item>
+										<p className="title">
+											{set.title}
 										</p>
-										<p className="control">
-											<a className="button"
-											   href={`/songs/add-to-set/${set._id}`}>
-												Add songs
-											</a>
-										</p>
+										<h2 className="subtitle">
+											{set.author}
+										</h2>
+									</Grid>
+								</Grid>
+							)}
 
-									</div>
-								</div>
-							</div>
-
-						</div>
-
-					</div>
-				</section>
-
+						</Grid>
+						<Grid item>
+							<Button
+								color="primary"
+								onClick={this.toggleEditMode( mode !== 'edit' )}
+								variant="fab"
+							>
+								<PencilIcon/>
+							</Button>
+						</Grid>
+					</Grid>
+				</Hero>
 
 				<section className="section">
 					<div className="container">
+
+						<Grid container justify="flex-end">
+							<Grid item>
+								<Button
+									href={`/songs/add-to-set/${set._id}`}
+									onClick={this.handleSaveSet}
+									variant="raised"
+								>
+									Add a song
+								</Button>
+							</Grid>
+						</Grid>
 
 						<table className="table is-bordered is-striped is-fullwidth">
 
@@ -428,5 +375,5 @@ class SetViewer extends Component {
 	};
 }
 
-export default withStyles(styles)(SetViewer);
+export default withStyles( styles )( SetViewer );
 //export default SetViewer;
