@@ -234,11 +234,11 @@ class SetViewer extends Component {
 								</Paper>
 							) : (
 								<Grid container spacing={24}>
-									<Grid item>
+									<Grid item className="is-hidden-mobile">
 										<DateSignifier date={set.setDate}/>
 									</Grid>
 									<Grid item>
-										<Typography variant="title" gutterBottom>
+										<Typography variant="subheading" gutterBottom>
         							{set.title}
       							</Typography>
 										<Typography gutterBottom>
