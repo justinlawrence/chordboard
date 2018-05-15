@@ -8,12 +8,22 @@ import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 import TextField from 'material-ui/TextField';
+import Typography from '@material-ui/core/Typography';
 import PencilIcon from 'mdi-material-ui/Pencil';
 
 import DateSignifier from '../../components/DateSignifier';
 import Hero from '../../components/Hero';
 import KeySelector from 'app/common/KeySelector';
+
+
 
 const styles = theme => ({
 	container: {
@@ -228,12 +238,12 @@ class SetViewer extends Component {
 										<DateSignifier date={set.setDate}/>
 									</Grid>
 									<Grid item>
-										<p className="title">
-											{set.title}
-										</p>
-										<h2 className="subtitle">
+										<Typography variant="title" gutterBottom>
+        							{set.title}
+      							</Typography>
+										<Typography gutterBottom>
 											{set.author}
-										</h2>
+										</Typography>
 									</Grid>
 								</Grid>
 							)}
@@ -266,27 +276,37 @@ class SetViewer extends Component {
 							</Grid>
 						</Grid>
 
-						<table className="table is-bordered is-striped is-fullwidth">
+						<Table className={classes.table} aria-labelledby="tableTitle">
 
-							<tbody>
+							<TableHead>
+								<TableRow>
+									<TableCell>Song</TableCell>
+									<TableCell>Key</TableCell>
+								</TableRow>
+							</TableHead>
+
+							<TableBody>
 							{set.songs.length ?
 								set.songs.map( this._createRow )
 								:
-								<tr>
-									<td>
+								<TableRow key="id-none">
+									<TableCell/>
+
+          				<TableCell>
 										<p className="subtitle">This set has no songs</p>
 
 										<a className="button is-primary"
 										   href={`/songs/add-to-set/${set._id}`}>
 											Add songs
 										</a>
-									</td>
+									</TableCell>
 
-								</tr>
+									<TableCell/>
+
+								</TableRow>
 							}
-							</tbody>
-
-						</table>
+							</TableBody>
+						</Table>
 
 					</div>
 
@@ -305,19 +325,20 @@ class SetViewer extends Component {
 		const key = setSong ? setSong.key : song.key;
 
 		return (
-			<tr key={song._id}>
+			<TableRow key={song._id}>
 
-				<td className="title is-4">
-					{songCount + 1}
-				</td>
-
-				<td className="title is-4">
+				<TableCell>
 					<Link to={`/sets/${set._id}/songs/${song._id}`}>
-						{song.title}
+							<Typography variant="title" gutterBottom>
+								{songCount + 1}.
+								&nbsp;
+								&nbsp;
+								{song.title}
+							</Typography>
 					</Link>
-				</td>
+				</TableCell>
 
-				<td>
+				<TableCell>
 					<div className="field is-grouped">
 
 						{mode === 'edit' &&
@@ -339,37 +360,32 @@ class SetViewer extends Component {
 						</a>}
 
 					</div>
-				</td>
+				</TableCell>
 
 				{mode === 'edit' &&
-				<React.Fragment>
-					<td>
+					<TableCell>
 						<a
 							onClick={() => this.onMoveSongUp( song._id )}
 							title="move this song up the list">
 								<span className="icon is-small is-left"><i
 									className="fa fa-arrow-up"/></span>
 						</a>
-					</td>
-					<td>
 						<a
 							onClick={() => this.onMoveSongDown( song._id )}
 							title="move this song down the list">
 							<span className="icon is-small is-left"><i
 								className="fa fa-arrow-down"/></span>
 						</a>
-					</td>
-					<td>
 						<a
 							onClick={() => this.removeSong( song._id )}
 							title="remove this song from the list">
 							<span className="icon is-small is-left"><i
 								className="fa fa-trash"/></span>
 						</a>
-					</td>
-				</React.Fragment>}
+					</TableCell>
+				}
 
-			</tr>
+			</TableRow>
 		);
 
 	};
