@@ -16,6 +16,12 @@ import Parser from 'app/parsers/song-parser.js';
 import transposeChord from '../common/transpose-chord';
 import transposeLines from '../common/transpose-lines';
 
+import { withStyles } from 'material-ui/styles';
+import Grid from 'material-ui/Grid';
+import Hero from '../../components/Hero';
+import Typography from '@material-ui/core/Typography';
+
+
 import './SongViewer.scss';
 
 class SongViewer extends Component {
@@ -173,21 +179,22 @@ class SongViewer extends Component {
 		return (
 			song ?
 				<div className="song-viewer">
-					<section className="hero is-small is-light">
-						<div className="hero-body">
-							<div className="container">
-								<div className="columns is-vcentered">
+					<Hero>
+						<Grid container justify="space-between">
+							<Grid item>
+									<Typography variant="display2">
+										{song.title}
+									</Typography>
+									<Typography variant="title">
+										{song.author}
+									</Typography>
+									<Typography>
+										Set key: {this.props.setKey} • Capo: {capo}
+									</Typography>
 
-									<div className="column">
-										<p className="title">
-											{song.title}
-										</p>
-										<h2 className="subtitle">
-											{song.author}
-										</h2>
-									</div>
+								</Grid>
 
-									<div className="column no-print">
+								<Grid item className="column no-print">
 
 										{/*<a className="button">Key of {song.key}</a>*/}
 
@@ -268,19 +275,12 @@ class SongViewer extends Component {
 												</div>
 											</div>
 
-											<div className="control">
-												<p>Set key: {this.props.setKey}<br/>Capo: {capo}</p>
-											</div>
-
-
 										</div>
 
-									</div>
+									</Grid>
+								</Grid>
 
-								</div>
-							</div>
-						</div>
-					</section>
+						</Hero>
 
 					<section className="section">
 						<div className="container">
