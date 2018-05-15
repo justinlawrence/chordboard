@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import SetLink from './SetLink';
-
-import './SetList.scss';
+import DateSignifier from '../../components/DateSignifier';
 
 class SetList extends Component {
 	state = {
@@ -12,13 +11,13 @@ class SetList extends Component {
 	componentDidMount() {
 
 		//Set the page title to make it easier to locate
-		document.title = 'Setlist';
+		document.title = 'Setlists';
 
 	}
 
 	filterSets = set => {
 
-		return set.title.toLowerCase().includes( this.state.searchText );
+		return set.title.toLowerCase().includes( this.state.searchText ) || set.author.toLowerCase().includes( this.state.searchText );
 
 	};
 
@@ -76,15 +75,13 @@ class SetList extends Component {
 
 									<tr key={set._id}>
 										<td>
-											{set.author}
-										</td>
-										<td>
-											{set.setDate}
+											<DateSignifier date={set.setDate}/>
 										</td>
 										<td>
 											<SetLink setFocusedSet={setFocusedSet} set={set}>
-												{set.title}
+												<p>{set.title}</p>
 											</SetLink>
+											<p>{set.author}</p>
 										</td>
 									</tr>
 								) )}

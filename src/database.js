@@ -54,6 +54,8 @@ export const Sets = {
 	},
 	getAll: () => {
 
+		//could we sort on doctype + setDate for these? see https://pouchdb.com/2014/05/01/secondary-indexes-have-landed-in-pouchdb.html
+
 		return db
 			.find( {
 				selector: {

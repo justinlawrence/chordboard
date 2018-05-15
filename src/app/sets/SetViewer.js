@@ -10,7 +10,27 @@ import KeySelector from 'app/common/KeySelector';
 
 import PouchDB from 'pouchdb';
 
-import './SetViewer.scss';
+
+import TextField from '@material-ui/core/TextField';
+import { withStyles } from 'material-ui/styles';
+
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 500,
+		stroke: 'red'
+  },
+  menu: {
+    width: 500,
+  },
+});
+
+
 
 const db = new PouchDB( 'chordboard' );
 
@@ -143,7 +163,7 @@ class SetViewer extends Component {
 
 	render() {
 
-		const { set } = this.props;
+		const { set, classes } = this.props;
 		const { mode, songCount, setDate, title } = this.state;
 
 		return set && (
@@ -157,8 +177,30 @@ class SetViewer extends Component {
 
 									{mode === 'edit' ? (
 
+
 										<div>
 											<div className="field">
+
+												<TextField
+																	id="title"
+																	label="Set title"
+																	className={classes.textField}
+																	value={title}
+																	onChange={this.onTitleInput}
+																	margin="normal"
+																/>
+
+												<TextField
+												        id="date"
+												        label="Set date"
+												        type="date"
+												        defaultValue="2017-05-24"
+												        className={classes.textField}
+												        InputLabelProps={{
+												          shrink: true,
+												        }}
+												      />
+
 
 												<p className="control has-icons-left">
 
@@ -195,10 +237,29 @@ class SetViewer extends Component {
 
 											</div>
 
-											<div className="column">
-												<a className="button is-primary"
-												   onClick={this.onSaveSet}>Save</a>
-											</div>
+
+											<div className="field">
+												<p className="control">
+
+													{mode === 'edit' ? (
+
+															<a className="button is-outlined"
+															   onClick={this.onDeleteSet}>
+																<span className="icon is-small is-left"><i
+																	className="fa fa-trash"/></span>
+															</a>
+
+
+													) : (
+														<span></span>
+													)}
+
+													<a className="button is-primary" onClick={this.onSaveSet}>Save</a>
+
+												</p>
+
+												</div>
+
 										</div>
 
 									) : (
@@ -248,30 +309,7 @@ class SetViewer extends Component {
 									</div>
 								</div>
 							</div>
-							<div className="columns is-vcentered">
 
-								<div className="column no-print">
-
-									<div className="field has-addons">
-										{mode === 'edit' ? (
-											<p className="control">
-
-												<a className="button is-outlined"
-												   onClick={this.onDeleteSet}>
-													<span className="icon is-small is-left"><i
-														className="fa fa-trash"/></span>
-												</a>
-
-											</p>
-
-										) : (
-											<p className="control">
-											</p>
-										)}
-									</div>
-
-								</div>
-							</div>
 						</div>
 
 					</div>
@@ -390,4 +428,5 @@ class SetViewer extends Component {
 	};
 }
 
-export default SetViewer;
+export default withStyles(styles)(SetViewer);
+//export default SetViewer;

@@ -4,8 +4,6 @@ import slugify from 'slugify';
 import PouchDB from 'pouchdb';
 import PouchDBFindPlugin from 'pouchdb-find';
 
-import './SetEditor.scss';
-
 PouchDB.plugin( PouchDBFindPlugin );
 
 const db = new PouchDB( 'chordboard' );
