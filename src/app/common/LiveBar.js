@@ -8,6 +8,35 @@ import Song from 'app/common/Song.js';
 
 import './live-bar.scss';
 
+
+import { withStyles } from 'material-ui/styles';
+
+import Button from '@material-ui/core/Button';
+
+import SetlistIcon from 'mdi-material-ui/FormatListBulleted';
+import ChevronRightIcon from 'mdi-material-ui/ChevronRight';
+import ChevronLeftIcon from 'mdi-material-ui/ChevronRight';
+
+
+const styles = theme => ({
+	container: {
+		display: 'flex',
+		flexWrap: 'wrap',
+	},
+	form: theme.mixins.gutters( {
+		paddingBottom: theme.spacing.unit * 2,
+		paddingTop: theme.spacing.unit * 2,
+		width: 500
+	} ),
+	formFooter: {
+		marginTop: theme.spacing.unit * 2
+	},
+	deleteButton: {
+		color: theme.palette.error.main
+	}
+});
+
+
 class LiveBar extends Component {
 	state = {
 		nextSongKey:       '',
@@ -96,7 +125,8 @@ class LiveBar extends Component {
 		const {
 			onExitLiveMode,
 			onGoToNextSong,
-			onGoToPreviousSong
+			onGoToPreviousSong,
+			classes
 		} = this.props;
 
 		const {
@@ -159,44 +189,45 @@ class LiveBar extends Component {
 							data-section={section.text}
 						/>
 					) )}
-					{/* JL: hide the close icon to make room for more song structure.
-							<a className="navbar-item" onClick={onExitLiveMode}>
-							<span className="icon"><i className="fa fa-close"/></span>
-						</a> */}
 
 				</div>
 
-				<Link
-					className="navbar-item"
-					to={`/sets/${this.props.match.params.setId}`}
-				    title="Setlist">
-					<span className="icon"><i className="fa fa-list-ul"/></span>
-				</Link>
 
 				<div className="live-bar__navigation-actions">
+
+					<Link
+						className="live-bar__navigation-actions__item"
+						to={`/sets/${this.props.match.params.setId}`}
+					    title="Setlist">
+							<span className="icon"><i className="fa fa-list-ul"/></span>
+							Setlist
+					</Link>
+
 					<a className="live-bar__navigation-actions__item"
 					   onClick={onGoToPreviousSong}>
 
 						<span className="icon"><i className="fa fa-angle-left fa-lg"/></span>
 
 						{previousSongTitle && (
-							<div className="is-size-7 is-hidden-touch">
+							<React.Fragment>
 								<SongKey value={previousSongKey}/>
 								{previousSongTitle}
-							</div>
+							</React.Fragment>
 						)}
 
 					</a>
 					<a className="live-bar__navigation-actions__item" onClick={onGoToNextSong}>
 
-						<span className="icon"><i className="fa fa-angle-right fa-lg"/></span>
 
 						{nextSongTitle && (
-							<div className="is-size-7 is-hidden-touch">
+							<React.Fragment>
 								<SongKey value={nextSongKey}/>
 								{nextSongTitle}
-							</div>
+							</React.Fragment>
 						)}
+						
+						<span className="icon"><i className="fa fa-angle-right fa-lg"/></span>
+
 					</a>
 				</div>
 
@@ -205,4 +236,37 @@ class LiveBar extends Component {
 	}
 }
 
-export default withRouter( LiveBar );
+export default withStyles( styles )(withRouter( LiveBar ));
+//export default withRouter( LiveBar );
+
+/*
+
+TODO: delete me once you're happy
+
+<a className="live-bar__navigation-actions__item"
+	 onClick={onGoToPreviousSong}>
+
+	<span className="icon"><i className="fa fa-angle-left fa-lg"/></span>
+
+	{previousSongTitle && (
+		<div className="is-size-7 is-hidden-touch">
+			<SongKey value={previousSongKey}/>
+			{previousSongTitle}
+		</div>
+	)}
+
+</a>
+<a className="live-bar__navigation-actions__item" onClick={onGoToNextSong}>
+
+	<span className="icon"><i className="fa fa-angle-right fa-lg"/></span>
+
+	{nextSongTitle && (
+		<div className="is-size-7 is-hidden-touch">
+			<SongKey value={nextSongKey}/>
+			{nextSongTitle}
+		</div>
+	)}
+</a>
+
+
+*/
