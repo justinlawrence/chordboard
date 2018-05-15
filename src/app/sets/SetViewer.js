@@ -280,6 +280,7 @@ class SetViewer extends Component {
 
 							<TableHead>
 								<TableRow>
+									<TableCell>#</TableCell>
 									<TableCell>Song</TableCell>
 									<TableCell>Key</TableCell>
 								</TableRow>
@@ -328,11 +329,14 @@ class SetViewer extends Component {
 			<TableRow key={song._id}>
 
 				<TableCell>
+					<Typography variant="title" gutterBottom>
+						{songCount + 1}.
+					</Typography>
+				</TableCell>
+
+				<TableCell>
 					<Link to={`/sets/${set._id}/songs/${song._id}`}>
 							<Typography variant="title" gutterBottom>
-								{songCount + 1}.
-								&nbsp;
-								&nbsp;
 								{song.title}
 							</Typography>
 					</Link>
