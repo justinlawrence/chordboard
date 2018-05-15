@@ -27,14 +27,16 @@
   },
   "homepage": "https://github.com/justinlawrence/chordboard#readme",
   "dependencies": {
-    "@material-ui/icons": "^1.0.0-beta.43",
+    "@material-ui/core": "latest",
+    "@material-ui/icons": "latest",
     "babel-regenerator-runtime": "^6.5.0",
     "copy-webpack-plugin": "^4.0.1",
     "date-fns": "^1.29.0",
     "lodash": "4.17.4",
-    "material-ui": "^1.0.0-beta.44",
-    "pouchdb": "^6.3.4",
-    "pouchdb-find": "^6.3.4",
+    "material-icons": "^0.2.3",
+    "material-ui": "^1.0.0-beta.47",
+    "pouchdb": "latest",
+    "pouchdb-find": "latest",
     "prop-types": "15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -46,7 +48,7 @@
     "redux-pouchdb": "0.1.1",
     "redux-saga": "^0.16.0",
     "slugify": "^1.2.1",
-    "url": "^0.11.0"
+    "url": "latest"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
