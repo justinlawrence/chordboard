@@ -17,19 +17,6 @@
 		flex-direction:  row;
 		justify-content: center;
 		padding:         0.5rem 0.5rem 0;
-
-		p {
-			height:        3em;
-			overflow:      hidden;
-			text-overflow: ellipsis;
-			white-space:   nowrap;
-			min-width:     8em;
-			max-width:     90%;
-		}
-
-		&:hover {
-			background-color: rgba(10, 10, 10, 0.08);
-		}
 	}
 
 	&__sections {
@@ -66,12 +53,22 @@
 		text-transform: uppercase;
 		font-size:.9em;
 
+		&__setlistbutton {
+			width:     100px !important;
+		}
+
 		&__item {
 			background-color: #eee;
 			border-radius:    .25em;
 			color:            black;
 			padding:          .5em;
 			height: 					40px;
+
+			width:     200px;
+
+			overflow:      hidden;
+			text-overflow: ellipsis;
+			white-space:   nowrap;
 
 			& + & {
 				margin-left: .25em;

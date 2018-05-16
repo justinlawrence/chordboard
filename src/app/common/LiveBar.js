@@ -103,10 +103,10 @@ class LiveBar extends Component {
 
 					this.setState( {
 						currentSong:       currentSong ? new Song( currentSong ) : null,
-						nextSongKey:       nextSong ? nextSong.key : '',
-						nextSongTitle:     nextSong ? nextSong.title : '',
-						previousSongKey:   previousSong ? previousSong.key : '',
-						previousSongTitle: previousSong ? previousSong.title : '',
+						nextSongKey:       nextSong ? nextSong.key : '-',
+						nextSongTitle:     nextSong ? nextSong.title : '-- END --',
+						previousSongKey:   previousSong ? previousSong.key : '-',
+						previousSongTitle: previousSong ? previousSong.title : '-- BEGINNING --',
 						currentSetId: set._id
 					} );
 
@@ -196,7 +196,7 @@ class LiveBar extends Component {
 				<div className="live-bar__navigation-actions">
 
 					<Link
-						className="live-bar__navigation-actions__item"
+						className="live-bar__navigation-actions__item live-bar__navigation-actions__setlistbutton"
 						to={`/sets/${currentSetId}`}
 					    title="Go back to the setlist">
 							<span className="icon"><i className="fa fa-list-ul"/></span>
