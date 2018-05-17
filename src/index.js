@@ -5,7 +5,7 @@ import RenderDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import defaultTheme from './themes/default-theme.js';
 import configureStore from 'configureStore';

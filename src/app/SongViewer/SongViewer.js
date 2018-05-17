@@ -16,8 +16,7 @@ import Parser from 'app/parsers/song-parser.js';
 import transposeChord from '../common/transpose-chord';
 import transposeLines from '../common/transpose-lines';
 
-import { withStyles } from 'material-ui/styles';
-import Grid from 'material-ui/Grid';
+import Grid from '@material-ui/core/Grid';
 import Hero from '../../components/Hero';
 import Typography from '@material-ui/core/Typography';
 

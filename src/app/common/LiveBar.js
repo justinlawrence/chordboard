@@ -9,7 +9,7 @@ import Song from 'app/common/Song.js';
 import './live-bar.scss';
 
 
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 
 const styles = theme => ({
