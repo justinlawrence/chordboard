@@ -22,7 +22,7 @@ export const user = ( state = initialUser, action = {} ) => {
 		case SET_CURRENT_USER:
 			return {
 				...state,
-				...action
+				...action.user
 			};
 
 		default:
