@@ -5,13 +5,14 @@ import Grid from '@material-ui/core/Grid';
 const styles = theme => ({
 	root: theme.mixins.gutters( {
 		backgroundColor: theme.heroBackgroundColor,
+		color: theme.heroContrastText,
 		paddingBottom: theme.spacing.unit * 2,
-		paddingTop: theme.spacing.unit * 2
-	} ),
-	container: {
-		margin: '0 auto',
-		maxWidth: theme.maxPageWidth
-	}
+		paddingTop: theme.spacing.unit * 2,
+
+		'& $Input': {
+			color: theme.heroContrastText
+		}
+	} )
 });
 
 const Hero = ( { children, classes } ) => (

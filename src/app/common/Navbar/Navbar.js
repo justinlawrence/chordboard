@@ -63,7 +63,7 @@ class Navbar extends React.Component {
 			<div className={classes.root}>
 				<AppBar color="secondary" position="static" className="no-print">
 					<Toolbar>
-						<IconButton className={classes.menuButton} aria-label="Menu">
+						<IconButton aria-label="Menu" className={classes.menuButton} color="inherit">
 							<MenuIcon/>
 						</IconButton>
 						<Typography variant="title" color="inherit" className={classes.flex}>

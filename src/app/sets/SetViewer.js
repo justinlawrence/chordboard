@@ -24,11 +24,10 @@ import Hero from '../../components/Hero';
 import KeySelector from 'app/common/KeySelector';
 
 
-
 const styles = theme => ({
 	container: {
 		display: 'flex',
-		flexWrap: 'wrap',
+		flexWrap: 'wrap'
 	},
 	form: theme.mixins.gutters( {
 		paddingBottom: theme.spacing.unit * 2,
@@ -201,7 +200,7 @@ class SetViewer extends Component {
 										fullWidth
 										onChange={this.handleDateChange}
 										InputLabelProps={{
-											shrink: true,
+											shrink: true
 										}}
 										value={setDate}
 									/>
@@ -239,8 +238,8 @@ class SetViewer extends Component {
 									</Grid>
 									<Grid item>
 										<Typography variant="subheading" gutterBottom>
-        							{set.title}
-      							</Typography>
+											{set.title}
+										</Typography>
 										<Typography gutterBottom>
 											{set.author}
 										</Typography>
@@ -287,25 +286,25 @@ class SetViewer extends Component {
 							</TableHead>
 
 							<TableBody>
-							{set.songs.length ?
-								set.songs.map( this._createRow )
-								:
-								<TableRow key="id-none">
-									<TableCell/>
+								{set.songs.length ?
+									set.songs.map( this._createRow )
+									:
+									<TableRow key="id-none">
+										<TableCell/>
 
-          				<TableCell>
-										<p className="subtitle">This set has no songs</p>
+										<TableCell>
+											<p className="subtitle">This set has no songs</p>
 
-										<a className="button is-primary"
-										   href={`/songs/add-to-set/${set._id}`}>
-											Add songs
-										</a>
-									</TableCell>
+											<a className="button is-primary"
+											   href={`/songs/add-to-set/${set._id}`}>
+												Add songs
+											</a>
+										</TableCell>
 
-									<TableCell/>
+										<TableCell/>
 
-								</TableRow>
-							}
+									</TableRow>
+								}
 							</TableBody>
 						</Table>
 
@@ -336,9 +335,9 @@ class SetViewer extends Component {
 
 				<TableCell>
 					<Link to={`/sets/${set._id}/songs/${song._id}`}>
-							<Typography variant="title" gutterBottom>
-								{song.title}
-							</Typography>
+						<Typography variant="title" gutterBottom>
+							{song.title}
+						</Typography>
 					</Link>
 				</TableCell>
 
@@ -367,26 +366,26 @@ class SetViewer extends Component {
 				</TableCell>
 
 				{mode === 'edit' &&
-					<TableCell>
-						<a
-							onClick={() => this.onMoveSongUp( song._id )}
-							title="move this song up the list">
+				<TableCell>
+					<a
+						onClick={() => this.onMoveSongUp( song._id )}
+						title="move this song up the list">
 								<span className="icon is-small is-left"><i
 									className="fa fa-arrow-up"/></span>
-						</a>
-						<a
-							onClick={() => this.onMoveSongDown( song._id )}
-							title="move this song down the list">
+					</a>
+					<a
+						onClick={() => this.onMoveSongDown( song._id )}
+						title="move this song down the list">
 							<span className="icon is-small is-left"><i
 								className="fa fa-arrow-down"/></span>
-						</a>
-						<a
-							onClick={() => this.removeSong( song._id )}
-							title="remove this song from the list">
+					</a>
+					<a
+						onClick={() => this.removeSong( song._id )}
+						title="remove this song from the list">
 							<span className="icon is-small is-left"><i
 								className="fa fa-trash"/></span>
-						</a>
-					</TableCell>
+					</a>
+				</TableCell>
 				}
 
 			</TableRow>

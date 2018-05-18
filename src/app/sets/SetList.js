@@ -1,16 +1,23 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import ContentLimiter from '../../components/ContentLimiter';
 import DateSignifier from '../../components/DateSignifier';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import Hero from '../../components/Hero';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import SetLink from './SetLink';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
+
+import {
+	Magnify as MagnifyIcon
+} from 'mdi-material-ui';
 
 class SetList extends Component {
 	state = {
@@ -30,7 +37,7 @@ class SetList extends Component {
 
 	};
 
-	handleSearchInput = event => {
+	handleSearchChange = event => {
 
 		this.setState( {
 			searchText: event.target.value
@@ -44,86 +51,87 @@ class SetList extends Component {
 		const { searchText } = this.state;
 
 		return (
-			<section className="section">
-				<div className="container">
-					<div className="columns">
+			<div>
+				<Hero>
+					<ContentLimiter>
+						<Grid container justify="space-between">
+							<Grid item>
+								<Typography variant="display1" color="inherit">Sets</Typography>
+							</Grid>
+							<Grid item>
+								<Grid container spacing={16} alignItems="center">
+									<Grid item>
+										<TextField
+											color="inherit"
+											label="Titles, authors"
+											onChange={this.handleSearchChange}
+											value={searchText}
+											InputProps={{
+												endAdornment: (
+													<InputAdornment position="end">
+														<MagnifyIcon/>
+													</InputAdornment>
+												)
+											}}
+										/>
+									</Grid>
+									<Grid item>
+										<Link to="/sets/new">
+											<Button color="primary" variant="raised">
+												New set
+											</Button>
+										</Link>
+									</Grid>
+								</Grid>
+							</Grid>
+						</Grid>
+					</ContentLimiter>
+				</Hero>
+				<ContentLimiter>
+					<Table>
 
-						<div className="column">
+						<TableHead>
+							<TableRow>
+								<TableCell>Date</TableCell>
+								<TableCell>Set</TableCell>
+							</TableRow>
+						</TableHead>
 
-							<div className="field has-addons has-addons-right">
-								<p className="control has-icons-left">
-									<input
-										type="text"
-										className="input"
-										onInput={this.handleSearchInput}
-										placeholder="Titles, authors"
-										value={searchText}/>
+						<TableBody>
 
-									<span className="icon is-small is-left">
-							            <i className="fa fa-search"/>
-							        </span>
-								</p>
+							{sets.filter( this.filterSets ).map( set => (
 
-								<p className="control">
-									&nbsp;
-								</p>
+								<TableRow key={set._id}>
 
-								<p className="control">
-									<Link to="/sets/new" className="button is-primary">
-										New set
-									</Link>
-								</p>
+									<TableCell>
+										<DateSignifier date={set.setDate}/>
+									</TableCell>
 
-							</div>
+									<TableCell>
 
-							<Table>
+										<SetLink setFocusedSet={setFocusedSet} set={set}>
 
-								<TableHead>
-									<TableRow>
-										<TableCell>Date</TableCell>
-										<TableCell>Set</TableCell>
-									</TableRow>
-								</TableHead>
+											<Typography variant="title" gutterBottom>
+												{set.title}
+											</Typography>
 
-								<TableBody>
+											<Typography gutterBottom>
+												{set.author}
+											</Typography>
 
-								{sets.filter( this.filterSets ).map( set => (
+										</SetLink>
 
-									<TableRow key={set._id}>
+									</TableCell>
 
-										<TableCell>
-											<DateSignifier date={set.setDate}/>
-										</TableCell>
+								</TableRow>
 
-										<TableCell>
+							) )}
 
-											<SetLink setFocusedSet={setFocusedSet} set={set}>
+						</TableBody>
 
-												<Typography variant="title" gutterBottom>
-														{set.title}
-												</Typography>
-
-												<Typography gutterBottom>
-													{set.author}
-												</Typography>
-
-											</SetLink>
-
-										</TableCell>
-
-									</TableRow>
-
-								) )}
-
-								</TableBody>
-
-							</Table>
-
-						</div>
-
-					</div>
-				</div>
-			</section>
+					</Table>
+				</ContentLimiter>
+			</div>
 		);
 
 	}

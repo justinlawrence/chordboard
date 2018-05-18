@@ -156,8 +156,8 @@ class SongViewer extends Component {
 	setListDropdownToggle = () => this.state.isSetListDropdownVisible ?
 		this.setListDropdownHide() : this.setListDropdownShow();
 
-	transposeDown = () => this.changeKey( -1 );
-	transposeUp = () => this.changeKey( 1 );
+	transposeDown = () => this.changeKey( 1 );
+	transposeUp = () => this.changeKey( -1 );
 
 	updateListOfSets = () => Sets.getAll().then( setList => this.setState( { setList } ) );
 
@@ -222,6 +222,7 @@ class SongViewer extends Component {
 														<span className="icon is-small">
 														 <i className="fa fa-plus"/>
 														</span>
+													+
 												</a>
 											</div>
 

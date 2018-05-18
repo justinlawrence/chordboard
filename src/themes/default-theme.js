@@ -19,9 +19,10 @@ const defaultTheme = {
 
 	// Custom values
 	maxPageWidth: 1344,
-	heroBackgroundColor: '#404B69' //hero
-};
 
+	heroBackgroundColor: '#DBEDF3', //hero
+	heroContrastText: '#000'
+};
 
 
 /*

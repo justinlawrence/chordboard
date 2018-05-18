@@ -44,7 +44,7 @@ class Login extends Component {
 			} catch ( err ) {
 				console.error( 'Could not set `user` in localStorage' );
 			}
-
+			console.log( 'Login.responseFacebook', this.props.history );
 			if ( this.props.history ) {
 				this.props.history.push( {
 					pathname: '/sets'
@@ -63,18 +63,18 @@ class Login extends Component {
 				<section className="hero is-dark is-fullheight">
 					<div className="hero-body">
 						<div className="container has-text-centered">
-									<h1 className="title is-1">Chordboard</h1>
-									<h2 className="subtitle">On the same page</h2>
-									<form onSubmit={this.handleLogin}>
+							<h1 className="title is-1">Chordboard</h1>
+							<h2 className="subtitle">On the same page</h2>
+							<form onSubmit={this.handleLogin}>
 
-											<div className="field">
-												<FacebookLogin
-													appId="2075514469393369"
-													autoLoad={true}
-													callback={this.responseFacebook}
-												/>
-											</div>
-									</form>
+								<div className="field">
+									<FacebookLogin
+										appId="2075514469393369"
+										autoLoad={true}
+										callback={this.responseFacebook}
+									/>
+								</div>
+							</form>
 						</div>
 					</div>
 				</section>
