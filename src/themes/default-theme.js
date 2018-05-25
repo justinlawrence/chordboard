@@ -20,7 +20,7 @@ const defaultTheme = {
 	// Custom values
 	maxPageWidth: 1344,
 
-	heroBackgroundColor: '#DBEDF3', //hero
+	heroBackgroundColor: '#f5f5f5', //hero was #dbedf3
 	heroContrastText: '#000'
 };
 

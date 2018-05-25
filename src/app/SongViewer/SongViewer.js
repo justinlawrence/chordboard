@@ -1,24 +1,37 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { includes, uniqBy } from 'lodash';
-import { Link } from 'react-router-dom';
+import * as actions from '../../actions';
 import { connect } from 'react-redux';
 import cx from 'classnames';
-
-import * as actions from '../../actions';
-import { Sets, db, sync } from 'database';
-import KeySelector from 'app/common/KeySelector';
-import getKeyDiff from 'app/common/getKeyDiff';
 import ChordLine from "./lines/ChordLine.js";
 import ChordPair from "./lines/ChordPair.js";
-import Line from "./lines/Line.js";
-import Parser from 'app/parsers/song-parser.js';
-import transposeChord from '../common/transpose-chord';
-import transposeLines from '../common/transpose-lines';
-
+import ContentLimiter from '../../components/ContentLimiter';
+import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
+import getKeyDiff from 'app/common/getKeyDiff';
 import Grid from '@material-ui/core/Grid';
 import Hero from '../../components/Hero';
+import IconButton from '@material-ui/core/IconButton';
+import { includes, uniqBy } from 'lodash';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import InputLabel from '@material-ui/core/InputLabel';
+import KeySelector from 'app/common/KeySelector';
+import Line from "./lines/Line.js";
+import { Link } from 'react-router-dom';
+import MenuItem from '@material-ui/core/MenuItem';
+import Parser from 'app/parsers/song-parser.js';
+import PropTypes from 'prop-types';
+import Select from '@material-ui/core/Select';
+import { Sets, db, sync } from 'database';
+import transposeChord from '../common/transpose-chord';
+import transposeLines from '../common/transpose-lines';
 import Typography from '@material-ui/core/Typography';
+
+import {
+	Plus as PlusIcon
+} from 'mdi-material-ui';
+import {
+	Minus as MinusIcon
+} from 'mdi-material-ui';
 
 
 import './SongViewer.scss';
@@ -232,116 +245,137 @@ class SongViewer extends Component {
 			song ?
 				<div className="song-viewer">
 					<Hero>
-						<Grid container justify="space-between">
-							<Grid item>
-								<Typography variant="display2">
-									{song.title}
-								</Typography>
-								<Typography variant="title">
-									{song.author}
-								</Typography>
-								<Typography>
-									Set key: {this.props.setKey} • Capo: {capo}
-								</Typography>
+						<ContentLimiter>
+							<Grid container justify="space-between">
 
-							</Grid>
+								<Grid item>
+									<Typography variant="display1" color="inherit">{song.title}</Typography>
+									<Typography variant="title">{song.author}</Typography>
+								</Grid>
 
-							<Grid item className="column no-print">
+								<Grid item className="column no-print">
+									<Grid container spacing={16} alignItems="center">
 
-								{/*<a className="button">Key of {song.key}</a>*/}
-
-								<div className="field has-addons">
-
-
-									<div className="control">
-
-										<a className="button" onClick={this.transposeDown}
-										   title="transpose down">
-														<span className="icon is-small">
-															 <i className="fa fa-minus"/>
-														</span>
-										</a>
-
-									</div>
-									<div className="control">
-										<KeySelector
-											onSelect={( key, amount ) => this.changeKey( amount )}
-											value={key}/>
-									</div>
-
-									<div className="control">
-										<a className="button" onClick={this.transposeUp}
-										   title="transpose up">
-														<span className="icon is-small">
-														 <i className="fa fa-plus"/>
-														</span>
-											+
-										</a>
-									</div>
-
-
-									<div className="control">
-										<Link className="button"
-										      to={`/songs/${song._id}/edit`}>
-													<span className="icon is-small"><i
-														className="fa fa-pencil"/></span>
-											<span>Edit Song</span>
-										</Link>
-									</div>
-
-									<div className="control">
-										<div className={cx(
-											'dropdown',
-											{ 'is-active': isSetListDropdownVisible }
-										)}>
-											<div className="dropdown-trigger"
-											     onClick={this.setListDropdownToggle}>
-												<button className="button"
-												        aria-haspopup="true"
-												        aria-controls="dropdown-menu">
-															<span className="icon is-small">
-																<i className="fa fa-plus-square-o"/>
-															</span>
-													<span>Add to set</span>
-													<span className="icon is-small">
-													            <i className="fa fa-angle-down"
-													               aria-hidden="true"/>
-													        </span>
-												</button>
+										<Grid item>
+											<Typography>
+												Set key {this.props.setKey}
+											</Typography>
+											<div className="control">
+													<KeySelector
+														onSelect={( key, amount ) => this.changeKey( amount )}
+														value={key}/>
 											</div>
-											<div className="dropdown-menu"
-											     id="set-list-dropdown-menu"
-											     onClick={this.setListDropdownHide}
-											     role="menu"
-											>
-												<div className="dropdown-content">
-													{setList.map( set => (
-														<a className="dropdown-item"
-														   key={set._id}
-														   onClick={() => this.addToSet( set )}>
-															{set.title}
-														</a>
-													) )}
+										</Grid>
+
+										<Grid item>
+											<Typography>
+												Capo {capo}
+											</Typography>
+
+											<IconButton aria-label="Transpose down" onClick={this.transposeDown}>
+											   <MinusIcon />
+											</IconButton>
+											<IconButton aria-label="Transpose up" onClick={this.transposeDown}>
+											   <PlusIcon />
+											</IconButton>
+
+										</Grid>
+
+									</Grid>
+								</Grid>
+
+								<Grid item className="column no-print">
+
+									{/*<a className="button">Key of {song.key}</a>*/}
+
+
+										<Grid item>
+											<Link to={`/songs/${song._id}/edit`}>
+												<Button color="primary" variant="raised">
+													Edit Song
+												</Button>
+											</Link>
+										</Grid>
+
+										<Grid item>
+
+											<form autoComplete="off">
+											        <FormControl>
+											          <InputLabel htmlFor="set">Add to set</InputLabel>
+											          <Select
+											            value=""
+											            onChange={() => this.addToSet( set )}
+											          >
+
+																	{setList.map( set => (
+																		<MenuItem
+																			key={set._id}
+																			value={set._id}>
+																			{set.title}
+																		</MenuItem>
+																	) )}
+
+											          </Select>
+											        </FormControl>
+											</form>
+										</Grid>
+
+{/* JL: once we're happy with the material "add to set", we can remove this
+										<div className="control">
+											<div className={cx(
+												'dropdown',
+												{ 'is-active': isSetListDropdownVisible }
+											)}>
+												<div className="dropdown-trigger"
+												     onClick={this.setListDropdownToggle}>
+													<button className="button"
+													        aria-haspopup="true"
+													        aria-controls="dropdown-menu">
+																<span className="icon is-small">
+																	<i className="fa fa-plus-square-o"/>
+																</span>
+														<span>Add to set</span>
+														<span className="icon is-small">
+														            <i className="fa fa-angle-down"
+														               aria-hidden="true"/>
+														        </span>
+													</button>
 												</div>
+												<div className="dropdown-menu"
+												     id="set-list-dropdown-menu"
+												     onClick={this.setListDropdownHide}
+												     role="menu"
+												>
+													<div className="dropdown-content">
+														{setList.map( set => (
+															<a className="dropdown-item"
+															   key={set._id}
+															   onClick={() => this.addToSet( set )}>
+																{set.title}
+															</a>
+														) )}
+													</div>
 
+												</div>
 											</div>
-										</div>
-									</div>
+										</div> */}
 
-								</div>
 
+								</Grid>
 							</Grid>
-						</Grid>
-
+						</ContentLimiter>
 					</Hero>
 
-					<section className="section">
-						<div className="container">
-							<div className="song-viewer__song">
-								{parseSong( lines, sections )}
+					<ContentLimiter>
+						<section className="section">
+							<div className="container">
+								<div className="song-viewer__song">
+									{parseSong( lines, sections )}
+								</div>
 							</div>
-						</div>
-					</section>
+						</section>
+				</ContentLimiter>
+
 				</div>
 				: null
 		);
