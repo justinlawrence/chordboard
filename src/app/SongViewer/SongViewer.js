@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { uniqBy } from 'lodash';
+import { includes, uniqBy } from 'lodash';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import cx from 'classnames';
@@ -23,6 +23,46 @@ import Typography from '@material-ui/core/Typography';
 
 import './SongViewer.scss';
 
+const convertToNashville = ( key, lines ) => {
+
+	const newLines = [];
+
+	console.log( lines );
+
+	lines.forEach( line => {
+
+		const newLine = { ...line };
+
+		if ( line.chords ) {
+
+			const newChords = { ...line.chords };
+			delete newChords._sort;
+
+			Object.keys( newChords ).forEach( k => {
+
+				if ( line.chords[ k ] ) {
+
+					newChords[ k ] = getKeyDiff( key, line.chords[ k ] ) + 1;
+					if ( includes( [ 2, 3, 7 ], newChords[ k ] ) ) {
+						newChords[ k ] += 'm';
+					}
+
+				}
+
+			} );
+
+			newLine.chords = { ...newChords, _sort: line.chords._sort };
+
+		}
+
+		newLines.push( newLine );
+
+	} );
+
+	return newLines;
+
+};
+
 class SongViewer extends Component {
 	static propTypes = {
 		setKey: PropTypes.string
@@ -30,10 +70,11 @@ class SongViewer extends Component {
 
 	state = {
 		capoAmount: 0,
+		isNashville: false, // ### jl
 		isSetListDropdownVisible: false,
 		key: '',
 		lines: [],
-		setList: [],
+		setList: []
 	};
 
 	componentDidMount() {
@@ -163,7 +204,13 @@ class SongViewer extends Component {
 
 	render() {
 
-		const { isSetListDropdownVisible, key, lines: linesState, setList } = this.state;
+		const {
+			isNashville,
+			isSetListDropdownVisible,
+			key,
+			lines: linesState,
+			setList
+		} = this.state;
 
 		const song = { ...this.props.song };
 		const setKey = this.props.setKey || song.key;
@@ -171,7 +218,13 @@ class SongViewer extends Component {
 		const capo = getKeyDiff( key, setKey ); //this is only for display purposes, telling the user where to put the capo
 		const transposeAmount = getKeyDiff( song.key, key ); //this is how much to transpose by
 
-		const lines = transposeLines( linesState, transposeAmount );
+		let lines = linesState;
+		if ( isNashville ) {
+			lines = convertToNashville( setKey, lines );
+		} else {
+			lines = transposeLines( linesState, transposeAmount );
+		}
+
 
 		let sections = [];
 
@@ -181,106 +234,106 @@ class SongViewer extends Component {
 					<Hero>
 						<Grid container justify="space-between">
 							<Grid item>
-									<Typography variant="display2">
-										{song.title}
-									</Typography>
-									<Typography variant="title">
-										{song.author}
-									</Typography>
-									<Typography>
-										Set key: {this.props.setKey} • Capo: {capo}
-									</Typography>
+								<Typography variant="display2">
+									{song.title}
+								</Typography>
+								<Typography variant="title">
+									{song.author}
+								</Typography>
+								<Typography>
+									Set key: {this.props.setKey} • Capo: {capo}
+								</Typography>
 
-								</Grid>
+							</Grid>
 
-								<Grid item className="column no-print">
+							<Grid item className="column no-print">
 
-										{/*<a className="button">Key of {song.key}</a>*/}
+								{/*<a className="button">Key of {song.key}</a>*/}
 
-										<div className="field has-addons">
+								<div className="field has-addons">
 
 
-											<div className="control">
+									<div className="control">
 
-												<a className="button" onClick={this.transposeDown}
-												   title="transpose down">
+										<a className="button" onClick={this.transposeDown}
+										   title="transpose down">
 														<span className="icon is-small">
 															 <i className="fa fa-minus"/>
 														</span>
-												</a>
+										</a>
 
-											</div>
-											<div className="control">
-												<KeySelector
-													onSelect={( key, amount ) => this.changeKey( amount )}
-													value={key}/>
-											</div>
+									</div>
+									<div className="control">
+										<KeySelector
+											onSelect={( key, amount ) => this.changeKey( amount )}
+											value={key}/>
+									</div>
 
-											<div className="control">
-												<a className="button" onClick={this.transposeUp}
-												   title="transpose up">
+									<div className="control">
+										<a className="button" onClick={this.transposeUp}
+										   title="transpose up">
 														<span className="icon is-small">
 														 <i className="fa fa-plus"/>
 														</span>
-													+
-												</a>
-											</div>
+											+
+										</a>
+									</div>
 
 
-											<div className="control">
-												<Link className="button"
-												      to={`/songs/${song._id}/edit`}>
+									<div className="control">
+										<Link className="button"
+										      to={`/songs/${song._id}/edit`}>
 													<span className="icon is-small"><i
 														className="fa fa-pencil"/></span>
-													<span>Edit Song</span>
-												</Link>
-											</div>
+											<span>Edit Song</span>
+										</Link>
+									</div>
 
-											<div className="control">
-												<div className={cx(
-													'dropdown',
-													{ 'is-active': isSetListDropdownVisible }
-												)}>
-													<div className="dropdown-trigger"
-													     onClick={this.setListDropdownToggle}>
-														<button className="button"
-														        aria-haspopup="true"
-														        aria-controls="dropdown-menu">
+									<div className="control">
+										<div className={cx(
+											'dropdown',
+											{ 'is-active': isSetListDropdownVisible }
+										)}>
+											<div className="dropdown-trigger"
+											     onClick={this.setListDropdownToggle}>
+												<button className="button"
+												        aria-haspopup="true"
+												        aria-controls="dropdown-menu">
 															<span className="icon is-small">
 																<i className="fa fa-plus-square-o"/>
 															</span>
-															<span>Add to set</span>
-															<span className="icon is-small">
+													<span>Add to set</span>
+													<span className="icon is-small">
 													            <i className="fa fa-angle-down"
 													               aria-hidden="true"/>
 													        </span>
-														</button>
-													</div>
-													<div className="dropdown-menu"
-													     id="set-list-dropdown-menu"
-													     onClick={this.setListDropdownHide}
-													     role="menu"
-													>
-														<div className="dropdown-content">
-															{setList.map( set => (
-																<a className="dropdown-item"
-																   key={set._id}
-																   onClick={() => this.addToSet( set )}>
-																	{set.title}
-																</a>
-															) )}
-														</div>
-
-													</div>
-												</div>
+												</button>
 											</div>
+											<div className="dropdown-menu"
+											     id="set-list-dropdown-menu"
+											     onClick={this.setListDropdownHide}
+											     role="menu"
+											>
+												<div className="dropdown-content">
+													{setList.map( set => (
+														<a className="dropdown-item"
+														   key={set._id}
+														   onClick={() => this.addToSet( set )}>
+															{set.title}
+														</a>
+													) )}
+												</div>
 
+											</div>
 										</div>
+									</div>
 
-									</Grid>
-								</Grid>
+								</div>
 
-						</Hero>
+							</Grid>
+						</Grid>
+
+					</Hero>
 
 					<section className="section">
 						<div className="container">
@@ -296,11 +349,11 @@ class SongViewer extends Component {
 	}
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = state => ( {
 	currentSet: state.currentSet,
 	song: state.currentSong,
 	user: state.user
-});
+} );
 
 export default connect( mapStateToProps, actions )( SongViewer );
 
