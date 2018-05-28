@@ -286,6 +286,12 @@ class SongViewer extends Component {
 											<form autoComplete="off">
 															<FormControl>
 																<InputLabel htmlFor="set">Add to set</InputLabel>
+
+																<Button color="secondary" variant="raised" >
+																	Add to set…
+																</Button>
+
+
 																<Select
 																	value=""
 																	onChange={() => this.addToSet( set )}

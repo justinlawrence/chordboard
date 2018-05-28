@@ -34,7 +34,7 @@
     "date-fns": "^1.29.0",
     "lodash": "4.17.10",
     "mdi-material-ui": "^5.0.0",
-    "pouchdb": "latest",
+    "pouchdb": "^6.4.3",
     "pouchdb-find": "latest",
     "prop-types": "15.6.1",
     "react": "^16.2.0",
