@@ -73,7 +73,7 @@ class Navbar extends React.Component {
 						<Button component={Link} color="inherit" to="/sets">Sets</Button>
 						<Button component={Link} color="inherit" to="/songs">Songs</Button>
 
-						<Button color="inherit">Login</Button>
+						{/* <Button color="inherit">Login</Button> */}
 
 					</Toolbar>
 				</AppBar>
