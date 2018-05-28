@@ -27,13 +27,11 @@ import transposeLines from '../common/transpose-lines';
 import Typography from '@material-ui/core/Typography';
 
 import {
-	Plus as PlusIcon
-} from 'mdi-material-ui';
-import {
+	Plus as PlusIcon,
 	Minus as MinusIcon
 } from 'mdi-material-ui';
 
-
+import { linesToNashville } from '../../utils/convertToNashville';
 import './SongViewer.scss';
 
 const convertToNashville = ( key, lines ) => {
@@ -83,7 +81,7 @@ class SongViewer extends Component {
 
 	state = {
 		capoAmount: 0,
-		isNashville: false, // ### jl
+		isNashville: true, // ### jl
 		isSetListDropdownVisible: false,
 		key: '',
 		lines: [],
@@ -213,6 +211,10 @@ class SongViewer extends Component {
 	transposeDown = () => this.changeKey( 1 );
 	transposeUp = () => this.changeKey( -1 );
 
+	toggleNashville = value => this.setState( prevState => ( {
+		isNashville: value !== undefined ? value : !prevState.isNashville
+	} ) );
+
 	updateListOfSets = () => Sets.getAll().then( setList => this.setState( { setList } ) );
 
 	render() {
@@ -231,13 +233,10 @@ class SongViewer extends Component {
 		const capo = getKeyDiff( key, setKey ); //this is only for display purposes, telling the user where to put the capo
 		const transposeAmount = getKeyDiff( song.key, key ); //this is how much to transpose by
 
-		let lines = linesState;
+		let lines = transposeLines( linesState, transposeAmount );
 		if ( isNashville ) {
-			lines = convertToNashville( setKey, lines );
-		} else {
-			lines = transposeLines( linesState, transposeAmount );
+			lines = linesToNashville( key, lines );
 		}
-
 
 		let sections = [];
 
@@ -249,7 +248,8 @@ class SongViewer extends Component {
 							<Grid container justify="space-between">
 
 								<Grid item>
-									<Typography variant="display1" color="inherit">{song.title}</Typography>
+									<Typography variant="display1"
+									            color="inherit">{song.title}</Typography>
 									<Typography variant="title">{song.author}</Typography>
 								</Grid>
 
@@ -261,9 +261,9 @@ class SongViewer extends Component {
 												Set key {this.props.setKey}
 											</Typography>
 											<div className="control">
-													<KeySelector
-														onSelect={( key, amount ) => this.changeKey( amount )}
-														value={key}/>
+												<KeySelector
+													onSelect={( key, amount ) => this.changeKey( amount )}
+													value={key}/>
 											</div>
 										</Grid>
 
@@ -272,11 +272,13 @@ class SongViewer extends Component {
 												Capo {capo}
 											</Typography>
 
-											<IconButton aria-label="Transpose down" onClick={this.transposeDown}>
-											   <MinusIcon />
+											<IconButton aria-label="Transpose down"
+											            onClick={this.transposeDown}>
+												<MinusIcon/>
 											</IconButton>
-											<IconButton aria-label="Transpose up" onClick={this.transposeDown}>
-											   <PlusIcon />
+											<IconButton aria-label="Transpose up"
+											            onClick={this.transposeUp}>
+												<PlusIcon/>
 											</IconButton>
 
 										</Grid>
@@ -284,6 +286,7 @@ class SongViewer extends Component {
 										<Grid item>
 
 											<form autoComplete="off">
+<<<<<<< HEAD
 															<FormControl>
 																<InputLabel htmlFor="set">Add to set</InputLabel>
 
@@ -307,6 +310,26 @@ class SongViewer extends Component {
 
 																</Select>
 															</FormControl>
+=======
+												<FormControl>
+													<InputLabel htmlFor="set">Add to
+														set</InputLabel>
+													<Select
+														value=""
+														onChange={() => this.addToSet( set )}
+													>
+
+														{setList.map( set => (
+															<MenuItem
+																key={set._id}
+																value={set._id}>
+																{set.title}
+															</MenuItem>
+														) )}
+
+													</Select>
+												</FormControl>
+>>>>>>> fa0bb229773bb8a8f01f9fd20b3a49e00c38af40
 											</form>
 										</Grid>
 
@@ -318,17 +341,16 @@ class SongViewer extends Component {
 									{/*<a className="button">Key of {song.key}</a>*/}
 
 
-										<Grid item>
-											<Link to={`/songs/${song._id}/edit`}>
-												<Button color="primary" variant="raised">
-													Edit Song
-												</Button>
-											</Link>
-										</Grid>
+									<Grid item>
+										<Link to={`/songs/${song._id}/edit`}>
+											<Button color="primary" variant="raised">
+												Edit Song
+											</Button>
+										</Link>
+									</Grid>
 
 
-
-{/* JL: once we're happy with the material "add to set", we can remove this
+									{/* JL: once we're happy with the material "add to set", we can remove this
 										<div className="control">
 											<div className={cx(
 												'dropdown',
@@ -382,7 +404,7 @@ class SongViewer extends Component {
 								</div>
 							</div>
 						</section>
-				</ContentLimiter>
+					</ContentLimiter>
 
 				</div>
 				: null
