@@ -211,6 +211,10 @@ class SongViewer extends Component {
 	transposeDown = () => this.changeKey( 1 );
 	transposeUp = () => this.changeKey( -1 );
 
+	toggleNashville = value => this.setState( prevState => ( {
+		isNashville: value !== undefined ? value : !prevState.isNashville
+	} ) );
+
 	updateListOfSets = () => Sets.getAll().then( setList => this.setState( { setList } ) );
 
 	render() {
