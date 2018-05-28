@@ -24,7 +24,6 @@ import Select from '@material-ui/core/Select';
 import { Sets, db, sync } from 'database';
 import transposeChord from '../common/transpose-chord';
 import transposeLines from '../common/transpose-lines';
-import SongKey from 'app/common/SongKey';
 import Typography from '@material-ui/core/Typography';
 
 import {
@@ -258,37 +257,56 @@ class SongViewer extends Component {
 								<Grid item className="column no-print">
 									<Grid container spacing={24} alignItems="center">
 
+										{this.props.setKey ?
 										<Grid item>
-											<Typography>
+											<Typography variant="caption">
 												Set key
-												<SongKey value={this.props.setKey}/>
 											</Typography>
-											<div className="control">
+											<Typography variant="subheading">
+												{this.props.setKey}
+											</Typography>
+										</Grid>
+										: ''}
+
+										<Grid item>
+											<Typography variant="caption">
+												Song key
+											</Typography>
+
+											<Typography variant="subheading">
 												<KeySelector
 													onSelect={( key, amount ) => this.changeKey( amount )}
 													value={key}/>
-											</div>
+												</Typography>
 										</Grid>
 
 										<Grid item>
-											<Typography>
-												Capo {capo}
+											<Typography variant="caption">
+												Capo
 											</Typography>
+											<Typography variant="subheading">
+												{capo}
+											</Typography>
+										</Grid>
 
-											<IconButton aria-label="Transpose down"
-											            onClick={this.transposeDown}>
-												<MinusIcon/>
-											</IconButton>
-											<IconButton aria-label="Transpose up"
-											            onClick={this.transposeUp}>
-												<PlusIcon/>
-											</IconButton>
+										<Grid item>
 
-											<IconButton aria-label="Toggle Nashville Numbering"
-											            onClick={this.toggleNashville}>
-												<EyeIcon/>
-											</IconButton>
+											<Grid item>
+												<IconButton aria-label="Transpose down"
+												            onClick={this.transposeDown}>
+													<MinusIcon/>
+												</IconButton>
+												<IconButton aria-label="Transpose up"
+												            onClick={this.transposeUp}>
+													<PlusIcon/>
+												</IconButton>
 
+												<IconButton aria-label="Toggle Nashville Numbering"
+												            onClick={this.toggleNashville}>
+													<EyeIcon/>
+												</IconButton>
+
+											</Grid>
 										</Grid>
 
 										<Grid item>
