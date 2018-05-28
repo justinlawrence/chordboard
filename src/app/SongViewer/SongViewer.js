@@ -24,11 +24,13 @@ import Select from '@material-ui/core/Select';
 import { Sets, db, sync } from 'database';
 import transposeChord from '../common/transpose-chord';
 import transposeLines from '../common/transpose-lines';
+import SongKey from 'app/common/SongKey';
 import Typography from '@material-ui/core/Typography';
 
 import {
 	Plus as PlusIcon,
-	Minus as MinusIcon
+	Minus as MinusIcon,
+	Eye as EyeIcon
 } from 'mdi-material-ui';
 
 import { linesToNashville } from '../../utils/convertToNashville';
@@ -81,7 +83,7 @@ class SongViewer extends Component {
 
 	state = {
 		capoAmount: 0,
-		isNashville: true, // ### jl
+		isNashville: false,
 		isSetListDropdownVisible: false,
 		key: '',
 		lines: [],
@@ -258,7 +260,8 @@ class SongViewer extends Component {
 
 										<Grid item>
 											<Typography>
-												Set key {this.props.setKey}
+												Set key
+												<SongKey value={this.props.setKey}/>
 											</Typography>
 											<div className="control">
 												<KeySelector
@@ -281,55 +284,38 @@ class SongViewer extends Component {
 												<PlusIcon/>
 											</IconButton>
 
+											<IconButton aria-label="Toggle Nashville Numbering"
+											            onClick={this.toggleNashville}>
+												<EyeIcon/>
+											</IconButton>
+
 										</Grid>
 
 										<Grid item>
 
 											<form autoComplete="off">
-<<<<<<< HEAD
-															<FormControl>
-																<InputLabel htmlFor="set">Add to set</InputLabel>
+													<FormControl>
+														<InputLabel htmlFor="set">Add to set</InputLabel>
 
-																<Button color="secondary" variant="raised" >
-																	Add to set…
-																</Button>
+														<Button color="secondary" variant="raised" >
+															Add to set
+														</Button>
 
+														<Select
+															value=""
+															onChange={() => this.addToSet( set )}
+														>
 
-																<Select
-																	value=""
-																	onChange={() => this.addToSet( set )}
-																>
+															{setList.map( set => (
+																<MenuItem
+																	key={set._id}
+																	value={set._id}>
+																	{set.title}
+																</MenuItem>
+															) )}
 
-																	{setList.map( set => (
-																		<MenuItem
-																			key={set._id}
-																			value={set._id}>
-																			{set.title}
-																		</MenuItem>
-																	) )}
-
-																</Select>
-															</FormControl>
-=======
-												<FormControl>
-													<InputLabel htmlFor="set">Add to
-														set</InputLabel>
-													<Select
-														value=""
-														onChange={() => this.addToSet( set )}
-													>
-
-														{setList.map( set => (
-															<MenuItem
-																key={set._id}
-																value={set._id}>
-																{set.title}
-															</MenuItem>
-														) )}
-
-													</Select>
-												</FormControl>
->>>>>>> fa0bb229773bb8a8f01f9fd20b3a49e00c38af40
+														</Select>
+													</FormControl>
 											</form>
 										</Grid>
 
