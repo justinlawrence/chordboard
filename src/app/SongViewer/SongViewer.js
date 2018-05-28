@@ -254,7 +254,7 @@ class SongViewer extends Component {
 								</Grid>
 
 								<Grid item className="column no-print">
-									<Grid container spacing={16} alignItems="center">
+									<Grid container spacing={24} alignItems="center">
 
 										<Grid item>
 											<Typography>
@@ -281,6 +281,29 @@ class SongViewer extends Component {
 
 										</Grid>
 
+										<Grid item>
+
+											<form autoComplete="off">
+															<FormControl>
+																<InputLabel htmlFor="set">Add to set</InputLabel>
+																<Select
+																	value=""
+																	onChange={() => this.addToSet( set )}
+																>
+
+																	{setList.map( set => (
+																		<MenuItem
+																			key={set._id}
+																			value={set._id}>
+																			{set.title}
+																		</MenuItem>
+																	) )}
+
+																</Select>
+															</FormControl>
+											</form>
+										</Grid>
+
 									</Grid>
 								</Grid>
 
@@ -297,28 +320,7 @@ class SongViewer extends Component {
 											</Link>
 										</Grid>
 
-										<Grid item>
 
-											<form autoComplete="off">
-											        <FormControl>
-											          <InputLabel htmlFor="set">Add to set</InputLabel>
-											          <Select
-											            value=""
-											            onChange={() => this.addToSet( set )}
-											          >
-
-																	{setList.map( set => (
-																		<MenuItem
-																			key={set._id}
-																			value={set._id}>
-																			{set.title}
-																		</MenuItem>
-																	) )}
-
-											          </Select>
-											        </FormControl>
-											</form>
-										</Grid>
 
 {/* JL: once we're happy with the material "add to set", we can remove this
 										<div className="control">
