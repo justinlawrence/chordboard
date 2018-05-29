@@ -1,8 +1,13 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import getKeyDiff from 'app/common/getKeyDiff';
 
-class KeySelector extends Component {
+const keys = [
+	{ id: '1', key: 'C', label: 'C' },
+	{ id: 'nashville', key: null, label: 'Nashville' },
+];
+
+class KeySelector extends PureComponent {
 	handleChange = event => {
 		if ( this.props.onSelect ) {
 			this.props.onSelect( event.target.value,
@@ -53,6 +58,7 @@ class KeySelector extends Component {
 						<option value="Bb">Bb</option>
 						<option value="B">B</option>
 						<option value="C">C</option>
+						<option value="nashville">Nashville</option>
 					</select>
 				</div>
 			</div>

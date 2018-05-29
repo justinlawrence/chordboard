@@ -17,10 +17,10 @@ import InputLabel from '@material-ui/core/InputLabel';
 import KeySelector from 'app/common/KeySelector';
 import Line from "./lines/Line.js";
 import { Link } from 'react-router-dom';
+import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Parser from 'app/parsers/song-parser.js';
 import PropTypes from 'prop-types';
-import Select from '@material-ui/core/Select';
 import { Sets, db, sync } from 'database';
 import transposeChord from '../common/transpose-chord';
 import transposeLines from '../common/transpose-lines';
@@ -83,7 +83,7 @@ class SongViewer extends Component {
 	state = {
 		capoAmount: 0,
 		isNashville: false,
-		isSetListDropdownVisible: false,
+		setListMenuAnchorEl: null,
 		key: '',
 		lines: [],
 		setList: []
@@ -163,6 +163,21 @@ class SongViewer extends Component {
 
 	};
 
+	createAddToSetHandler = set => () => this.addToSet( set );
+
+	handleSelectKey = ( key, amount ) => {
+
+		if ( key === 'nashville' ) {
+			this.setState( {
+				isNashville: true
+			} );
+		} else {
+			this.changeKey( amount );
+			this.setState( { isNashville: false } );
+		}
+
+	};
+
 	handleProps = props => {
 
 		const songUser = props.song.users && props.song.users.find( u => u.id === props.user.id ) || {};
@@ -204,15 +219,15 @@ class SongViewer extends Component {
 		this.props.setCurrentSongUserKey( key );
 	};
 
-	setListDropdownHide = () => this.setState( { isSetListDropdownVisible: false } );
-	setListDropdownShow = () => this.setState( { isSetListDropdownVisible: true } );
-	setListDropdownToggle = () => this.state.isSetListDropdownVisible ?
-		this.setListDropdownHide() : this.setListDropdownShow();
+	showSetListDropdown = isVisible => event =>
+		this.setState( {
+			setListMenuAnchorEl: isVisible ? event.currentTarget : null
+		} );
 
 	transposeDown = () => this.changeKey( 1 );
 	transposeUp = () => this.changeKey( -1 );
 
-	toggleNashville = value => this.setState( prevState => ( {
+	toggleNashville = value => () => this.setState( prevState => ( {
 		isNashville: value !== undefined ? value : !prevState.isNashville
 	} ) );
 
@@ -222,7 +237,7 @@ class SongViewer extends Component {
 
 		const {
 			isNashville,
-			isSetListDropdownVisible,
+			setListMenuAnchorEl,
 			key,
 			lines: linesState,
 			setList
@@ -258,15 +273,15 @@ class SongViewer extends Component {
 									<Grid container spacing={24} alignItems="center">
 
 										{this.props.setKey ?
-										<Grid item>
-											<Typography variant="caption">
-												Set key
-											</Typography>
-											<Typography variant="subheading">
-												{this.props.setKey}
-											</Typography>
-										</Grid>
-										: ''}
+											<Grid item>
+												<Typography variant="caption">
+													Set key
+												</Typography>
+												<Typography variant="subheading">
+													{this.props.setKey}
+												</Typography>
+											</Grid>
+											: ''}
 
 										<Grid item>
 											<Typography variant="caption">
@@ -275,9 +290,10 @@ class SongViewer extends Component {
 
 											<Typography variant="subheading">
 												<KeySelector
-													onSelect={( key, amount ) => this.changeKey( amount )}
-													value={key}/>
-												</Typography>
+													onSelect={this.handleSelectKey}
+													value={key}
+												/>
+											</Typography>
 										</Grid>
 
 										<Grid item>
@@ -302,7 +318,7 @@ class SongViewer extends Component {
 												</IconButton>
 
 												<IconButton aria-label="Toggle Nashville Numbering"
-												            onClick={this.toggleNashville}>
+												            onClick={this.toggleNashville()}>
 													<EyeIcon/>
 												</IconButton>
 
@@ -312,28 +328,30 @@ class SongViewer extends Component {
 										<Grid item>
 
 											<form autoComplete="off">
-													<FormControl>
-														<InputLabel htmlFor="set">Add to set</InputLabel>
+												<FormControl>
+													<Button
+														color="secondary"
+														onClick={this.showSetListDropdown( true )}
+														variant="raised"
+													>
+														Add to set
+													</Button>
 
-														<Button color="secondary" variant="raised" >
-															Add to set
-														</Button>
-
-														<Select
-															value=""
-															onChange={() => this.addToSet( set )}
-														>
-
-															{setList.map( set => (
-																<MenuItem
-																	key={set._id}
-																	value={set._id}>
-																	{set.title}
-																</MenuItem>
-															) )}
-
-														</Select>
-													</FormControl>
+													<Menu
+														anchorEl={setListMenuAnchorEl}
+														onClose={this.showSetListDropdown( false )}
+														open={Boolean( setListMenuAnchorEl )}
+													>
+														{setList.map( set => (
+															<MenuItem
+																key={set._id}
+																onClick={this.createAddToSetHandler}
+																value={set._id}>
+																{set.title}
+															</MenuItem>
+														) )}
+													</Menu>
+												</FormControl>
 											</form>
 										</Grid>
 
@@ -343,7 +361,6 @@ class SongViewer extends Component {
 								<Grid item className="column no-print">
 
 									{/*<a className="button">Key of {song.key}</a>*/}
-
 
 									<Grid item>
 										<Link to={`/songs/${song._id}/edit`}>
