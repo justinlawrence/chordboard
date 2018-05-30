@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import * as actions from '../../actions';
 import { connect } from 'react-redux';
-import cx from 'classnames';
-import ChordLine from "./lines/ChordLine.js";
-import ChordPair from "./lines/ChordPair.js";
+
+import ChordLine from "./lines/ChordLine";
+import ChordPair from "./lines/ChordPair";
 import ContentLimiter from '../../components/ContentLimiter';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
@@ -12,14 +12,12 @@ import Grid from '@material-ui/core/Grid';
 import Hero from '../../components/Hero';
 import IconButton from '@material-ui/core/IconButton';
 import { includes, uniqBy } from 'lodash';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import InputLabel from '@material-ui/core/InputLabel';
 import KeySelector from 'app/common/KeySelector';
-import Line from "./lines/Line.js";
+import Line from "./lines/Line";
 import { Link } from 'react-router-dom';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import Parser from 'app/parsers/song-parser.js';
+import Parser from 'app/parsers/song-parser';
 import PropTypes from 'prop-types';
 import { Sets, db, sync } from 'database';
 import transposeChord from '../common/transpose-chord';
@@ -35,46 +33,6 @@ import {
 import { linesToNashville } from '../../utils/convertToNashville';
 import './SongViewer.scss';
 
-const convertToNashville = ( key, lines ) => {
-
-	const newLines = [];
-
-	console.log( lines );
-
-	lines.forEach( line => {
-
-		const newLine = { ...line };
-
-		if ( line.chords ) {
-
-			const newChords = { ...line.chords };
-			delete newChords._sort;
-
-			Object.keys( newChords ).forEach( k => {
-
-				if ( line.chords[ k ] ) {
-
-					newChords[ k ] = getKeyDiff( key, line.chords[ k ] ) + 1;
-					if ( includes( [ 2, 3, 7 ], newChords[ k ] ) ) {
-						newChords[ k ] += 'm';
-					}
-
-				}
-
-			} );
-
-			newLine.chords = { ...newChords, _sort: line.chords._sort };
-
-		}
-
-		newLines.push( newLine );
-
-	} );
-
-	return newLines;
-
-};
-
 class SongViewer extends Component {
 	static propTypes = {
 		setKey: PropTypes.string
@@ -84,7 +42,7 @@ class SongViewer extends Component {
 		capoAmount: 0,
 		isNashville: false,
 		setListMenuAnchorEl: null,
-		key: '',
+		displayKey: '',
 		lines: [],
 		setList: []
 	};
@@ -165,14 +123,18 @@ class SongViewer extends Component {
 
 	createAddToSetHandler = set => () => this.addToSet( set );
 
-	handleSelectKey = ( key, amount ) => {
+	handleSelectSetKey = ( option, amount ) => {
+		console.log( `change setKey to ${option.key} by ${amount}` );
+	};
 
-		if ( key === 'nashville' ) {
-			this.setState( {
-				isNashville: true
-			} );
+	handleSelectDisplayKey = ( option ) => {
+
+		this.setState( { displayKey: option.key } );
+
+		if ( option.value === 'nashville' ) {
+			this.setState( { isNashville: true } );
 		} else {
-			this.changeKey( amount );
+			this.changeKey( option.key );
 			this.setState( { isNashville: false } );
 		}
 
@@ -182,16 +144,16 @@ class SongViewer extends Component {
 
 		const songUser = props.song.users && props.song.users.find( u => u.id === props.user.id ) || {};
 
-		console.log( 'song key', props.song.key );
+		/*console.log( 'song key', props.song.key );
 		console.log( 'set key', props.setKey );
-		console.log( 'user key', songUser.key );
+		console.log( 'user key', songUser.key );*/
 
-		const key = songUser.key || props.setKey || props.song.key;
+		const displayKey = songUser.key || props.setKey || props.song.key;
 
 		const parser = new Parser();
 		const lines = parser.parse( props.song.content );
 
-		this.setState( { key, lines } );
+		this.setState( { displayKey, lines } );
 
 	};
 
@@ -214,9 +176,10 @@ class SongViewer extends Component {
 
 	}
 
-	changeKey = amount => {
-		const key = transposeChord( this.state.key, amount );
-		this.props.setCurrentSongUserKey( key );
+	changeKey = key => {
+		if ( key ) {
+			this.props.setCurrentSongUserKey( key );
+		}
 	};
 
 	showSetListDropdown = isVisible => event =>
@@ -224,8 +187,14 @@ class SongViewer extends Component {
 			setListMenuAnchorEl: isVisible ? event.currentTarget : null
 		} );
 
-	transposeDown = () => this.changeKey( 1 );
-	transposeUp = () => this.changeKey( -1 );
+	transposeDown = () => {
+		console.log( 'TODO: pass key to changeKey, not a number' );
+		//this.changeKey( 1 )
+	};
+	transposeUp = () => {
+		console.log( 'TODO: pass key to changeKey, not a number' );
+		//this.changeKey( -1 )
+	};
 
 	toggleNashville = value => () => this.setState( prevState => ( {
 		isNashville: value !== undefined ? value : !prevState.isNashville
@@ -235,23 +204,21 @@ class SongViewer extends Component {
 
 	render() {
 
+		const { setKey, song } = this.props;
 		const {
 			isNashville,
 			setListMenuAnchorEl,
-			key,
+			displayKey,
 			lines: linesState,
 			setList
 		} = this.state;
 
-		const song = { ...this.props.song };
-		const setKey = this.props.setKey || song.key;
-
-		const capo = getKeyDiff( key, setKey ); //this is only for display purposes, telling the user where to put the capo
-		const transposeAmount = getKeyDiff( song.key, key ); //this is how much to transpose by
+		const capo = getKeyDiff( displayKey, setKey || song.key ); //this is only for display purposes, telling the user where to put the capo
+		const transposeAmount = getKeyDiff( song.key, displayKey ); //this is how much to transpose by
 
 		let lines = transposeLines( linesState, transposeAmount );
 		if ( isNashville ) {
-			lines = linesToNashville( key, lines );
+			lines = linesToNashville( displayKey, lines );
 		}
 
 		let sections = [];
@@ -272,40 +239,34 @@ class SongViewer extends Component {
 								<Grid item className="column no-print">
 									<Grid container spacing={24} alignItems="center">
 
-										{this.props.setKey ?
+										{setKey ? (
 											<Grid item>
-												<Typography variant="caption">
-													Set key
-												</Typography>
-												<Typography variant="subheading">
-													{this.props.setKey}
-												</Typography>
-											</Grid>
-											: ''}
-
-										<Grid item>
-											<Typography variant="caption">
-												Song key
-											</Typography>
-
-											<Typography variant="subheading">
 												<KeySelector
-													onSelect={this.handleSelectKey}
-													value={key}
+													label="Set key"
+													onSelect={this.handleSelectSetKey}
+													songKey={setKey}
 												/>
-											</Typography>
-										</Grid>
+											</Grid>
+										) : null}
 
 										<Grid item>
 											<Typography variant="caption">
 												Capo
 											</Typography>
 											<Typography variant="subheading">
-												{capo}
+												{capo} ({displayKey})
 											</Typography>
 										</Grid>
 
 										<Grid item>
+											<KeySelector
+												label="Song key"
+												onSelect={this.handleSelectDisplayKey}
+												songKey={displayKey}
+											/>
+										</Grid>
+
+										{/*<Grid item>
 
 											<Grid item>
 												<IconButton aria-label="Transpose down"
@@ -323,7 +284,7 @@ class SongViewer extends Component {
 												</IconButton>
 
 											</Grid>
-										</Grid>
+										</Grid>*/}
 
 										<Grid item>
 

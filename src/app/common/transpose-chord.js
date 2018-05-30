@@ -1,4 +1,5 @@
 export const octave = [
+	"Ab",
 	"A",
 	"Bb",
 	"B",
@@ -9,8 +10,7 @@ export const octave = [
 	"E",
 	"F",
 	"F#",
-	"G",
-	"G#"
+	"G"
 ];
 
 export default function transposeChord( chord, amount ) {

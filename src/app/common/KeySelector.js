@@ -1,67 +1,74 @@
 import React, { PureComponent } from 'react';
+import { find, toLower } from 'lodash';
+
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
 
 import getKeyDiff from 'app/common/getKeyDiff';
 
-const keys = [
-	{ id: '1', key: 'C', label: 'C' },
-	{ id: 'nashville', key: null, label: 'Nashville' },
+const options = [
+	{ key: 'C', label: 'C', value: 'c' },
+	{ key: "C#", label: 'C#', value: 'c#' },
+	{ key: "D", label: 'D', value: 'd' },
+	{ key: "Eb", label: 'Eb', value: 'eb' },
+	{ key: "E", label: 'E', value: 'e' },
+	{ key: "F", label: 'F', value: 'f' },
+	{ key: "F#", label: 'F#', value: 'f#' },
+	{ key: "G", label: 'G', value: 'g' },
+	{ key: "Ab", label: 'Ab', value: 'ab' },
+	{ key: "A", label: 'A', value: 'a' },
+	{ key: "Bb", label: 'Bb', value: 'bb' },
+	{ key: "B", label: 'B', value: 'b' }
 ];
 
 class KeySelector extends PureComponent {
+	state = {
+		value: 'c'
+	};
+
+	componentDidMount() {
+		this.handleProps( this.props );
+	}
+
+	componentWillReceiveProps( nextProps ) {
+		this.handleProps( nextProps );
+	}
+
 	handleChange = event => {
+		const value = event.target.value;
+		const option = find( options, { value } );
+
+		this.setState( { value } );
+
 		if ( this.props.onSelect ) {
-			this.props.onSelect( event.target.value,
-				getKeyDiff( this.props.value, event.target.value ) );
+			this.props.onSelect( option, getKeyDiff( this.props.songKey, option.key ) );
+		}
+	};
+
+	handleProps = props => {
+		const value = toLower( props.songKey );
+		if ( value !== this.state.value && find( options, { value } ) ) {
+			this.setState( { value } );
 		}
 	};
 
 	render() {
-		
-		const { value } = this.props;
+		const { label } = this.props;
+		const { value } = this.state;
 
 		return (
-			<div className="control is-primary">
-				<div className="select">
-					<select onChange={this.handleChange} value={value}>
-						<option value="C">C</option>
-						<option value="C#">C#</option>
-						<option value="Db">Db</option>
-						<option value="D">D</option>
-						<option value="D#">D#</option>
-						<option value="Eb">Eb</option>
-						<option value="E">E</option>
-						<option value="F">F</option>
-						<option value="F#">F#</option>
-						<option value="Gb">Gb</option>
-						<option value="G">G</option>
-						<option value="G#">G#</option>
-						<option value="Ab">Ab</option>
-						<option value="A">A</option>
-						<option value="A#">A#</option>
-						<option value="Bb">Bb</option>
-						<option value="B">B</option>
-						<option value="C">C</option>
-						<option value="C#">C#</option>
-						<option value="Db">Db</option>
-						<option value="D">D</option>
-						<option value="D#">D#</option>
-						<option value="Eb">Eb</option>
-						<option value="E">E</option>
-						<option value="F">F</option>
-						<option value="F#">F#</option>
-						<option value="Gb">Gb</option>
-						<option value="G">G</option>
-						<option value="G#">G#</option>
-						<option value="Ab">Ab</option>
-						<option value="A">A</option>
-						<option value="A#">A#</option>
-						<option value="Bb">Bb</option>
-						<option value="B">B</option>
-						<option value="C">C</option>
-						<option value="nashville">Nashville</option>
-					</select>
-				</div>
-			</div>
+			<TextField
+				select
+				label={label}
+				value={value}
+				onChange={this.handleChange}
+			>
+				{options.map( option => (
+					<MenuItem key={option.value} value={option.value}>
+						{option.label}
+					</MenuItem>
+				) )}
+			</TextField>
 		);
 
 	}
