@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import * as actions from '../../actions';
+import { find } from 'lodash';
 import { connect } from 'react-redux';
 
+import * as actions from '../../actions';
 import ChordLine from "./lines/ChordLine";
 import ChordPair from "./lines/ChordPair";
 import ContentLimiter from '../../components/ContentLimiter';
@@ -124,7 +125,27 @@ class SongViewer extends Component {
 	createAddToSetHandler = set => () => this.addToSet( set );
 
 	handleSelectSetKey = ( option, amount ) => {
-		console.log( `change setKey to ${option.key} by ${amount}` );
+		const { currentSet, song } = this.props;
+		db.get( currentSet._id ).then( doc => {
+
+			const setSong = find( doc.songs, { _id: song._id } );
+			setSong.key = option.key;
+
+			db.put( doc ).catch( err => {
+
+				if ( err.name === 'conflict' ) {
+
+					console.error( 'SongList.addToSet: conflict -', err );
+
+				} else {
+
+					console.error( 'SongList.addToSet -', err );
+
+				}
+
+			} );
+
+		} ).catch( console.error );
 	};
 
 	handleSelectDisplayKey = ( option ) => {
@@ -178,6 +199,7 @@ class SongViewer extends Component {
 
 	changeKey = key => {
 		if ( key ) {
+			this.setState( { displayKey: key } );
 			this.props.setCurrentSongUserKey( key );
 		}
 	};
@@ -188,12 +210,10 @@ class SongViewer extends Component {
 		} );
 
 	transposeDown = () => {
-		console.log( 'TODO: pass key to changeKey, not a number' );
-		//this.changeKey( 1 )
+		this.changeKey( transposeChord( this.state.displayKey, -1 ) )
 	};
 	transposeUp = () => {
-		console.log( 'TODO: pass key to changeKey, not a number' );
-		//this.changeKey( -1 )
+		this.changeKey( transposeChord( this.state.displayKey, 1 ) )
 	};
 
 	toggleNashville = value => () => this.setState( prevState => ( {
@@ -266,7 +286,7 @@ class SongViewer extends Component {
 											/>
 										</Grid>
 
-										{/*<Grid item>
+										<Grid item>
 
 											<Grid item>
 												<IconButton aria-label="Transpose down"
@@ -284,7 +304,7 @@ class SongViewer extends Component {
 												</IconButton>
 
 											</Grid>
-										</Grid>*/}
+										</Grid>
 
 										<Grid item>
 

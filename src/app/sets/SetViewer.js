@@ -352,7 +352,7 @@ class SetViewer extends Component {
 
 						<KeySelector
 							onSelect={( key, amount ) => this.changeKey( song._id, amount )}
-							value={key}
+							songKey={key}
 						/>
 
 						{mode === 'edit' &&

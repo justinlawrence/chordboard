@@ -66,7 +66,7 @@ export default function transposeChord( chord, amount ) {
 
 	} else {
 
-		return octave[ chordNr ] + (matches && matches[ 1 ] ? matches[ 1 ] : '');
+		return octave[ chordNr ] + ( matches && matches[ 1 ] ? matches[ 1 ] : '' );
 
 	}
 
@@ -91,7 +91,7 @@ if ( module.hot ) {
 		[ transposeChord( "C/E", 2 ), "D/F#" ],
 		[ transposeChord( "Cmaj7/E", 2 ), "Dmaj7/F#" ],
 		[ transposeChord( "G2", 2 ), "A2" ],
-		[ transposeChord( "Gmaj7", 4 ), "Bmaj7" ],
+		[ transposeChord( "Gmaj7", 4 ), "Bmaj7" ]
 	];
 
 	tests.forEach( ( test, i ) => {
