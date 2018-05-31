@@ -1872,6 +1872,12 @@ chokidar@^2.0.0, chokidar@^2.0.2:
   optionalDependencies:
     fsevents "^1.1.2"
 
+chord-magic@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/chord-magic/-/chord-magic-1.0.0.tgz#bc12d124dcf65ec03e5b96458271777305807c68"
+  dependencies:
+    extend "^1.3.0"
+
 chownr@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.0.1.tgz#e2a75042a9551908bebd25b8523d5f9769d79181"
@@ -3383,6 +3389,10 @@ extend-shallow@^3.0.0, extend-shallow@^3.0.2:
   dependencies:
     assign-symbols "^1.0.0"
     is-extendable "^1.0.1"
+
+extend@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/extend/-/extend-1.3.0.tgz#d1516fb0ff5624d2ebf9123ea1dac5a1994004f8"
 
 extend@~3.0.0, extend@~3.0.1:
   version "3.0.1"
