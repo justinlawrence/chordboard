@@ -148,7 +148,6 @@ class SongList extends Component {
 									<TableRow>
 										<TableCell>Song</TableCell>
 										<TableCell className="is-hidden-mobile">Author</TableCell>
-										<TableCell className="is-hidden-mobile">Key</TableCell>
 									</TableRow>
 								</TableHead>
 
@@ -170,13 +169,6 @@ class SongList extends Component {
 													{song.author}
 											</TableCell>
 
-
-
-											<TableCell className="is-hidden-mobile">
-												<Typography variant="title" gutterBottom>
-													{song.key}
-												</Typography>
-											</TableCell>
 
 											{isAddToSet &&
 											<TableCell>
