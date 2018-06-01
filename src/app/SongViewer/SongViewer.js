@@ -1,325 +1,353 @@
-import React, {Component} from 'react';
-import {find} from 'lodash';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { find } from 'lodash';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-import * as actions from '../../actions';
+import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import ChordLine from "./lines/ChordLine";
-import ChordPair from "./lines/ChordPair";
-import ContentLimiter from '../../components/ContentLimiter';
+import ButtonBase from '@material-ui/core/ButtonBase';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
-import getKeyDiff from 'app/common/getKeyDiff';
 import Grid from '@material-ui/core/Grid';
-import Hero from '../../components/Hero';
 import IconButton from '@material-ui/core/IconButton';
-import {includes, uniqBy} from 'lodash';
-import KeySelector from 'app/common/KeySelector';
-import Line from "./lines/Line";
-import {Link} from 'react-router-dom';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Typography from '@material-ui/core/Typography';
+import {
+	Eye as EyeIcon,
+	Minus as MinusIcon,
+	Plus as PlusIcon
+} from 'mdi-material-ui';
+
+import { Sets, db, sync } from 'database';
+import * as actions from '../../actions';
+import ChordLine from "./lines/ChordLine";
+import ChordPair from "./lines/ChordPair";
+import ContentLimiter from '../../components/ContentLimiter';
+import getKeyDiff from 'app/common/getKeyDiff';
+import Hero from '../../components/Hero';
+import { includes, uniqBy } from 'lodash';
+import KeySelector from 'app/common/KeySelector';
+import Line from "./lines/Line";
 import Parser from 'app/parsers/song-parser';
-import PropTypes from 'prop-types';
-import {Sets, db, sync} from 'database';
 import transposeChord from '../common/transpose-chord';
 import transposeLines from '../common/transpose-lines';
-import Typography from '@material-ui/core/Typography';
 
-import {Plus as PlusIcon, Minus as MinusIcon, Eye as EyeIcon} from 'mdi-material-ui';
-
-import {linesToNashville} from '../../utils/convertToNashville';
+import { linesToNashville } from '../../utils/convertToNashville';
 import './SongViewer.scss';
 
+const styles = theme => ( {
+	capoButton: {
+		borderRadius: 3,
+		flexDirection: 'column',
+		padding: theme.spacing.unit
+	}
+} );
+
 class SongViewer extends Component {
-  static propTypes = {
-    setKey: PropTypes.string
-  };
+	static propTypes = {
+		setKey: PropTypes.string
+	};
 
-  state = {
-    capoAmount: 0,
-    isNashville: false,
-    setListMenuAnchorEl: null,
-    displayKey: '',
-    lines: [],
-    setList: []
-  };
+	state = {
+		capoAmount: 0,
+		isNashville: false,
+		isSongKeyDialogOpen: false,
+		setListMenuAnchorEl: null,
+		displayKey: '',
+		lines: [],
+		setList: []
+	};
 
-  componentDidMount() {
+	componentDidMount() {
 
-    // Update an initial list when the component mounts.
-    this.updateListOfSets();
+		// Update an initial list when the component mounts.
+		this.updateListOfSets();
 
-    //Set the page title to the song title
-    document.title = this.props.song.title;
+		//Set the page title to the song title
+		document.title = this.props.song.title;
 
-    // Listen for any changes on the database.
-    sync.on("change", this.updateListOfSets.bind(this));
+		// Listen for any changes on the database.
+		sync.on( "change", this.updateListOfSets.bind( this ) );
 
-    this.handleProps(this.props);
+		this.handleProps( this.props );
 
-    const songId = this.props.song._id;
-    const setId = this.props.currentSet._id;
-    console.log('songId', songId);
-    console.log('setId', setId);
+		const songId = this.props.song._id;
+		const setId = this.props.currentSet._id;
+		console.log( 'songId', songId );
+		console.log( 'setId', setId );
 
-  }
+	}
 
-  componentWillReceiveProps(nextProps) {
-    this.handleProps(nextProps);
-  }
+	componentWillReceiveProps( nextProps ) {
+		this.handleProps( nextProps );
+	}
 
-  componentWillUnmount() {
-    sync.cancel();
-  }
+	componentWillUnmount() {
+		sync.cancel();
+	}
 
-  addToSet = set => {
+	addToSet = set => {
 
-    const {song} = this.props;
+		const { song } = this.props;
 
-    db.get(set._id).then(doc => {
+		db.get( set._id ).then( doc => {
 
-      const data = {
-        ...doc
-      };
+			const data = {
+				...doc
+			};
 
-      data.songs = data.songs || [];
-      data.songs.push({_id: song._id, key: song.key});
-      data.songs = uniqBy(data.songs, '_id');
+			data.songs = data.songs || [];
+			data.songs.push( { _id: song._id, key: song.key } );
+			data.songs = uniqBy( data.songs, '_id' );
 
-      db.put(data).then(() => {
+			db.put( data ).then( () => {
 
-        if (this.props.history) {
+				if ( this.props.history ) {
 
-          const location = {
-            pathname: `/sets/${doc._id}`
-          };
+					const location = {
+						pathname: `/sets/${doc._id}`
+					};
 
-          this.props.history.push(location);
-        }
+					this.props.history.push( location );
+				}
 
-      }).catch(err => {
+			} ).catch( err => {
 
-        if (err.name === 'conflict') {
+				if ( err.name === 'conflict' ) {
 
-          console.error('SongList.addToSet: conflict -', err);
+					console.error( 'SongList.addToSet: conflict -', err );
 
-        } else {
+				} else {
 
-          console.error('SongList.addToSet -', err);
+					console.error( 'SongList.addToSet -', err );
 
-        }
+				}
 
-      });
+			} );
 
-    }).catch(err => {
-      console.error(err);
-    });
+		} ).catch( err => {
+			console.error( err );
+		} );
 
-  };
+	};
 
-  createAddToSetHandler = set => () => this.addToSet(set);
+	createAddToSetHandler = set => () => this.addToSet( set );
 
-  handleSelectSetKey = (option, amount) => {
-    const {currentSet, song} = this.props;
-    db.get(currentSet._id).then(doc => {
+	handleSelectSetKey = ( option, amount ) => {
+		const { currentSet, song } = this.props;
+		db.get( currentSet._id ).then( doc => {
 
-      const setSong = find(doc.songs, {_id: song._id});
-      setSong.key = option.key;
+			const setSong = find( doc.songs, { _id: song._id } );
+			setSong.key = option.key;
 
-      db.put(doc).catch(err => {
+			db.put( doc ).catch( err => {
 
-        if (err.name === 'conflict') {
+				if ( err.name === 'conflict' ) {
 
-          console.error('SongList.addToSet: conflict -', err);
+					console.error( 'SongList.addToSet: conflict -', err );
 
-        } else {
+				} else {
 
-          console.error('SongList.addToSet -', err);
+					console.error( 'SongList.addToSet -', err );
 
-        }
+				}
 
-      });
+			} );
 
-    }).catch(console.error);
-  };
+		} ).catch( console.error );
+	};
 
-	handleDialogOpen = () => {
-     this.setState({
-       open: true,
-     });
-   };
+	handleSelectDisplayKey = ( option ) => {
 
-  handleSelectDisplayKey = (option) => {
+		this.setState( { displayKey: option.key } );
 
-    this.setState({displayKey: option.key});
+		if ( option.value === 'nashville' ) {
+			this.setState( { isNashville: true } );
+		} else {
+			this.changeKey( option.key );
+			this.setState( { isNashville: false } );
+		}
 
-    if (option.value === 'nashville') {
-      this.setState({isNashville: true});
-    } else {
-      this.changeKey(option.key);
-      this.setState({isNashville: false});
-    }
+	};
 
-  };
+	handleSongKeyDialogClose = () => this.setState( { isSongKeyDialogOpen: false } );
+	handleSongKeyDialogOpen = () => this.setState( { isSongKeyDialogOpen: true } );
 
-  handleProps = props => {
+	handleProps = props => {
 
-    const songUser = props.song.users && props.song.users.find(u => u.id === props.user.id) || {};
+		const songUser = props.song.users && props.song.users.find( u => u.id === props.user.id ) || {};
 
-    /*console.log( 'song key', props.song.key );
-		console.log( 'set key', props.setKey );
-		console.log( 'user key', songUser.key );*/
+		/*console.log( 'song key', props.song.key );
+			console.log( 'set key', props.setKey );
+			console.log( 'user key', songUser.key );*/
 
-    const displayKey = songUser.key || props.setKey || props.song.key;
+		const displayKey = songUser.key || props.setKey || props.song.key;
 
-    const parser = new Parser();
-    const lines = parser.parse(props.song.content);
+		const parser = new Parser();
+		const lines = parser.parse( props.song.content );
 
-    this.setState({displayKey, lines});
+		this.setState( { displayKey, lines } );
 
-  };
+	};
 
-  scrollToSection(section) {
+	scrollToSection( section ) {
 
-    let totalVertPadding = 32;
-    let headerHeight = 92;
+		let totalVertPadding = 32;
+		let headerHeight = 92;
 
-    location.href = '#';
-    location.href = '#section-' + section.index;
+		location.href = '#';
+		location.href = '#section-' + section.index;
 
-    let scrollBottom = window.innerHeight - document.body.scrollTop + totalVertPadding;
+		let scrollBottom = window.innerHeight - document.body.scrollTop + totalVertPadding;
 
-    if (headerHeight < scrollBottom) {
+		if ( headerHeight < scrollBottom ) {
 
-      // Go back 92 pixels to offset the header.
-      window.scrollBy(0, -headerHeight);
+			// Go back 92 pixels to offset the header.
+			window.scrollBy( 0, -headerHeight );
 
-    }
+		}
 
-  }
+	}
 
-  changeKey = key => {
-    if (key) {
-      this.setState({displayKey: key});
-      this.props.setCurrentSongUserKey(key);
-    }
-  };
+	changeKey = key => {
+		if ( key ) {
+			this.setState( { displayKey: key } );
+			this.props.setCurrentSongUserKey( key );
+		}
+	};
 
-  showSetListDropdown = isVisible => event => this.setState({
-    setListMenuAnchorEl: isVisible
-      ? event.currentTarget
-      : null
-  });
+	showSetListDropdown = isVisible => event => this.setState( {
+		setListMenuAnchorEl: isVisible
+			? event.currentTarget
+			: null
+	} );
 
-  transposeDown = () => {
-    this.changeKey(transposeChord(this.state.displayKey, -1))
-  };
-  transposeUp = () => {
-    this.changeKey(transposeChord(this.state.displayKey, 1))
-  };
+	transposeDown = () => {
+		this.changeKey( transposeChord( this.state.displayKey, -1 ) )
+	};
+	transposeUp = () => {
+		this.changeKey( transposeChord( this.state.displayKey, 1 ) )
+	};
 
-  toggleNashville = value => () => this.setState(prevState => ({
-    isNashville: value !== undefined
-      ? value
-      : !prevState.isNashville
-  }));
-
-  updateListOfSets = () => Sets.getAll().then(setList => this.setState({setList}));
-
-  render() {
-
-    const {setKey, song, onClose} = this.props;
-    const {isNashville, setListMenuAnchorEl, displayKey, lines: linesState, setList} = this.state;
-
-    const capo = getKeyDiff(displayKey, setKey || song.key); //this is only for display purposes, telling the user where to put the capo
-    const transposeAmount = getKeyDiff(song.key, displayKey); //this is how much to transpose by
-
-    let lines = transposeLines(linesState, transposeAmount);
-    if (isNashville) {
-      lines = linesToNashville(displayKey, lines);
-    }
-
-    let sections = [];
-
-    return (
-      song
-      ? <div className="song-viewer">
-        <Hero>
-          <ContentLimiter>
-            <Grid container="container" justify="space-between">
-
-              <Grid item="item">
-                <Typography variant="display1" color="inherit">{song.title}</Typography>
-                <Typography variant="title">{song.author}</Typography>
-              </Grid>
-
-              <Grid item="item" className="column no-print">
-                <Grid container="container" spacing={24} alignItems="center">
-
-                  {
-                    setKey
-                      ? (<Grid item="item">
-                        <KeySelector label="Set key" onSelect={this.handleSelectSetKey} songKey={setKey}/>
-                      </Grid>)
-                      : null
-                  }
-
-                  <Grid item="item">
-                    <KeySelector label="Song key" onSelect={this.handleSelectDisplayKey} songKey={displayKey}/>
-                  </Grid>
-
-                  <Grid item="item">
-                    <Typography variant="caption">
-                      Capo
-                    </Typography>
-                    <Typography variant="subheading">
-                      {capo}
-                      ({displayKey})
-                    </Typography>
-
-										<Button onClick={this.handleDialogOpen}>Transpose</Button>
-										        <SimpleDialogWrapped
-										          selectedValue={this.state.selectedValue}
-										          open={this.state.open}
-										          onClose={this.handleClose}
-										        />
-                  </Grid>
-
-                </Grid>
-              </Grid>
-
-              <Grid item="item" className="column no-print">
-
-                <Grid item="item">
-
-                  <form autoComplete="off">
-                    <FormControl>
-                      <Button color="secondary" onClick={this.showSetListDropdown(true)} variant="raised">
-                        Add to set
-                      </Button>
-
-                      <Menu anchorEl={setListMenuAnchorEl} onClose={this.showSetListDropdown(false)} open={Boolean(setListMenuAnchorEl)}>
-                        {
-                          setList.map(set => (<MenuItem key={set._id} onClick={this.createAddToSetHandler} value={set._id}>
-                            {set.title}
-                          </MenuItem>))
-                        }
-                      </Menu>
-                    </FormControl>
-                  </form>
-                </Grid>
-
-                <Grid item="item">
-                  <Link to={`/songs/${song._id}/edit`}>
-                    <Button color="primary" variant="raised">
-                      Edit Song
-                    </Button>
-                  </Link>
-                </Grid>
-
-                {/* JL: once we're happy with the material "add to set", we can remove this
+	toggleNashville = value => () => this.setState( prevState => ( {
+		isNashville: value !== undefined
+			? value
+			: !prevState.isNashville
+	} ) );
+
+	updateListOfSets = () => Sets.getAll().then( setList => this.setState( { setList } ) );
+
+	render() {
+
+		const { classes, setKey, song, onClose } = this.props;
+		const {
+			isNashville,
+			isSongKeyDialogOpen,
+			setListMenuAnchorEl,
+			displayKey,
+			lines: linesState,
+			setList
+		} = this.state;
+
+		const capo = getKeyDiff( displayKey, setKey || song.key ); //this is only for display purposes, telling the user where to put the capo
+		const transposeAmount = getKeyDiff( song.key, displayKey ); //this is how much to transpose by
+
+		let lines = transposeLines( linesState, transposeAmount );
+		if ( isNashville ) {
+			lines = linesToNashville( displayKey, lines );
+		}
+
+		let sections = [];
+
+		return (
+			song
+				? <div className="song-viewer">
+					<Hero>
+						<ContentLimiter>
+							<Grid container="container" justify="space-between">
+
+								<Grid item="item">
+									<Typography variant="display1"
+									            color="inherit">{song.title}</Typography>
+									<Typography variant="title">{song.author}</Typography>
+								</Grid>
+
+								<Grid item="item" className="column no-print">
+									<Grid container="container" spacing={24} alignItems="center">
+
+										{
+											setKey
+												? ( <Grid item="item">
+													<KeySelector label="Set key"
+													             onSelect={this.handleSelectSetKey}
+													             songKey={setKey}/>
+												</Grid> )
+												: null
+										}
+
+										<Grid item="item">
+											<KeySelector label="Song key"
+											             onSelect={this.handleSelectDisplayKey}
+											             songKey={displayKey}/>
+										</Grid>
+
+										<Grid item="item">
+											<ButtonBase
+												className={classes.capoButton}
+												onClick={this.handleSongKeyDialogOpen}
+											>
+												<Typography variant="caption">
+													Capo
+												</Typography>
+												<Typography variant="subheading">
+													{capo}
+													({displayKey})
+												</Typography>
+											</ButtonBase>
+										</Grid>
+
+									</Grid>
+								</Grid>
+
+								<Grid item="item" className="column no-print">
+
+									<Grid item="item">
+
+										<form autoComplete="off">
+											<FormControl>
+												<Button color="secondary"
+												        onClick={this.showSetListDropdown( true )}
+												        variant="raised">
+													Add to set
+												</Button>
+
+												<Menu anchorEl={setListMenuAnchorEl}
+												      onClose={this.showSetListDropdown( false )}
+												      open={Boolean( setListMenuAnchorEl )}>
+													{
+														setList.map( set => ( <MenuItem key={set._id}
+														                                onClick={this.createAddToSetHandler}
+														                                value={set._id}>
+															{set.title}
+														</MenuItem> ) )
+													}
+												</Menu>
+											</FormControl>
+										</form>
+									</Grid>
+
+									<Grid item="item">
+										<Link to={`/songs/${song._id}/edit`}>
+											<Button color="primary" variant="raised">
+												Edit Song
+											</Button>
+										</Link>
+									</Grid>
+
+									{/* JL: once we're happy with the material "add to set", we can remove this
 										<div className="control">
 											<div className={cx(
 												'dropdown',
@@ -358,172 +386,146 @@ class SongViewer extends Component {
 												</div>
 											</div>
 										</div> */
-                }
+									}
 
-                </Grid>
-              </Grid>
-            </ContentLimiter>
+								</Grid>
+							</Grid>
+						</ContentLimiter>
 
-          </Hero>
+					</Hero>
 
-          <ContentLimiter>
-            <section className="section">
-              <div className="container">
-                <div className="song-viewer__song">
-                  {
-                  parseSong(lines, sections)
-                }
-                </div>
-            </div>
-          </section>
-        </ContentLimiter>
+					<ContentLimiter>
+						<section className="section">
+							<div className="container">
+								<div className="song-viewer__song">
+									{
+										parseSong( lines, sections )
+									}
+								</div>
+							</div>
+						</section>
+					</ContentLimiter>
 
+					<Dialog
+						aria-labelledby="songkey-dialog-title"
+						maxWidth="xs"
+						onClose={this.handleSongKeyDialogClose}
+						open={isSongKeyDialogOpen}
+					>
+						<DialogTitle id="songkey-dialog-title">Set song key</DialogTitle>
+						<div>
 
-      </div>
-      : null);
+							<Grid item="item">
+								<IconButton aria-label="Transpose down" onClick={this.transposeDown}>
+									<MinusIcon/>
+								</IconButton>
+							</Grid>
 
-  }
+							<Grid item="item">
+								<IconButton aria-label="Transpose up" onClick={this.transposeUp}>
+									<PlusIcon/>
+								</IconButton>
+							</Grid>
+
+							<Grid item="item">
+
+								<IconButton aria-label="Toggle Nashville Numbering"
+								            onClick={this.toggleNashville()}>
+									<EyeIcon/>
+								</IconButton>
+
+							</Grid>
+
+						</div>
+					</Dialog>
+
+				</div>
+				: null );
+
+	}
 }
 
-const mapStateToProps = state => ({currentSet: state.currentSet, song: state.currentSong, user: state.user});
+const mapStateToProps = state => ( {
+	currentSet: state.currentSet,
+	song: state.currentSong,
+	user: state.user
+} );
 
-export default connect(mapStateToProps, actions)(SongViewer);
-
-
-const SimpleDialogWrapped = withStyles(styles)(SimpleDialog);
-
-class SimpleDialog extends React.Component {
-  handleClose = () => {
-    this.props.onClose(this.props.selectedValue);
-  };
-
-  handleListItemClick = value => {
-    this.props.onClose(value);
-  };
-
-  render() {
-    const { classes, onClose, selectedValue, ...other } = this.props;
-
-    return (
-
-			<Dialog
-				onClose={this.handleClose()}
-				maxWidth="xs"
-				aria-labelledby="songkey-dialog-title"
-				>
-				<DialogTitle id="songkey-dialog-title">Set song key</DialogTitle>
-				<div>
-
-					<Grid item="item">
-						<IconButton aria-label="Transpose down" onClick={this.transposeDown}>
-							<MinusIcon/>
-						</IconButton>
-					</Grid>
-
-					<Grid item="item">
-
-						<IconButton aria-label="Transpose up" onClick={this.transposeUp}>
-							<PlusIcon/>
-						</IconButton>
-
-					</Grid>
-
-					<Grid item="item">
-
-						<IconButton aria-label="Toggle Nashville Numbering" onClick={this.toggleNashville()}>
-							<EyeIcon/>
-						</IconButton>
-
-					</Grid>
-
-			</div>
-			</Dialog>
-
-
-		);
-	   }
-	 }
-
-	 SimpleDialog.propTypes = {
-	   classes: PropTypes.object.isRequired,
-	   onClose: PropTypes.func,
-	   selectedValue: PropTypes.string,
-	 };
-
-
-
-
-
-
+export default connect( mapStateToProps, actions )( withStyles( styles )( SongViewer ) );
 
 // -----------------------------------------------------
 
-export function parseSong(lines, sections) {
+export function parseSong( lines, sections ) {
 
-  let children = [];
-  let result = [];
-  let section = '';
-  let sectionIndex = 0;
+	let children = [];
+	let result = [];
+	let section = '';
+	let sectionIndex = 0;
 
-  for (let i = 0; i < lines.length; i++) {
+	for ( let i = 0; i < lines.length; i++ ) {
 
-    let line = lines[i];
+		let line = lines[ i ];
 
-    switch (lines[i].type) {
+		switch ( lines[ i ].type ) {
 
-      case 'chord-line':
-        children.push(<ChordLine key={i} chords={line.chords}/>);
-        break;
+			case 'chord-line':
+				children.push( <ChordLine key={i} chords={line.chords}/> );
+				break;
 
-      case 'chord-pair':
-        children.push(<ChordPair key={i} chords={line.chords} text={line.text}/>);
-        break;
+			case 'chord-pair':
+				children.push( <ChordPair key={i} chords={line.chords} text={line.text}/> );
+				break;
 
-      case 'empty':
-        children.push(<div key={i} className="empty-line"/>);
-        break;
+			case 'empty':
+				children.push( <div key={i} className="empty-line"/> );
+				break;
 
-      case 'line':
-        children.push(<Line key={i} text={line.text}/>);
-        break;
+			case 'line':
+				children.push( <Line key={i} text={line.text}/> );
+				break;
 
-      case 'section':
+			case 'section':
 
-        if (section) {
+				if ( section ) {
 
-          // Finish off last section
-          result.push(<section id={`section-${sectionIndex}`} key={`section-${sectionIndex}`} className="song-viewer__section" data-section={section}>{children}</section>);
-          children = [];
+					// Finish off last section
+					result.push( <section id={`section-${sectionIndex}`}
+					                      key={`section-${sectionIndex}`}
+					                      className="song-viewer__section"
+					                      data-section={section}>{children}</section> );
+					children = [];
 
-        } else {
+				} else {
 
-          result = result.concat(children);
+					result = result.concat( children );
 
-        }
+				}
 
-        section = line.text;
-        sections.push({title: line.text, index: sectionIndex});
+				section = line.text;
+				sections.push( { title: line.text, index: sectionIndex } );
 
-        sectionIndex++;
+				sectionIndex++;
 
-        break;
+				break;
 
-    }
+		}
 
-  } //end of loop through lines
+	} //end of loop through lines
 
-  if (section) {
+	if ( section ) {
 
-    result.push(<section id={`section-${sectionIndex}`} key={`section-${sectionIndex}`} className="song-viewer__section" data-section={section}>{children}</section>);
+		result.push( <section id={`section-${sectionIndex}`} key={`section-${sectionIndex}`}
+		                      className="song-viewer__section"
+		                      data-section={section}>{children}</section> );
 
-  }
+	}
 
-  if (children.length && !section) {
+	if ( children.length && !section ) {
 
-    result = result.concat(children);
+		result = result.concat( children );
 
-  }
+	}
 
-  return result;
+	return result;
 
 }
