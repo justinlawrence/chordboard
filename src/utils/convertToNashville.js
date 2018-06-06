@@ -1,26 +1,27 @@
 import { includes } from 'lodash';
-import * as Chord from 'tonal-chord';
-import * as Key from 'tonal-key';
+import { parse, prettyPrint, transpose } from 'chord-magic';
+
+import getKeyDiff from '../app/common/getKeyDiff';
 
 export const chordToNashville = ( key, chord ) => {
 
-	const keyTokens = Chord.tokenize( key );
-	const keyNote = keyTokens[ 0 ] + ( keyTokens[ 1 ] === 'm' ? ' minor' : ' major' );
+	const nashville = [
+		1,     // 'A',
+		'A#',  // 'A#',
+		2,     // 'B',
+		'C',   // 'C',
+		3,     // 'C#',
+		4,     // 'D',
+		'D#',  // 'D#',
+		5,     // 'E',
+		'F',   // 'F',
+		6,     // 'F#',
+		'G',   // 'G',
+		7      // 'G#'
+	];
+	const distance = getKeyDiff( key, 'A' );
 
-	const chordTokens = Chord.tokenize( chord );
-	const chordIsMinor = chordTokens[ 1 ] === 'm';
-
-	const scale = Key.scale( keyNote );
-
-	let result = scale.indexOf( chordTokens[ 0 ] ) + 1;
-
-	if ( chordIsMinor ) {
-
-		result += 'm';
-
-	}
-
-	return String( result );
+	return prettyPrint( transpose( parse( chord ), distance ), { naming: nashville } );
 
 };
 
