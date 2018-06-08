@@ -287,16 +287,17 @@ class SongViewer extends Component {
 				<div className="song-viewer">
 					<Hero>
 						<ContentLimiter>
-							<Grid container justify="space-between">
 
-								<Grid item>
+							<Grid container className={classes.root} justify="space-between">
+
+								<Grid item xs={12} sm={8}>
 									<Typography variant="display1"
 									            color="inherit">{song.title}</Typography>
-									<Typography variant="title">{song.author}</Typography>
+									<Typography variant="subheading">{song.author}</Typography>
 								</Grid>
 
-								<Grid item className="column no-print">
-									<Grid container spacing={24} alignItems="center">
+								<Grid item xs={12} sm={2} className="column no-print">
+									<Grid container spacing={24}>
 
 										{
 											setKey
@@ -329,40 +330,44 @@ class SongViewer extends Component {
 									</Grid>
 								</Grid>
 
-								<Grid item className="column no-print">
+								<Grid item  xs={12} sm={2} className="column no-print">
 
-									<Grid item>
+									<Grid container>
 
-										<form autoComplete="off">
-											<FormControl>
-												<Button color="secondary"
-												        onClick={this.showSetListDropdown( true )}
-												        variant="raised">
-													Add to set
+										<Grid item>
+
+											<form autoComplete="off">
+												<FormControl>
+													<Button color="secondary"
+													        onClick={this.showSetListDropdown( true )}
+													        variant="raised">
+														Add to set
+													</Button>
+
+													<Menu anchorEl={setListMenuAnchorEl}
+													      onClose={this.showSetListDropdown( false )}
+													      open={Boolean( setListMenuAnchorEl )}>
+														{
+															setList.map( set => (
+																<MenuItem key={set._id}
+																          onClick={this.createAddToSetHandler}
+																          value={set._id}>
+																	{set.title}
+																</MenuItem> ) )
+														}
+													</Menu>
+												</FormControl>
+											</form>
+										</Grid>
+
+										<Grid item>
+											<Link to={`/songs/${song._id}/edit`}>
+												<Button color="primary" variant="raised">
+													Edit Song
 												</Button>
+											</Link>
+										</Grid>
 
-												<Menu anchorEl={setListMenuAnchorEl}
-												      onClose={this.showSetListDropdown( false )}
-												      open={Boolean( setListMenuAnchorEl )}>
-													{
-														setList.map( set => (
-															<MenuItem key={set._id}
-															          onClick={this.createAddToSetHandler}
-															          value={set._id}>
-																{set.title}
-															</MenuItem> ) )
-													}
-												</Menu>
-											</FormControl>
-										</form>
-									</Grid>
-
-									<Grid item>
-										<Link to={`/songs/${song._id}/edit`}>
-											<Button color="primary" variant="raised">
-												Edit Song
-											</Button>
-										</Link>
 									</Grid>
 
 								</Grid>
