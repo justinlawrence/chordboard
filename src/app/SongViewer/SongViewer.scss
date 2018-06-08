@@ -5,41 +5,6 @@ $chord-gap: .75em;
 	padding-right: $horiz-padding;
 }
 
-.chord-pair .text-line,
-.chord-line .text-line {
-	margin-top:     24px;
-	display:        inline-block;
-	position:       relative;
-	white-space:    pre;
-	height:         24px;
-	line-height:    24px;
-	vertical-align: middle;
-	&:before {
-		content:  attr(data-content);
-		position: absolute;
-		top:      -18px;
-	}
-}
-
-
-.chord-pair .text-line:before,
-.chord-line .text-line:before {
-	color:     #03a9f4;
-	font-size: 16px;
-	font-weight: 600;
-}
-
-// These are chords that are found on a separate line
-.chord-line .text-line {
-	height:       0;
-	margin-right: $chord-gap;
-	visibility:   hidden;
-
-	&:before {
-		visibility: visible;
-	}
-}
-
 // Blank whitespace lines
 .empty-line {
 	height: 16px;
@@ -61,8 +26,6 @@ $chord-gap: .75em;
 		@media print {
 			margin-left: 3px;
 		}
-
-
 
 		&[data-section]:before {
 			color:            white;
@@ -196,11 +159,4 @@ $chord-gap: .75em;
 	}
 }
 
-// The lyric lines, there are 2 types, the ones in chord-pairs and the ones that are found without chords
-.text-line {
-	font-size: 1.1rem;
-	&.text-line_empty {
-		margin-left: $chord-gap;
-		min-width:   2em;
-	}
-}
+

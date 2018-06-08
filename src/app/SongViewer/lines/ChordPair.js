@@ -1,8 +1,35 @@
 import React from 'react';
-import {range} from "lodash";
+import { range } from "lodash";
 import cx from 'classnames';
 
-const ChordPair = ( { chords, text } ) => {
+import { withStyles } from '@material-ui/core/styles';
+
+const styles = theme => ( {
+	text: {
+		display: 'inline-block',
+		height: theme.spacing.unit * 3,
+		lineHeight: `${theme.spacing.unit * 3}px`,
+		marginTop: theme.spacing.unit * 3,
+		position: 'relative',
+		verticalAlign: 'middle',
+		whiteSpace: 'pre',
+
+		'&:before': {
+			color: '#03a9f4',
+			content: 'attr(data-content)',
+			fontSize: '.8em',
+			fontWeight: '600',
+			position: 'absolute',
+			top: '-18px'
+		}
+	},
+	textEmpty: {
+		marginLeft: '.75em',
+		minWidth: '2em'
+	}
+} );
+
+const ChordPair = ( { chords, chordSize, classes, text, wordSize } ) => {
 
 	const children = [];
 
@@ -13,11 +40,11 @@ const ChordPair = ( { chords, text } ) => {
 
 		children.push(
 			<span key={i}
-				className={cx(
-					'text-line',
-					{ 'text-line_empty': !slice.trim() }
-				)}
-				data-content={chords[ index ]}
+			      className={cx(
+				      classes.text,
+				      { [ classes.textEmpty ]: !slice.trim() }
+			      )}
+			      data-content={chords[ index ]}
 			>
 				{slice}
 			</span>
@@ -26,9 +53,9 @@ const ChordPair = ( { chords, text } ) => {
 	} );
 
 	return (
-		<div className="chord-pair">{children}</div>
+		<div style={{ fontSize: `${wordSize}px` }}>{children}</div>
 	);
 
 };
 
-export default ChordPair;
+export default withStyles( styles )( ChordPair );

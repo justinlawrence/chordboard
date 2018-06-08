@@ -1,7 +1,6 @@
 import React from "react";
 
-export default ( { text } ) => {
+const Line = ( { text, wordSize } ) =>
+	<div style={{ fontSize: `${wordSize}px` }}>{text}</div>;
 
-	return <div className="text-line">{ text }</div>;
-
-};
+export default Line;
