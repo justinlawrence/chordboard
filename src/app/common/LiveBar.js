@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import {find, findIndex} from 'lodash';
+import Grid from '@material-ui/core/Grid';
 import {Link, matchPath, withRouter} from 'react-router-dom';
 
 import {db} from 'database';
 import SongKey from 'app/common/SongKey';
 import Song from 'app/common/Song.js';
+
 
 import './live-bar.scss';
 
@@ -178,68 +180,76 @@ class LiveBar extends Component {
 		return show ? (
 			<nav className="live-bar no-print">
 
-				<div className="live-bar__sections">
+					<Grid container className={classes.root} justify="space-between">
 
-					{sections.map( section => (
-						<a
-							key={`section-${section.index}`}
-							href={`#section-${section.index}`}
-							className="live-bar__section-link song-viewer__section"
-							data-section={section.text}
-							title={`Jump to the ${section.text}`}
-						/>
-					) )}
+						<Grid item xs={8} sm={8}>
 
-				</div>
+								<div className="live-bar__sections">
 
+									{sections.map( section => (
+										<a
+											key={`section-${section.index}`}
+											href={`#section-${section.index}`}
+											className="live-bar__section-link song-viewer__section"
+											data-section={section.text}
+											title={`Jump to the ${section.text}`}
+										/>
+									) )}
 
-				<div className="live-bar__navigation-actions">
+								</div>
+						</Grid>
 
-					<Link
-						className="live-bar__navigation-actions__item live-bar__navigation-actions__setlistbutton"
-						to={`/sets/${currentSetId}`}
-					    title="Go back to the setlist">
-							<span className="icon"><i className="fa fa-list-ul"/></span>
-							Setlist
-					</Link>
+						<Grid item xs={4} sm={4}>
 
+						<div className="live-bar__navigation-actions">
 
-					<a
-						className="live-bar__navigation-actions__item"
-					  onClick={onGoToPreviousSong}
-						title="Jump to the previous song"
-						>
-
-
-						<span className="icon"><i className="fa fa-angle-left fa-lg"/></span>
-
-						{previousSongTitle && (
-							<React.Fragment>
-								<SongKey value={previousSongKey}/>
-								{previousSongTitle}
-							</React.Fragment>
-						)}
-
-					</a>
-
-					<a
-						className="live-bar__navigation-actions__item"
-						onClick={onGoToNextSong}
-						title="Jump to the next song"
-						>
+							<Link
+								className="live-bar__navigation-actions__item live-bar__navigation-actions__setlistbutton"
+								to={`/sets/${currentSetId}`}
+							    title="Go back to the setlist">
+									<span className="icon"><i className="fa fa-list-ul"/></span>
+									Setlist
+							</Link>
 
 
-						{nextSongTitle && (
-							<React.Fragment>
-								<SongKey value={nextSongKey}/>
-								{nextSongTitle}
-							</React.Fragment>
-						)}
+							<a
+								className="live-bar__navigation-actions__item"
+							  onClick={onGoToPreviousSong}
+								title="Jump to the previous song"
+								>
 
-						<span className="icon"><i className="fa fa-angle-right fa-lg"/></span>
 
-					</a>
-				</div>
+								<span className="icon"><i className="fa fa-angle-left fa-lg"/></span>
+
+								{previousSongTitle && (
+									<React.Fragment>
+										<SongKey value={previousSongKey}/>
+										{previousSongTitle}
+									</React.Fragment>
+								)}
+
+							</a>
+
+							<a
+								className="live-bar__navigation-actions__item"
+								onClick={onGoToNextSong}
+								title="Jump to the next song"
+								>
+
+
+								{nextSongTitle && (
+									<React.Fragment>
+										<SongKey value={nextSongKey}/>
+										{nextSongTitle}
+									</React.Fragment>
+								)}
+
+								<span className="icon"><i className="fa fa-angle-right fa-lg"/></span>
+
+							</a>
+						</div>
+				</Grid>
+				</Grid>
 
 			</nav>
 		) : null;
