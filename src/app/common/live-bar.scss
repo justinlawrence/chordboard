@@ -1,74 +1,75 @@
 .live-bar {
-	align-items:      stretch;
+	align-items: stretch;
 	background-color: #eee;
-	box-shadow:       0 -2px 4px rgba(0, 0, 0, 0.1);
-	display:          flex;
-	height:           44px;
+	box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+	display: flex;
+	flex: 0 0 48px;
 
 	.level-item {
 		margin-bottom: 0;
 	}
 
 	.live-bar-item-stacked {
-		border:          1px solid rgba(10, 10, 10, 0.05);
-		align-items:     center;
-		display:         flex;
-		flex:            0 0 auto;
-		flex-direction:  row;
+		border: 1px solid rgba(10, 10, 10, 0.05);
+		align-items: center;
+		display: flex;
+		flex: 0 0 auto;
+		flex-direction: row;
 		justify-content: center;
-		padding:         0.5rem 0.5rem 0;
+		padding: 0.5rem 0.5rem 0;
 	}
 
 	&__sections {
 		align-items: center;
-		display:     flex;
-		flex:        1 1 0;
-		overflow-x:  auto;
+		display: flex;
+		flex: 1 1 0;
+		overflow-x: auto;
 	}
 
 	&__section-link {
-		border:   0 !important;
-		margin:   0 .25em 0 0 !important;
-		padding:  0 !important;
+		border: 0 !important;
+		margin: 0 .25em 0 0 !important;
+		padding: 0 !important;
 		position: relative !important;
 		min-width: 3em !important;
 
 		&:before {
-			display:     block !important;
+			display: block !important;
 			line-height: 2em !important;
-			min-height:  2em !important;
-			min-width:   3em !important;
-			position:    relative !important;
-			text-align:  center !important;
-			transform:   none !important;
+			min-height: 2em !important;
+			min-width: 3em !important;
+			position: relative !important;
+			text-align: center !important;
+			transform: none !important;
 		}
 	}
 
 	&__navigation-actions {
-		align-items: center;
-		display:     flex;
-		flex-wrap:   nowrap;
-		padding:     0 .25em;
-		overflow-y:hidden ;
+		display: flex;
+		flex-wrap: nowrap;
+		height: 100%;
+		padding: 0 16px;
+		overflow-y: hidden;
 		text-transform: uppercase;
-		font-size:.9em;
+		font-size: .9em;
 
 		&__setlistbutton {
-			width:     100px !important;
+			width: 100px !important;
 		}
 
 		&__item {
+			align-items: center;
+			box-sizing: border-box;
 			background-color: #eee;
-			border-radius:    .25em;
-			color:            black;
-			padding:          .5em;
-			height: 					40px;
-
-			width:     200px;
-
-			overflow:      hidden;
+			border-radius: .25em;
+			color: black;
+			cursor: pointer;
+			display: flex;
+			padding: 8px;
+			width: 200px;
+			overflow: hidden;
 			text-overflow: ellipsis;
-			white-space:   nowrap;
+			white-space: nowrap;
 
 			& + & {
 				margin-left: .25em;

@@ -290,13 +290,13 @@ class SongViewer extends Component {
 
 							<Grid container className={classes.root} justify="space-between">
 
-								<Grid item xs={12} sm={8}>
+								<Grid item xs={12} sm>
 									<Typography variant="display1"
 									            color="inherit">{song.title}</Typography>
 									<Typography variant="subheading">{song.author}</Typography>
 								</Grid>
 
-								<Grid item xs={12} sm={2} className="column no-print">
+								<Grid item className="column no-print">
 									<Grid container spacing={24}>
 
 										{
@@ -330,7 +330,7 @@ class SongViewer extends Component {
 									</Grid>
 								</Grid>
 
-								<Grid item  xs={12} sm={2} className="column no-print">
+								<Grid item className="column no-print">
 
 									<Grid container>
 

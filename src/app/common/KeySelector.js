@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { find, toLower } from 'lodash';
 
+import { withStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 
@@ -20,6 +21,12 @@ const options = [
 	{ key: "Bb", label: 'Bb', value: 'bb' },
 	{ key: "B", label: 'B', value: 'b' }
 ];
+
+const styles = theme => ( {
+	root: {
+		minWidth: theme.spacing.unit * 9
+	}
+} );
 
 class KeySelector extends PureComponent {
 	state = {
@@ -53,11 +60,12 @@ class KeySelector extends PureComponent {
 	};
 
 	render() {
-		const { label } = this.props;
+		const { classes, label } = this.props;
 		const { value } = this.state;
 
 		return (
 			<TextField
+				className={classes.root}
 				select
 				label={label}
 				value={value}
@@ -74,4 +82,4 @@ class KeySelector extends PureComponent {
 	}
 }
 
-export default KeySelector;
+export default withStyles( styles )( KeySelector );

@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import {find, findIndex} from 'lodash';
+import React, { Component } from 'react';
+import { find, findIndex } from 'lodash';
 import Grid from '@material-ui/core/Grid';
-import {Link, matchPath, withRouter} from 'react-router-dom';
+import { Link, matchPath, withRouter } from 'react-router-dom';
 
-import {db} from 'database';
+import { db } from 'database';
 import SongKey from 'app/common/SongKey';
 import Song from 'app/common/Song.js';
 
@@ -12,12 +12,17 @@ import './live-bar.scss';
 
 
 import { withStyles } from '@material-ui/core/styles';
+import Hidden from '@material-ui/core/Hidden';
+import {
+	ChevronLeft as ChevronLeftIcon,
+	ChevronRight as ChevronRightIcon,
+	FormatListBulleted as FormatListBulletedIcon
+} from 'mdi-material-ui';
 
-
-const styles = theme => ({
+const styles = theme => ( {
 	container: {
 		display: 'flex',
-		flexWrap: 'wrap',
+		flexWrap: 'wrap'
 	},
 	form: theme.mixins.gutters( {
 		paddingBottom: theme.spacing.unit * 2,
@@ -30,14 +35,14 @@ const styles = theme => ({
 	deleteButton: {
 		color: theme.palette.error.main
 	}
-});
+} );
 
 
 class LiveBar extends Component {
 	state = {
-		nextSongKey:       '',
-		nextSongTitle:     '',
-		previousSongKey:   '',
+		nextSongKey: '',
+		nextSongTitle: '',
+		previousSongKey: '',
 		previousSongTitle: ''
 	};
 
@@ -85,7 +90,7 @@ class LiveBar extends Component {
 
 				db.allDocs( {
 					include_docs: true,
-					keys:         keys.filter( k => k )
+					keys: keys.filter( k => k )
 				} ).then( result => {
 
 					const songs = result.rows
@@ -104,10 +109,10 @@ class LiveBar extends Component {
 					}
 
 					this.setState( {
-						currentSong:       currentSong ? new Song( currentSong ) : null,
-						nextSongKey:       nextSong ? nextSong.key : '-',
-						nextSongTitle:     nextSong ? nextSong.title : '-- END --',
-						previousSongKey:   previousSong ? previousSong.key : '-',
+						currentSong: currentSong ? new Song( currentSong ) : null,
+						nextSongKey: nextSong ? nextSong.key : '-',
+						nextSongTitle: nextSong ? nextSong.title : '-- END --',
+						previousSongKey: previousSong ? previousSong.key : '-',
 						previousSongTitle: previousSong ? previousSong.title : '-- BEGINNING --',
 						currentSetId: set._id
 					} );
@@ -149,7 +154,7 @@ class LiveBar extends Component {
 
 					sections.push( {
 						index: ++sectionIndex,
-						text:  line.text
+						text: line.text
 					} );
 
 				}
@@ -180,53 +185,54 @@ class LiveBar extends Component {
 		return show ? (
 			<nav className="live-bar no-print">
 
-					<Grid container className={classes.root} justify="space-between">
+				<Grid container className={classes.root} justify="space-between">
 
-						<Grid item xs={8} sm={8}>
+					<Grid item xs={8} sm={7}>
 
-								<div className="live-bar__sections">
+						<div className="live-bar__sections">
 
-									{sections.map( section => (
-										<a
-											key={`section-${section.index}`}
-											href={`#section-${section.index}`}
-											className="live-bar__section-link song-viewer__section"
-											data-section={section.text}
-											title={`Jump to the ${section.text}`}
-										/>
-									) )}
+							{sections.map( section => (
+								<a
+									key={`section-${section.index}`}
+									href={`#section-${section.index}`}
+									className="live-bar__section-link song-viewer__section"
+									data-section={section.text}
+									title={`Jump to the ${section.text}`}
+								/>
+							) )}
 
-								</div>
-						</Grid>
+						</div>
+					</Grid>
 
-						<Grid item xs={4} sm={4}>
+					<Grid item xs={4} sm={5}>
 
 						<div className="live-bar__navigation-actions">
 
 							<Link
 								className="live-bar__navigation-actions__item live-bar__navigation-actions__setlistbutton"
 								to={`/sets/${currentSetId}`}
-							    title="Go back to the setlist">
-									<span className="icon"><i className="fa fa-list-ul"/></span>
+								title="Go back to the setlist">
+								<FormatListBulletedIcon/>
+								<Hidden xsDown>
 									Setlist
+								</Hidden>
 							</Link>
-
 
 							<a
 								className="live-bar__navigation-actions__item"
-							  onClick={onGoToPreviousSong}
+								onClick={onGoToPreviousSong}
 								title="Jump to the previous song"
-								>
+							>
+								<ChevronLeftIcon/>
 
-
-								<span className="icon"><i className="fa fa-angle-left fa-lg"/></span>
-
-								{previousSongTitle && (
-									<React.Fragment>
-										<SongKey value={previousSongKey}/>
-										{previousSongTitle}
-									</React.Fragment>
-								)}
+								<Hidden xsDown>
+									{previousSongTitle && (
+										<React.Fragment>
+											<SongKey value={previousSongKey}/>
+											{previousSongTitle}
+										</React.Fragment>
+									)}
+								</Hidden>
 
 							</a>
 
@@ -234,21 +240,20 @@ class LiveBar extends Component {
 								className="live-bar__navigation-actions__item"
 								onClick={onGoToNextSong}
 								title="Jump to the next song"
-								>
+							>
+								<Hidden xsDown>
+									{nextSongTitle && (
+										<React.Fragment>
+											<SongKey value={nextSongKey}/>
+											{nextSongTitle}
+										</React.Fragment>
+									)}
+								</Hidden>
 
-
-								{nextSongTitle && (
-									<React.Fragment>
-										<SongKey value={nextSongKey}/>
-										{nextSongTitle}
-									</React.Fragment>
-								)}
-
-								<span className="icon"><i className="fa fa-angle-right fa-lg"/></span>
-
+								<ChevronRightIcon/>
 							</a>
 						</div>
-				</Grid>
+					</Grid>
 				</Grid>
 
 			</nav>
@@ -256,7 +261,7 @@ class LiveBar extends Component {
 	}
 }
 
-export default withStyles( styles )(withRouter( LiveBar ));
+export default withStyles( styles )( withRouter( LiveBar ) );
 //export default withRouter( LiveBar );
 
 /*

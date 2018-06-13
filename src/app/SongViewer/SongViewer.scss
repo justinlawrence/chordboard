@@ -1,49 +1,52 @@
 $horiz-padding: 48px;
 $chord-gap: .75em;
 .sheet {
-	padding-left:  $horiz-padding;
+	padding-left: $horiz-padding;
 	padding-right: $horiz-padding;
 }
-
 // Blank whitespace lines
 .empty-line {
 	height: 16px;
 }
-
 .song-viewer {
 
 	&__song {
-		position:     relative;
+		position: relative;
 	}
 
 	&__section {
-		margin-top:     8px;
+		margin-left: 64px;
+		margin-top: 8px;
 		// border-left:  4px solid #ddd;
-		padding-top:    0;
+		padding-top: 0;
 		padding-bottom: 0;
-		padding-left:   1em;
+		padding-left: 1em;
 
 		@media print {
-			margin-left: 3px;
+			margin-left: 64px;
+		}
+
+		@media (max-width: 600px) {
+			margin-left: 0;
 		}
 
 		&[data-section]:before {
-			color:            white;
-			border-radius:    4px;
-			padding:          4px 8px;
-			position:         absolute;
+			color: white;
+			border-radius: 4px;
+			padding: 4px 8px;
+			position: absolute;
 			background-color: #eee;
-			transform:        translate(calc(-100% - 1em), 0);
+			transform: translate(calc(-100% - 1em), 0);
 			transform-origin: 0 0;
-			text-transform:   uppercase;
-			z-index:          1;
+			text-transform: uppercase;
+			z-index: 1;
 		}
 
 		&[data-section*="Bridge"] {
 			border-left: 4px solid #03a9f4;
 
 			&:before {
-				content:          "BR";
+				content: "BR";
 				background-color: #03a9f4;
 			}
 		}
@@ -52,7 +55,7 @@ $chord-gap: .75em;
 			border-left: 4px solid #ff5252;
 
 			&:before {
-				content:          "CH";
+				content: "CH";
 				background-color: #ff5252;
 			}
 		}
@@ -61,7 +64,7 @@ $chord-gap: .75em;
 			border-left: 4px solid #ff5252;
 
 			&:before {
-				content:          "CH 2";
+				content: "CH 2";
 				background-color: #ff5252;
 			}
 		}
@@ -70,11 +73,10 @@ $chord-gap: .75em;
 			border-left: 4px solid #ff5252;
 
 			&:before {
-				content:          "CH 3";
+				content: "CH 3";
 				background-color: #ff5252;
 			}
 		}
-
 
 		&[data-section*="Pre-chorus"],
 		&[data-section*="Pre-Chorus"],
@@ -84,7 +86,7 @@ $chord-gap: .75em;
 			border-left: 4px solid #ff9800;
 
 			&:before {
-				content:          "PC";
+				content: "PC";
 				background-color: #ff9800;
 			}
 		}
@@ -93,7 +95,7 @@ $chord-gap: .75em;
 			border-left: 4px solid #00bcd4;
 
 			&:before {
-				content:          "IN";
+				content: "IN";
 				background-color: #00bcd4;
 			}
 		}
@@ -103,7 +105,7 @@ $chord-gap: .75em;
 			border-left: 4px solid #444;
 
 			&:before {
-				content:          "OUT";
+				content: "OUT";
 				background-color: #444;
 			}
 		}
@@ -113,7 +115,7 @@ $chord-gap: .75em;
 			border-left: 4px solid silver;
 
 			&:before {
-				content:          "INST";
+				content: "INST";
 				background-color: silver;
 			}
 		}
@@ -142,7 +144,6 @@ $chord-gap: .75em;
 				content: "Hk";
 			}
 		}
-
 
 		&[data-section*="Verse"]:before { content: "V"; }
 		&[data-section*="Verse 1"]:before { content: "1"; }
