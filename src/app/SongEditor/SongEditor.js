@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
 import { isNil } from 'lodash';
 import { Link } from 'react-router-dom';
+
+import Button from '@material-ui/core/Button';
+
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import ContentLimiter from '../../components/ContentLimiter';
+import Hero from '../../components/Hero';
+import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles';
+
 import slugify from 'slugify';
 
 import { parseSong } from '../SongViewer/SongViewer.js';
@@ -9,6 +19,22 @@ import Song from '../common/Song.js';
 import chordproParser from 'app/parsers/chordpro-parser.js';
 import Parser from 'app/parsers/song-parser.js';
 import '../SongEditor/SongEditor.scss';
+
+const styles = theme => ( {
+	root: {
+		flexGrow: 1
+	},
+	form: theme.mixins.gutters( {
+		paddingBottom: theme.spacing.unit * 2,
+		paddingTop: theme.spacing.unit * 2,
+	} ),
+	formFooter: {
+		marginTop: theme.spacing.unit * 2
+	},
+	control: {
+		padding: theme.spacing.unit * 2
+	}
+} );
 
 class SongEditor extends Component {
 	state = {
@@ -212,6 +238,7 @@ class SongEditor extends Component {
 
 	render() {
 
+		const { classes } = this.props;
 		const { author, title, key, content, parserType, song } = this.state;
 
 		const songCopy = Object.assign( {}, song );
@@ -226,79 +253,74 @@ class SongEditor extends Component {
 
 
 		return (
-			<section className="section">
-				<div className="container">
-					<div className="columns">
-						<div className="column is-three-quarters">
+			<div className="song-editor">
+				<Hero>
+					<ContentLimiter>
 
-							<div className="field">
+						<Grid container className={classes.root} justify="space-between">
 
-								<p className="control has-icons-left">
-									<input
-										type="text"
-										className="input"
-										onInput={this.onTitleInput}
-										placeholder="Title"
-										value={title}/>
+							<Grid item sm={12}>
+								<Paper className={classes.form} component="form">
 
-									<span className="icon is-small is-left">
-						                <i className="fa fa-chevron-right"></i>
-						            </span>
+									<Grid container className={classes.root} justify="space-between">
 
-								</p>
-							</div>
+										<Grid item sm={12}>
 
-							<div className="field">
+											<input
+												type="text"
+												className="input"
+												onInput={this.onTitleInput}
+												placeholder="Title"
+											value={title}/>
 
-								<p className="control has-icons-left">
-									<input
-										type="text"
-										className="input"
-										onInput={this.onAuthorInput}
-										placeholder="Author"
-										value={author}/>
+										</Grid>
+										<Grid item sm={12}>
 
-									<span className="icon is-small is-left">
-					      		<i className="fa fa-chevron-right"></i>
-					    		</span>
-								</p>
+											<input
+												type="text"
+												className="input"
+												onInput={this.onAuthorInput}
+												placeholder="Author"
+												value={author}/>
 
-							</div>
+											</Grid>
+											<Grid item sm={12}>
 
-							<div className="field">
+											<input
+												type="text"
+												className="input"
+												onInput={this.onKeyInput}
+												placeholder="Key"
+												value={key}/>
 
-								<p className="control has-icons-left">
-									<input
-										type="text"
-										className="input"
-										onInput={this.onKeyInput}
-										placeholder="Key"
-										value={key}/>
+											</Grid>
+											<Grid item sm={12}>
 
-									<span className="icon is-small is-left">
-					      		<i className="fa fa-chevron-right"></i>
-					    		</span>
-								</p>
+												<select
+													onChange={this.handleParserChange}
+													value={this.state.parserType}
+												>
+													<option value="chords-above-words">
+														Chords above words
+													</option>
+													<option value="chordpro">Onsong</option>
+												</select>
 
-							</div>
+											</Grid>
+									</Grid>
 
-							<div className="field has-addons has-addons-right">
-								<p className="control">
-									<select
-										onChange={this.handleParserChange}
-										value={this.state.parserType}
-									>
-										<option value="chords-above-words">
-											Chords above words
-										</option>
-										<option value="chordpro">Onsong</option>
-									</select>
-								</p>
-							</div>
+								</Paper>
+							</Grid>
 
-							<div className="field">
+						</Grid>
+					</ContentLimiter>
+				</Hero>
 
-								<p className="control">
+				<ContentLimiter>
+
+					<Grid container className={classes.root} justify="center">
+
+						<Grid item xs={12} sm={8} >
 									<textarea
 										className="textarea song-editor__content"
 										onInput={this.onContentInput}
@@ -307,52 +329,55 @@ class SongEditor extends Component {
 										rows="25"
 									>
 									</textarea>
-								</p>
 
-							</div>
+								<Button
+										 onClick={this.onSaveSong}>
+										 Save
+								</Button>
 
-						</div>
+						</Grid>
 
-						<div className="column">
 
-							<div className="level-left">
-								<div className="level-item">
+						<Grid item xs={0} sm={4}>
 
+							<Grid container className={classes.root} justify="space-between">
+
+								<Grid item sm={6}>
 									<a className="button is-outlined" onClick={this.onDeleteSong}>
 											 <span className="icon is-small is-left">
 												 <i className="fa fa-trash"></i>
 											</span>
 									</a>
-								</div>
-								<div className="level-item">
+								</Grid>
 
-									<a className="button is-primary"
-									   onClick={this.onSaveSong}>Save</a>
+								<Grid item sm={12}>
 
-								</div>
-							</div>
+									<Paper>
+										<div className="song-editor__preview">
 
-							<div className="song-editor__preview">
+											<h1 className="title">
+												{title}
+											</h1>
+											<h2 className="subtitle">
+												{author}
+											</h2>
 
-								<h1 className="title">
-									{title}
-								</h1>
-								<h2 className="subtitle">
-									{author}
-								</h2>
+											<div className="song-editor__preview-content">
+												{previewSong}
+											</div>
 
-								<div className="song-editor__preview-content">
-									{previewSong}
-								</div>
+										</div>
+									</Paper>
 
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
+								</Grid>
+							</Grid>
+				</Grid>
+				</Grid>
+			</ContentLimiter>
+		</div>
 		);
 
 	}
 }
 
-export default SongEditor;
+export default ( withStyles( styles )( SongEditor ) );

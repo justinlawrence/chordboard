@@ -57,8 +57,7 @@ class SetEditor extends Component {
 	render() {
 
 		//JL TODO: props was {}, not sure whether it should be below
-		const { title } = this.state;
-		const { setDate } = this.state;
+		const { title, setDate } = this.state;
 
 		return (
 			<section className="section">
