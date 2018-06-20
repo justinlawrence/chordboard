@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { isNil } from 'lodash';
-import { Link } from 'react-router-dom';
+import React, {Component} from 'react';
+import {isNil} from 'lodash';
+import {Link} from 'react-router-dom';
 
 import Button from '@material-ui/core/Button';
 
@@ -9,375 +9,366 @@ import Typography from '@material-ui/core/Typography';
 import ContentLimiter from '../../components/ContentLimiter';
 import Hero from '../../components/Hero';
 import Paper from '@material-ui/core/Paper';
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 
 import slugify from 'slugify';
 
-import { parseSong } from '../SongViewer/SongViewer.js';
-import { db } from 'database';
+import {parseSong} from '../SongViewer/SongViewer.js';
+import {db} from 'database';
 import Song from '../common/Song.js';
+import TextField from '@material-ui/core/TextField';
 import chordproParser from 'app/parsers/chordpro-parser.js';
 import Parser from 'app/parsers/song-parser.js';
 import '../SongEditor/SongEditor.scss';
 
-const styles = theme => ( {
-	root: {
-		flexGrow: 1
-	},
-	form: theme.mixins.gutters( {
-		paddingBottom: theme.spacing.unit * 2,
-		paddingTop: theme.spacing.unit * 2,
-	} ),
-	formFooter: {
-		marginTop: theme.spacing.unit * 2
-	},
-	control: {
-		padding: theme.spacing.unit * 2
-	}
-} );
+const styles = theme => ({
+  root: {
+    flexGrow: 1
+  },
+  form: theme.mixins.gutters({
+    paddingBottom: theme.spacing.unit * 2,
+    paddingTop: theme.spacing.unit * 2
+  }),
+  formFooter: {
+    marginTop: theme.spacing.unit * 2
+  },
+  control: {
+    padding: theme.spacing.unit * 2
+  }
+});
 
 class SongEditor extends Component {
-	state = {
-		author: '',
-		isLoading: false,
-		title: '',
-		key: '',
-		content: '',
-		parserType: 'chords-above-words',
-		song: null
-	};
+  state = {
+    author: '',
+    isLoading: false,
+    title: '',
+    key: '',
+    content: '',
+    parserType: 'chords-above-words',
+    song: null
+  };
 
-	componentDidMount() {
-		this.handleProps( this.props );
-	}
+  componentDidMount() {
+    this.handleProps(this.props);
+  }
 
-	componentWillReceiveProps( nextProps ) {
-		this.handleProps( nextProps );
-	}
+  componentWillReceiveProps(nextProps) {
+    this.handleProps(nextProps);
+  }
 
-	handleParserChange = event => {
+  handleParserChange = event => {
 
-		this.setState( {
-			parserType: event.target.value
-		} );
+    this.setState({parserType: event.target.value});
 
-	};
+  };
 
-	handleProps = props => {
+  handleProps = props => {
 
-		this.setState( {
-			isLoading: true
-		} );
+    this.setState({isLoading: true});
 
-		if ( props.id ) {
+    if (props.id) {
 
-			db.get( props.id )
-				.then( doc => {
+      db.get(props.id).then(doc => {
 
-					const song = new Song( doc );
+        const song = new Song(doc);
 
-					this.setState( {
-						author: song.author,
-						isLoading: false,
-						title: song.title,
-						key: song.key,
-						content: song.content,
-						song: song
-					} );
+        this.setState({
+          author: song.author,
+          isLoading: false,
+          title: song.title,
+          key: song.key,
+          content: song.content,
+          song: song
+        });
 
-				} )
-				.catch( err => {
+      }).catch(err => {
 
-					console.error( 'SongViewer.handleProps -', err );
+        console.error('SongViewer.handleProps -', err);
 
-					this.setState( {
-						author: '',
-						isLoading: false,
-						title: '',
-						key: '',
-						content: '',
-						song: null
-					} );
+        this.setState({
+          author: '',
+          isLoading: false,
+          title: '',
+          key: '',
+          content: '',
+          song: null
+        });
 
-				} );
+      });
 
-		}
+    }
 
-	};
+  };
 
-	onAuthorInput = event => {
-		this.setState( { author: event.target.value } );
-	};
+  onAuthorInput = event => {
+    this.setState({author: event.target.value});
+  };
 
-	onContentInput = event => {
-		const content = event.target.value;
-		const song = Object.assign( {}, this.state.song, { content } );
-		this.setState( { content, song } );
-	};
+  onContentInput = event => {
+    const content = event.target.value;
+    const song = Object.assign({}, this.state.song, {content});
+    this.setState({content, song});
+  };
 
-	onTitleInput = event => {
-		this.setState( { title: event.target.value } );
-	};
+  onTitleInput = event => {
+    this.setState({title: event.target.value});
+  };
 
-	onKeyInput = event => {
-		this.setState( { key: event.target.value } );
-	};
+  onKeyInput = event => {
+    this.setState({key: event.target.value});
+  };
 
-	onDeleteSong = () => {
+  onDeleteSong = () => {
 
-		if ( confirm( 'Are you very sure you want to delete this song?' ) ) {
+    if (confirm('Are you very sure you want to delete this song?')) {
 
-			db.remove( this.state.song._id, this.state.song._rev )
-				.then( () => {
+      db.remove(this.state.song._id, this.state.song._rev).then(() => {
 
-					if ( this.props.history ) {
-						this.props.history.push( {
-							pathname: '/songs'
-						} );
-					}
+        if (this.props.history) {
+          this.props.history.push({pathname: '/songs'});
+        }
 
-				} )
-				.catch( err => {
+      }).catch(err => {
 
-					alert( 'Unable to delete song' );
-					console.warn( err );
+        alert('Unable to delete song');
+        console.warn(err);
 
-				} );
+      });
 
-		}
-	};
+    }
+  };
 
+  HandleCancel = () => {
 
-	onSaveSong = () => {
+    if (this.props.history) {
+      this.props.history.goBack();
+    }
 
-		const { author, parserType, title, key, song } = this.state;
-		const isNew = !song || isNil( song._id );
-		let content = this.state.content;
+  }
 
-		if ( parserType === 'chordpro' ) {
+  onSaveSong = () => {
 
-			content = chordproParser( content );
+    const {author, parserType, title, key, song} = this.state;
+    const isNew = !song || isNil(song._id);
+    let content = this.state.content;
 
-		}
+    if (parserType === 'chordpro') {
 
-		if ( isNew ) {
+      content = chordproParser(content);
 
-			db.post( {
-				type: 'song',
-				users: [ 'justin' ], //TODO
-				slug: slugify( title ),
-				author: author,
-				title: title,
-				key: key,
-				content: content
-			} ).then( () => {
+    }
 
-				if ( this.props.history ) {
-					this.props.history.goBack();
-				}
+    if (isNew) {
 
-			} ).catch( err => {
+      db.post({
+        type: 'song', users: ['justin'], //TODO
+        slug: slugify(title),
+        author: author,
+        title: title,
+        key: key,
+        content: content
+      }).then(() => {
 
-				if ( err.name === 'conflict' ) {
+        if (this.props.history) {
+          this.props.history.goBack();
+        }
 
-					console.error( 'SongEditor.onSaveSong: conflict -', err );
+      }).catch(err => {
 
-				} else {
+        if (err.name === 'conflict') {
 
-					console.error( 'SongEditor.onSaveSong -', err );
+          console.error('SongEditor.onSaveSong: conflict -', err);
 
-				}
+        } else {
 
-			} );
+          console.error('SongEditor.onSaveSong -', err);
 
-		} else { //existing
+        }
 
-			const data = Object.assign( {}, song );
+      });
 
-			data.author = author;
-			data.content = content;
-			data.slug = slugify( title );
-			data.title = title;
-			data.key = key;
+    } else { //existing
 
-			console.log( 'existing: id', song._id, 'rev', song._rev );
-			console.log( this.props );
-			db.put( data ).then( ( data ) => {
+      const data = Object.assign({}, song);
 
-				this.setState( {
-					song: Object.assign( {}, this.state.song, {
-						_rev: data.rev
-					} )
-				} );
+      data.author = author;
+      data.content = content;
+      data.slug = slugify(title);
+      data.title = title;
+      data.key = key;
 
-				//TODO: add toast updated message
-				//alert( 'Updated successfully!' );
+      console.log('existing: id', song._id, 'rev', song._rev);
+      console.log(this.props);
+      db.put(data).then((data) => {
 
-				if ( this.props.history ) {
-					this.props.history.goBack();
-				}
+        this.setState({song: Object.assign({}, this.state.song, {_rev: data.rev})});
 
+        //TODO: add toast updated message
+        //alert( 'Updated successfully!' );
 
-			} ).catch( err => {
+        if (this.props.history) {
+          this.props.history.goBack();
+        }
 
-				if ( err.name === 'conflict' ) {
+      }).catch(err => {
 
-					console.error( 'SongEditor.onSaveSong: conflict -', err );
+        if (err.name === 'conflict') {
 
-				} else {
+          console.error('SongEditor.onSaveSong: conflict -', err);
 
-					console.error( 'SongEditor.onSaveSong -', err );
+        } else {
 
-				}
+          console.error('SongEditor.onSaveSong -', err);
 
-			} );
+        }
 
-		}
+      });
 
-	};
+    }
 
-	render() {
+  };
 
-		const { classes } = this.props;
-		const { author, title, key, content, parserType, song } = this.state;
+  render() {
 
-		const songCopy = Object.assign( {}, song );
+    const {classes} = this.props;
+    const {
+      author,
+      title,
+      key,
+      content,
+      parserType,
+      song
+    } = this.state;
 
-		if ( parserType === 'chordpro' ) {
+    const songCopy = Object.assign({}, song);
 
-			songCopy.content = chordproParser( songCopy.content );
+    if (parserType === 'chordpro') {
 
-		}
-		const parser = new Parser();
-		const previewSong = parseSong( parser.parse( songCopy.content ), [] );
+      songCopy.content = chordproParser(songCopy.content);
 
+    }
+    const parser = new Parser();
+    const previewSong = parseSong(parser.parse(songCopy.content), []);
 
-		return (
-			<div className="song-editor">
-				<Hero>
-					<ContentLimiter>
+    return (<div className="song-editor">
+      <Hero>
+        <ContentLimiter>
 
-						<Grid container className={classes.root} justify="space-between">
+          <Grid container="container" className={classes.root} justify="space-between">
 
-							<Grid item sm={12}>
-								<Paper className={classes.form} component="form">
+            <Grid item="item" xs={12}>
+              <Paper className={classes.form} component="form">
 
-									<Grid container className={classes.root} justify="space-between">
+                <Grid container="container" className={classes.root} justify="space-between">
 
-										<Grid item sm={12}>
+                  <Grid item="item" xs={12}>
 
-											<input
-												type="text"
-												className="input"
-												onInput={this.onTitleInput}
-												placeholder="Title"
-											value={title}/>
+                    <TextField id="title" label="Song title" className={classes.textField} fullWidth="fullWidth" value={title} onChange={this.onTitleInput} margin="normal"/>
 
-										</Grid>
-										<Grid item sm={12}>
+                  </Grid>
+                  <Grid item="item" xs={12}>
 
-											<input
-												type="text"
-												className="input"
-												onInput={this.onAuthorInput}
-												placeholder="Author"
-												value={author}/>
+                    <TextField id="author" label="Authors (comma separated)" className={classes.textField} fullWidth="fullWidth" value={author} onChange={this.onAuthorInput} margin="normal"/>
 
-											</Grid>
-											<Grid item sm={12}>
+                  </Grid>
+                  <Grid item="item" xs={12}>
 
-											<input
-												type="text"
-												className="input"
-												onInput={this.onKeyInput}
-												placeholder="Key"
-												value={key}/>
+                    <TextField id="key" label="Key" className={classes.textField} fullWidth="fullWidth" value={key} onChange={this.onKeyInput} margin="normal"/>
 
-											</Grid>
-											<Grid item sm={12}>
+                  </Grid>
+                  <Grid item="item" xs={4}>
 
-												<select
-													onChange={this.handleParserChange}
-													value={this.state.parserType}
-												>
-													<option value="chords-above-words">
-														Chords above words
-													</option>
-													<option value="chordpro">Onsong</option>
-												</select>
+                    <select onChange={this.handleParserChange} value={this.state.parserType}>
+                      <option value="chords-above-words">
+                        Chords above words
+                      </option>
+                      <option value="chordpro">Onsong</option>
+                    </select>
 
-											</Grid>
-									</Grid>
+                  </Grid>
+                  <Grid item="item" xs={8}>
+                    <Grid container="container" justify="flex-end">
 
-								</Paper>
-							</Grid>
+                      <Button onClick={this.HandleCancel}>
+                        Cancel
+                      </Button>
 
-						</Grid>
-					</ContentLimiter>
-				</Hero>
+                      <Button onClick={this.onDeleteSong} color="primary">
+                        Delete
+                      </Button>
 
-				<ContentLimiter>
+                      <Button onClick={this.onSaveSong} color="primary" variant="raised">
+                        Save
+                      </Button>
 
-					<Grid container className={classes.root} justify="center">
+                    </Grid>
+                  </Grid>
 
-						<Grid item xs={12} sm={8} >
-									<textarea
-										className="textarea song-editor__content"
-										onInput={this.onContentInput}
-										placeholder="Type words and chords here."
-										value={content}
-										rows="25"
-									>
-									</textarea>
+                </Grid>
 
-								<Button
-										 onClick={this.onSaveSong}>
-										 Save
-								</Button>
+              </Paper>
+            </Grid>
 
-						</Grid>
+          </Grid>
 
+        </ContentLimiter>
+      </Hero>
 
-						<Grid item xs={0} sm={4}>
+      <Hero>
+        <ContentLimiter>
 
-							<Grid container className={classes.root} justify="space-between">
+          <Grid container="container" className={classes.root} justify="center" hide="xsDown">
 
-								<Grid item sm={6}>
-									<a className="button is-outlined" onClick={this.onDeleteSong}>
-											 <span className="icon is-small is-left">
-												 <i className="fa fa-trash"></i>
-											</span>
-									</a>
+            <Grid item="item" xs={12} sm={8}>
+							<Typography variant="caption">
+								Editor
+							</Typography>
+              <textarea className="textarea song-editor__content" onInput={this.onContentInput} placeholder="Type words and chords here." value={content} rows="25"></textarea>
+            </Grid>
+
+            <Grid item="item" sm={4}>
+
+              <Grid container="container" className={classes.root} justify="space-between">
+
+                <Grid item="item" xs={12}>
+									<Typography variant="caption">
+										Song Preview
+									</Typography>
+
+                  <Paper>
+
+                    <div className="song-editor__preview">
+
+                      <h1 className="title">
+                        {title}
+                      </h1>
+                      <h2 className="subtitle">
+                        {author}
+                      </h2>
+
+                      <div className="song-editor__preview-content">
+                        {previewSong}
+                      </div>
+
+                    </div>
+                  </Paper>
 								</Grid>
 
-								<Grid item sm={12}>
+									<Grid item="item" xs={12}>
+									<Typography variant="caption">										
+										Tips: add colons after sections eg. Verse 1:
+									</Typography>
 
-									<Paper>
-										<div className="song-editor__preview">
 
-											<h1 className="title">
-												{title}
-											</h1>
-											<h2 className="subtitle">
-												{author}
-											</h2>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </ContentLimiter>
+      </Hero>
+    </div>);
 
-											<div className="song-editor__preview-content">
-												{previewSong}
-											</div>
-
-										</div>
-									</Paper>
-
-								</Grid>
-							</Grid>
-				</Grid>
-				</Grid>
-			</ContentLimiter>
-		</div>
-		);
-
-	}
+  }
 }
 
-export default ( withStyles( styles )( SongEditor ) );
+export default(withStyles(styles)(SongEditor));
