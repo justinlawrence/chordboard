@@ -5,6 +5,7 @@ import { Link, Route } from 'react-router-dom';
 
 import * as actions from 'actions';
 import { db } from 'database';
+import { sync } from '../../database';
 import SongContainer from '../songs/SongContainer';
 import transposeChord from '../common/transpose-chord';
 
@@ -12,11 +13,14 @@ import SetViewer from './SetViewer';
 
 class SetContainer extends Component {
 	state = {
-		set: null,
 		songs: []
 	};
 
 	componentDidMount() {
+		sync.on( "change", () => {
+			this.props.fetchCurrentSet( this.props.setId );
+		} );
+
 		this.handleProps( this.props );
 	}
 
@@ -24,9 +28,13 @@ class SetContainer extends Component {
 		this.handleProps( nextProps );
 	}
 
+	componentWillUnmount() {
+		sync.cancel();
+	}
+
 	handleChangeKey = ( songId, amount ) => {
 
-		const set = { ...this.state.set };
+		const set = { ...this.props.currentSet };
 
 		const setSongs = set.songs.slice();
 		const setSong = find( setSongs, s => s._id === songId );
@@ -51,7 +59,7 @@ class SetContainer extends Component {
 
 	handleSongMove = ( songId, targetIndex = 0 ) => {
 
-		const set = Object.assign( {}, this.state.set );
+		const set = { ...this.props.currentSet };
 		const setSongs = set.songs.slice();
 		const index = findIndex( setSongs, { _id: songId } );
 		const song = setSongs[ index ];
@@ -73,11 +81,8 @@ class SetContainer extends Component {
 	};
 
 	handleProps = props => {
-		if ( !this.state.set || this.state.set._id !== props.setId ) {
+		if ( !this.props.currentSet || this.props.currentSet._id !== props.setId ) {
 			props.fetchCurrentSet( props.setId );
-		}
-		if ( this.props.currentSet ) {
-			this.setState( { set: this.props.currentSet } );
 		}
 	};
 
@@ -85,7 +90,7 @@ class SetContainer extends Component {
 
 		if ( confirm( 'Are you very sure you want to delete this set?' ) ) {
 
-			const set = this.state.set;
+			const set = this.props.currentSet;
 
 			//1 delete from pouchDb
 			db.remove( set._id, set._rev )
@@ -115,7 +120,7 @@ class SetContainer extends Component {
 
 	handleRemoveSong = songId => {
 
-		const set = Object.assign( {}, this.state.set );
+		const set = { ...this.props.currentSet };
 		const setSongs = set.songs.slice();
 		const songs = this.state.songs.slice();
 
@@ -136,9 +141,9 @@ class SetContainer extends Component {
 
 	render() {
 
-		const { set } = this.state;
+		const { currentSet } = this.props;
 
-		return set && (
+		return currentSet && (
 			<div>
 				<Route exact path="/sets/:setId" render={props => (
 					<SetViewer
@@ -146,18 +151,18 @@ class SetContainer extends Component {
 						onSongMove={this.handleSongMove}
 						onRemoveSet={this.handleRemoveSet}
 						onRemoveSong={this.handleRemoveSong}
-						set={set}
+						set={currentSet}
 						{...props}/>
 				)}/>
 				<Route exact path="/sets/:setId/songs/:songId" render={( { match } ) => {
 
 					const songId = match.params.songId;
 
-					const index = findIndex( set.songs, { _id: songId } );
-					const currentKey = set && set.songs[ index ] ?
-						set.songs[ index ].key : null;
+					const index = findIndex( currentSet.songs, { _id: songId } );
+					const currentKey = currentSet && currentSet.songs[ index ] ?
+						currentSet.songs[ index ].key : null;
 
-						//TODO: catch errors where the set song key is empty
+					//TODO: catch errors where the set song key is empty
 
 					return (
 						<div>
@@ -198,8 +203,8 @@ class SetContainer extends Component {
 	};
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = state => ( {
 	currentSet: state.currentSet
-});
+} );
 
 export default connect( mapStateToProps, actions )( SetContainer );
