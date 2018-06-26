@@ -6,8 +6,13 @@ import PouchDB from 'pouchdb';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import DateSignifier from '../../components/DateSignifier';
 import Grid from '@material-ui/core/Grid';
+import Hero from '../../components/Hero';
+import IconButton from '@material-ui/core/IconButton';
+import KeySelector from 'app/common/KeySelector';
 import Paper from '@material-ui/core/Paper';
+import SongKey from '../common/SongKey';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -17,11 +22,23 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import PencilIcon from 'mdi-material-ui/Pencil';
 
-import DateSignifier from '../../components/DateSignifier';
-import Hero from '../../components/Hero';
-import KeySelector from 'app/common/KeySelector';
+// JL: why oh why doesn't my consolidated import work???
+// import {
+// 	Pencil as PencilIcon,
+// 	Minus as MinusIcon,
+// 	Plus as PlusIcon,
+// 	Up as UpIcon,
+// 	Down as DownIcon,
+// 	Delete as DeleteIcon
+// } from 'mdi-material-ui';
+
+import PencilIcon from 'mdi-material-ui/Pencil';
+import MinusIcon from 'mdi-material-ui/Minus';
+import PlusIcon from 'mdi-material-ui/Plus';
+import UpIcon from 'mdi-material-ui/ArrowUp';
+import DownIcon from 'mdi-material-ui/ArrowDown';
+import DeleteIcon from 'mdi-material-ui/Delete';
 
 
 const styles = theme => ({
@@ -237,7 +254,7 @@ class SetViewer extends Component {
 										<DateSignifier date={set.setDate}/>
 									</Grid>
 									<Grid item>
-										<Typography variant="subheading" gutterBottom>
+										<Typography variant="title" gutterBottom>
 											{set.title}
 										</Typography>
 										<Typography gutterBottom>
@@ -250,36 +267,32 @@ class SetViewer extends Component {
 						</Grid>
 						<Grid item>
 							<Button
-								color="primary"
 								onClick={this.toggleEditMode( mode !== 'edit' )}
-								variant="fab"
+								variant="raised"
 							>
-								<PencilIcon/>
+								Edit set
+							</Button>
+
+							<Button
+								href={`/songs/add-to-set/${set._id}`}
+								onClick={this.handleSaveSet}
+								variant="raised"
+							>
+								Add a song
 							</Button>
 						</Grid>
+
+
 					</Grid>
 				</Hero>
 
 				<section className="section">
 					<div className="container">
 
-						<Grid container justify="flex-end">
-							<Grid item>
-								<Button
-									href={`/songs/add-to-set/${set._id}`}
-									onClick={this.handleSaveSet}
-									variant="raised"
-								>
-									Add a song
-								</Button>
-							</Grid>
-						</Grid>
-
 						<Table className={classes.table} aria-labelledby="tableTitle">
 
 							<TableHead>
 								<TableRow>
-									<TableCell>#</TableCell>
 									<TableCell>Song</TableCell>
 									<TableCell>Key</TableCell>
 								</TableRow>
@@ -327,46 +340,78 @@ class SetViewer extends Component {
 		return (
 			<TableRow key={song._id}>
 
-				<TableCell>
-					<Typography variant="title" gutterBottom>
-						{songCount + 1}.
-					</Typography>
-				</TableCell>
 
 				<TableCell>
+
 					<Link to={`/sets/${set._id}/songs/${song._id}`}>
+
 						<Typography variant="title" gutterBottom>
-							{song.title}
+							{songCount + 1}. {song.title}
 						</Typography>
 					</Link>
+
 				</TableCell>
 
 				<TableCell>
-					<div className="field is-grouped">
+					<Grid container>
+
+						<Grid item>
+							<KeySelector
+								onSelect={( key, amount ) => this.changeKey( song._id, amount )}
+								songKey={key}
+							/>
+						</Grid>
 
 						{mode === 'edit' &&
-						<a className="button is-small is-white" title="transpose down"
-						   onClick={() => this.transposeDown( song )}>
-							<span className="icon is-small"><i className="fa fa-minus"/></span>
-						</a>}
 
-						<KeySelector
-							onSelect={( key, amount ) => this.changeKey( song._id, amount )}
-							songKey={key}
-						/>
+						<Grid item>
 
-						{mode === 'edit' &&
-						<a className="button is-small is-white" title="transpose up"
-						   onClick={() => this.transposeUp( song )}>
+							<IconButton
+								aria-label="Transpose down"
+								onClick={() => this.transposeDown( song )}
+								>
+							    <MinusIcon />
+							</IconButton>
 
-							<span className="icon is-small"><i className="fa fa-plus"/></span>
-						</a>}
+							<IconButton
+								aria-label="Transpose up"
+								onClick={() => this.transposeUp( song )}
+								>
+							    <PlusIcon />
+							</IconButton>
 
-					</div>
+						</Grid>
+
+					}
+
+					</Grid>
 				</TableCell>
 
 				{mode === 'edit' &&
+
 				<TableCell>
+
+					<IconButton
+						aria-label="Move song up"
+						onClick={() => this.onMoveSongUp( song._id )}
+						>
+							<UpIcon />
+					</IconButton>
+
+					<IconButton
+						aria-label="Move song down"
+						onClick={() => this.onMoveSongDown( song._id )}
+						>
+							<DownIcon />
+					</IconButton>
+
+					<IconButton
+						aria-label="Remove song"
+						onClick={() => this.removeSong( song._id )}
+						>
+							<DeleteIcon />
+					</IconButton>
+
 					<a
 						onClick={() => this.onMoveSongUp( song._id )}
 						title="move this song up the list">
@@ -395,4 +440,3 @@ class SetViewer extends Component {
 }
 
 export default withStyles( styles )( SetViewer );
-//export default SetViewer;
