@@ -1,8 +1,51 @@
+/*
+#
+#
+#
+#
+#
+#
+#
+#
+#   Most of this functionality has been merged into setviewer
+#		TOD: move across the song.create
+#
+#
+#
+#
+#
+#
+*/
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import slugify from 'slugify';
 import PouchDB from 'pouchdb';
 import PouchDBFindPlugin from 'pouchdb-find';
+
+import Button from '@material-ui/core/Button';
+import ContentLimiter from '../../components/ContentLimiter';
+import Hero from '../../components/Hero';
+import TextField from '@material-ui/core/TextField';
+import {withStyles} from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1
+  },
+  form: theme.mixins.gutters({
+    paddingBottom: theme.spacing.unit * 2,
+    paddingTop: theme.spacing.unit * 2
+  }),
+  formFooter: {
+    marginTop: theme.spacing.unit * 2
+  },
+  control: {
+    padding: theme.spacing.unit * 2
+  }
+});
+
 
 PouchDB.plugin( PouchDBFindPlugin );
 
@@ -56,54 +99,65 @@ class SetEditor extends Component {
 
 	render() {
 
-		//JL TODO: props was {}, not sure whether it should be below
+		const {classes} = this.props;
 		const { title, setDate } = this.state;
 
 		return (
-			<section className="section">
-				<div className="container">
-					<div className="columns">
-						<div className="column is-three-quarters">
-							<div className="field">
-								<p className="control has-icons-left">
+			<div className="set-editor">
 
-									<input
-										type="text"
-										className="input"
-										onInput={this.onTitleInput}
-										placeholder="Title"
-										value={title}/>
+				<Hero>
+					<ContentLimiter>
 
-									<span className="icon is-small is-left">
-					          	<i className="fa fa-chevron-right"/>
-						      </span>
+            <Paper className={classes.form} component="form">
 
-								</p>
+						<div className="columns">
+							<div className="column is-three-quarters">
+								<div className="field">
+									<p className="control has-icons-left">
+
+											<TextField
+	                      id="title"
+	                      label="Set title"
+	                      className={classes.textField}
+	                      fullWidth="fullWidth"
+	                      value={title}
+	                      onChange={this.onTitleInput}
+	                      margin="normal"/>
+
+
+									</p>
+								</div>
+								<div className="field">
+									<p className="control has-icons-left">
+
+                      <TextField
+                        id="date"
+                        label="Set date"
+                        type="date"
+                        className={classes.textField}
+                        fullWidth
+                        onChange={this.onSetDateInput}
+                        InputLabelProps={{
+                          shrink: true
+                        }}
+                        value={setDate}
+                      />
+
+
+
+									</p>
+								</div>
 							</div>
-							<div className="field">
-								<p className="control has-icons-left">
 
-									<input
-										type="date"
-										className="input"
-										onInput={this.onSetDateInput}
-										placeholder="Set Date"
-										value={setDate}/>
+							<Button onClick={this.onSaveSet} color="primary" variant="raised">
+								Save
+							</Button>
 
-									<span className="icon is-small is-left">
-						         <i className="fa fa-chevron-right"/>
-						      </span>
-
-								</p>
-							</div>
 						</div>
-						<div className="column">
-							<a className="button is-primary"
-							   onClick={this.onSaveSet}>Save</a>
-						</div>
-					</div>
-				</div>
-			</section>
+          </Paper>
+				</ContentLimiter>
+			</Hero>
+			</div>
 		);
 	}
 }
@@ -112,4 +166,4 @@ const mapStateToProps = state => ({
 	user: state.user
 });
 
-export default connect( mapStateToProps )( SetEditor );
+export default connect( mapStateToProps )( withStyles(styles)(SetEditor) );

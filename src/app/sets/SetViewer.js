@@ -306,12 +306,23 @@ class SetViewer extends Component {
 										<TableCell/>
 
 										<TableCell>
-											<p className="subtitle">This set has no songs</p>
+											<Typography variant="title">
+												This set has no songs
+											</Typography>
 
-											<a className="button is-primary"
-											   href={`/songs/add-to-set/${set._id}`}>
-												Add songs
-											</a>
+
+
+										</TableCell>
+
+										<TableCell>
+											<Button
+												href={`/songs/add-to-set/${set._id}`}
+												onClick={this.handleSaveSet}
+												variant="raised"
+											>
+												Add a song
+											</Button>
+
 										</TableCell>
 
 										<TableCell/>
