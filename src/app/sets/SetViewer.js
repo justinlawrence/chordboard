@@ -70,9 +70,8 @@ class SetViewer extends Component {
 		onRemoveSong: PropTypes.func,
 		onSongMove: PropTypes.func,
 		set: PropTypes.object.isRequired,
-		songs: PropTypes.array,
 		user: PropTypes.object
-	}
+	};
 
 	state = {
 		isLoading: false,
@@ -144,7 +143,7 @@ class SetViewer extends Component {
 
 	onMoveSongDown = songId => {
 
-		const index = findIndex( this.props.songs, { _id: songId } );
+		const index = findIndex( this.props.set.songs, { _id: songId } );
 
 		if ( index > -1 ) {
 			if ( this.props.onSongMove ) {
@@ -155,8 +154,7 @@ class SetViewer extends Component {
 	};
 
 	onMoveSongUp = songId => {
-
-		const index = findIndex( this.props.songs, { _id: songId } );
+		const index = findIndex( this.props.set.songs, { _id: songId } );
 
 		if ( index > -1 ) {
 			if ( this.props.onSongMove ) {

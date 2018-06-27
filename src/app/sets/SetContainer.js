@@ -45,10 +45,9 @@ class SetContainer extends Component {
 
 			set.songs = setSongs;
 
-			this.setState( { set } );
-
 			if ( set ) {
 
+				this.props.setCurrentSet( set );
 				this._saveSet( set );
 
 			}
@@ -70,10 +69,9 @@ class SetContainer extends Component {
 
 		set.songs = setSongs;
 
-		this.setState( { set } );
-
 		if ( set ) {
 
+			this.props.setCurrentSet( set );
 			this._saveSet( set );
 
 		}
@@ -129,10 +127,11 @@ class SetContainer extends Component {
 
 		set.songs = setSongs;
 
-		this.setState( { set, songs } );
+		this.setState( { songs } );
 
 		if ( set ) {
 
+			this.props.setCurrentSet( set );
 			this._saveSet( set );
 
 		}
