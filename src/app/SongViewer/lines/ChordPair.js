@@ -7,12 +7,11 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = theme => ( {
 	text: {
 		display: 'inline-block',
-		height: theme.spacing.unit * 3,
 		lineHeight: `${theme.spacing.unit * 3}px`,
 		marginTop: theme.spacing.unit * 3,
 		position: 'relative',
 		verticalAlign: 'middle',
-		whiteSpace: 'pre',
+		whiteSpace: 'pre-wrap',
 
 		'&:before': {
 			color: '#03a9f4',
