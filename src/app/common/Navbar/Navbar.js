@@ -48,6 +48,11 @@ class Navbar extends React.Component {
 			} );
 		}
 
+		//facebook logout as per https://developers.facebook.com/docs/facebook-login/web/
+		FB.logout(function(response) {
+		   // Person is now logged out
+		});
+
 	};
 
 	setUserTextSize = () => {
@@ -90,7 +95,14 @@ class Navbar extends React.Component {
 						<Button component={Link} color="inherit" to="/sets">Sets</Button>
 						<Button component={Link} color="inherit" to="/songs">Songs</Button>
 
-						{/* <Button color="inherit">Login</Button> */}
+						{!this.props.setCurrentUser ?
+							<Button color="inherit" onClick={this.logout}>Logout</Button>
+
+							:
+
+							<Button component={Link} color="inherit" to="/login">Login</Button>
+
+						}
 
 					</Toolbar>
 				</AppBar>

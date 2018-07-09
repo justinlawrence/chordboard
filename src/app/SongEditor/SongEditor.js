@@ -254,14 +254,14 @@ class SongEditor extends Component {
       <Hero>
         <ContentLimiter>
 
-          <Grid container="container" className={classes.root} justify="space-between">
+          <Grid container className={classes.root} justify="space-between">
 
-            <Grid item="item" xs={12}>
+            <Grid item xs={12}>
               <Paper className={classes.form} component="form">
 
-                <Grid container="container" className={classes.root} justify="space-between">
+                <Grid container className={classes.root} justify="space-between">
 
-                  <Grid item="item" xs={12}>
+                  <Grid item xs={12}>
 
                     <TextField
                       id="title"
@@ -273,7 +273,7 @@ class SongEditor extends Component {
                       margin="normal"/>
 
                   </Grid>
-                  <Grid item="item" xs={12}>
+                  <Grid item xs={12}>
 
                     <TextField
                       id="author"
@@ -285,12 +285,12 @@ class SongEditor extends Component {
                       margin="normal"/>
 
                   </Grid>
-                  <Grid item="item" xs={12}>
+                  <Grid item xs={12}>
 
                     <TextField id="key" label="Key" className={classes.textField} fullWidth="fullWidth" value={key} onChange={this.onKeyInput} margin="normal"/>
 
                   </Grid>
-                  <Grid item="item" xs={4}>
+                  <Grid item xs={4}>
 
                     <select onChange={this.handleParserChange} value={this.state.parserType}>
                       <option value="chords-above-words">
@@ -300,8 +300,8 @@ class SongEditor extends Component {
                     </select>
 
                   </Grid>
-                  <Grid item="item" xs={8}>
-                    <Grid container="container" justify="flex-end">
+                  <Grid item xs={8}>
+                    <Grid container justify="flex-end">
 
                       <Button onClick={this.HandleCancel}>
                         Cancel
@@ -331,20 +331,20 @@ class SongEditor extends Component {
       <Hero>
         <ContentLimiter>
 
-          <Grid container="container" className={classes.root} justify="center" hide="xsDown">
+          <Grid container className={classes.root} justify="center" hide="xsDown">
 
-            <Grid item="item" xs={12} sm={8}>
+            <Grid item xs={12} sm={8}>
 							<Typography variant="caption">
 								Editor
 							</Typography>
               <textarea className="textarea song-editor__content" onInput={this.onContentInput} placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:" value={content} rows="25"></textarea>
             </Grid>
 
-            <Grid item="item" sm={4}>
+            <Grid item sm={4}>
 
-              <Grid container="container" className={classes.root} justify="space-between">
+              <Grid container className={classes.root} justify="space-between">
 
-                <Grid item="item" xs={12}>
+                <Grid item xs={12}>
 									<Typography variant="caption">
 										Song Preview
 									</Typography>

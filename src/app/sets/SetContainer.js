@@ -90,6 +90,11 @@ class SetContainer extends Component {
 
 			const set = this.props.currentSet;
 
+			//const set = { ...this.props.currentSet };
+
+			console.log('current set is', set._id, set._rev);
+
+
 			//1 delete from pouchDb
 			db.remove( set._id, set._rev )
 				.then( () => {

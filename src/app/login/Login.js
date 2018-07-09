@@ -3,9 +3,35 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import FacebookLogin from 'react-facebook-login';
 
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import ContentLimiter from '../../components/ContentLimiter';
+import Hero from '../../components/Hero';
+import Paper from '@material-ui/core/Paper';
+import {withStyles} from '@material-ui/core/styles';
+
+
 import { setCurrentUser } from 'actions';
 
 import './login.scss';
+
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1
+  },
+  form: theme.mixins.gutters({
+    paddingBottom: theme.spacing.unit * 2,
+    paddingTop: theme.spacing.unit * 2
+  }),
+  formFooter: {
+    marginTop: theme.spacing.unit * 2
+  },
+  control: {
+    padding: theme.spacing.unit * 2
+  }
+});
+
 
 class Login extends Component {
 	state = {
@@ -56,30 +82,43 @@ class Login extends Component {
 	render() {
 
 		const props = this.props;
+		const {classes} = this.props;
+
 		const { name } = this.state;
 
 		return (
-			<div>
-				<section className="hero is-dark is-fullheight">
-					<div className="hero-body">
-						<div className="container has-text-centered">
-							<h1 className="title is-1">Chordboard</h1>
-							<h2 className="subtitle">On the same page</h2>
-							<form onSubmit={this.handleLogin}>
+			<div className="login">
+				<Hero>
+					<ContentLimiter>
 
-								<div className="field">
-									<FacebookLogin
-										appId="2075514469393369"
-										autoLoad={true}
-										callback={this.responseFacebook}
-									/>
-								</div>
-							</form>
-						</div>
-					</div>
-				</section>
+						<Grid container className={classes.root} justify="space-between">
 
+							<Grid item xs={12}>
+								<Paper className={classes.form}>
+
+									<Grid container className={classes.root} justify="space-between">
+
+										<Grid item xs={12}>
+
+											<form onSubmit={this.handleLogin}>
+
+												<FacebookLogin
+													appId="2075514469393369"
+													autoLoad={true}
+													callback={this.responseFacebook}
+												/>
+
+											</form>
+											
+										</Grid>
+									</Grid>
+								</Paper>
+							</Grid>
+						</Grid>
+					</ContentLimiter>
+				</Hero>
 			</div>
+
 		);
 	}
 }
@@ -87,5 +126,6 @@ class Login extends Component {
 const mapDispatchToProps = {
 	setCurrentUser
 };
+//export default withRouter( connect( mapStateToProps, actions )( withStyles( styles )( Navbar ) ) );
 
-export default withRouter( connect( null, mapDispatchToProps )( Login ) );
+export default withRouter( connect( null, mapDispatchToProps )( withStyles( styles )( Login ) ));

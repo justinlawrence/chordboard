@@ -9,7 +9,7 @@ const styles = theme => ({
 		paddingBottom: theme.spacing.unit * 2,
 		paddingTop: theme.spacing.unit * 2,
 
-		'& $Input': {
+		'& Input': {
 			color: theme.heroContrastText
 		}
 	} )
