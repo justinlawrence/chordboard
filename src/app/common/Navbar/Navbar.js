@@ -15,23 +15,39 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from 'mdi-material-ui/Menu';
 import Button from '@material-ui/core/Button';
 
-const styles = theme => ({
+const styles = theme => ( {
 	root: {
-		flexGrow: 1,
+		flexGrow: 1
 	},
 	flex: {
-		flex: 1,
+		flex: 1
 	},
 	menuButton: {
 		marginLeft: -12,
-		marginRight: 20,
+		marginRight: 20
 	}
-});
+} );
 
 
 class Navbar extends React.Component {
 	state = {
 		isMenuVisible: false
+	};
+
+	logout = () => {
+
+		localStorage.setItem( 'user', '' );
+
+		this.props.setCurrentUser( {
+			name: null
+		} );
+
+		if ( this.props.history ) {
+			this.props.history.push( {
+				pathname: '/login'
+			} );
+		}
+
 	};
 
 	setUserTextSize = () => {
@@ -55,7 +71,7 @@ class Navbar extends React.Component {
 		} = this.props;
 
 		const {
-			isMenuVisible,
+			isMenuVisible
 		} = this.state;
 
 
@@ -63,7 +79,8 @@ class Navbar extends React.Component {
 			<div className={classes.root}>
 				<AppBar color="secondary" position="static" className="no-print">
 					<Toolbar>
-						<IconButton aria-label="Menu" className={classes.menuButton} color="inherit">
+						<IconButton aria-label="Menu" className={classes.menuButton}
+						            color="inherit">
 							<MenuIcon/>
 						</IconButton>
 						<Typography variant="title" color="inherit" className={classes.flex}>
@@ -126,13 +143,11 @@ class Navbar extends React.Component {
 }
 
 Navbar.propTypes = {
-	classes: PropTypes.object,
+	classes: PropTypes.object
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = state => ( {
 	syncState: state.syncState
-});
+} );
 
-//TODO: Brett please check this is right, thanks
-//export default withRouter( connect( mapStateToProps, actions )( Navbar ) );
-export default withStyles( styles )( Navbar );
+export default withRouter( connect( mapStateToProps, actions )( withStyles( styles )( Navbar ) ) );

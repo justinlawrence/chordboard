@@ -14,7 +14,7 @@ class Login extends Component {
 
 	handleInput = event => this.setState( { name: event.target.value } );
 
-	/*handleLogin = event => {
+	handleLogin = event => {
 
 		event.preventDefault();
 
@@ -29,7 +29,7 @@ class Login extends Component {
 			} );
 		}
 
-	};*/
+	};
 
 	responseFacebook = response => {
 		if ( response && response.userID ) {

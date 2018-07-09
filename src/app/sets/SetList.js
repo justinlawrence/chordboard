@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { reverse, sortBy } from 'lodash';
 import ContentLimiter from '../../components/ContentLimiter';
 import DateSignifier from '../../components/DateSignifier';
 import { Link } from 'react-router-dom';
@@ -99,7 +100,7 @@ class SetList extends Component {
 
 						<TableBody>
 
-							{sets.filter( this.filterSets ).map( set => (
+							{reverse( sortBy( sets.filter( this.filterSets ), 'setDate' ) ).map( set => (
 
 								<TableRow key={set._id}>
 
