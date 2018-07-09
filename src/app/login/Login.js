@@ -70,7 +70,9 @@ class Login extends Component {
 			} catch ( err ) {
 				console.error( 'Could not set `user` in localStorage' );
 			}
+
 			console.log( 'Login.responseFacebook', this.props.history );
+			
 			if ( this.props.history ) {
 				this.props.history.push( {
 					pathname: '/sets'
@@ -109,7 +111,7 @@ class Login extends Component {
 												/>
 
 											</form>
-											
+
 										</Grid>
 									</Grid>
 								</Paper>

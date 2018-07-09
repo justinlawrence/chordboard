@@ -34,6 +34,8 @@ class Navbar extends React.Component {
 		isMenuVisible: false
 	};
 
+
+
 	logout = () => {
 
 		localStorage.setItem( 'user', '' );
@@ -54,6 +56,8 @@ class Navbar extends React.Component {
 		});
 
 	};
+
+
 
 	setUserTextSize = () => {
 		this.props.setCurrentUser( {
@@ -95,7 +99,8 @@ class Navbar extends React.Component {
 						<Button component={Link} color="inherit" to="/sets">Sets</Button>
 						<Button component={Link} color="inherit" to="/songs">Songs</Button>
 
-						{!this.props.setCurrentUser ?
+						{//TODO: Brett, I think you said using getItem was not efficient}
+						{localStorage.getItem( 'user') ?
 							<Button color="inherit" onClick={this.logout}>Logout</Button>
 
 							:
