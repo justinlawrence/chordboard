@@ -12,8 +12,8 @@ const defaultTheme = {
 			contrastText: '#fff'
 		},
 		secondary: {
-			main: '#283149', //nav
-			contrastText: '#fff'
+			main: '#fff', //nav was 283149
+			contrastText: '#000' //was fff
 		}
 	},
 
