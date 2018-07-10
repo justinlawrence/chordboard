@@ -95,11 +95,9 @@ class Navbar extends React.Component {
 
 					{/* { TODO: Brett, I think you said using getItem was not efficient} */}
 					{
-						localStorage.getItem( 'user' )
-							? <Button color="inherit" onClick={this.logout}>Logout</Button>
-
-							: <Button component={Link} color="inherit" to="/login">Login</Button>
-
+						!localStorage.getItem( 'user' ) &&
+						<Button component={Link} color="inherit" to="/login">Login</Button>
+						 // <Button color="inherit" onClick={this.logout}>Logout</Button>
 					}
 
 				</Toolbar>

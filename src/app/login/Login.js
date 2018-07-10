@@ -35,7 +35,7 @@ const styles = theme => ( {
 		flexGrow: 1
 	},
 	form: theme.mixins.gutters( {
-		paddingBottom: theme.spacing.unit * 2,
+		paddingBottom: theme.spacing.unit * 8,
 		paddingTop: theme.spacing.unit * 2,
 		width: theme.spacing.unit * theme.spacing.unit * 5
 	} ),
@@ -182,7 +182,7 @@ class Login extends Component {
 								/>
 
 								<GoogleLogin
-									clientId="384365916551-1d10tjgai1q5d3svu0pdi6krppcrk1om.apps.googleusercontent.com"
+									clientId="348219215842-arln6bobbvqt504k4gkpmbcpeinhr58n.apps.googleusercontent.com"
 									buttonText="LOGIN WITH GOOGLE"
 									onSuccess={this.responseGoogle}
 									onFailure={this.responseGoogle}
