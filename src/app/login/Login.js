@@ -167,7 +167,7 @@ class Login extends Component {
 
 								<FacebookLogin
 									appId="2075514469393369"
-									autoLoad={true}
+									autoLoad={false}
 									callback={this.responseFacebook}
 									render={renderProps => (
 										<Button variant="contained" color="primary"
