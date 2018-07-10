@@ -11,6 +11,10 @@ import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+
+import chordboardLogo from '../../../assets/chordboard-logo-short.png';
+
+
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from 'mdi-material-ui/Menu';
 import Button from '@material-ui/core/Button';
@@ -23,6 +27,9 @@ const styles = theme => ( {
 	menuButton: {
 		marginLeft: -12,
 		marginRight: 20
+	},
+	logo: {
+		paddingRight: 8
 	}
 } );
 
@@ -83,9 +90,12 @@ class Navbar extends React.Component {
 			<AppBar color="secondary" position="static" className="no-print">
 				<Toolbar>
 
+					<img src={chordboardLogo} width="32px" className={classes.logo}/>
+
+{/*
 					<IconButton aria-label="Menu" className={classes.menuButton} color="inherit">
 						<MenuIcon/>
-					</IconButton>
+					</IconButton> */}
 					<Typography variant="title" color="inherit" className={classes.flex}>
 						Chordboard
 					</Typography>
