@@ -34,13 +34,13 @@ module.exports = function () {
 					use: 'raw-loader'
 				},
 				{
-					test:    /\.(jpe?g|png|gif|svg)$/i,
+					test: /\.(jpe?g|png|gif|svg)$/i,
 					use: {
-    				loader: "url-loader",
-    				options: {
-      			limit: 25000,
-    			},
-  			},
+						loader: "url-loader",
+						options: {
+							limit: 25000
+						}
+					}
 				}
 			]
 		},
