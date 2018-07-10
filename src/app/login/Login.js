@@ -1,7 +1,15 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import FacebookLogin from 'react-facebook-login';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
+
+
+import Button from '@material-ui/core/Button';
+import cx from 'classnames';
+
+// import FacebookLogin from 'react-facebook-login';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+
+import GoogleLogin from 'react-google-login';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -10,124 +18,187 @@ import Hero from '../../components/Hero';
 import Paper from '@material-ui/core/Paper';
 import {withStyles} from '@material-ui/core/styles';
 
+import {setCurrentUser} from 'actions';
 
-import { setCurrentUser } from 'actions';
+import chordboardLogo from '../../assets/chordboard-logo-long.png';
+
+import {
+	Google as GoogleIcon,
+	Facebook as FacebookIcon
+} from 'mdi-material-ui';
+
 
 import './login.scss';
 
-
 const styles = theme => ({
-  root: {
-    flexGrow: 1
+   root: {
+      flexGrow: 1
+   },
+   form: theme.mixins.gutters({
+      paddingBottom: theme.spacing.unit * 2,
+      paddingTop: theme.spacing.unit * 2,
+      width: theme.spacing.unit * theme.spacing.unit * 5
+   }),
+   formFooter: {
+      marginTop: theme.spacing.unit * 2
+   },
+   control: {
+      padding: theme.spacing.unit * 2
+   },
+  leftIcon: {
+    marginRight: theme.spacing.unit,
   },
-  form: theme.mixins.gutters({
-    paddingBottom: theme.spacing.unit * 2,
-    paddingTop: theme.spacing.unit * 2
-  }),
-  formFooter: {
-    marginTop: theme.spacing.unit * 2
+  rightIcon: {
+    marginLeft: theme.spacing.unit,
   },
-  control: {
-    padding: theme.spacing.unit * 2
+  facebookButton: {
+    backgroundColor: '#4c69ba',
+    margin: theme.spacing.unit
+  },
+  googleButton: {
+    backgroundColor: 'rgb(209, 72, 54)',
+    margin: theme.spacing.unit
+  },
+  addPaddingBottom: {
+    paddingBottom: theme.spacing.unit * 4
   }
 });
 
-
 class Login extends Component {
-	state = {
-		name: ''
-	};
+   state = {
+      name: ''
+   };
 
-	handleInput = event => this.setState( { name: event.target.value } );
+   handleInput = event => this.setState({name: event.target.value});
 
-	handleLogin = event => {
+   handleLogin = event => {
 
-		event.preventDefault();
+      event.preventDefault();
 
-		localStorage.setItem( 'user', this.state.name );
-		this.props.setCurrentUser( {
-			name: this.state.name
-		} );
+      localStorage.setItem('user', this.state.name);
+      this.props.setCurrentUser({name: this.state.name});
 
-		if ( this.props.history ) {
-			this.props.history.push( {
-				pathname: '/sets'
-			} );
-		}
+      if (this.props.history) {
+         this.props.history.push({pathname: '/sets'});
+      }
 
-	};
+   };
 
-	responseFacebook = response => {
-		if ( response && response.userID ) {
-			const user = {
-				id: response.userID,
-				name: response.name
-			};
+   responseFacebook = response => {
+      if (response && response.userID) {
+         const user = {
+            id: response.userID,
+            name: response.name
+         };
 
-			this.props.setCurrentUser( user );
-			try {
-				localStorage.setItem( 'user', JSON.stringify( user ) );
-			} catch ( err ) {
-				console.error( 'Could not set `user` in localStorage' );
-			}
+         this.props.setCurrentUser(user);
+         try {
+            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('loginFrom', 'facebook');
 
-			console.log( 'Login.responseFacebook', this.props.history );
-			
-			if ( this.props.history ) {
-				this.props.history.push( {
-					pathname: '/sets'
-				} );
-			}
-		}
-	};
+         } catch (err) {
+            console.error('Could not set `user` in localStorage');
+         }
 
-	render() {
+         console.log('Login.responseFacebook', this.props.history);
 
-		const props = this.props;
-		const {classes} = this.props;
+         if (this.props.history) {
+            this.props.history.push({pathname: '/sets'});
+         }
+      }
+   };
 
-		const { name } = this.state;
+   responseGoogle = response => {
+      if (response && response.userID) {
+         const user = {
+            id: response.userID,
+            name: response.name
+         };
 
-		return (
-			<div className="login">
-				<Hero>
-					<ContentLimiter>
+         this.props.setCurrentUser(user);
+         try {
+            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('loginFrom', 'google');
+         } catch (err) {
+            console.error('Could not set `user` in localStorage');
+         }
 
-						<Grid container className={classes.root} justify="space-between">
+         console.log('Login.responseGoogle', this.props.history);
 
-							<Grid item xs={12}>
-								<Paper className={classes.form}>
+         if (this.props.history) {
+            this.props.history.push({pathname: '/sets'});
+         }
+      }
+   };
 
-									<Grid container className={classes.root} justify="space-between">
+   render() {
 
-										<Grid item xs={12}>
+      const props = this.props;
+      const {classes} = this.props;
 
-											<form onSubmit={this.handleLogin}>
+      const {name} = this.state;
 
-												<FacebookLogin
-													appId="2075514469393369"
-													autoLoad={true}
-													callback={this.responseFacebook}
-												/>
+      return (<div className="login">
+         <Hero>
+            <ContentLimiter>
 
-											</form>
+               <Grid container className={classes.root} justify="center">
+                    <form onSubmit={this.handleLogin}>
 
-										</Grid>
-									</Grid>
-								</Paper>
-							</Grid>
-						</Grid>
-					</ContentLimiter>
-				</Hero>
-			</div>
+                       <Paper className={classes.form} elevation={10}>
 
-		);
-	}
+                          <Grid container className={classes.root} alignItems="center" direction="column">
+
+                            <img src={chordboardLogo} width="200px" className={classes.addPaddingBottom}/>
+
+                            <Typography variant="title" className={classes.addPaddingBottom}>
+                               Please Log In
+                            </Typography>
+
+                            {/* look up mui buttonBase  look up styling on google/fb */}
+                            {/* de-styled according to "facebook button without styling" https://www.npmjs.com/package/react-facebook-login */}
+
+                             <FacebookLogin appId="2075514469393369" autoLoad={true} callback={this.responseFacebook}
+                               render={renderProps => (
+                                 <Button variant="contained" color="primary" fullWidth className={classes.facebookButton}>
+                                      <FacebookIcon className={classes.leftIcon}
+                                      onClick={renderProps.onClick}/>
+                                      Continue with Facebook
+                                 </Button>
+
+                                )}
+                             />
+
+                             <Button variant="contained" color="primary" fullWidth className={classes.googleButton}>
+                                  <GoogleIcon className={classes.leftIcon} />
+                                  Sign in with Google
+                             </Button>
+
+
+{/* style={{backgroundColor: 'purple'}} */}
+                              <Grid item xs={12}>
+                                 <GoogleLogin
+                                   clientId="384365916551-1d10tjgai1q5d3svu0pdi6krppcrk1om.apps.googleusercontent.com"
+                                   buttonText="LOGIN WITH GOOGLE"
+
+                                   onSuccess={this.responseGoogle}
+                                   onFailure={this.responseGoogle}/>
+                              </Grid>
+
+                          </Grid>
+                       </Paper>
+
+                   </form>
+                  </Grid>
+            </ContentLimiter>
+         </Hero>
+      </div>);
+   }
 }
 
 const mapDispatchToProps = {
-	setCurrentUser
+   setCurrentUser
 };
 //export default withRouter( connect( mapStateToProps, actions )( withStyles( styles )( Navbar ) ) );
 
-export default withRouter( connect( null, mapDispatchToProps )( withStyles( styles )( Login ) ));
+export default withRouter(connect(null, mapDispatchToProps)(withStyles(styles)(Login)));

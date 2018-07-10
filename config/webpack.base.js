@@ -32,14 +32,16 @@ module.exports = function () {
 				{
 					test: /(\.txt|\.onsong)$/,
 					use: 'raw-loader'
-				}/*,
+				},
 				{
 					test:    /\.(jpe?g|png|gif|svg)$/i,
-					loaders: [
-						'url?limit=8192',
-						'img-loader'
-					]
-				}*/
+					use: {
+    				loader: "url-loader",
+    				options: {
+      			limit: 25000,
+    			},
+  			},
+				}
 			]
 		},
 		plugins: [

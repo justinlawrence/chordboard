@@ -6,13 +6,10 @@ import { Link, matchPath, withRouter } from 'react-router-dom';
 import { db } from 'database';
 import SongKey from 'app/common/SongKey';
 import Song from 'app/common/Song.js';
-
-
 import './live-bar.scss';
-
-
 import { withStyles } from '@material-ui/core/styles';
 import Hidden from '@material-ui/core/Hidden';
+
 import {
 	ChevronLeft as ChevronLeftIcon,
 	ChevronRight as ChevronRightIcon,
