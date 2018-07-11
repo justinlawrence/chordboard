@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Hero from '../../components/Hero';
+import { Link } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -195,6 +196,16 @@ class Login extends Component {
 											Sign in with Google
 										</Button>
 									)}/>
+
+
+
+									<Typography className={classes.addPaddingTop}>
+										Prefer not to log in?
+									</Typography>
+
+									<Button href={'https://beta.chordboard.co'}>
+										Go to the previous version
+									</Button>
 
 							</Grid>
 						</Paper>

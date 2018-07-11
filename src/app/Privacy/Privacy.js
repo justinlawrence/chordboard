@@ -11,14 +11,16 @@ const styles = theme => ({
     flexGrow: 1
   },
   form: {
-    padding: theme.spacing.unit * 5,
-		backgroundColor: 'purple'
+    padding: theme.spacing.unit * 5
   }
 });
 
 class Privacy extends Component {
 
 	render() {
+
+
+    const { classes } = this.props;
 
 		return (
 				<Hero>
