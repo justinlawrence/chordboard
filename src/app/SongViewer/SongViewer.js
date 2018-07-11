@@ -12,9 +12,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Fade from '@material-ui/core/Fade';
 import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
+import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
 import { Sets, db, sync } from 'database';
@@ -30,6 +32,7 @@ import Line from "./lines/Line";
 import Paper from '@material-ui/core/Paper';
 import Parser from 'app/parsers/song-parser';
 import Song from '../../components/Song';
+import SongKey from 'app/common/SongKey';
 import transposeChord from '../common/transpose-chord';
 import transposeLines from '../common/transpose-lines';
 
@@ -37,8 +40,11 @@ import { linesToNashville } from '../../utils/convertToNashville';
 import './SongViewer.scss';
 
 import {
-	Minus as MinusIcon, 
-	Plus as PlusIcon
+	Minus as MinusIcon,
+	FilePlus as FilePlusIcon,
+	Plus as PlusIcon,
+	Pencil as PencilIcon,
+	Settings as SettingsIcon
 } from 'mdi-material-ui';
 
 const styles = theme => ( {
@@ -57,6 +63,9 @@ const styles = theme => ( {
 	},
 	control: {
 		padding: theme.spacing.unit * 2
+	},
+	select: {
+		width: theme.spacing.unit * 7
 	}
 } );
 
@@ -286,6 +295,14 @@ class SongViewer extends Component {
 
 		let sections = [];
 
+		let capoKeyDescr = '';
+
+		if (capo) {
+				capoKeyDescr = 'Capo ' + capo;
+		} else {
+				capoKeyDescr = 'Capo key';
+		}
+
 		return (
 			<Fade in={Boolean( song )} appear mountOnEnter unmountOnExit>
 				<div className="song-viewer">
@@ -294,87 +311,76 @@ class SongViewer extends Component {
 
 							<Grid container className={classes.root} justify="space-between">
 
-								<Grid item xs={12} sm>
+								<Grid item xs={12} sm={8}>
 									<Typography variant="display1"
 									            color="inherit">{song.title}</Typography>
 									<Typography variant="subheading">{song.author}</Typography>
 								</Grid>
 
-								<Grid item className="column no-print">
-									<Grid container spacing={24}>
 
-										{
-											setKey
-												? ( <Grid item>
+								<Grid item xs={12} sm={4}>
+
+
+									<form autoComplete="off">
+
+
+
+										{	setKey &&
+
+												<Tooltip title="The key everyone will be playing in">
 													<KeySelector label="Set key"
-													             onSelect={this.handleSelectSetKey}
-													             songKey={setKey}/>
-												</Grid> )
-												: null
+												             onSelect={this.handleSelectSetKey}
+												             songKey={setKey}/>
+												 </Tooltip>
 										}
 
-										<Grid item>
-											<KeySelector label="Song key"
-											             onSelect={this.handleSelectDisplayKey}
-											             songKey={displayKey}/>
-										</Grid>
+										<Tooltip title="The key you will be playing in">
+												<KeySelector label={capoKeyDescr}
+												             onSelect={this.handleSelectDisplayKey}
+												             songKey={displayKey}
+																	 className={classes.select}/>
 
-										<Grid item>
-											<ButtonBase className={classes.capoButton}
-											            onClick={this.handleSongKeyDialogOpen}>
-												<Typography variant="caption">
-													Capo
-												</Typography>
-												<Typography variant="subheading">
-													{capo}
-												</Typography>
-											</ButtonBase>
-										</Grid>
+									 </Tooltip>
 
-									</Grid>
-								</Grid>
 
-								<Grid item className="column no-print">
+										<Tooltip title="Edit song">
+											<IconButton className={classes.button} href={`/songs/${song._id}/edit`} >
+												<PencilIcon />
+											</IconButton>
+										</Tooltip>
 
-									<Grid container>
+											<Tooltip title="Song settings">
+												<IconButton className={classes.button} onClick={this.handleSongKeyDialogOpen} >
+													<SettingsIcon />
+												</IconButton>
+											</Tooltip>
 
-										<Grid item>
 
-											<form autoComplete="off">
-												<FormControl>
-													<Button color="secondary"
-													        onClick={this.showSetListDropdown( true )}
-													        variant="raised">
-														Add to set
-													</Button>
+											<Tooltip title="Add to set">
+												<IconButton className={classes.button} onClick={this.showSetListDropdown( true )}>
+													<FilePlusIcon />
+												</IconButton>
+											</Tooltip>
 
-													<Menu anchorEl={setListMenuAnchorEl}
-													      onClose={this.showSetListDropdown( false )}
-													      open={Boolean( setListMenuAnchorEl )}>
-														{
-															setList.map( set => (
-																<MenuItem key={set._id}
-																          onClick={this.createAddToSetHandler}
-																          value={set._id}>
-																	{set.title}
-																</MenuItem> ) )
-														}
-													</Menu>
-												</FormControl>
-											</form>
-										</Grid>
+											<Menu anchorEl={setListMenuAnchorEl}
+														onClose={this.showSetListDropdown( false )}
+														open={Boolean( setListMenuAnchorEl )}>
+												{
+													setList.map( set => (
+														<MenuItem key={set._id}
+																			onClick={this.createAddToSetHandler}
+																			value={set._id}>
+															{set.title}
+														</MenuItem> ) )
+												}
+											</Menu>
 
-										<Grid item>
-											<Link to={`/songs/${song._id}/edit`}>
-												<Button color="primary" variant="raised">
-													Edit Song
-												</Button>
-											</Link>
-										</Grid>
-
-									</Grid>
+									</form>
 
 								</Grid>
+
+
+
 							</Grid>
 						</ContentLimiter>
 
@@ -393,33 +399,41 @@ class SongViewer extends Component {
 
 					<Dialog aria-labelledby="songkey-dialog-title"
 					        onClose={this.handleSongKeyDialogClose} open={isSongKeyDialogOpen}>
-						<DialogTitle id="songkey-dialog-title">Song Options</DialogTitle>
+
+						<DialogTitle id="songkey-dialog-title">Song Settings</DialogTitle>
+
 						<Paper className={classes.control}>
 
 							<Grid container className={classes.root}>
+
 
 								<Grid item xs={12}>
 									<Grid container spacing={16}>
 
 										<Grid item xs={6}>
-											<Typography variant="subheading">Transpose</Typography>
+											<Typography variant="subheading">Capo Key</Typography>
 										</Grid>
 
 										<Grid item xs={6}>
-
 											<IconButton aria-label="Transpose down"
-											            onClick={this.transposeDown}>
-												<MinusIcon/>
+																 onClick={this.transposeDown}>
+											 <MinusIcon/>
 											</IconButton>
 
 											<IconButton aria-label="Transpose up"
-											            onClick={this.transposeUp}>
-												<PlusIcon/>
+																 onClick={this.transposeUp}>
+											 <PlusIcon/>
 											</IconButton>
+											<KeySelector
+														 onSelect={this.handleSelectDisplayKey}
+														 songKey={displayKey}/>
 
-										</Grid>
-									</Grid>
-								</Grid>
+
+										 </Grid>
+									 </Grid>
+								 </Grid>
+
+
 
 								<Grid item xs={12}>
 									<Grid container spacing={16}>
