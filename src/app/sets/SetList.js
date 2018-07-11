@@ -94,6 +94,7 @@ class SetList extends Component {
 						<TableHead>
 							<TableRow>
 								<TableCell>Date</TableCell>
+								<TableCell>Person</TableCell>
 								<TableCell>Set</TableCell>
 							</TableRow>
 						</TableHead>
@@ -109,6 +110,12 @@ class SetList extends Component {
 									</TableCell>
 
 									<TableCell>
+										<Typography>
+											{set.author}
+										</Typography>
+									</TableCell>
+
+									<TableCell>
 
 										<SetLink setFocusedSet={setFocusedSet} set={set}>
 
@@ -116,9 +123,6 @@ class SetList extends Component {
 												{set.title}
 											</Typography>
 
-											<Typography gutterBottom>
-												{set.author}
-											</Typography>
 
 										</SetLink>
 

@@ -10,6 +10,7 @@ import SongList from './app/SongList/SongList';
 import SongEditor from './app/SongEditor/SongEditor';
 import SongContainer from './app/songs/SongContainer';
 import SetListContainer from './app/sets/SetListContainer';
+import Privacy from './app/privacy/Privacy';
 
 import { db, sync } from 'database';
 import './app.scss';
@@ -108,7 +109,10 @@ class App extends Component {
 				<div className="app__content">
 					<Navbar/>
 					<Switch>
+
 						<Route exact path="/login" component={Login}/>
+
+						<Route exact path="/privacy" component={Privacy}/>
 
 						{!user.name &&
 						<Redirect to="/login"/>}
