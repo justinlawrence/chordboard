@@ -41,7 +41,7 @@ import './SongViewer.scss';
 
 import {
 	Minus as MinusIcon,
-	FilePlus as FilePlusIcon,
+	PlaylistPlus as PlaylistPlusIcon,
 	Plus as PlusIcon,
 	Pencil as PencilIcon,
 	Settings as SettingsIcon
@@ -349,16 +349,10 @@ class SongViewer extends Component {
 											</IconButton>
 										</Tooltip>
 
-											<Tooltip title="Song settings">
-												<IconButton className={classes.button} onClick={this.handleSongKeyDialogOpen} >
-													<SettingsIcon />
-												</IconButton>
-											</Tooltip>
-
 
 											<Tooltip title="Add to set">
 												<IconButton className={classes.button} onClick={this.showSetListDropdown( true )}>
-													<FilePlusIcon />
+													<PlaylistPlusIcon />
 												</IconButton>
 											</Tooltip>
 
@@ -374,6 +368,13 @@ class SongViewer extends Component {
 														</MenuItem> ) )
 												}
 											</Menu>
+
+											<Tooltip title="Song settings">
+												<IconButton className={classes.button} onClick={this.handleSongKeyDialogOpen} >
+													<SettingsIcon />
+												</IconButton>
+											</Tooltip>
+
 
 									</form>
 

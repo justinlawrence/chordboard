@@ -15,8 +15,10 @@ import slugify from 'slugify';
 
 import {parseSong} from '../SongViewer/SongViewer.js';
 import {db} from 'database';
+
 import Song from '../common/Song.js';
 import TextField from '@material-ui/core/TextField';
+import Textarea from "react-textarea-autosize";
 import chordproParser from 'app/parsers/chordpro-parser.js';
 import Parser from 'app/parsers/song-parser.js';
 import '../SongEditor/SongEditor.scss';
@@ -340,7 +342,8 @@ class SongEditor extends Component {
 							<Typography variant="caption" className={classes.addPaddingBottom}>
 								Editor
 							</Typography>
-              <textarea className="textarea song-editor__content" onInput={this.onContentInput} placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:" value={content} rows="25"></textarea>
+              {/* <textarea className="textarea song-editor__content" onInput={this.onContentInput} placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:" value={content} rows="25"></textarea> */}
+              <Textarea className="textarea song-editor__content" onInput={this.onContentInput} placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:" value={content} />
             </Grid>
 
             <Grid item sm={4}>
