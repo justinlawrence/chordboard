@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import cx from 'classnames';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import GoogleLogin from 'react-google-login';
-import cx from 'classnames';
-
-import Button from '@material-ui/core/Button';
-
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import Hero from '../../components/Hero';
 import { Link } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
-import { withStyles } from '@material-ui/core/styles';
-
 import { setCurrentUser } from 'actions';
+import Typography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles';
 
 import chordboardLogo from '../../assets/chordboard-logo-long.png';
 
@@ -23,8 +20,6 @@ import {
 	Facebook as FacebookIcon
 } from 'mdi-material-ui';
 
-
-import './login.scss';
 
 const styles = theme => ( {
 	root: {
@@ -196,8 +191,6 @@ class Login extends Component {
 											Sign in with Google
 										</Button>
 									)}/>
-
-
 
 									<Typography className={classes.addPaddingTop}>
 										Prefer not to log in?

@@ -34,6 +34,9 @@ const styles = theme => ({
   },
   control: {
     padding: theme.spacing.unit * 2
+  },
+  addPaddingBottom: {
+    paddingBottom: theme.spacing.unit
   }
 });
 
@@ -267,7 +270,7 @@ class SongEditor extends Component {
                       id="title"
                       label="Song title"
                       className={classes.textField}
-                      fullWidth="fullWidth"
+                      fullWidth
                       value={title}
                       onChange={this.onTitleInput}
                       margin="normal"/>
@@ -279,7 +282,7 @@ class SongEditor extends Component {
                       id="author"
                       label="Authors (comma separated)"
                       className={classes.textField}
-                      fullWidth="fullWidth"
+                      fullWidth
                       value={author}
                       onChange={this.onAuthorInput}
                       margin="normal"/>
@@ -287,7 +290,7 @@ class SongEditor extends Component {
                   </Grid>
                   <Grid item xs={12}>
 
-                    <TextField id="key" label="Key" className={classes.textField} fullWidth="fullWidth" value={key} onChange={this.onKeyInput} margin="normal"/>
+                    <TextField id="key" label="Key" className={classes.textField} fullWidth value={key} onChange={this.onKeyInput} margin="normal"/>
 
                   </Grid>
                   <Grid item xs={4}>
@@ -303,12 +306,12 @@ class SongEditor extends Component {
                   <Grid item xs={8}>
                     <Grid container justify="flex-end">
 
-                      <Button onClick={this.HandleCancel}>
-                        Cancel
-                      </Button>
-
                       <Button onClick={this.onDeleteSong} color="primary">
                         Delete
+                      </Button>
+
+                      <Button onClick={this.HandleCancel}>
+                        Cancel
                       </Button>
 
                       <Button onClick={this.onSaveSong} color="primary" variant="raised">
@@ -334,7 +337,7 @@ class SongEditor extends Component {
           <Grid container className={classes.root} justify="center" hide="xsDown">
 
             <Grid item xs={12} sm={8}>
-							<Typography variant="caption">
+							<Typography variant="caption" className={classes.addPaddingBottom}>
 								Editor
 							</Typography>
               <textarea className="textarea song-editor__content" onInput={this.onContentInput} placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:" value={content} rows="25"></textarea>
@@ -345,7 +348,7 @@ class SongEditor extends Component {
               <Grid container className={classes.root} justify="space-between">
 
                 <Grid item xs={12}>
-									<Typography variant="caption">
+									<Typography variant="caption" className={classes.addPaddingBottom}>
 										Song Preview
 									</Typography>
 
