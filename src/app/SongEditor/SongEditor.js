@@ -342,7 +342,7 @@ class SongEditor extends Component {
 							<Typography variant="caption" className={classes.addPaddingBottom}>
 								Editor
 							</Typography>
-              {/* <textarea className="textarea song-editor__content" onInput={this.onContentInput} placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:" value={content} rows="25"></textarea> */}
+              {/* TODO: DELETE this if the textarea below is working nicely <textarea className="textarea song-editor__content" onInput={this.onContentInput} placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:" value={content} rows="25"></textarea> */}
               <Textarea className="textarea song-editor__content" onInput={this.onContentInput} placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:" value={content} />
             </Grid>
 
