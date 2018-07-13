@@ -162,40 +162,22 @@ class SongViewer extends Component {
 	createAddToSetHandler = set => () => this.addToSet( set );
 
 	handleSelectSetKey = ( option, amount ) => {
-		const { currentSet, song } = this.props;
-		db.get( currentSet._id ).then( doc => {
-
-			const setSong = find( doc.songs, { _id: song._id } );
-			setSong.key = option.key;
-
-			db.put( doc ).catch( err => {
-
-				if ( err.name === 'conflict' ) {
-
-					console.error( 'SongList.addToSet: conflict -', err );
-
-				} else {
-
-					console.error( 'SongList.addToSet -', err );
-
-				}
-
-			} );
-
-		} ).catch( console.error );
+		const { song } = this.props;
+		this.props.setCurrentSetSongKey( {
+			key: option.key,
+			song
+		} );
 	};
 
 	handleSelectDisplayKey = ( option ) => {
+		const key = option.key === this.props.setKey ? null : option.key;
 
-		this.setState( { displayKey: option.key } );
+		this.setState( {
+			displayKey: key,
+			isNashville: option.value === 'nashville'
+		} );
 
-		if ( option.value === 'nashville' ) {
-			this.setState( { isNashville: true } );
-		} else {
-			this.changeKey( option.key );
-			this.setState( { isNashville: false } );
-		}
-
+		this.props.setCurrentSongUserKey( key );
 	};
 
 	handleSongKeyDialogClose = () => this.setState( { isSongKeyDialogOpen: false } );
@@ -297,10 +279,10 @@ class SongViewer extends Component {
 
 		let capoKeyDescr = '';
 
-		if (capo) {
-				capoKeyDescr = 'Capo ' + capo;
+		if ( capo ) {
+			capoKeyDescr = 'Capo ' + capo;
 		} else {
-				capoKeyDescr = 'Capo key';
+			capoKeyDescr = 'Capo key';
 		}
 
 		return (
@@ -312,76 +294,68 @@ class SongViewer extends Component {
 							<Grid container className={classes.root} justify="space-between">
 
 								<Grid item xs={12} sm={8}>
-									<Typography variant="display1"
-									            color="inherit">{song.title}</Typography>
+									<Typography variant="display1" color="inherit">
+										{song.title}
+									</Typography>
 									<Typography variant="subheading">{song.author}</Typography>
 								</Grid>
 
-
 								<Grid item xs={12} sm={4}>
-
-
 									<form autoComplete="off">
 
-
-
-										{	setKey &&
-
-												<Tooltip title="The key everyone will be playing in">
-													<KeySelector label="Set key"
-												             onSelect={this.handleSelectSetKey}
-												             songKey={setKey}/>
-												 </Tooltip>
-										}
+										{setKey &&
+										<Tooltip title="The key everyone will be playing in">
+											<KeySelector label="Set key"
+											             onSelect={this.handleSelectSetKey}
+											             songKey={setKey}/>
+										</Tooltip>}
 
 										<Tooltip title="The key you will be playing in">
-												<KeySelector label={capoKeyDescr}
-												             onSelect={this.handleSelectDisplayKey}
-												             songKey={displayKey}
-																	 className={classes.select}/>
-
-									 </Tooltip>
+											<KeySelector label={capoKeyDescr}
+											             onSelect={this.handleSelectDisplayKey}
+											             songKey={displayKey || setKey}
+											             className={classes.select}/>
+										</Tooltip>
 
 
 										<Tooltip title="Edit song">
-											<IconButton className={classes.button} href={`/songs/${song._id}/edit`} >
-												<PencilIcon />
+											<IconButton className={classes.button}
+											            href={`/songs/${song._id}/edit`}>
+												<PencilIcon/>
 											</IconButton>
 										</Tooltip>
 
 
-											<Tooltip title="Add to set">
-												<IconButton className={classes.button} onClick={this.showSetListDropdown( true )}>
-													<PlaylistPlusIcon />
-												</IconButton>
-											</Tooltip>
+										<Tooltip title="Add to set">
+											<IconButton className={classes.button}
+											            onClick={this.showSetListDropdown( true )}>
+												<PlaylistPlusIcon/>
+											</IconButton>
+										</Tooltip>
 
-											<Menu anchorEl={setListMenuAnchorEl}
-														onClose={this.showSetListDropdown( false )}
-														open={Boolean( setListMenuAnchorEl )}>
-												{
-													setList.map( set => (
-														<MenuItem key={set._id}
-																			onClick={this.createAddToSetHandler}
-																			value={set._id}>
-															{set.title}
-														</MenuItem> ) )
-												}
-											</Menu>
+										<Menu anchorEl={setListMenuAnchorEl}
+										      onClose={this.showSetListDropdown( false )}
+										      open={Boolean( setListMenuAnchorEl )}>
+											{
+												setList.map( set => (
+													<MenuItem key={set._id}
+													          onClick={this.createAddToSetHandler}
+													          value={set._id}>
+														{set.title}
+													</MenuItem> ) )
+											}
+										</Menu>
 
-											<Tooltip title="Song settings">
-												<IconButton className={classes.button} onClick={this.handleSongKeyDialogOpen} >
-													<SettingsIcon />
-												</IconButton>
-											</Tooltip>
-
+										<Tooltip title="Song settings">
+											<IconButton className={classes.button}
+											            onClick={this.handleSongKeyDialogOpen}>
+												<SettingsIcon/>
+											</IconButton>
+										</Tooltip>
 
 									</form>
 
 								</Grid>
-
-
-
 							</Grid>
 						</ContentLimiter>
 
@@ -417,23 +391,22 @@ class SongViewer extends Component {
 
 										<Grid item xs={6}>
 											<IconButton aria-label="Transpose down"
-																 onClick={this.transposeDown}>
-											 <MinusIcon/>
+											            onClick={this.transposeDown}>
+												<MinusIcon/>
 											</IconButton>
 
 											<IconButton aria-label="Transpose up"
-																 onClick={this.transposeUp}>
-											 <PlusIcon/>
+											            onClick={this.transposeUp}>
+												<PlusIcon/>
 											</IconButton>
 											<KeySelector
-														 onSelect={this.handleSelectDisplayKey}
-														 songKey={displayKey}/>
+												onSelect={this.handleSelectDisplayKey}
+												songKey={displayKey}/>
 
 
-										 </Grid>
-									 </Grid>
-								 </Grid>
-
+										</Grid>
+									</Grid>
+								</Grid>
 
 
 								<Grid item xs={12}>

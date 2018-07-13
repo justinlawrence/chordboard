@@ -19,6 +19,11 @@ function* updateCurrentSongUserKey( { key } ) {
 	const user = users.find( u => u.id === currentUser.id )
 	if ( user ) {
 		user.key = key;
+
+		if ( key === null ) {
+			users.splice( users.indexOf( user ), 1 );
+		}
+
 	} else {
 		users.push( { id: currentUser.id, key } );
 	}

@@ -1,4 +1,4 @@
-export { FETCH_CURRENT_SET, SET_CURRENT_SET, fetchCurrentSet, setCurrentSet } from './current-set'
+export * from './current-set'
 
 export { SET_SYNC_STATE, setSyncState } from './set-state'
 
