@@ -196,7 +196,7 @@ class Login extends Component {
 										Prefer not to log in?
 									</Typography>
 
-									<Button href={'https://beta.chordboard.co'}>
+									<Button href={'https://immutable.chordboard.co'}>
 										Go to the previous version
 									</Button>
 
