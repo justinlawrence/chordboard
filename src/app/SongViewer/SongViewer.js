@@ -159,7 +159,10 @@ class SongViewer extends Component {
 
 	};
 
-	createAddToSetHandler = set => () => this.addToSet( set );
+	createAddToSetHandler = set => () => {
+		this.showSetListDropdown( false )()
+		this.addToSet( set )
+	};
 
 	handleSelectSetKey = ( option, amount ) => {
 		const { song } = this.props;
@@ -339,7 +342,7 @@ class SongViewer extends Component {
 											{
 												setList.map( set => (
 													<MenuItem key={set._id}
-													          onClick={this.createAddToSetHandler}
+													          onClick={this.createAddToSetHandler( set )}
 													          value={set._id}>
 														{set.title}
 													</MenuItem> ) )

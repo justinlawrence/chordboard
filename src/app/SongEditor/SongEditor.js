@@ -166,7 +166,8 @@ class SongEditor extends Component {
     if (isNew) {
 
       db.post({
-        type: 'song', users: ['justin'], //TODO
+        type: 'song',
+        users: ['justin'], //TODO
         slug: slugify(title),
         author: author,
         title: title,
@@ -255,133 +256,135 @@ class SongEditor extends Component {
     const parser = new Parser();
     const previewSong = parseSong(parser.parse(songCopy.content), []);
 
-    return (<div className="song-editor">
-      <Hero>
-        <ContentLimiter>
+    return (
+      <div className="song-editor">
+        <Hero>
+          <ContentLimiter>
 
-          <Grid container className={classes.root} justify="space-between">
+            <Grid container className={classes.root} justify="space-between">
 
-            <Grid item xs={12}>
-              <Paper className={classes.form} component="form">
+              <Grid item xs={12}>
+                <Paper className={classes.form} component="form">
+
+                  <Grid container className={classes.root} justify="space-between">
+
+                    <Grid item xs={12}>
+
+                      <TextField
+                        id="title"
+                        label="Song title"
+                        className={classes.textField}
+                        fullWidth
+                        value={title}
+                        onChange={this.onTitleInput}
+                        margin="normal"/>
+
+                    </Grid>
+                    <Grid item xs={12}>
+
+                      <TextField
+                        id="author"
+                        label="Authors (comma separated)"
+                        className={classes.textField}
+                        fullWidth
+                        value={author}
+                        onChange={this.onAuthorInput}
+                        margin="normal"/>
+
+                    </Grid>
+                    <Grid item xs={12}>
+
+                      <TextField id="key" label="Key" className={classes.textField} fullWidth value={key} onChange={this.onKeyInput} margin="normal"/>
+
+                    </Grid>
+                    <Grid item xs={4}>
+
+                      <select onChange={this.handleParserChange} value={this.state.parserType}>
+                        <option value="chords-above-words">
+                          Chords above words
+                        </option>
+                        <option value="chordpro">Onsong</option>
+                      </select>
+
+                    </Grid>
+                    <Grid item xs={8}>
+                      <Grid container justify="flex-end">
+
+                        <Button onClick={this.onDeleteSong} color="primary">
+                          Delete
+                        </Button>
+
+                        <Button onClick={this.HandleCancel}>
+                          Cancel
+                        </Button>
+
+                        <Button onClick={this.onSaveSong} color="primary" variant="raised">
+                          Save
+                        </Button>
+
+                      </Grid>
+                    </Grid>
+
+                  </Grid>
+
+                </Paper>
+              </Grid>
+
+            </Grid>
+
+          </ContentLimiter>
+        </Hero>
+
+        <Hero>
+          <ContentLimiter>
+
+            <Grid container className={classes.root} justify="center" hide="xsDown">
+
+              <Grid item xs={12} sm={8}>
+                              <Typography variant="caption" className={classes.addPaddingBottom}>
+                                  Editor
+                              </Typography>
+                {/* TODO: DELETE this if the textarea below is working nicely <textarea className="textarea song-editor__content" onInput={this.onContentInput} placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:" value={content} rows="25"></textarea> */}
+                <Textarea className="textarea song-editor__content" onInput={this.onContentInput} placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:" value={content} />
+              </Grid>
+
+              <Grid item sm={4}>
 
                 <Grid container className={classes.root} justify="space-between">
 
                   <Grid item xs={12}>
+                                      <Typography variant="caption" className={classes.addPaddingBottom}>
+                                          Song Preview
+                                      </Typography>
 
-                    <TextField
-                      id="title"
-                      label="Song title"
-                      className={classes.textField}
-                      fullWidth
-                      value={title}
-                      onChange={this.onTitleInput}
-                      margin="normal"/>
+                    <Paper>
 
-                  </Grid>
-                  <Grid item xs={12}>
+                      <div className="song-editor__preview">
 
-                    <TextField
-                      id="author"
-                      label="Authors (comma separated)"
-                      className={classes.textField}
-                      fullWidth
-                      value={author}
-                      onChange={this.onAuthorInput}
-                      margin="normal"/>
+                        <h1 className="title">
+                          {title}
+                        </h1>
+                        <h2 className="subtitle">
+                          {author}
+                        </h2>
 
-                  </Grid>
-                  <Grid item xs={12}>
+                        <div className="song-editor__preview-content">
+                          {previewSong}
+                        </div>
 
-                    <TextField id="key" label="Key" className={classes.textField} fullWidth value={key} onChange={this.onKeyInput} margin="normal"/>
-
-                  </Grid>
-                  <Grid item xs={4}>
-
-                    <select onChange={this.handleParserChange} value={this.state.parserType}>
-                      <option value="chords-above-words">
-                        Chords above words
-                      </option>
-                      <option value="chordpro">Onsong</option>
-                    </select>
-
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Grid container justify="flex-end">
-
-                      <Button onClick={this.onDeleteSong} color="primary">
-                        Delete
-                      </Button>
-
-                      <Button onClick={this.HandleCancel}>
-                        Cancel
-                      </Button>
-
-                      <Button onClick={this.onSaveSong} color="primary" variant="raised">
-                        Save
-                      </Button>
-
-                    </Grid>
-                  </Grid>
+                      </div>
+                    </Paper>
+                                  </Grid>
 
                 </Grid>
-
-              </Paper>
-            </Grid>
-
-          </Grid>
-
-        </ContentLimiter>
-      </Hero>
-
-      <Hero>
-        <ContentLimiter>
-
-          <Grid container className={classes.root} justify="center" hide="xsDown">
-
-            <Grid item xs={12} sm={8}>
-							<Typography variant="caption" className={classes.addPaddingBottom}>
-								Editor
-							</Typography>
-              {/* TODO: DELETE this if the textarea below is working nicely <textarea className="textarea song-editor__content" onInput={this.onContentInput} placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:" value={content} rows="25"></textarea> */}
-              <Textarea className="textarea song-editor__content" onInput={this.onContentInput} placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:" value={content} />
-            </Grid>
-
-            <Grid item sm={4}>
-
-              <Grid container className={classes.root} justify="space-between">
-
-                <Grid item xs={12}>
-									<Typography variant="caption" className={classes.addPaddingBottom}>
-										Song Preview
-									</Typography>
-
-                  <Paper>
-
-                    <div className="song-editor__preview">
-
-                      <h1 className="title">
-                        {title}
-                      </h1>
-                      <h2 className="subtitle">
-                        {author}
-                      </h2>
-
-                      <div className="song-editor__preview-content">
-                        {previewSong}
-                      </div>
-
-                    </div>
-                  </Paper>
-								</Grid>
-
               </Grid>
             </Grid>
-          </Grid>
-        </ContentLimiter>
-      </Hero>
-    </div>);
+          </ContentLimiter>
+        </Hero>
+      </div>
+    );
 
   }
 }
 
-export default(withStyles(styles)(SongEditor));
+export default withStyles(styles)(SongEditor);

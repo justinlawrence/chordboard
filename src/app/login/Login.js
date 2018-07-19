@@ -25,7 +25,7 @@ const styles = theme => ( {
 	root: {
 		backgroundColor: theme.heroBackgroundColor,
 		display: 'flex',
-		flexGrow: 1,
+		flexGrow: 1
 	},
 	container: {
 		flexGrow: 1
@@ -65,17 +65,24 @@ const styles = theme => ( {
 
 class Login extends Component {
 	state = {
+		id: '',
 		name: ''
 	};
 
-	handleInput = event => this.setState( { name: event.target.value } );
+	handleEmailInput = event => this.setState( { id: event.target.value } );
+	handleNameInput = event => this.setState( { name: event.target.value } );
 
 	handleLogin = event => {
 
 		event.preventDefault();
 
-		localStorage.setItem( 'user', this.state.name );
-		this.props.setCurrentUser( { name: this.state.name } );
+		const user = {
+			id: this.state.id,
+			name: this.state.name
+		};
+
+		localStorage.setItem( 'user', JSON.stringify( user ) );
+		this.props.setCurrentUser( user );
 
 		if ( this.props.history ) {
 			this.props.history.push( { pathname: '/sets' } );
@@ -192,13 +199,13 @@ class Login extends Component {
 										</Button>
 									)}/>
 
-									<Typography className={classes.addPaddingTop}>
-										Prefer not to log in?
-									</Typography>
+								<Typography className={classes.addPaddingTop}>
+									Prefer not to log in?
+								</Typography>
 
-									<Button href={'https://beta.chordboard.co'}>
-										Go to the previous version
-									</Button>
+								<Button href={'https://beta.chordboard.co'}>
+									Go to the previous version
+								</Button>
 
 							</Grid>
 						</Paper>
