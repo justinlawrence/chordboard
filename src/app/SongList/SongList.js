@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import ContentLimiter from '../../components/ContentLimiter';
-import {uniqBy} from 'lodash';
-import {db} from 'database';
+import { uniqBy } from 'lodash';
+import { db } from 'database';
 import Grid from '@material-ui/core/Grid';
 import Hero from '../../components/Hero';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -17,10 +17,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import {
-	Magnify as MagnifyIcon
-} from 'mdi-material-ui';
-
+import { Magnify as MagnifyIcon } from 'mdi-material-ui';
 
 class SongList extends Component {
 	state = {
@@ -28,172 +25,135 @@ class SongList extends Component {
 	};
 
 	addToSet = song => {
+		db.get(this.props.setId)
+			.then(doc => {
+				const data = Object.assign({}, doc);
 
-		db.get( this.props.setId ).then( doc => {
+				data.songs = data.songs || [];
+				data.songs.push({
+					_id: song._id,
+					key: song.key
+				});
+				data.songs = uniqBy(data.songs, '_id');
 
-			const data = Object.assign( {}, doc );
+				db.put(data)
+					.then(() => {
+						if (this.props.history) {
+							const location = {
+								pathname: `/sets/${doc._id}`
+							};
 
-			data.songs = data.songs || [];
-			data.songs.push( {
-				_id: song._id,
-				key: song.key
-			} );
-			data.songs = uniqBy( data.songs, '_id' );
-
-			db.put( data ).then( () => {
-
-				if ( this.props.history ) {
-
-					const location = {
-						pathname: `/sets/${doc._id}`
-					};
-
-					this.props.history.push( location );
-				}
-
-			} ).catch( err => {
-
-				if ( err.name === 'conflict' ) {
-
-					console.error( 'SongList.addToSet: conflict -', err );
-
-				} else {
-
-					console.error( 'SongList.addToSet -', err );
-
-				}
-
-			} );
-
-		} ).catch( err => {
-			console.error( err );
-		} );
-
+							this.props.history.push(location);
+						}
+					})
+					.catch(err => {
+						if (err.name === 'conflict') {
+							console.error('SongList.addToSet: conflict -', err);
+						} else {
+							console.error('SongList.addToSet -', err);
+						}
+					});
+			})
+			.catch(err => {
+				console.error(err);
+			});
 	};
 
 	filterSongs = song => {
-
-		return song.title.toLowerCase().includes(
-			this.state.searchText ) || song.content.toLowerCase().includes(
-			this.state.searchText ) || song.author.toLowerCase().includes(
-			this.state.searchText );
-
+		return (
+			song.title.toLowerCase().includes(this.state.searchText) ||
+			song.content.toLowerCase().includes(this.state.searchText) ||
+			song.author.toLowerCase().includes(this.state.searchText)
+		);
 	};
 
 	handleSearchInput = event => {
-
-		this.setState( {
+		this.setState({
 			searchText: event.target.value
-		} );
-
+		});
 	};
 
 	render() {
-
 		const { songs } = this.props;
 		const { searchText } = this.state;
 
-
-
 		//const isAddToSet = /\/add-to-set\//.test( path );
-		const isAddToSet = /\/add-to-set\//.test( window.location.href );
+		const isAddToSet = /\/add-to-set\//.test(window.location.href);
 
 		return (
-			<div >
+			<div>
 				<Hero>
 					<ContentLimiter>
-
 						<Grid container justify="space-between">
 							<Grid item>
-								<Typography variant="display1" color="inherit">Songs</Typography>
+								<Typography variant="display1" color="inherit">
+									Songs
+								</Typography>
 							</Grid>
 
-						<Grid item>
-							<Grid container spacing={16} alignItems="center">
+							<Grid item>
+								<Grid container spacing={16} alignItems="center">
+									<Grid item>
+										<TextField
+											color="inherit"
+											label="Titles, words, authors"
+											onChange={this.handleSearchInput}
+											value={searchText}
+											InputProps={{
+												endAdornment: (
+													<InputAdornment position="end">
+														<MagnifyIcon />
+													</InputAdornment>
+												)
+											}}
+										/>
+									</Grid>
 
-								<Grid item>
-
-									<TextField
-										color="inherit"
-										label="Titles, words, authors"
-										onChange={this.handleSearchInput}
-										value={searchText}
-										InputProps={{
-											endAdornment: (
-												<InputAdornment position="end">
-													<MagnifyIcon/>
-												</InputAdornment>
-											)
-										}}
-									/>
-								</Grid>
-
-								<Grid item>
-									<Link to="/songs/new">
-										<Button color="primary" variant="raised">
-											New song
-										</Button>
-									</Link>
+									<Grid item>
+										<Link to="/songs/new">
+											<Button color="primary" variant="raised">
+												New song
+											</Button>
+										</Link>
+									</Grid>
 								</Grid>
 							</Grid>
 						</Grid>
-					</Grid>
-						</ContentLimiter>
-						</Hero>
-						<ContentLimiter>
+					</ContentLimiter>
+				</Hero>
+				<Table>
+					<TableHead>
+						<TableRow>
+							<TableCell>Song</TableCell>
+							<TableCell className="is-hidden-mobile">Author</TableCell>
+							{isAddToSet && <TableCell>Action</TableCell>}
+						</TableRow>
+					</TableHead>
 
-							<Table>
+					<TableBody>
+						{songs.filter(this.filterSongs).map((song, i) => (
+							<TableRow key={song._id}>
+								<TableCell>
+									<Typography variant="title" gutterBottom>
+										<a href={`/songs/${song._id}`}> {song.title}</a>
+									</Typography>
+								</TableCell>
 
-								<TableHead>
-									<TableRow>
-										<TableCell>Song</TableCell>
-										<TableCell className="is-hidden-mobile">Author</TableCell>
-									</TableRow>
-								</TableHead>
+								<TableCell className="is-hidden-mobile">{song.author}</TableCell>
 
-								<TableBody>
-
-								{songs.filter( this.filterSongs ).map(
-									( song, i ) => (
-										<TableRow key={song._id}>
-
-
-											<TableCell>
-												<Typography variant="title" gutterBottom>
-													<a href={`/songs/${song._id}`}> {song.title}</a>
-												</Typography>
-											</TableCell>
-
-
-											<TableCell className="is-hidden-mobile">
-													{song.author}
-											</TableCell>
-
-
-											{isAddToSet &&
-											<TableCell>
-												<button className="button is-primary is-outlined"
-												        onClick={() => this.addToSet( song )}>
-													<span>Add to set</span>
-													<span className="icon is-small">
-														<i className="fa fa-chevron-right"></i>
-												    </span>
-												</button>
-											</TableCell>
-											}
-										</TableRow>
-									) )}
-
-								</TableBody>
-
-							</Table>
-						</ContentLimiter>
-
-
+								{isAddToSet && (
+									<TableCell>
+										<Button variant="outlined" onClick={() => this.addToSet(song)}>
+											Add
+										</Button>
+									</TableCell>
+								)}
+							</TableRow>
+						))}
+					</TableBody>
+				</Table>
 			</div>
-
 		);
-
 	}
 }
 
