@@ -66,8 +66,8 @@ class Login extends Component {
 		name: ''
 	};
 
-	handleEmailInput = event => this.setState({ email: event.target.value });
-	handleNameInput = event => this.setState({ name: event.target.value });
+	handleEmailChange = event => this.setState({ email: event.target.value });
+	handleNameChange = event => this.setState({ name: event.target.value });
 
 	handleLogin = event => {
 		event.preventDefault();
@@ -132,10 +132,8 @@ class Login extends Component {
 	};
 
 	render() {
-		const props = this.props;
 		const { classes } = this.props;
-
-		const { name } = this.state;
+		const { email, name } = this.state;
 
 		return (
 			<div className={classes.root}>
@@ -160,8 +158,8 @@ class Login extends Component {
 									label="Email"
 									className={classes.textField}
 									fullWidth
-									value={this.email}
-									onChange={this.handleEmailInput}
+									value={email}
+									onChange={this.handleEmailChange}
 									margin="normal"
 								/>
 
@@ -170,8 +168,8 @@ class Login extends Component {
 									label="Full Name"
 									className={classes.textField}
 									fullWidth
-									value={this.name}
-									onChange={this.handleNameInput}
+									value={name}
+									onChange={this.handleNameChange}
 									margin="normal"
 								/>
 
