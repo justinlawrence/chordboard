@@ -109,10 +109,14 @@ class App extends Component {
 				<div className="app__content">
 					<Navbar/>
 					<Switch>
+						<Route exact path="/privacy" component={Privacy}/>
 
 						<Route exact path="/login" component={Login}/>
 
-						<Route exact path="/privacy" component={Privacy}/>
+						<Route path="/sets" render={props => (
+							<SetListContainer setFocusedSet={this.setFocusedSet}/>
+						)}/>
+
 
 						{!user.name &&
 						<Redirect to="/login"/>}
@@ -133,10 +137,6 @@ class App extends Component {
 
 						<Route exact path="/songs/:id" render={( { match } ) => (
 							<SongContainer id={match.params.id}/>
-						)}/>
-
-						<Route path="/sets" render={props => (
-							<SetListContainer setFocusedSet={this.setFocusedSet}/>
 						)}/>
 
 						<Redirect to="/sets"/>
