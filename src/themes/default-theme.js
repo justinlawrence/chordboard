@@ -12,15 +12,15 @@ const defaultTheme = {
 			contrastText: '#fff'
 		},
 		secondary: {
-			main: '#fff', //nav was 283149
-			contrastText: '#000' //was fff
+			main: '#283149', //nav was 283149 then fff
+			contrastText: '#fff' //was fff then 000
 		}
 	},
 
 	// Custom values
 	maxPageWidth: 1344,
 
-	heroBackgroundColor: '#f5f5f5', //hero was #dbedf3
+	heroBackgroundColor: '#dbedf3', //hero was #dbedf3m then f5f5f5
 	heroContrastText: '#000'
 };
 

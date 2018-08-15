@@ -12,7 +12,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-import chordboardLogo from '../../../assets/chordboard-logo-inline.png';
+import chordboardLogo from '../../../assets/chordboard-logo-light.png';
 
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from 'mdi-material-ui/Menu';
@@ -83,7 +83,7 @@ class Navbar extends React.Component {
 				<AppBar color="secondary" position="static" className="no-print">
 					<Toolbar>
 						<Link to="/">
-							<img src={chordboardLogo} height="32px" className={classes.logo} />
+							<img src={chordboardLogo} height="24px" className={classes.logo} />
 						</Link>
 
 						{/*

@@ -14,7 +14,8 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
-import chordboardLogo from '../../assets/chordboard-logo-long.png';
+import chordboardLogo from '../../assets/chordboard-logo-inline.png';
+// import chordboardLogo from '../../assets/chordboard-logo-dark.png';
 
 import { Google as GoogleIcon, Facebook as FacebookIcon } from 'mdi-material-ui';
 
@@ -143,7 +144,7 @@ class Login extends Component {
 							<Grid container alignItems="center" direction="column">
 								<img
 									src={chordboardLogo}
-									width="200px"
+									height="44px"
 									className={cx(classes.addPaddingTop, classes.addPaddingBottom)}
 								/>
 
