@@ -303,7 +303,7 @@ class SongViewer extends Component {
 									<Typography variant="subheading">{song.author}</Typography>
 								</Grid>
 
-								<Grid item xs={12} sm={4}>
+								<Grid item xs={12} sm={4} className="no-print">
 									<form autoComplete="off">
 
 										{setKey &&

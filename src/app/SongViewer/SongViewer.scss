@@ -1,4 +1,4 @@
-$horiz-padding: 48px;
+$horiz-padding: 68px;
 $chord-gap: .75em;
 .sheet {
 	padding-left: $horiz-padding;
@@ -24,7 +24,7 @@ $chord-gap: .75em;
 		position: relative;
 
 		@media print {
-			margin-left: 64px;
+			padding-left: 40px;
 		}
 
 		@media (max-width: 600px) {
@@ -160,5 +160,3 @@ $chord-gap: .75em;
 
 	}
 }
-
-
