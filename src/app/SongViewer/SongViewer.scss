@@ -1,4 +1,4 @@
-$horiz-padding: 68px;
+$horiz-padding: 48px;
 $chord-gap: .75em;
 .sheet {
 	padding-left: $horiz-padding;
@@ -23,13 +23,15 @@ $chord-gap: .75em;
 		padding-left: 1em;
 		position: relative;
 
-		@media print {
-			padding-left: 40px;
-		}
-
 		@media (max-width: 600px) {
 			margin-left: 0;
 		}
+		@media print {
+			padding-left: 16px;
+			margin-left: 44px;
+
+		}
+
 
 		&[data-section]:before {
 			color: white;
