@@ -47,8 +47,8 @@
     "react-textarea-autosize": "^7.0.2",
     "redux": "4.0.0",
     "redux-devtools-extension": "2.13.5",
-    "redux-pouchdb": "0.1.1",
-    "redux-saga": "^0.16.0",
+    "redux-pouchdb": "0.1.4",
+    "redux-saga": "0.16.2",
     "rimraf": "^2.6.2",
     "slugify": "^1.2.1",
     "url": "latest"
