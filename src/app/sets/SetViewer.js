@@ -77,6 +77,7 @@ class SetViewer extends Component {
 		isLoading: false,
 		mode: '',
 		title: '',
+		author: '',
 		setDate: ''
 	};
 
@@ -93,6 +94,7 @@ class SetViewer extends Component {
 		console.log( set );
 		this.setState( {
 			title: set.title,
+			author: set.author,
 			setDate: set.setDate
 		} );
 	};
@@ -100,20 +102,23 @@ class SetViewer extends Component {
 	handleDateChange = event => {
 		this.setState( { setDate: event.target.value } );
 	};
-
 	onTitleInput = event => {
 		this.setState( { title: event.target.value } );
+	};
+	onAuthorInput = event => {
+		this.setState( { author: event.target.value } );
 	};
 
 	handleSaveSet = () => {
 
-		const { title, setDate } = this.state;
+		const { title, author, setDate } = this.state;
 
 		db.get( this.props.set._id ).then( doc => {
 
 			db.put( {
 				...doc,
 				title: title,
+				author: author,
 				setDate: setDate
 			} ).catch( err => {
 
@@ -188,7 +193,7 @@ class SetViewer extends Component {
 	render() {
 
 		const { set, classes } = this.props;
-		const { mode, songCount, setDate, title } = this.state;
+		const { mode, songCount, setDate, title, author } = this.state;
 
 		return set && (
 			<div className="set-viewer">
@@ -204,6 +209,16 @@ class SetViewer extends Component {
 										fullWidth
 										value={title}
 										onChange={this.onTitleInput}
+										margin="normal"
+									/>
+
+									<TextField
+										id="author"
+										label="Set author"
+										className={classes.textField}
+										fullWidth
+										value={author}
+										onChange={this.onAuthorInput}
 										margin="normal"
 									/>
 
