@@ -14,8 +14,18 @@ import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
+
+import Avatar from '@material-ui/core/Avatar';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import { format, isAfter } from 'date-fns'
+
+
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+
+
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
@@ -40,6 +50,7 @@ import { linesToNashville } from '../../utils/convertToNashville';
 import './SongViewer.scss';
 
 import {
+	Image as ImageIcon,
 	Minus as MinusIcon,
 	PlaylistPlus as PlaylistPlusIcon,
 	Plus as PlusIcon,
@@ -91,9 +102,6 @@ class SongViewer extends Component {
 		// Update an initial list when the component mounts.
 		this.updateListOfSets();
 
-		//Set the page title to the song title
-		document.title = this.props.song.title;
-
 		// Listen for any changes on the database.
 		sync.on( "change", this.updateListOfSets.bind( this ) );
 
@@ -101,6 +109,7 @@ class SongViewer extends Component {
 
 		const songId = this.props.song._id;
 		const setId = this.props.currentSet._id;
+
 		console.log( 'songId', songId );
 		console.log( 'setId', setId );
 
@@ -109,6 +118,7 @@ class SongViewer extends Component {
 	componentWillReceiveProps( nextProps ) {
 		this.handleProps( nextProps );
 	}
+
 
 	componentWillUnmount() {
 		sync.cancel();
@@ -187,6 +197,10 @@ class SongViewer extends Component {
 	handleSongKeyDialogOpen = () => this.setState( { isSongKeyDialogOpen: true } );
 
 	handleProps = props => {
+
+		//Set the page title to the song title
+		document.title = props.song.title;
+
 
 		const songUser = props.song.users && props.song.users.find( u => u.id === props.user.id ) || {};
 
@@ -288,6 +302,10 @@ class SongViewer extends Component {
 			capoKeyDescr = 'Capo key';
 		}
 
+		var setListActive = setList.filter(function (set) {
+	  		return isAfter(set.setDate, new Date() );
+		});
+
 		return (
 			<Fade in={Boolean( song )} appear mountOnEnter unmountOnExit>
 				<div className="song-viewer">
@@ -336,18 +354,27 @@ class SongViewer extends Component {
 											</IconButton>
 										</Tooltip>
 
-										<Menu anchorEl={setListMenuAnchorEl}
+										<Dialog anchorEl={setListMenuAnchorEl}
 										      onClose={this.showSetListDropdown( false )}
 										      open={Boolean( setListMenuAnchorEl )}>
+												<DialogTitle id="add-to-set-title">Add to Set</DialogTitle>
+												<List component="nav">
 											{
-												setList.map( set => (
-													<MenuItem key={set._id}
+												setListActive.map( set => (
+													<ListItem button key={set._id}
 													          onClick={this.createAddToSetHandler( set )}
 													          value={set._id}>
-														{set.title}
-													</MenuItem> ) )
+
+														<Avatar>
+														   <ImageIcon />
+														</Avatar>
+
+														<ListItemText primary={set.author + ' • ' + set.title} secondary={set.setDate} />
+
+													</ListItem> ) )
 											}
-										</Menu>
+											</List>
+										</Dialog>
 
 										<Tooltip title="Song settings">
 											<IconButton className={classes.button}

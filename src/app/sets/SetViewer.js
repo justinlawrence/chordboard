@@ -83,6 +83,7 @@ class SetViewer extends Component {
 
 	componentDidMount() {
 		this.handleProps( this.props );
+
 	}
 
 	componentWillReceiveProps( nextProps ) {
@@ -97,6 +98,7 @@ class SetViewer extends Component {
 			author: set.author,
 			setDate: set.setDate
 		} );
+		document.title = "Set: " + set.title;
 	};
 
 	handleDateChange = event => {
