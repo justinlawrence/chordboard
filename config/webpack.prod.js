@@ -11,7 +11,7 @@ module.exports = function ( env ) {
 			filename: '[name].[chunkhash].js'
 		},
 		module: {
-			loaders: [
+			rules: [
 				{
 					test: /\.scss$/,
 					exclude: /node_modules/,

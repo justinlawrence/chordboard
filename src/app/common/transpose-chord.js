@@ -16,6 +16,9 @@ export const octave = [
 export default function transposeChord( chord, amount ) {
 
 	//credit: https://codepen.io/Grilly86/pen/rwRYYM
+	if ( chord == undefined ) {
+		chord = "";
+	}
 
 	const chords = chord.split( '/' );
 	if ( chords.length > 1 ) {

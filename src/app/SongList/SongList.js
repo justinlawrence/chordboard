@@ -5,6 +5,7 @@ import { uniqBy } from 'lodash';
 import { db } from 'database';
 import Grid from '@material-ui/core/Grid';
 import Hero from '../../components/Hero';
+import Hidden from '@material-ui/core/Hidden';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { Link } from 'react-router-dom';
 import Table from '@material-ui/core/Table';
@@ -125,7 +126,9 @@ class SongList extends Component {
 					<TableHead>
 						<TableRow>
 							<TableCell>Song</TableCell>
-							<TableCell className="is-hidden-mobile">Author</TableCell>
+							<Hidden only="xs">
+								<TableCell>Author</TableCell>
+							</Hidden>
 							{isAddToSet && <TableCell>Action</TableCell>}
 						</TableRow>
 					</TableHead>
@@ -135,11 +138,13 @@ class SongList extends Component {
 							<TableRow key={song._id}>
 								<TableCell>
 									<Typography variant="title" gutterBottom>
-										<a href={`/songs/${song._id}`}> {song.title}</a>
+										<a href={`/songs/${song._id}`}>{song.title}</a>
 									</Typography>
 								</TableCell>
 
-								<TableCell className="is-hidden-mobile">{song.author}</TableCell>
+								<Hidden only="xs">
+									<TableCell>{song.author}</TableCell>
+								</Hidden>
 
 								{isAddToSet && (
 									<TableCell>

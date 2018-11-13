@@ -6,6 +6,7 @@ const commonConfig = require( './webpack.base.js' );
 module.exports = function ( env ) {
 
 	return webpackMerge( commonConfig(), {
+		mode: 'development',
 		devtool: false,
 		devServer: {
 			compress: true,
@@ -20,7 +21,7 @@ module.exports = function ( env ) {
 			}
 		},
 		module: {
-			loaders: [
+			rules: [
 				{
 					test: /\.scss$/,
 					use: [

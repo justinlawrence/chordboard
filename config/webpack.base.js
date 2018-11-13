@@ -23,7 +23,7 @@ module.exports = function () {
 			sourceMapFilename: '[name].map'
 		},
 		module: {
-			loaders: [
+			rules: [
 				{
 					test: /\.js$/,
 					exclude: /node_modules/,
