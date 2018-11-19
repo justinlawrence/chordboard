@@ -112,7 +112,7 @@ class SongList extends Component {
 
 									<Grid item>
 										<Link to="/songs/new">
-											<Button color="primary" variant="raised">
+											<Button color="primary" variant="contained">
 												New song
 											</Button>
 										</Link>

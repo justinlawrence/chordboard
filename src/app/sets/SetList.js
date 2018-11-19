@@ -78,7 +78,7 @@ class SetList extends Component {
 									</Grid>
 									<Grid item>
 										<Link to="/sets/new">
-											<Button color="primary" variant="raised">
+											<Button color="primary" variant="contained">
 												New set
 											</Button>
 										</Link>

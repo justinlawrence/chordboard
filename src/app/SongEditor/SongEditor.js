@@ -318,7 +318,7 @@ class SongEditor extends Component {
                           Cancel
                         </Button>
 
-                        <Button onClick={this.onSaveSong} color="primary" variant="raised">
+                        <Button onClick={this.onSaveSong} color="primary" variant="contained">
                           Save
                         </Button>
 

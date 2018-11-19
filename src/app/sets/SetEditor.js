@@ -149,7 +149,7 @@ class SetEditor extends Component {
 								</div>
 							</div>
 
-							<Button onClick={this.onSaveSet} color="primary" variant="raised">
+							<Button onClick={this.onSaveSet} color="primary" variant="contained">
 								Save
 							</Button>
 

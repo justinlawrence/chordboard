@@ -283,7 +283,7 @@ class SetViewer extends Component {
 						<Grid item>
 							<Button
 								onClick={this.toggleEditMode( mode !== 'edit' )}
-								variant="raised"
+								variant="contained"
 							>
 								Edit set
 							</Button>
@@ -291,7 +291,7 @@ class SetViewer extends Component {
 							<Button
 								href={`/songs/add-to-set/${set._id}`}
 								onClick={this.handleSaveSet}
-								variant="raised"
+								variant="contained"
 							>
 								Add a song
 							</Button>
@@ -333,7 +333,7 @@ class SetViewer extends Component {
 											<Button
 												href={`/songs/add-to-set/${set._id}`}
 												onClick={this.handleSaveSet}
-												variant="raised"
+												variant="contained"
 											>
 												Add a song
 											</Button>
