@@ -1,7 +1,6 @@
 .live-bar {
 	align-items: stretch;
-	background-color: #eee;
-	box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+	background-color: #F6F9FC;
 	display: flex;
 	flex: 0 0 48px;
 
@@ -10,7 +9,6 @@
 	}
 
 	.live-bar-item-stacked {
-		border: 1px solid rgba(10, 10, 10, 0.05);
 		align-items: center;
 		display: flex;
 		flex: 0 0 auto;
@@ -60,13 +58,12 @@
 		&__item {
 			align-items: center;
 			box-sizing: border-box;
-			background-color: #eee;
 			border-radius: .25em;
 			color: black;
 			cursor: pointer;
 			display: flex;
 			padding: 8px;
-			width: 200px;
+			max-width: 300px;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;
@@ -76,7 +73,7 @@
 			}
 
 			&:hover {
-				background-color: darken(#eee, 3%);
+				background-color: darken(#F6F9FC, 3%);
 			}
 
 			.song-key {

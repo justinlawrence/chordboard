@@ -12,6 +12,33 @@ const defaultTheme = {
 			contrastText: '#fff'
 		},
 		secondary: {
+			main: '#fff', //nav was 283149 then fff
+			contrastText: '#000' //was fff then 000
+		}
+	},
+
+	// Custom values
+	maxPageWidth: 1344,
+
+	heroBackgroundColor: '#F6F9FC', //hero was #dbedf3m then f5f5f5
+	heroContrastText: '#000'
+};
+
+
+/*
+
+Based on this theme
+http://colorhunt.co/c/114174
+
+
+
+const defaultTheme = {
+	palette: {
+		primary: {
+			main: '#F73859', //fab
+			contrastText: '#fff'
+		},
+		secondary: {
 			main: '#283149', //nav was 283149 then fff
 			contrastText: '#fff' //was fff then 000
 		}
@@ -23,7 +50,7 @@ const defaultTheme = {
 	heroBackgroundColor: '#dbedf3', //hero was #dbedf3m then f5f5f5
 	heroContrastText: '#000'
 };
-
+*/
 
 /*
 
