@@ -3,7 +3,7 @@ import { db, sync } from 'database';
 import { connect } from 'react-redux';
 
 import * as actions from '../../actions';
-import SongViewer from '../SongViewer/SongViewer';
+import SongViewer from '../SongViewer/SongViewer.js';
 
 class SongContainer extends Component {
 
