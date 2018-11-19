@@ -29,6 +29,7 @@
   "homepage": "https://github.com/justinlawrence/chordboard#readme",
   "dependencies": {
     "@material-ui/core": "3.5.1",
+    "@sentry/node": "4.3.2",
     "babel-regenerator-runtime": "^6.5.0",
     "chord-magic": "^2.1.1",
     "copy-webpack-plugin": "^4.0.1",
