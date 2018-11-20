@@ -15,12 +15,20 @@ import './styles/main.scss';
 
 import * as Sentry from '@sentry/browser';
 
-if ( process.env.NODE_ENV === 'production' ) {
-	Sentry.init({ dsn: 'https://2c14c1a4ae774cdd9c80545e7a34c2e7@sentry.io/1246393' });
-}
-
 // const noSleep = new NoSleep();
 const store = configureStore();
+
+if ( process.env.NODE_ENV === 'production' ) {
+	window.Sentry = Sentry;
+	const state = store.getState();
+	Sentry.init({ dsn: 'https://2c14c1a4ae774cdd9c80545e7a34c2e7@sentry.io/1246393' });
+	Sentry.configureScope((scope) => {
+	 	scope.setUser({
+			id: state.user.id,
+			username: state.user.name
+		});
+	});
+}
 
 //noSleep.enable();
 
