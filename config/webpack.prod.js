@@ -48,7 +48,7 @@ module.exports = function ( env ) {
 		},
 		plugins: [
 			new ExtractTextPlugin( '[name].[chunkhash].css' ),
-			new OfflinePlugin()
+			//new OfflinePlugin()
 		]
 	} );
 
