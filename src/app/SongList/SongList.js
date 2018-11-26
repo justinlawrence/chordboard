@@ -25,7 +25,7 @@ class SongList extends Component {
 		searchText: ''
 	};
 
-	addToSet = song => {
+	addToSet = song => {		
 		db.get(this.props.setId)
 			.then(doc => {
 				const data = Object.assign({}, doc);
