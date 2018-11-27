@@ -12,6 +12,7 @@ import SongContainer from './app/songs/SongContainer';
 import SetListContainer from './app/sets/SetListContainer';
 import Privacy from './app/privacy/Privacy';
 
+import * as actions from './actions';
 import { db, sync } from 'database';
 import './app.scss';
 
@@ -23,6 +24,8 @@ class App extends Component {
 	};
 
 	componentDidMount() {
+
+		this.props.fetchSongsRequest();
 
 		this._getListOfSongs().then( songList => {
 			this.setState( { songList } );
@@ -210,4 +213,4 @@ const mapStateToProps = state => ({
 	user: state.user
 });
 
-export default withRouter( connect( mapStateToProps, null )( App ) );
+export default withRouter( connect( mapStateToProps, actions )( App ) );

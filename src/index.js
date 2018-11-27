@@ -4,7 +4,6 @@ import React from 'react';
 import RenderDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import firebase from 'firebase';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
@@ -18,20 +17,6 @@ import * as Sentry from '@sentry/browser';
 
 // const noSleep = new NoSleep();
 const store = configureStore();
-
-// Initialize Firebase.
-firebase.initializeApp({
-  apiKey: "AIzaSyAjZmRaQ30-wo5J6kAiSuMn9_8r-63xxlA",
-  authDomain: "chordboard-209821.firebaseapp.com",
-  projectId: "chordboard-209821",
-});
-
-const db = firebase.firestore();
-
-// Disable deprecated features
-db.settings({
-  timestampsInSnapshots: true
-});
 
 if ( process.env.NODE_ENV === 'production' ) {
 	window.Sentry = Sentry;
@@ -47,24 +32,9 @@ if ( process.env.NODE_ENV === 'production' ) {
 
 //noSleep.enable();
 
-// db.collection( 'songs' ).get().then( querySnapshot => {
-//     querySnapshot.forEach((doc) => {
-//         console.log(doc.data());
-//     });
-// });
-
-db.collection( 'songs' ).onSnapshot( querySnapshot => {
-    querySnapshot.forEach(doc => {
-        //const timestamp = doc.get('created_at');
-        //const date = timestamp.toDate();
-        console.log(doc.data());
-    });
-})
-
 const theme = createMuiTheme( defaultTheme );
 
 const render = _App => {
-
 	RenderDOM.render(
 		<Provider store={store}>
 			<BrowserRouter>
@@ -75,7 +45,6 @@ const render = _App => {
 		</Provider>,
 		document.querySelector( 'main' )
 	);
-
 }
 
 render( App )
