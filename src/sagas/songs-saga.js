@@ -4,29 +4,30 @@ import { eventChannel } from 'redux-saga'
 import { db } from '../firebase';
 import {
 	FETCH_SONGS_REQUEST,
-	fetchSongsSuccess
-} from 'actions'
+	fetchSongsSuccess,
+	mergeSongs
+} from '../actions'
 
 const songsCollection = db.collection( 'songs' );
 
-//const songsChannel = type => eventChannel( emit => {
-	//sync.on( type, emit );
-	// db.collection( 'songs' ).onSnapshot( querySnapshot => {
-	// 	querySnapshot.forEach(doc => {
-	// 		//const timestamp = doc.get('created_at');
-	// 		//const date = timestamp.toDate();
-	// 		console.log(doc.data());
-	// 	});
-	// })
-	//return () => {};
-//} );
+const songsChannel = () => eventChannel( emitter => {
+	songsCollection.onSnapshot( querySnapshot => {
+		const songs = [];
+		querySnapshot.forEach(doc => {
+			songs.push({ id: doc.id, ...doc.data() });
+		});
+		emitter( songs );
+	})
+	return () => {};
+} );
 
 export function* songsSaga() {
-	yield takeEvery( FETCH_SONGS_REQUEST, fetchSongs );
+	const songsChan = yield call( songsChannel );
+	//yield takeEvery( FETCH_SONGS_REQUEST, fetchSongs );
+	yield takeEvery( songsChan, handleSongsEvent );
 }
 
-function* fetchSongs(  ) {
-
+function* fetchSongs() {
 	const querySnapshot = yield songsCollection.get();
 
 	const songs = [];
@@ -35,4 +36,8 @@ function* fetchSongs(  ) {
     });
 
 	yield put( fetchSongsSuccess( songs ) );
+}
+
+function* handleSongsEvent( songs ) {
+	yield put( mergeSongs( songs ) );
 }

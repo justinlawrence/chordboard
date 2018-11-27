@@ -2,6 +2,7 @@ export const ADD_SONG = 'ADD_SONG'
 export const EDIT_SONG = 'EDIT_SONG'
 export const FETCH_SONGS_REQUEST = 'FETCH_SONGS_REQUEST';
 export const FETCH_SONGS_SUCCESS = 'FETCH_SONGS_SUCCESS';
+export const MERGE_SONGS = 'MERGE_SONGS'
 export const REMOVE_SONG = 'REMOVE_SONG'
 export const SET_CURRENT_SONG = 'SET_CURRENT_SONG'
 export const SET_CURRENT_SONG_USER_KEY = 'SET_CURRENT_SONG_USER_KEY'
@@ -22,6 +23,11 @@ export const fetchSongsSuccess = songs => ({
 	type: FETCH_SONGS_SUCCESS,
 	payload: { songs }
 });
+
+export const mergeSongs = songs => ({
+	type: MERGE_SONGS,
+	payload: { songs }
+})
 
 export const setCurrentSong = song => ({
 	type: SET_CURRENT_SONG,

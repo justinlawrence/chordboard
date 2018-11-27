@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
-import ContentLimiter from '../../components/ContentLimiter';
+import ContentLimiter from './ContentLimiter';
 import { uniqBy } from 'lodash';
 import { db } from 'database';
 import Grid from '@material-ui/core/Grid';
-import Hero from '../../components/Hero';
+import Hero from './Hero';
 import Hidden from '@material-ui/core/Hidden';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { Link } from 'react-router-dom';
@@ -25,8 +25,8 @@ class SongList extends Component {
 		searchText: ''
 	};
 
-	addToSet = song => {		
-		db.get(this.props.setId)
+	addToSet = song => {
+		/*db.get(this.props.setId)
 			.then(doc => {
 				const data = Object.assign({}, doc);
 
@@ -57,7 +57,7 @@ class SongList extends Component {
 			})
 			.catch(err => {
 				console.error(err);
-			});
+			});*/
 	};
 
 	filterSongs = song => {
@@ -135,10 +135,10 @@ class SongList extends Component {
 
 					<TableBody>
 						{songs.filter(this.filterSongs).map((song, i) => (
-							<TableRow key={song._id}>
+							<TableRow key={song.id}>
 								<TableCell>
 									<Typography variant="title" gutterBottom>
-										<a href={`/songs/${song._id}`}>{song.title}</a>
+										<a href={`/songs/${song.id}`}>{song.title}</a>
 									</Typography>
 								</TableCell>
 

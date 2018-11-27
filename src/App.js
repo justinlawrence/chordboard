@@ -6,15 +6,17 @@ import { Redirect, Route, Switch, matchPath, withRouter } from 'react-router-dom
 import LiveBar from './app/common/LiveBar';
 import Login from './app/login/Login';
 import Navbar from './app/common/Navbar/Navbar';
-import SongList from './app/SongList/SongList';
+import SongListContainer from './containers/SongListContainer';
 import SongEditor from './app/SongEditor/SongEditor';
 import SongContainer from './app/songs/SongContainer';
 import SetListContainer from './app/sets/SetListContainer';
 import Privacy from './app/privacy/Privacy';
 
 import * as actions from './actions';
-import { db, sync } from 'database';
+import { db, sync } from './database';
 import './app.scss';
+
+import { db as firestore } from './firebase';
 
 class App extends Component {
 	state = {
@@ -24,8 +26,6 @@ class App extends Component {
 	};
 
 	componentDidMount() {
-
-		this.props.fetchSongsRequest();
 
 		this._getListOfSongs().then( songList => {
 			this.setState( { songList } );
@@ -125,11 +125,11 @@ class App extends Component {
 						<Redirect to="/login"/>}
 
 						<Route exact path="/songs" render={props => (
-							<SongList songs={songList} {...props}/>
+							<SongListContainer {...props}/>
 						)}/>
 
 						<Route exact path="/songs/add-to-set/:setId" render={props => (
-							<SongList setId={props.match.params.setId} songs={songList} {...props}/>
+							<SongListContainer setId={props.match.params.setId} {...props}/>
 						)}/>
 
 						<Route exact path="/songs/new" component={SongEditor}/>
