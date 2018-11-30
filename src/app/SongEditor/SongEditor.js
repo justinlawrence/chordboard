@@ -62,13 +62,10 @@ class SongEditor extends Component {
   }
 
   handleParserChange = event => {
-
     this.setState({parserType: event.target.value});
-
   };
 
   handleProps = props => {
-
     this.setState({isLoading: true});
 
     if (props.id) {
@@ -260,7 +257,6 @@ class SongEditor extends Component {
       <div className="song-editor">
         <Hero>
           <ContentLimiter>
-
             <Grid container className={classes.root} justify="space-between">
 
               <Grid item xs={12}>

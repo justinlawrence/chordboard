@@ -515,13 +515,7 @@ class SongViewer extends Component {
 	}
 }
 
-const mapStateToProps = state => ( {
-	currentSet: state.currentSet,
-	song: state.currentSong,
-	user: state.user
-} );
-
-export default connect( mapStateToProps, actions )( withStyles( styles )( SongViewer ) );
+export default connect( null, actions )( withStyles( styles )( SongViewer ) );
 
 export function parseSong( lines, sections, chordSize ) {
 

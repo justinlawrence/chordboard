@@ -1,49 +1,41 @@
-import React, { Component } from 'react';
-import { db, sync } from 'database';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
 import * as actions from '../../actions';
 import SongViewer from '../SongViewer/SongViewer.js';
 
-class SongContainer extends Component {
-
+class SongContainer extends PureComponent {
 	componentDidMount() {
-		this.handleProps( this.props );
+		this.updateCurrentSong();
 	}
 
-	componentWillReceiveProps( nextProps ) {
-		if ( this.props.id !== nextProps.id ) {
-			this.handleProps( nextProps );
+	componentDidUpdate() {
+		this.updateCurrentSong();
+	}
+
+	updateCurrentSong = () => {
+		if ( !this.props.song || this.props.song.id !== this.props.id ) {
+			this.props.setCurrentSongId( this.props.id );
 		}
-	}
-
-	handleProps = props => {
-
-		this._getSongById( props.id )
-			.then( song => this.props.setCurrentSong( song ) );
-
 	};
 
 	render() {
-
-		const { currentKey } = this.props;
-
+		const { currentSet, currentKey, song, user } = this.props;
 		return (
-			<SongViewer setKey={currentKey}/>
+			<SongViewer
+				currentSet={currentSet}
+				setKey={currentKey}
+				song={song}
+				user={user}
+			/>
 		);
-
 	}
-
-	_getSongById = id => {
-
-		return db.get( id )
-			.catch( err => {
-
-				console.warn( 'App.constructor - pouchdb query failed: _getSongById', err );
-
-			} );
-
-	};
 }
 
-export default connect( null, actions )( SongContainer );
+const mapStateToProps = state => ( {
+	currentSet: state.currentSet,
+	song: state.currentSong,
+	user: state.user
+} );
+
+export default connect( mapStateToProps, actions )( SongContainer );

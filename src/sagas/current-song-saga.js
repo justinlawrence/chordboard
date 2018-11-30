@@ -1,15 +1,31 @@
 import { call, put, select, take, takeEvery } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga'
 
-import { db, sync } from 'database';
+import { db } from '../firebase';
 import {
+	SET_CURRENT_SONG_ID,
 	SET_CURRENT_SONG_USER_KEY,
 	setCurrentSong,
 	setSong
 } from 'actions'
 
+const songsCollection = db.collection( 'songs' );
+
 export function* currentSongSaga() {
-	yield takeEvery( SET_CURRENT_SONG_USER_KEY, updateCurrentSongUserKey );
+	yield takeEvery( SET_CURRENT_SONG_ID, updateCurrentSongById );
+	//yield takeEvery( SET_CURRENT_SONG_USER_KEY, updateCurrentSongUserKey );
+}
+
+function* updateCurrentSongById( { payload } ) {
+	const doc = yield songsCollection.doc( payload.id ).get();
+	if (doc.exists) {
+		yield put( setCurrentSong( {
+			id: doc.id,
+			...doc.data()
+		} ) );
+	} else {
+		console.error( 'Document does not exist' );
+	}
 }
 
 function* updateCurrentSongUserKey( { key } ) {
@@ -33,23 +49,4 @@ function* updateCurrentSongUserKey( { key } ) {
 	const song = yield db.get( currentSong._id );
 	song.users = users;
 	yield db.put( song );
-}
-
-const syncChannel = type => eventChannel( emit => {
-	sync.on( type, emit );
-	return () => {};
-} );
-
-export function* songChanges() {
-	const changesChannel = yield call( syncChannel, 'change' );
-	while ( true ) {
-		const { change } = yield take( changesChannel );
-		const docs = change.docs;
-
-		const songs = docs.filter( doc => doc.type === 'song' );
-		for ( let i = 0; i < songs.length; i++ ) {
-			const song = songs[ i ];
-			yield put( setSong( song ) );
-		}
-	}
 }

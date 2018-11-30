@@ -26,6 +26,7 @@ class SongList extends Component {
 	};
 
 	addToSet = song => {
+		alert( 'TODO: move to redux' );
 		/*db.get(this.props.setId)
 			.then(doc => {
 				const data = Object.assign({}, doc);
@@ -68,16 +69,13 @@ class SongList extends Component {
 		);
 	};
 
-	handleSearchInput = event => {
-		this.setState({
-			searchText: event.target.value
-		});
-	};
+	handleSearchInput = event => this.setState({ searchText: event.target.value });
 
 	render() {
 		const { songs } = this.props;
 		const { searchText } = this.state;
 
+		const filteredSongs = songs.filter( this.filterSongs );
 		//const isAddToSet = /\/add-to-set\//.test( path );
 		const isAddToSet = /\/add-to-set\//.test(window.location.href);
 
@@ -87,13 +85,13 @@ class SongList extends Component {
 					<ContentLimiter>
 						<Grid container justify="space-between">
 							<Grid item>
-								<Typography variant="display1" color="inherit">
+								<Typography color="inherit" variant="display1">
 									Songs
 								</Typography>
 							</Grid>
 
 							<Grid item>
-								<Grid container spacing={16} alignItems="center">
+								<Grid container alignItems="center" spacing={16}>
 									<Grid item>
 										<TextField
 											color="inherit"
@@ -111,11 +109,14 @@ class SongList extends Component {
 									</Grid>
 
 									<Grid item>
-										<Link to="/songs/new">
-											<Button color="primary" variant="contained">
-												New song
-											</Button>
-										</Link>
+										<Button
+										 	to="/songs/new"
+											component={Link}
+											color="primary"
+											variant="contained"
+										>
+											New song
+										</Button>
 									</Grid>
 								</Grid>
 							</Grid>
@@ -129,12 +130,14 @@ class SongList extends Component {
 							<Hidden only="xs">
 								<TableCell>Author</TableCell>
 							</Hidden>
-							{isAddToSet && <TableCell>Action</TableCell>}
+							{isAddToSet && (
+								<TableCell>Action</TableCell>
+							)}
 						</TableRow>
 					</TableHead>
 
 					<TableBody>
-						{songs.filter(this.filterSongs).map((song, i) => (
+						{filteredSongs.map(song => (
 							<TableRow key={song.id}>
 								<TableCell>
 									<Typography variant="title" gutterBottom>
@@ -148,7 +151,10 @@ class SongList extends Component {
 
 								{isAddToSet && (
 									<TableCell>
-										<Button variant="outlined" onClick={() => this.addToSet(song)}>
+										<Button
+											onClick={() => this.addToSet(song)}
+											variant="outlined"
+										>
 											Add
 										</Button>
 									</TableCell>

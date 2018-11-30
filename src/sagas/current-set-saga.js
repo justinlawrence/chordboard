@@ -9,8 +9,8 @@ import {
 } from '../actions'
 
 export function* currentSetSaga() {
-	yield takeLatest( FETCH_CURRENT_SET, handleFetchSet )
-	yield takeLatest( SET_CURRENT_SET_SONG_KEY, updateCurrentSetKey );
+	//yield takeLatest( FETCH_CURRENT_SET, handleFetchSet )
+	//yield takeLatest( SET_CURRENT_SET_SONG_KEY, updateCurrentSetKey );
 }
 
 function* handleFetchSet( { setId } ) {

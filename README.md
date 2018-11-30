@@ -43,3 +43,9 @@ Copied from https://github.com/pouchdb/add-cors-to-couchdb
 * Tablature
 * Nashville chord colouring
 * Remote control
+
+
+### TODO
+* Remove PouchDB
+* Remove Sass
+* Move project into create-react-app skeleton
