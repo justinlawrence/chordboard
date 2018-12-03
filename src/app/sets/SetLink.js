@@ -1,25 +1,27 @@
-import React, {Component} from 'react';
-import {Link, Route} from 'react-router-dom';
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
-class SetLink extends Component {
+class SetLink extends PureComponent {
+	static propTypes = {
+		children: PropTypes.array.isRequired,
+		setFocusedSet: PropTypes.func.isRequired,
+		set: PropTypes.object.isRequired
+	}
+
 	handleClick = () => {
-		this.props.setFocusedSet( this.props.set );
-	};
+		this.props.setFocusedSet(this.props.set)
+	}
 
 	render() {
-
-		const { children, set } = this.props;
+		const { children, set } = this.props
 
 		return (
-			<Link
-				onClick={this.handleClick}
-				to={`/sets/${set._id}`}
-			>
+			<Link onClick={this.handleClick} to={`/sets/${set.id}`}>
 				{children}
 			</Link>
-		);
-
+		)
 	}
-};
+}
 
-export default SetLink;
+export default SetLink

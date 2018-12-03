@@ -1,10 +1,6 @@
-import React from 'react';
-import './song-key.scss';
+import React from 'react'
+//import './song-key.scss';
 
-const SongKey = ( { value } ) => (
-	<div className="song-key">
-		{value}
-	</div>
-);
+const SongKey = ({ value }) => <div className="song-key">{value}</div>
 
-export default SongKey;
+export default SongKey

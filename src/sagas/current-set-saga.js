@@ -1,6 +1,6 @@
-import { put, select, takeLatest } from 'redux-saga/effects';
+import { put, select, takeLatest } from 'redux-saga/effects'
 
-import { db } from '../database';
+import { db } from '../firebase'
 import {
 	FETCH_CURRENT_SET,
 	SET_CURRENT_SET_SONG_KEY,
@@ -8,43 +8,54 @@ import {
 	setCurrentSong
 } from '../actions'
 
+const setsCollection = db.collection('sets')
+
 export function* currentSetSaga() {
-	//yield takeLatest( FETCH_CURRENT_SET, handleFetchSet )
+	yield takeLatest(FETCH_CURRENT_SET, handleFetchSet)
 	//yield takeLatest( SET_CURRENT_SET_SONG_KEY, updateCurrentSetKey );
 }
 
-function* handleFetchSet( { setId } ) {
+function* handleFetchSet({ setId }) {
 	try {
-		const set = yield db.get( setId );
-		const keys = set.songs.map( song => song._id );
-		const { rows } = yield db.allDocs( { include_docs: true, keys } );
-		// Override song keys with values from the set.
-		set.songs = rows.map( ( row, index ) => ( {
-			...row.doc,
-			...set.songs[ index ]
-		} ) ).filter( song => !!song );
-		yield put( setCurrentSet( set ) );
-	} catch ( e ) {
-		console.error( 'currentSetSaga', e );
+		const setQuery = yield setsCollection.doc(setId).get()
+		const set = {
+			id: setQuery.id,
+			...setQuery.data()
+		}
+
+		for (let i = 0; i < set.songs.length; i++) {
+			const ref = set.songs[i].ref
+			const songQuery = yield ref.get()
+			set.songs[i] = {
+				id: songQuery.id,
+				...songQuery.data(),
+				// Override song keys with values from the set.
+				key: set.songs[i].key
+			}
+		}
+
+		yield put(setCurrentSet(set))
+	} catch (e) {
+		console.error('currentSetSaga', e)
 	}
 }
 
-function* updateCurrentSetKey( { payload } ) {
-	const { currentSet } = yield select();
-	const key = payload.key;
-	const song = payload.song;
+function* updateCurrentSetKey({ payload }) {
+	const { currentSet } = yield select()
+	const key = payload.key
+	const song = payload.song
 
-	const songs = [ ...currentSet.songs ].filter( u => typeof u === 'object' );
-	const setSong = songs.find( s => s._id === song._id );
+	const songs = [...currentSet.songs].filter(u => typeof u === 'object')
+	const setSong = songs.find(s => s._id === song._id)
 
-	songs.splice( songs.indexOf( setSong ), 1, {
+	songs.splice(songs.indexOf(setSong), 1, {
 		...setSong,
 		key
-	} );
+	})
 
-	yield put( setCurrentSet( { ...currentSet, songs } ) );
+	yield put(setCurrentSet({ ...currentSet, songs }))
 
-	const set = yield db.get( currentSet._id );
-	set.songs = songs;
-	yield db.put( set );
+	const set = yield db.get(currentSet._id)
+	set.songs = songs
+	yield db.put(set)
 }
