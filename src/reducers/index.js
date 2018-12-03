@@ -1,17 +1,19 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 
-import { currentSet } from './current-set';
-import { currentSong } from './current-song';
-import { song } from './song.js';
-import { syncState } from './sync-state.js';
-import { user } from './user.js';
+import { currentSet } from './current-set'
+import { currentSong } from './current-song'
+import { sets } from './sets-reducer'
+import { song } from './songs'
+import { syncState } from './sync-state'
+import { user } from './user'
 
-const reducer = combineReducers( {
+const reducer = combineReducers({
 	currentSet,
 	currentSong,
-	syncState,
+	sets,
 	song,
-	user
-} );
+	syncState,
+	user,
+})
 
-export default reducer;
+export default reducer
