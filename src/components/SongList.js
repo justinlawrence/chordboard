@@ -1,32 +1,29 @@
-import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
-import ContentLimiter from './ContentLimiter';
-import { uniqBy } from 'lodash';
-import { db } from 'database';
-import Grid from '@material-ui/core/Grid';
-import Hero from './Hero';
-import Hidden from '@material-ui/core/Hidden';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import { Link } from 'react-router-dom';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
-import { Magnify as MagnifyIcon } from 'mdi-material-ui';
+import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
+import Hidden from '@material-ui/core/Hidden'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import TextField from '@material-ui/core/TextField'
+import Typography from '@material-ui/core/Typography'
+import { Magnify as MagnifyIcon } from 'mdi-material-ui'
+
+import ContentLimiter from './ContentLimiter'
+import Hero from './Hero'
 
 class SongList extends Component {
 	state = {
 		searchText: ''
-	};
+	}
 
 	addToSet = song => {
-		alert( 'TODO: move to redux' );
+		window.alert('TODO: move to redux')
 		/*db.get(this.props.setId)
 			.then(doc => {
 				const data = Object.assign({}, doc);
@@ -59,25 +56,25 @@ class SongList extends Component {
 			.catch(err => {
 				console.error(err);
 			});*/
-	};
+	}
 
 	filterSongs = song => {
 		return (
 			song.title.toLowerCase().includes(this.state.searchText) ||
 			song.content.toLowerCase().includes(this.state.searchText) ||
 			song.author.toLowerCase().includes(this.state.searchText)
-		);
-	};
+		)
+	}
 
-	handleSearchInput = event => this.setState({ searchText: event.target.value });
+	handleSearchInput = event => this.setState({ searchText: event.target.value })
 
 	render() {
-		const { songs } = this.props;
-		const { searchText } = this.state;
+		const { songs } = this.props
+		const { searchText } = this.state
 
-		const filteredSongs = songs.filter( this.filterSongs );
+		const filteredSongs = songs.filter(this.filterSongs)
 		//const isAddToSet = /\/add-to-set\//.test( path );
-		const isAddToSet = /\/add-to-set\//.test(window.location.href);
+		const isAddToSet = /\/add-to-set\//.test(window.location.href)
 
 		return (
 			<div>
@@ -110,7 +107,7 @@ class SongList extends Component {
 
 									<Grid item>
 										<Button
-										 	to="/songs/new"
+											to="/songs/new"
 											component={Link}
 											color="primary"
 											variant="contained"
@@ -130,9 +127,7 @@ class SongList extends Component {
 							<Hidden only="xs">
 								<TableCell>Author</TableCell>
 							</Hidden>
-							{isAddToSet && (
-								<TableCell>Action</TableCell>
-							)}
+							{isAddToSet && <TableCell>Action</TableCell>}
 						</TableRow>
 					</TableHead>
 
@@ -164,8 +159,8 @@ class SongList extends Component {
 					</TableBody>
 				</Table>
 			</div>
-		);
+		)
 	}
 }
 
-export default SongList;
+export default SongList

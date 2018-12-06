@@ -16,14 +16,14 @@ import Typography from '@material-ui/core/Typography'
 import ContentLimiter from './ContentLimiter'
 import DateSignifier from './DateSignifier'
 import Hero from './Hero'
-import SetLink from '../app/sets/SetLink'
+import SetLink from './SetLink'
 
 import { Magnify as MagnifyIcon } from 'mdi-material-ui'
 
 class SetList extends Component {
 	state = {
-		searchText: '',
-	};
+		searchText: ''
+	}
 
 	componentDidMount() {
 		//Set the page title to make it easier to locate
@@ -35,13 +35,13 @@ class SetList extends Component {
 			set.title.toLowerCase().includes(this.state.searchText) ||
 			set.author.toLowerCase().includes(this.state.searchText)
 		)
-	};
+	}
 
 	handleSearchChange = event => {
 		this.setState({
-			searchText: event.target.value,
+			searchText: event.target.value
 		})
-	};
+	}
 
 	render() {
 		const { setFocusedSet, sets = [] } = this.props
@@ -58,11 +58,7 @@ class SetList extends Component {
 								</Typography>
 							</Grid>
 							<Grid item>
-								<Grid
-									container
-									spacing={16}
-									alignItems="center"
-								>
+								<Grid container spacing={16} alignItems="center">
 									<Grid item>
 										<TextField
 											color="inherit"
@@ -74,16 +70,13 @@ class SetList extends Component {
 													<InputAdornment position="end">
 														<MagnifyIcon />
 													</InputAdornment>
-												),
+												)
 											}}
 										/>
 									</Grid>
 									<Grid item>
 										<Link to="/sets/new">
-											<Button
-												color="primary"
-												variant="contained"
-											>
+											<Button color="primary" variant="contained">
 												New set
 											</Button>
 										</Link>
@@ -103,30 +96,24 @@ class SetList extends Component {
 						</TableHead>
 
 						<TableBody>
-							{reverse(
-								sortBy(sets.filter(this.filterSets), 'setDate')
-							).map(set => (
-								<TableRow key={set.id}>
-									<TableCell>
-										<DateSignifier date={set.setDate} />
-									</TableCell>
+							{reverse(sortBy(sets.filter(this.filterSets), 'setDate')).map(
+								set => (
+									<TableRow key={set.id}>
+										<TableCell>
+											<DateSignifier date={set.setDate} />
+										</TableCell>
 
-									<TableCell>
-										<SetLink
-											setFocusedSet={setFocusedSet}
-											set={set}
-										>
-											<Typography
-												variant="title"
-												gutterBottom
-											>
-												{set.title}
-											</Typography>
-										</SetLink>
-										<Typography>{set.author}</Typography>
-									</TableCell>
-								</TableRow>
-							))}
+										<TableCell>
+											<SetLink setFocusedSet={setFocusedSet} set={set}>
+												<Typography variant="title" gutterBottom>
+													{set.title}
+												</Typography>
+											</SetLink>
+											<Typography>{set.author}</Typography>
+										</TableCell>
+									</TableRow>
+								)
+							)}
 						</TableBody>
 					</Table>
 				</ContentLimiter>
