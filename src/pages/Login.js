@@ -21,7 +21,9 @@ const styles = theme => ({
 	root: {
 		backgroundColor: theme.heroBackgroundColor,
 		display: 'flex',
-		flexGrow: 1
+		flexGrow: 1,
+		height: '90vh',
+		paddingTop: '5vh'
 	},
 	container: {
 		flexGrow: 1
@@ -136,41 +138,19 @@ class Login extends Component {
 
 		return (
 			<div className={classes.root}>
-				<Grid
-					container
-					className={classes.container}
-					alignItems="center"
-					justify="center"
-				>
+				<Grid container className={classes.container} justify="center">
 					<form onSubmit={this.handleLogin}>
 						<Paper className={classes.form} elevation={10}>
 							<Grid container alignItems="center" direction="column">
+								{/* de-styled according to "facebook button without styling" https://www.npmjs.com/package/react-facebook-login */}
+
 								<img
 									src={chordboardLogo}
-									height="44px"
+									height="112px"
 									className={cx(
 										classes.addPaddingTop,
 										classes.addPaddingBottom
 									)}
-								/>
-
-								<Typography
-									variant="title"
-									className={classes.addPaddingBottom}
-								>
-									Please Log In
-								</Typography>
-
-								{/* de-styled according to "facebook button without styling" https://www.npmjs.com/package/react-facebook-login */}
-
-								<TextField
-									id="email"
-									label="Email"
-									className={classes.textField}
-									fullWidth
-									value={email}
-									onChange={this.handleEmailChange}
-									margin="normal"
 								/>
 
 								<TextField
@@ -180,6 +160,16 @@ class Login extends Component {
 									fullWidth
 									value={name}
 									onChange={this.handleNameChange}
+									margin="normal"
+								/>
+
+								<TextField
+									id="email"
+									label="Email"
+									className={cx(classes.textField, classes.addPaddingBottom)}
+									fullWidth
+									value={email}
+									onChange={this.handleEmailChange}
 									margin="normal"
 								/>
 
