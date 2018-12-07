@@ -230,7 +230,7 @@ class SetViewer extends Component {
 											<DateSignifier date={set.setDate} />
 										</Grid>
 										<Grid item>
-											<Typography variant="h2" gutterBottom>
+											<Typography variant="h6" gutterBottom>
 												{set.title}
 											</Typography>
 											<Typography gutterBottom>{set.author}</Typography>
@@ -275,7 +275,7 @@ class SetViewer extends Component {
 											<TableCell />
 
 											<TableCell>
-												<Typography variant="h2">
+												<Typography variant="h6">
 													This set has no songs
 												</Typography>
 											</TableCell>
@@ -313,7 +313,7 @@ class SetViewer extends Component {
 			<TableRow key={song._id}>
 				<TableCell>
 					<Link to={`/sets/${set._id}/songs/${song._id}`}>
-						<Typography variant="h2" gutterBottom>
+						<Typography variant="h6" gutterBottom>
 							{songCount + 1}. {song.title}
 						</Typography>
 					</Link>

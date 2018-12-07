@@ -125,7 +125,7 @@ class SongList extends Component {
 						{filteredSongs.map(song => (
 							<TableRow key={song.id}>
 								<TableCell>
-									<Typography variant="h2" gutterBottom>
+									<Typography variant="h6" gutterBottom>
 										<a href={`/songs/${song.id}`}>{song.title}</a>
 									</Typography>
 								</TableCell>

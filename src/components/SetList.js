@@ -105,7 +105,7 @@ class SetList extends Component {
 
 										<TableCell>
 											<SetLink setFocusedSet={setFocusedSet} set={set}>
-												<Typography variant="h2" gutterBottom>
+												<Typography variant="h6" gutterBottom>
 													{set.title}
 												</Typography>
 											</SetLink>
