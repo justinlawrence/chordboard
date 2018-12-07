@@ -2,10 +2,18 @@ import { combineReducers } from 'redux'
 import merge from 'lodash/fp/merge'
 import reduce from 'lodash/fp/reduce'
 
-import { FETCH_SONGS_SUCCESS, MERGE_SONGS, SET_SONG } from '../actions'
+import { DELETE_SONG, MERGE_SONGS, SET_SONG } from '../actions'
 
 const byId = (state = {}, action = {}) => {
 	switch (action.type) {
+	case DELETE_SONG:
+		return reduce((acc, song) => {
+			if (song.id !== action.payload) {
+				acc[song.id] = song
+			}
+			return acc
+		})({})(state)
+
 	case MERGE_SONGS:
 		return reduce((acc, song) => {
 			acc[song.id] = acc[song.id] ? merge(acc[song.id])(song) : song
@@ -15,20 +23,14 @@ const byId = (state = {}, action = {}) => {
 	case SET_SONG:
 		return {
 			...state,
-			[action.song._id]: action.song
+			[action.song.id]: action.song
 		}
-
-	case FETCH_SONGS_SUCCESS:
-		return reduce((acc, song) => {
-			acc[song.id] = song
-			return acc
-		})({ ...state })(action.payload.songs)
 
 	default:
 		return state
 	}
 }
 
-export const song = combineReducers({
+export const songs = combineReducers({
 	byId
 })

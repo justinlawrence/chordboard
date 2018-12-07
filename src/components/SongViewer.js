@@ -93,8 +93,8 @@ class SongViewer extends Component {
 
 		this.handleProps(this.props)
 
-		const songId = this.props.song._id
-		const setId = this.props.currentSet._id
+		const songId = this.props.song.id
+		const setId = this.props.currentSet.id
 
 		console.log('songId', songId)
 		console.log('setId', setId)
@@ -287,10 +287,8 @@ class SongViewer extends Component {
 						<ContentLimiter>
 							<Grid container className={classes.root} justify="space-between">
 								<Grid item xs={12} sm={8}>
-									<Typography variant="display1" color="inherit">
-										{song.title}
-									</Typography>
-									<Typography variant="subheading">{song.author}</Typography>
+									<Typography variant="h4">{song.title}</Typography>
+									<Typography variant="h5">{song.author}</Typography>
 								</Grid>
 
 								<Grid item xs={12} sm={4} className="no-print">
@@ -317,7 +315,7 @@ class SongViewer extends Component {
 										<Tooltip title="Edit song">
 											<IconButton
 												className={classes.button}
-												href={`/songs/${song._id}/edit`}
+												href={`/songs/${song.id}/edit`}
 											>
 												<PencilIcon />
 											</IconButton>
@@ -344,9 +342,9 @@ class SongViewer extends Component {
 												{setListActive.map(set => (
 													<ListItem
 														button
-														key={set._id}
+														key={set.id}
 														onClick={this.createAddToSetHandler(set)}
-														value={set._id}
+														value={set.id}
 													>
 														<Avatar>
 															<ImageIcon />
@@ -398,7 +396,7 @@ class SongViewer extends Component {
 								<Grid item xs={12}>
 									<Grid container spacing={16}>
 										<Grid item xs={6}>
-											<Typography variant="subheading">Capo Key</Typography>
+											<Typography variant="h5">Capo Key</Typography>
 										</Grid>
 
 										<Grid item xs={6}>
@@ -426,7 +424,7 @@ class SongViewer extends Component {
 								<Grid item xs={12}>
 									<Grid container spacing={16}>
 										<Grid item xs={6}>
-											<Typography variant="subheading">Word Size</Typography>
+											<Typography variant="h5">Word Size</Typography>
 										</Grid>
 
 										<Grid item xs={6}>
@@ -450,7 +448,7 @@ class SongViewer extends Component {
 								<Grid item xs={12}>
 									<Grid container spacing={16}>
 										<Grid item xs={6}>
-											<Typography variant="subheading">Chord Size</Typography>
+											<Typography variant="h5">Chord Size</Typography>
 										</Grid>
 
 										<Grid item xs={6}>
@@ -474,9 +472,7 @@ class SongViewer extends Component {
 								<Grid item xs={12}>
 									<Grid container spacing={16}>
 										<Grid item xs={6}>
-											<Typography variant="subheading">
-												Nashville Numbering
-											</Typography>
+											<Typography variant="h5">Nashville Numbering</Typography>
 										</Grid>
 
 										<Grid item xs={6}>

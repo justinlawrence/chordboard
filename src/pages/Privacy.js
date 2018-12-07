@@ -26,9 +26,7 @@ class Privacy extends Component {
 				<ContentLimiter>
 					<Grid container justify="space-between">
 						<Grid item>
-							<Typography variant="display1" color="inherit">
-								Privacy
-							</Typography>
+							<Typography variant="h4">Privacy</Typography>
 						</Grid>
 
 						<Paper className={classes.form} component="form">
@@ -194,7 +192,7 @@ class Privacy extends Component {
 								using the Google Analytics Opt Out Browser add on.
 							</Typography>
 
-							<Typography variant="display1">
+							<Typography variant="h4">
 								California Online Privacy Protection Act
 							</Typography>
 
@@ -261,7 +259,7 @@ class Privacy extends Component {
 								behavioral tracking
 							</Typography>
 
-							<Typography variant="display1">
+							<Typography variant="h4">
 								COPPA (Children Online Privacy Protection Act)
 							</Typography>
 
@@ -285,9 +283,7 @@ class Privacy extends Component {
 								collect PII from children under 13?
 							</Typography>
 
-							<Typography variant="display1">
-								Fair Information Practices
-							</Typography>
+							<Typography variant="h4">Fair Information Practices</Typography>
 
 							<Typography>
 								The Fair Information Practices Principles form the backbone of

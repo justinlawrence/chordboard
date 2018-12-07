@@ -155,7 +155,7 @@ class Login extends Component {
 								/>
 
 								<Typography
-									variant="title"
+									variant="h2"
 									className={classes.addPaddingBottom}
 								>
 									Please Log In

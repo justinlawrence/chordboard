@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { isNil } from 'lodash'
+import { connect } from 'react-redux'
 import slugify from 'slugify'
 import Textarea from 'react-textarea-autosize'
 
@@ -13,6 +15,7 @@ import Typography from '@material-ui/core/Typography'
 import { db } from '../database'
 import { parseSong } from './SongViewer'
 
+import * as actions from '../redux/actions'
 import ContentLimiter from './ContentLimiter'
 import Hero from './Hero'
 import Song from '../utils/Song'
@@ -40,58 +43,40 @@ const styles = theme => ({
 })
 
 class SongEditor extends Component {
+	static propTypes = {
+		classes: PropTypes.object,
+		id: PropTypes.string,
+		match: PropTypes.object,
+		history: PropTypes.object,
+		// Redux props
+		addSong: PropTypes.func.isRequired,
+		deleteSong: PropTypes.func.isRequired,
+		song: PropTypes.object,
+		updateSong: PropTypes.func.isRequired
+	}
+
 	state = {
 		author: '',
-		isLoading: false,
-		title: '',
-		key: '',
 		content: '',
-		parserType: 'chords-above-words',
-		song: null
+		isLoading: false,
+		key: '',
+		title: '',
+		parserType: 'chords-above-words'
 	}
 
 	componentDidMount() {
-		this.handleProps(this.props)
+		this.updateSongState()
 	}
 
-	componentWillReceiveProps(nextProps) {
-		this.handleProps(nextProps)
+	componentDidUpdate(prevProps) {
+		const { song } = this.props
+		if (!song || !prevProps.song || song.id !== prevProps.song.id) {
+			this.updateSongState()
+		}
 	}
 
 	handleParserChange = event => {
 		this.setState({ parserType: event.target.value })
-	}
-
-	handleProps = props => {
-		this.setState({ isLoading: true })
-
-		if (props.id) {
-			db.get(props.id)
-				.then(doc => {
-					const song = new Song(doc)
-
-					this.setState({
-						author: song.author,
-						isLoading: false,
-						title: song.title,
-						key: song.key,
-						content: song.content,
-						song: song
-					})
-				})
-				.catch(err => {
-					console.error('SongViewer.handleProps -', err)
-
-					this.setState({
-						author: '',
-						isLoading: false,
-						title: '',
-						key: '',
-						content: '',
-						song: null
-					})
-				})
-		}
 	}
 
 	onAuthorInput = event => {
@@ -100,8 +85,7 @@ class SongEditor extends Component {
 
 	onContentInput = event => {
 		const content = event.target.value
-		const song = Object.assign({}, this.state.song, { content })
-		this.setState({ content, song })
+		this.setState({ content })
 	}
 
 	onTitleInput = event => {
@@ -114,103 +98,72 @@ class SongEditor extends Component {
 
 	onDeleteSong = () => {
 		if (window.confirm('Are you very sure you want to delete this song?')) {
-			db.remove(this.state.song._id, this.state.song._rev)
-				.then(() => {
-					if (this.props.history) {
-						this.props.history.push({ pathname: '/songs' })
-					}
-				})
-				.catch(err => {
-					alert('Unable to delete song')
-					console.warn(err)
-				})
+			this.props.deleteSong(this.props.song.id)
+			if (this.props.history) {
+				this.props.history.push({ pathname: '/songs' })
+			}
 		}
 	}
 
-	HandleCancel = () => {
+	handleCancel = () => {
 		if (this.props.history) {
 			this.props.history.goBack()
 		}
 	}
 
 	onSaveSong = () => {
-		const { author, parserType, title, key, song } = this.state
-		const isNew = !song || isNil(song._id)
+		const { song } = this.props
+		const { author, parserType, title, key } = this.state
+		const isNew = !song || isNil(song.id)
 		let content = this.state.content
 
 		if (parserType === 'chordpro') {
 			content = chordproParser(content)
 		}
 
+		const newSong = {
+			author,
+			content,
+			key,
+			title
+		}
+
 		if (isNew) {
-			db.post({
-				type: 'song',
-				users: ['justin'], //TODO
-				slug: slugify(title),
-				author: author,
-				title: title,
-				key: key,
-				content: content
-			})
-				.then(() => {
-					if (this.props.history) {
-						this.props.history.goBack()
-					}
-				})
-				.catch(err => {
-					if (err.name === 'conflict') {
-						console.error('SongEditor.onSaveSong: conflict -', err)
-					} else {
-						console.error('SongEditor.onSaveSong -', err)
-					}
-				})
+			this.props.addSong(newSong)
 		} else {
-			//existing
+			this.props.updateSong(song.id, newSong)
+		}
 
-			const data = Object.assign({}, song)
+		// TODO: change this because it seems to cause a refresh
+		if (this.props.history) {
+			//this.props.history.goBack()
+		}
+	}
 
-			data.author = author
-			data.content = content
-			data.slug = slugify(title)
-			data.title = title
-			data.key = key
-
-			console.log('existing: id', song._id, 'rev', song._rev)
-			console.log(this.props)
-			db.put(data)
-				.then(data => {
-					this.setState({
-						song: Object.assign({}, this.state.song, { _rev: data.rev })
-					})
-
-					//TODO: add toast updated message
-					//alert( 'Updated successfully!' );
-
-					if (this.props.history) {
-						this.props.history.goBack()
-					}
-				})
-				.catch(err => {
-					if (err.name === 'conflict') {
-						console.error('SongEditor.onSaveSong: conflict -', err)
-					} else {
-						console.error('SongEditor.onSaveSong -', err)
-					}
-				})
+	updateSongState = () => {
+		const { song } = this.props
+		if (song) {
+			this.setState({
+				author: song.author,
+				content: song.content,
+				key: song.key,
+				title: song.title
+			})
 		}
 	}
 
 	render() {
-		const { classes } = this.props
-		const { author, title, key, content, parserType, song } = this.state
+		const { classes, match } = this.props
+		const { author, content, key, title, parserType } = this.state
 
-		const songCopy = Object.assign({}, song)
+		const isNew = match.path === '/songs/new'
 
+		let parsedContent = content
 		if (parserType === 'chordpro') {
-			songCopy.content = chordproParser(songCopy.content)
+			parsedContent = chordproParser(content)
 		}
 		const parser = new Parser()
-		const previewSong = parseSong(parser.parse(songCopy.content), [])
+		const previewSong = parseSong(parser.parse(parsedContent), [])
 
 		return (
 			<div className="song-editor">
@@ -230,9 +183,9 @@ class SongEditor extends Component {
 												label="Song title"
 												className={classes.textField}
 												fullWidth
-												value={title}
 												onChange={this.onTitleInput}
 												margin="normal"
+												value={title}
 											/>
 										</Grid>
 										<Grid item xs={12}>
@@ -241,9 +194,9 @@ class SongEditor extends Component {
 												label="Authors (comma separated)"
 												className={classes.textField}
 												fullWidth
-												value={author}
 												onChange={this.onAuthorInput}
 												margin="normal"
+												value={author}
 											/>
 										</Grid>
 										<Grid item xs={12}>
@@ -252,15 +205,15 @@ class SongEditor extends Component {
 												label="Key"
 												className={classes.textField}
 												fullWidth
-												value={key}
 												onChange={this.onKeyInput}
 												margin="normal"
+												value={key}
 											/>
 										</Grid>
 										<Grid item xs={4}>
 											<select
 												onChange={this.handleParserChange}
-												value={this.state.parserType}
+												value={parserType}
 											>
 												<option value="chords-above-words">
 													Chords above words
@@ -270,11 +223,13 @@ class SongEditor extends Component {
 										</Grid>
 										<Grid item xs={8}>
 											<Grid container justify="flex-end">
-												<Button onClick={this.onDeleteSong} color="primary">
-													Delete
-												</Button>
+												{!isNew && (
+													<Button onClick={this.onDeleteSong} color="primary">
+														Delete
+													</Button>
+												)}
 
-												<Button onClick={this.HandleCancel}>Cancel</Button>
+												<Button onClick={this.handleCancel}>Cancel</Button>
 
 												<Button
 													onClick={this.onSaveSong}
@@ -310,9 +265,9 @@ class SongEditor extends Component {
 								{/* TODO: DELETE this if the textarea below is working nicely <textarea className="textarea song-editor__content" onInput={this.onContentInput} placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:" value={content} rows="25"></textarea> */}
 								<Textarea
 									className="textarea song-editor__content"
-									onInput={this.onContentInput}
+									onChange={this.onContentInput}
 									placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:"
-									value={content}
+									value={parsedContent}
 								/>
 							</Grid>
 
@@ -351,4 +306,11 @@ class SongEditor extends Component {
 	}
 }
 
-export default withStyles(styles)(SongEditor)
+const mapStateToProps = (state, ownProps) => ({
+	song: state.songs.byId[ownProps.id]
+})
+
+export default connect(
+	mapStateToProps,
+	actions
+)(withStyles(styles)(SongEditor))

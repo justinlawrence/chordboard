@@ -51,19 +51,16 @@ class SetList extends Component {
 			<div>
 				<Hero>
 					<ContentLimiter>
-						<Grid container justify="space-between">
+						<Grid container alignItems="center" justify="space-between">
 							<Grid item>
-								<Typography variant="display1" color="inherit">
-									Sets
-								</Typography>
+								<Typography variant="h4">Sets</Typography>
 							</Grid>
 							<Grid item>
-								<Grid container spacing={16} alignItems="center">
+								<Grid container alignItems="center" spacing={16}>
 									<Grid item>
 										<TextField
-											color="inherit"
-											label="Titles, authors"
 											onChange={this.handleSearchChange}
+											placeholder="Titles, authors"
 											value={searchText}
 											InputProps={{
 												endAdornment: (
@@ -75,11 +72,14 @@ class SetList extends Component {
 										/>
 									</Grid>
 									<Grid item>
-										<Link to="/sets/new">
-											<Button color="primary" variant="contained">
-												New set
-											</Button>
-										</Link>
+										<Button
+											to="/sets/new"
+											component={Link}
+											color="primary"
+											variant="contained"
+										>
+											New set
+										</Button>
 									</Grid>
 								</Grid>
 							</Grid>
@@ -105,7 +105,7 @@ class SetList extends Component {
 
 										<TableCell>
 											<SetLink setFocusedSet={setFocusedSet} set={set}>
-												<Typography variant="title" gutterBottom>
+												<Typography variant="h2" gutterBottom>
 													{set.title}
 												</Typography>
 											</SetLink>

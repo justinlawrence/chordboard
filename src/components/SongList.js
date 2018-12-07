@@ -1,21 +1,22 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
+import includes from 'lodash/fp/includes'
+import toLower from 'lodash/fp/toLower'
+
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Hidden from '@material-ui/core/Hidden'
-import InputAdornment from '@material-ui/core/InputAdornment'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
-import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import { Magnify as MagnifyIcon } from 'mdi-material-ui'
 
 import ContentLimiter from './ContentLimiter'
 import Hero from './Hero'
+import SearchBox from './SearchBox'
 
 class SongList extends Component {
 	state = {
@@ -59,18 +60,18 @@ class SongList extends Component {
 	}
 
 	filterSongs = song => {
+		const contains = includes(toLower(this.state.searchText))
 		return (
-			song.title.toLowerCase().includes(this.state.searchText) ||
-			song.content.toLowerCase().includes(this.state.searchText) ||
-			song.author.toLowerCase().includes(this.state.searchText)
+			contains(toLower(song.title)) ||
+			contains(toLower(song.content)) ||
+			contains(toLower(song.author))
 		)
 	}
 
-	handleSearchInput = event => this.setState({ searchText: event.target.value })
+	handleSearch = searchText => this.setState({ searchText })
 
 	render() {
 		const { songs } = this.props
-		const { searchText } = this.state
 
 		const filteredSongs = songs.filter(this.filterSongs)
 		//const isAddToSet = /\/add-to-set\//.test( path );
@@ -80,28 +81,17 @@ class SongList extends Component {
 			<div>
 				<Hero>
 					<ContentLimiter>
-						<Grid container justify="space-between">
+						<Grid container alignItems="center" justify="space-between">
 							<Grid item>
-								<Typography color="inherit" variant="display1">
-									Songs
-								</Typography>
+								<Typography variant="h4">Songs</Typography>
 							</Grid>
 
 							<Grid item>
 								<Grid container alignItems="center" spacing={16}>
 									<Grid item>
-										<TextField
-											color="inherit"
-											label="Titles, words, authors"
-											onChange={this.handleSearchInput}
-											value={searchText}
-											InputProps={{
-												endAdornment: (
-													<InputAdornment position="end">
-														<MagnifyIcon />
-													</InputAdornment>
-												)
-											}}
+										<SearchBox
+											onSearch={this.handleSearch}
+											placeholder="Titles, words, authors"
 										/>
 									</Grid>
 
@@ -135,7 +125,7 @@ class SongList extends Component {
 						{filteredSongs.map(song => (
 							<TableRow key={song.id}>
 								<TableCell>
-									<Typography variant="title" gutterBottom>
+									<Typography variant="h2" gutterBottom>
 										<a href={`/songs/${song.id}`}>{song.title}</a>
 									</Typography>
 								</TableCell>
