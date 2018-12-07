@@ -7,24 +7,24 @@ http://colorhunt.co/c/114174
 
 const defaultTheme = {
 	typography: {
-		useNextVariants: true,
+		useNextVariants: true
 	},
 	palette: {
 		primary: {
 			main: '#F73859', //fab
-			contrastText: '#fff',
+			contrastText: '#fff'
 		},
 		secondary: {
 			main: '#fff', //nav was 283149 then fff
-			contrastText: '#000', //was fff then 000
-		},
+			contrastText: '#000' //was fff then 000
+		}
 	},
 
 	// Custom values
 	maxPageWidth: 1344,
 
-	heroBackgroundColor: '#F6F9FC', //hero was #dbedf3m then f5f5f5
-	heroContrastText: '#000',
+	heroBackgroundColor: '#f0f4fc', //hero was #dbedf3m then f5f5f5
+	heroContrastText: '#000'
 }
 
 /*
