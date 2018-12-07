@@ -287,7 +287,7 @@ class SongViewer extends Component {
 						<ContentLimiter>
 							<Grid container className={classes.root} justify="space-between">
 								<Grid item xs={12} sm={8}>
-									<Typography variant="display1" color="inherit">
+									<Typography variant="h4" color="inherit">
 										{song.title}
 									</Typography>
 									<Typography variant="subheading">{song.author}</Typography>

@@ -53,7 +53,7 @@ class SetList extends Component {
 					<ContentLimiter>
 						<Grid container justify="space-between">
 							<Grid item>
-								<Typography variant="display1" color="inherit">
+								<Typography variant="h4" color="inherit">
 									Sets
 								</Typography>
 							</Grid>

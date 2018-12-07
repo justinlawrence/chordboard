@@ -82,7 +82,7 @@ class SongList extends Component {
 					<ContentLimiter>
 						<Grid container justify="space-between">
 							<Grid item>
-								<Typography color="inherit" variant="display1">
+								<Typography color="inherit" variant="h4">
 									Songs
 								</Typography>
 							</Grid>
