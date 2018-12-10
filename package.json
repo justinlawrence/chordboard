@@ -40,8 +40,8 @@
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"deploy": "npm run clean && npm run build && rsync -azP --delete ./build/ irjweb:/var/www/chordboard",
-		"deploy:beta": "npm run clean && npm run build && rsync -azP --delete ./build/ irjweb:/var/www/chordboard-beta"
+		"deploy": "npm run build && rsync -azP --delete ./build/ irjweb:/var/www/chordboard",
+		"deploy:beta": "npm run build && rsync -azP --delete ./build/ irjweb:/var/www/chordboard-beta"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
