@@ -17,11 +17,11 @@ import TableRow from '@material-ui/core/TableRow'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import {
-	Minus as MinusIcon,
-	Plus as PlusIcon,
 	ArrowUp as ArrowUpIcon,
 	ArrowDown as ArrowDownIcon,
-	Delete as DeleteIcon
+	Delete as DeleteIcon,
+	Minus as MinusIcon,
+	Plus as PlusIcon
 } from 'mdi-material-ui'
 
 import DateSignifier from './DateSignifier'

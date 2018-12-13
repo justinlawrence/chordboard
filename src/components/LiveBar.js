@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { find, findIndex } from 'lodash'
 import { Link, matchPath, withRouter } from 'react-router-dom'
 
@@ -35,6 +36,12 @@ const styles = theme => ({
 })
 
 class LiveBar extends Component {
+	static propTypes = {
+		classes: PropTypes.object,
+		onGoToNextSong: PropTypes.func,
+		onGoToPreviousSong: PropTypes.func
+	}
+
 	state = {
 		nextSongKey: '',
 		nextSongTitle: '',
@@ -114,12 +121,7 @@ class LiveBar extends Component {
 	}
 
 	render() {
-		const {
-			onExitLiveMode,
-			onGoToNextSong,
-			onGoToPreviousSong,
-			classes
-		} = this.props
+		const { onGoToNextSong, onGoToPreviousSong, classes } = this.props
 
 		const {
 			currentSong,

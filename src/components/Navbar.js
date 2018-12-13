@@ -31,7 +31,7 @@ class Navbar extends React.Component {
 		classes: PropTypes.object,
 		history: PropTypes.object,
 		// Redux props
-		setCurrentUser: PropTypes.object
+		setCurrentUser: PropTypes.func.isRequired
 	}
 
 	logout = () => {

@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 import { format, isBefore } from 'date-fns'
-import cx from 'classnames';
+import cx from 'classnames'
 
-import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles'
+import Grid from '@material-ui/core/Grid'
+import Paper from '@material-ui/core/Paper'
 
 const styles = theme => ({
 	root: {
@@ -23,7 +23,7 @@ const styles = theme => ({
 		textAlign: 'center'
 	},
 	monthPast: {
-		backgroundColor: theme.palette.grey[ 400 ],
+		backgroundColor: theme.palette.grey[400]
 	},
 	divider: {
 		borderBottom: `1px dotted ${theme.palette.divider}`,
@@ -37,33 +37,35 @@ const styles = theme => ({
 	day: {
 		fontSize: theme.typography.caption.fontSize,
 		fontWeight: 600,
-		textAlign: 'center',
+		textAlign: 'center'
 	}
-});
+})
 
-const DateSignifier = ( { classes, date } ) => (
+const DateSignifier = ({ classes, date }) => (
 	<Paper className={classes.root}>
 		<Grid container direction="column">
-			<Grid item className={cx(
-				classes.month,
-				{ [ classes.monthPast ]: isBefore( date, new Date() ) }
-			)}>
-				{format( date, 'MMM' )}
+			<Grid
+				item
+				className={cx(classes.month, {
+					[classes.monthPast]: isBefore(date, new Date())
+				})}
+			>
+				{format(date, 'MMM')}
 			</Grid>
 			<Grid item className={classes.date}>
-				{format( date, 'D' )}
+				{format(date, 'd')}
 			</Grid>
-			<Grid item className={classes.divider}/>
+			<Grid item className={classes.divider} />
 			<Grid item className={classes.day}>
-				{format( date, 'ddd' )}
+				{format(date, 'EEE')}
 			</Grid>
 		</Grid>
 	</Paper>
-);
+)
 
 DateSignifier.propTypes = {
 	classes: PropTypes.object,
 	date: PropTypes.string.isRequired
 }
 
-export default withStyles( styles )( DateSignifier );
+export default withStyles(styles)(DateSignifier)

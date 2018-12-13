@@ -34,8 +34,8 @@ function* handleAddSong({ payload: newSong }) {
 	yield put(
 		mergeSongs([
 			{
-				id: song.id,
-				...song.data()
+				...newSong,
+				id: song.id
 			}
 		])
 	)

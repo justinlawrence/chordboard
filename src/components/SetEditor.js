@@ -18,23 +18,24 @@
 */
 
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import slugify from 'slugify'
-import PouchDB from 'pouchdb'
+import { format } from 'date-fns'
 
 import { withStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
 import Paper from '@material-ui/core/Paper'
 
+import * as actions from '../redux/actions'
 import ContentLimiter from './ContentLimiter'
 import Hero from './Hero'
+import SetFormContainer from '../containers/SetFormContainer'
 
 const styles = theme => ({
 	root: {
 		flexGrow: 1
 	},
 	form: theme.mixins.gutters({
+		maxWidth: theme.spacing.keyline * 8,
 		paddingBottom: theme.spacing.unit * 2,
 		paddingTop: theme.spacing.unit * 2
 	}),
@@ -46,98 +47,44 @@ const styles = theme => ({
 	}
 })
 
-const db = new PouchDB('chordboard')
-
 class SetEditor extends Component {
-	state = {
-		title: '',
-		setDate: ''
+	static propTypes = {
+		classes: PropTypes.object,
+		history: PropTypes.object,
+		// Redux props
+		addSet: PropTypes.func.isRequired
 	}
 
-	onTitleInput = event => {
-		this.setState({ title: event.target.value })
+	handleFormCancel = () => {
+		if (this.props.history) {
+			this.props.history.goBack()
+		}
 	}
 
-	onSetDateInput = event => {
-		this.setState({ setDate: event.target.value })
-	}
-
-	onSaveSet = () => {
-		const { user } = this.props
-		const { title } = this.state
-		const { setDate } = this.state
-
-		db.post({
-			type: 'set',
-			author: user.name,
-			slug: slugify(title),
-			title: title,
-			setDate: setDate,
-			songs: []
-		}).then(doc => {
-			PouchDB.sync(
-				'chordboard',
-				'https://justinlawrence:cXcmbbLFO8@couchdb.cloudno.de/chordboard'
-			)
-
-			if (this.props.history) {
-				this.props.history.push({
-					pathname: `/sets/${doc.id}`
-				})
-			}
+	handleFormSubmit = setData => {
+		this.props.addSet({
+			title: setData.title,
+			setDate: format(setData.date, 'yyyy-MM-dd')
 		})
+		if (this.props.history) {
+			this.props.history.push({
+				pathname: '/sets'
+			})
+		}
 	}
 
 	render() {
 		const { classes } = this.props
-		const { title, setDate } = this.state
 
 		return (
 			<div className="set-editor">
 				<Hero>
 					<ContentLimiter>
-						<Paper className={classes.form} component="form">
-							<div className="columns">
-								<div className="column is-three-quarters">
-									<div className="field">
-										<p className="control has-icons-left">
-											<TextField
-												id="title"
-												label="Set title"
-												className={classes.textField}
-												fullWidth="fullWidth"
-												value={title}
-												onChange={this.onTitleInput}
-												margin="normal"
-											/>
-										</p>
-									</div>
-									<div className="field">
-										<p className="control has-icons-left">
-											<TextField
-												id="date"
-												label="Set date"
-												type="date"
-												className={classes.textField}
-												fullWidth
-												onChange={this.onSetDateInput}
-												InputLabelProps={{
-													shrink: true
-												}}
-												value={setDate}
-											/>
-										</p>
-									</div>
-								</div>
-
-								<Button
-									onClick={this.onSaveSet}
-									color="primary"
-									variant="contained"
-								>
-									Save
-								</Button>
-							</div>
+						<Paper className={classes.form}>
+							<SetFormContainer
+								onCancel={this.handleFormCancel}
+								onSubmit={this.handleFormSubmit}
+							/>
 						</Paper>
 					</ContentLimiter>
 				</Hero>
@@ -150,4 +97,7 @@ const mapStateToProps = state => ({
 	user: state.user
 })
 
-export default connect(mapStateToProps)(withStyles(styles)(SetEditor))
+export default connect(
+	mapStateToProps,
+	actions
+)(withStyles(styles)(SetEditor))

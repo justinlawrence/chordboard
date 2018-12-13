@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import * as Sentry from '@sentry/browser'
+import DateFnsUtils from '@date-io/date-fns'
+import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
@@ -33,7 +35,9 @@ ReactDOM.render(
 	<Provider store={store}>
 		<BrowserRouter>
 			<MuiThemeProvider theme={theme}>
-				<App />
+				<MuiPickersUtilsProvider utils={DateFnsUtils}>
+					<App />
+				</MuiPickersUtilsProvider>
 			</MuiThemeProvider>
 		</BrowserRouter>
 	</Provider>,
