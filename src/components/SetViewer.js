@@ -1,20 +1,20 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { find, findIndex } from 'lodash'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import PouchDB from 'pouchdb'
 
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
+import Grow from '@material-ui/core/Grow'
 import IconButton from '@material-ui/core/IconButton'
-import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
-import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import {
 	ArrowUp as ArrowUpIcon,
@@ -24,9 +24,11 @@ import {
 	Plus as PlusIcon
 } from 'mdi-material-ui'
 
+import * as actions from '../redux/actions'
 import DateSignifier from './DateSignifier'
 import Hero from './Hero'
 import KeySelector from './KeySelector'
+import SetFormContainer from '../containers/SetFormContainer'
 
 const styles = theme => ({
 	container: {
@@ -50,21 +52,21 @@ const db = new PouchDB('chordboard')
 
 class SetViewer extends Component {
 	static propTypes = {
+		classes: PropTypes.object,
 		history: PropTypes.object,
 		onChangeKey: PropTypes.func,
 		onRemoveSet: PropTypes.func,
 		onRemoveSong: PropTypes.func,
 		onSongMove: PropTypes.func,
 		set: PropTypes.object.isRequired,
-		user: PropTypes.object
+		user: PropTypes.object,
+		// Redux props
+		updateSet: PropTypes.func.isRequired
 	}
 
 	state = {
 		isLoading: false,
-		mode: '',
-		title: '',
-		author: '',
-		setDate: ''
+		mode: ''
 	}
 
 	componentDidMount() {
@@ -78,41 +80,12 @@ class SetViewer extends Component {
 	handleProps = props => {
 		const { set } = props
 		console.log('SetViewer.handleProps - set', set)
-		this.setState({
-			title: set.title,
-			author: set.author,
-			setDate: set.setDate
-		})
 		document.title = 'Set: ' + set.title
 	}
 
-	handleDateChange = event => {
-		this.setState({ setDate: event.target.value })
-	}
-	onTitleInput = event => {
-		this.setState({ title: event.target.value })
-	}
-	onAuthorInput = event => {
-		this.setState({ author: event.target.value })
-	}
-
-	handleSaveSet = () => {
-		const { title, author, setDate } = this.state
-
-		db.get(this.props.set._id).then(doc => {
-			db.put({
-				...doc,
-				title: title,
-				author: author,
-				setDate: setDate
-			}).catch(err => {
-				if (err.name === 'conflict') {
-					console.error('SetViewer.handleSaveSet: conflict -', err)
-				} else {
-					console.error('SetViewer.handleSaveSet-', err)
-				}
-			})
-		})
+	handleSaveSet = data => {
+		data.id = this.props.set.id
+		this.props.updateSet(data)
 	}
 
 	handleDeleteSet = () => {
@@ -160,8 +133,7 @@ class SetViewer extends Component {
 
 	render() {
 		const { set, classes } = this.props
-		const { mode, songCount, setDate, title, author } = this.state
-
+		const { mode } = this.state
 		return (
 			set && (
 				<div className="set-viewer">
@@ -169,65 +141,25 @@ class SetViewer extends Component {
 						<Grid container justify="space-between">
 							<Grid item>
 								{mode === 'edit' ? (
-									<Paper className={classes.form} component="form">
-										<TextField
-											id="title"
-											label="Set title"
-											className={classes.textField}
-											fullWidth
-											value={title}
-											onChange={this.onTitleInput}
-											margin="normal"
-										/>
-
-										<TextField
-											id="author"
-											label="Set author"
-											className={classes.textField}
-											fullWidth
-											value={author}
-											onChange={this.onAuthorInput}
-											margin="normal"
-										/>
-
-										<TextField
-											id="date"
-											label="Set date"
-											type="date"
-											className={classes.textField}
-											fullWidth
-											onChange={this.handleDateChange}
-											InputLabelProps={{
-												shrink: true
-											}}
-											value={setDate}
-										/>
-
-										<Grid
-											container
-											className={classes.formFooter}
-											justify="flex-end"
-										>
-											<Grid item>
-												<Button
-													className={classes.deleteButton}
-													onClick={this.handleDeleteSet}
-												>
-													Delete this set
-												</Button>
-												<Button onClick={this.toggleEditMode(false)}>
-													Cancel
-												</Button>
-												<Button color="primary" onClick={this.handleSaveSet}>
-													Save
-												</Button>
-											</Grid>
-										</Grid>
-									</Paper>
+									<SetFormContainer
+										initialValues={{
+											author: set.author,
+											date: set.setDate,
+											title: set.title
+										}}
+										onCancel={this.toggleEditMode(false)}
+										onDelete={this.handleDeleteSet}
+										onSubmit={this.handleSaveSet}
+										isEdit
+									/>
 								) : (
 									<Grid container spacing={24}>
 										<Grid item className="is-hidden-mobile">
-											<DateSignifier date={set.setDate} />
+											<Grow in={Boolean(set.setDate)} mountOnEnter>
+												<div>
+													<DateSignifier date={set.setDate} />
+												</div>
+											</Grow>
 										</Grid>
 										<Grid item>
 											<Typography variant="h6" gutterBottom>
@@ -402,4 +334,7 @@ class SetViewer extends Component {
 	}
 }
 
-export default withStyles(styles)(SetViewer)
+export default connect(
+	null,
+	actions
+)(withStyles(styles)(SetViewer))

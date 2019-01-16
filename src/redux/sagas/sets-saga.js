@@ -5,7 +5,7 @@ import map from 'lodash/fp/map'
 import pick from 'lodash/fp/pick'
 
 import { db } from '../../firebase'
-import { ADD_SET, mergeSets } from '../actions'
+import { ADD_SET, UPDATE_SET, mergeSets } from '../actions'
 
 const setsCollection = db.collection('sets')
 
@@ -25,6 +25,7 @@ export function* setsSaga() {
 	const setsChan = yield call(setsChannel)
 	yield takeEvery(setsChan, handleSetsEvent)
 	yield takeEvery(ADD_SET, handleAddSet)
+	yield takeEvery(UPDATE_SET, handleUpdateSet)
 }
 
 function* handleAddSet({ payload: newSet }) {
@@ -42,6 +43,14 @@ function* handleAddSet({ payload: newSet }) {
 			}
 		])
 	)
+}
+
+function* handleUpdateSet({ payload: set }) {
+	set.slug = slugify(set.title)
+	set.setDate = set.date
+
+	yield setsCollection.doc(set.id).update(set)
+	yield put(mergeSets([set]))
 }
 
 function* handleSetsEvent(sets) {

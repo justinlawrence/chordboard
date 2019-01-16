@@ -14,7 +14,7 @@ const byId = handleActions(
 			reduce((acc, set) => {
 				if (acc[set.id]) {
 					if (!isEqual(acc[set.id])(set)) {
-						acc[set.id] = merge({}, acc[set.id])(set)
+						acc[set.id] = reduce(merge, {}, [acc[set.id], set])
 					}
 				} else {
 					acc[set.id] = set

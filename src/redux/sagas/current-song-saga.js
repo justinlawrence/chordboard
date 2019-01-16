@@ -1,4 +1,4 @@
-import { put, select, takeEvery } from 'redux-saga/effects'
+import { put, takeEvery } from 'redux-saga/effects'
 //import { eventChannel } from 'redux-saga'
 
 import { db } from '../../firebase'

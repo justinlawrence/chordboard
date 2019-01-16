@@ -146,6 +146,7 @@ class Login extends Component {
 
 								<img
 									src={chordboardLogo}
+									alt=""
 									height="112px"
 									className={cx(
 										classes.addPaddingTop,

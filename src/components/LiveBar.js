@@ -38,6 +38,7 @@ const styles = theme => ({
 class LiveBar extends Component {
 	static propTypes = {
 		classes: PropTypes.object,
+		location: PropTypes.object,
 		onGoToNextSong: PropTypes.func,
 		onGoToPreviousSong: PropTypes.func
 	}
@@ -161,9 +162,9 @@ class LiveBar extends Component {
 			}
 		})
 
-		const match = matchPath(location.pathname, {
+		/*const match = matchPath(location.pathname, {
 			path: '/sets/:setId/songs/:songsId'
-		})
+		})*/
 
 		return show ? (
 			<nav className="live-bar no-print">

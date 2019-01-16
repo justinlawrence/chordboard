@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 
 class SetLink extends PureComponent {
 	static propTypes = {
-		children: PropTypes.array.isRequired,
-		setFocusedSet: PropTypes.func.isRequired,
+		children: PropTypes.any,
+		setFocusedSet: PropTypes.func,
 		set: PropTypes.object.isRequired
 	}
 

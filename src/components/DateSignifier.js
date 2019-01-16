@@ -6,6 +6,7 @@ import cx from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
 
 const styles = theme => ({
 	root: {
@@ -16,11 +17,9 @@ const styles = theme => ({
 	month: {
 		backgroundColor: theme.palette.primary.main,
 		color: theme.palette.common.white,
-		fontSize: theme.typography.caption.fontSize,
 		fontWeight: 800,
 		height: theme.spacing.unit * 2.5,
-		lineHeight: `${theme.spacing.unit * 2.5}px`,
-		textAlign: 'center'
+		lineHeight: `${theme.spacing.unit * 2.5}px`
 	},
 	monthPast: {
 		backgroundColor: theme.palette.grey[400]
@@ -30,34 +29,37 @@ const styles = theme => ({
 		margin: `0 ${theme.spacing.unit}px`
 	},
 	date: {
-		fontSize: theme.typography.headline.fontSize,
-		fontWeight: 800,
-		textAlign: 'center'
+		fontWeight: 800
 	},
 	day: {
-		fontSize: theme.typography.caption.fontSize,
-		fontWeight: 600,
-		textAlign: 'center'
+		fontWeight: 600
 	}
 })
 
 const DateSignifier = ({ classes, date }) => (
 	<Paper className={classes.root}>
 		<Grid container direction="column">
-			<Grid
-				item
-				className={cx(classes.month, {
-					[classes.monthPast]: isBefore(date, new Date())
-				})}
-			>
-				{format(date, 'MMM')}
+			<Grid item>
+				<Typography
+					className={cx(classes.month, {
+						[classes.monthPast]: isBefore(date, new Date())
+					})}
+					align="center"
+					variant="caption"
+				>
+					{format(date, 'MMM')}
+				</Typography>
 			</Grid>
-			<Grid item className={classes.date}>
-				{format(date, 'd')}
+			<Grid item>
+				<Typography className={classes.date} align="center" variant="h5">
+					{format(date, 'd')}
+				</Typography>
 			</Grid>
 			<Grid item className={classes.divider} />
-			<Grid item className={classes.day}>
-				{format(date, 'EEE')}
+			<Grid item>
+				<Typography className={classes.day} align="center" variant="caption">
+					{format(date, 'EEE')}
+				</Typography>
 			</Grid>
 		</Grid>
 	</Paper>
