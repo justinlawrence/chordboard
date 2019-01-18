@@ -30,6 +30,14 @@ const styles = theme => ({
 })
 
 class SetFormContainer extends Component {
+	static defaultProps = {
+		initialValues: {
+			author: '',
+			date: '',
+			title: ''
+		}
+	}
+
 	static propTypes = {
 		initialValues: PropTypes.shape({
 			author: PropTypes.string,

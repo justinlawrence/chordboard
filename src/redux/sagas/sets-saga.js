@@ -46,8 +46,12 @@ function* handleAddSet({ payload: newSet }) {
 }
 
 function* handleUpdateSet({ payload: set }) {
-	set.slug = slugify(set.title)
-	set.setDate = set.date
+	if (set.title) {
+		set.slug = slugify(set.title)
+	}
+	if (set.date) {
+		set.setDate = set.date
+	}
 
 	yield setsCollection.doc(set.id).update(set)
 	yield put(mergeSets([set]))

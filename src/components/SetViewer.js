@@ -29,6 +29,7 @@ import DateSignifier from './DateSignifier'
 import Hero from './Hero'
 import KeySelector from './KeySelector'
 import SetFormContainer from '../containers/SetFormContainer'
+import SongSelectorDialog from '../containers/SongSelectorDialog'
 
 const styles = theme => ({
 	container: {
@@ -66,6 +67,7 @@ class SetViewer extends Component {
 
 	state = {
 		isLoading: false,
+		isSongSelectorVisible: false,
 		mode: ''
 	}
 
@@ -83,6 +85,8 @@ class SetViewer extends Component {
 		document.title = 'Set: ' + set.title
 	}
 
+	handleAddASong = () => this.setState({ isSongSelectorVisible: true })
+
 	handleSaveSet = data => {
 		data.id = this.props.set.id
 		this.props.updateSet(data)
@@ -92,6 +96,14 @@ class SetViewer extends Component {
 		if (this.props.onRemoveSet) {
 			this.props.onRemoveSet()
 		}
+	}
+
+	handleSongSelectorClose = value => {
+		this.setState({ isSongSelectorVisible: false })
+		const set = { ...this.props.set }
+		set.songs = set.songs || []
+		set.songs.push(value)
+		this.handleSaveSet(set)
 	}
 
 	onMoveSongDown = songId => {
@@ -133,13 +145,13 @@ class SetViewer extends Component {
 
 	render() {
 		const { set, classes } = this.props
-		const { mode } = this.state
+		const { mode, isSongSelectorVisible } = this.state
 		return (
 			set && (
 				<div className="set-viewer">
 					<Hero>
-						<Grid container justify="space-between">
-							<Grid item>
+						<Grid container spacing={8}>
+							<Grid item xs>
 								{mode === 'edit' ? (
 									<SetFormContainer
 										initialValues={{
@@ -177,14 +189,19 @@ class SetViewer extends Component {
 								>
 									Edit set
 								</Button>
-
+							</Grid>
+							<Grid item>
 								<Button
-									href={`/songs/add-to-set/${set._id}`}
-									onClick={this.handleSaveSet}
+									color="primary"
+									onClick={this.handleAddASong}
 									variant="contained"
 								>
 									Add a song
 								</Button>
+								<SongSelectorDialog
+									onClose={this.handleSongSelectorClose}
+									open={isSongSelectorVisible}
+								/>
 							</Grid>
 						</Grid>
 					</Hero>
@@ -211,18 +228,6 @@ class SetViewer extends Component {
 													This set has no songs
 												</Typography>
 											</TableCell>
-
-											<TableCell>
-												<Button
-													href={`/songs/add-to-set/${set._id}`}
-													onClick={this.handleSaveSet}
-													variant="contained"
-												>
-													Add a song
-												</Button>
-											</TableCell>
-
-											<TableCell />
 										</TableRow>
 									)}
 								</TableBody>
