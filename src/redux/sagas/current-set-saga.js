@@ -25,12 +25,16 @@ function* handleFetchSet({ setId }) {
 
 		for (let i = 0; i < set.songs.length; i++) {
 			const ref = set.songs[i].ref
-			const songQuery = yield ref.get()
-			set.songs[i] = {
-				id: songQuery.id,
-				...songQuery.data(),
-				// Override song keys with values from the set.
-				key: set.songs[i].key
+			try {
+				const songQuery = yield ref.get()
+				set.songs[i] = {
+					id: songQuery.id,
+					...songQuery.data(),
+					// Override song keys with values from the set.
+					key: set.songs[i].key
+				}
+			} catch (err) {
+				console.warn('Song doesn\'t have a ref', set.songs[i])
 			}
 		}
 

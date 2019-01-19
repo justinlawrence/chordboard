@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import map from 'lodash/fp/map'
 import filter from 'lodash/fp/filter'
 import flow from 'lodash/fp/flow'
+import includes from 'lodash/fp/includes'
+import map from 'lodash/fp/map'
 import reduce from 'lodash/fp/reduce'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -33,15 +34,31 @@ class SongSelectorDialog extends PureComponent {
 	static propTypes = {
 		classes: PropTypes.object,
 		onClose: PropTypes.func.isRequired,
+		open: PropTypes.bool.isRequired,
 		// Redux props
 		songs: PropTypes.array
 	}
 
+	state = {
+		setSongs: []
+	}
+
 	handleClose = () => this.props.onClose()
-	handleListItemClick = value => this.props.onClose(value)
+
+	handleCheckboxClick = value => event => {
+		event.stopPropagation()
+		this.setState(prevState => ({
+			setSongs: [...prevState.setSongs, value]
+		}))
+	}
+
+	handleListItemClick = value => () => this.props.onClose([value])
+
+	handleSave = () => this.props.onClose(this.state.setSongs)
 
 	render() {
-		const { classes, songs, ...other } = this.props
+		const { classes, songs, open } = this.props
+		const { setSongs } = this.state
 
 		const categoryFilter = filter(() => true)
 		const searchFilter = filter(() => true)
@@ -54,7 +71,7 @@ class SongSelectorDialog extends PureComponent {
 			<Dialog
 				onClose={this.handleClose}
 				aria-labelledby="song-selector-dialog"
-				{...other}
+				open={open}
 			>
 				<DialogTitle id="song-selector-dialog">Add a song</DialogTitle>
 				<DialogContent className={classes.content}>
@@ -62,12 +79,15 @@ class SongSelectorDialog extends PureComponent {
 						{map(song => (
 							<ListItem
 								button
-								onClick={() => this.handleListItemClick(song)}
+								onClick={this.handleListItemClick(song)}
 								key={song.id}
 							>
 								<Grid container spacing={8} wrap="nowrap">
 									<Grid item>
-										<Checkbox />
+										<Checkbox
+											checked={includes(song)(setSongs)}
+											onClick={this.handleCheckboxClick(song)}
+										/>
 									</Grid>
 									<Grid item xs>
 										<Grid container direction="column">
@@ -83,8 +103,9 @@ class SongSelectorDialog extends PureComponent {
 					</List>
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={this.handleClose} color="primary">
-						Close
+					<Button onClick={this.handleClose}>Close</Button>
+					<Button onClick={this.handleSave} color="primary">
+						Save
 					</Button>
 				</DialogActions>
 			</Dialog>

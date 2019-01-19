@@ -1,6 +1,7 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 import slugify from 'slugify'
+import forEach from 'lodash/fp/forEach'
 import map from 'lodash/fp/map'
 import pick from 'lodash/fp/pick'
 
@@ -8,6 +9,7 @@ import { db } from '../../firebase'
 import { ADD_SET, UPDATE_SET, mergeSets } from '../actions'
 
 const setsCollection = db.collection('sets')
+const songsCollection = db.collection('songs')
 
 const setsChannel = () =>
 	eventChannel(emitter => {
@@ -52,6 +54,19 @@ function* handleUpdateSet({ payload: set }) {
 	if (set.date) {
 		set.setDate = set.date
 	}
+
+	const setSongs = []
+	for (let i = 0; i < set.songs.length; i++) {
+		const song = set.songs[i]
+		const songDoc = yield songsCollection.doc(song.id).get()
+		setSongs.push({
+			id: song.id,
+			key: song.key,
+			ref: songDoc.ref
+		})
+	}
+
+	set.songs = setSongs
 
 	yield setsCollection.doc(set.id).update(set)
 	yield put(mergeSets([set]))

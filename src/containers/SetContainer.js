@@ -95,8 +95,8 @@ class SetContainer extends Component {
 		const setSongs = set.songs.slice()
 		const songs = this.state.songs.slice()
 
-		remove(setSongs, { _id: songId })
-		remove(songs, { _id: songId })
+		remove(setSongs, { id: songId })
+		remove(songs, { id: songId })
 
 		set.songs = setSongs
 
@@ -104,7 +104,7 @@ class SetContainer extends Component {
 
 		if (set) {
 			this.props.setCurrentSet(set)
-			this._saveSet(set)
+			this.props.updateSet(set)
 		}
 	}
 
