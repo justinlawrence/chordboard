@@ -241,18 +241,20 @@ class SetViewer extends Component {
 	_createRow = song => {
 		const { set } = this.props
 		const { mode } = this.state
-		const setSong = find(set.songs, s => s._id === song._id)
-		const songCount = findIndex(set.songs, s => s._id === song._id)
+		const setSong = find(set.songs, s => s.id === song.id)
+		const songCount = findIndex(set.songs, s => s.id === song.id)
 		const key = setSong ? setSong.key : song.key
 
 		return (
 			<TableRow key={song.id}>
 				<TableCell>
-					<Link to={`/sets/${set.id}/songs/${song.id}`}>
-						<Typography variant="h6" gutterBottom>
-							{songCount + 1}. {song.title}
-						</Typography>
-					</Link>
+					<Typography
+						component={Link}
+						to={`/sets/${set.id}/songs/${song.id}`}
+						variant="h6"
+					>
+						{songCount + 1}. {song.title}
+					</Typography>
 				</TableCell>
 
 				<TableCell>

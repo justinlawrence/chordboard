@@ -43,7 +43,7 @@ class SongSelectorDialog extends PureComponent {
 		setSongs: []
 	}
 
-	handleClose = () => this.props.onClose()
+	handleClose = () => this.props.onClose([])
 
 	handleCheckboxClick = value => event => {
 		event.stopPropagation()
