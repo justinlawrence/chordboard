@@ -26,16 +26,16 @@ class SetContainer extends Component {
 		const set = { ...this.props.currentSet }
 
 		const setSongs = set.songs.slice()
-		const setSong = find(setSongs, s => s._id === songId)
+		const setSong = find(setSongs, s => s.id === songId)
 
 		if (setSong) {
 			setSong.key = transposeChord(setSong.key, amount)
 
 			set.songs = setSongs
-
+			console.log(set)
 			if (set) {
 				this.props.setCurrentSet(set)
-				this._saveSet(set)
+				this.props.updateSet(set)
 			}
 		}
 	}
@@ -43,7 +43,7 @@ class SetContainer extends Component {
 	handleSongMove = (songId, targetIndex = 0) => {
 		const set = { ...this.props.currentSet }
 		const setSongs = set.songs.slice()
-		const index = findIndex(setSongs, { _id: songId })
+		const index = findIndex(setSongs, { id: songId })
 		const song = setSongs[index]
 		const newIndex = Math.max(Math.min(targetIndex, setSongs.length), 0)
 
@@ -54,7 +54,7 @@ class SetContainer extends Component {
 
 		if (set) {
 			this.props.setCurrentSet(set)
-			this._saveSet(set)
+			this.props.updateSet(set)
 		}
 	}
 
@@ -69,6 +69,8 @@ class SetContainer extends Component {
 			const set = this.props.currentSet
 
 			//const set = { ...this.props.currentSet };
+			alert('TODO: handle with redux')
+			return
 
 			console.log('current set is', set._id, set._rev)
 
@@ -134,7 +136,7 @@ class SetContainer extends Component {
 						render={({ match }) => {
 							const songId = match.params.songId
 
-							const index = findIndex(currentSet.songs, { _id: songId })
+							const index = findIndex(currentSet.songs, { id: songId })
 							const currentKey =
 								currentSet && currentSet.songs[index]
 									? currentSet.songs[index].key
@@ -152,20 +154,6 @@ class SetContainer extends Component {
 				</div>
 			)
 		)
-	}
-
-	_saveSet = set => {
-		db.get(set._id).then(doc => {
-			set._rev = doc._rev
-
-			return db.put(set).catch(err => {
-				if (err.name === 'conflict') {
-					console.error('SetContainer._saveSet: conflict -', err)
-				} else {
-					console.error('SetContainer._saveSet -', err)
-				}
-			})
-		})
 	}
 }
 
