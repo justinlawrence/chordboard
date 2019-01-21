@@ -69,12 +69,14 @@ const styles = theme => ({
 
 class SongViewer extends Component {
 	static propTypes = {
-		setKey: PropTypes.string
+		setKey: PropTypes.string,
+		song: PropTypes.object
 	}
 
 	state = {
 		capoAmount: 0,
 		chordSize: 16,
+		capoKey: null,
 		isNashville: false,
 		isSongKeyDialogOpen: false,
 		setListMenuAnchorEl: null,
@@ -111,21 +113,21 @@ class SongViewer extends Component {
 	addToSet = set => {
 		const { song } = this.props
 
-		db.get(set._id)
+		db.get(set.id)
 			.then(doc => {
 				const data = {
 					...doc
 				}
 
 				data.songs = data.songs || []
-				data.songs.push({ _id: song._id, key: song.key })
-				data.songs = uniqBy(data.songs, '_id')
+				data.songs.push({ id: song.id, key: song.key })
+				data.songs = uniqBy(data.songs, 'id')
 
 				db.put(data)
 					.then(() => {
 						if (this.props.history) {
 							const location = {
-								pathname: `/sets/${doc._id}`
+								pathname: `/sets/${doc.id}`
 							}
 
 							this.props.history.push(location)
@@ -165,6 +167,9 @@ class SongViewer extends Component {
 			isNashville: option.value === 'nashville'
 		})
 
+		if (this.props.song.id) {
+			localStorage.setItem(`chordboard.${this.props.song.id}.capoKey`, key)
+		}
 		this.props.setCurrentSongUserKey(key)
 	}
 
@@ -183,8 +188,8 @@ class SongViewer extends Component {
 		/*console.log( 'song key', props.song.key );
 				console.log( 'set key', props.setKey );
 				console.log( 'user key', songUser.key );*/
-
-		const displayKey = songUser.key || props.setKey || props.song.key
+		const capoKey = localStorage.getItem(`chordboard.${props.song.id}.capoKey`)
+		const displayKey = capoKey || songUser.key || props.setKey || props.song.key
 
 		const parser = new Parser()
 		const lines = parser.parse(props.song.content)

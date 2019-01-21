@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import { handleActions } from 'redux-actions'
 import isEqual from 'lodash/fp/isEqual'
 import merge from 'lodash/fp/merge'
+import omit from 'lodash/fp/omit'
 import reduce from 'lodash/fp/reduce'
 
 const initialState = {
@@ -20,7 +21,8 @@ const byId = handleActions(
 					acc[set.id] = set
 				}
 				return acc
-			})({ ...state })(action.payload)
+			})({ ...state })(action.payload),
+		REMOVE_SET: (state, action) => omit(action.payload)({ ...state })
 	},
 	initialState.byId
 )

@@ -1,12 +1,17 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 import slugify from 'slugify'
-import forEach from 'lodash/fp/forEach'
 import map from 'lodash/fp/map'
 import pick from 'lodash/fp/pick'
 
 import { db } from '../../firebase'
-import { ADD_SET, UPDATE_SET, mergeSets } from '../actions'
+import {
+	ADD_SET,
+	REMOVE_SET,
+	UPDATE_SET,
+	mergeSets,
+	removeSet
+} from '../actions'
 
 const setsCollection = db.collection('sets')
 const songsCollection = db.collection('songs')
@@ -27,6 +32,7 @@ export function* setsSaga() {
 	const setsChan = yield call(setsChannel)
 	yield takeEvery(setsChan, handleSetsEvent)
 	yield takeEvery(ADD_SET, handleAddSet)
+	yield takeEvery(REMOVE_SET, handleRemoveSet)
 	yield takeEvery(UPDATE_SET, handleUpdateSet)
 }
 
@@ -45,6 +51,11 @@ function* handleAddSet({ payload: newSet }) {
 			}
 		])
 	)
+}
+
+function* handleRemoveSet({ payload: setId }) {
+	yield setsCollection.doc(setId).delete()
+	yield put(removeSet(setId))
 }
 
 function* handleUpdateSet({ payload: set }) {

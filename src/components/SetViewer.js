@@ -4,7 +4,6 @@ import { find, findIndex } from 'lodash'
 import uniqBy from 'lodash/fp/uniqBy'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import PouchDB from 'pouchdb'
 
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -49,8 +48,6 @@ const styles = theme => ({
 		color: theme.palette.error.main
 	}
 })
-
-const db = new PouchDB('chordboard')
 
 class SetViewer extends Component {
 	static propTypes = {
@@ -106,7 +103,7 @@ class SetViewer extends Component {
 	}
 
 	onMoveSongDown = songId => {
-		const index = findIndex(this.props.set.songs, { _id: songId })
+		const index = findIndex(this.props.set.songs, { id: songId })
 
 		if (index > -1) {
 			if (this.props.onSongMove) {
@@ -116,7 +113,7 @@ class SetViewer extends Component {
 	}
 
 	onMoveSongUp = songId => {
-		const index = findIndex(this.props.set.songs, { _id: songId })
+		const index = findIndex(this.props.set.songs, { id: songId })
 
 		if (index > -1) {
 			if (this.props.onSongMove) {
@@ -139,8 +136,8 @@ class SetViewer extends Component {
 
 	toggleEditMode = value => () => this.setState({ mode: value ? 'edit' : '' })
 
-	transposeDown = song => this.changeKey(song._id, -1)
-	transposeUp = song => this.changeKey(song._id, 1)
+	transposeDown = song => this.changeKey(song.id, -1)
+	transposeUp = song => this.changeKey(song.id, 1)
 
 	render() {
 		const { set, classes } = this.props
@@ -288,51 +285,28 @@ class SetViewer extends Component {
 
 				{mode === 'edit' && (
 					<TableCell>
-						<IconButton
-							aria-label="Move song up"
-							onClick={() => this.onMoveSongUp(song.id)}
-						>
-							<ArrowUpIcon />
-						</IconButton>
+						<Grid container wrap="nowrap">
+							<IconButton
+								aria-label="Move song up"
+								onClick={() => this.onMoveSongUp(song.id)}
+							>
+								<ArrowUpIcon />
+							</IconButton>
 
-						<IconButton
-							aria-label="Move song down"
-							onClick={() => this.onMoveSongDown(song.id)}
-						>
-							<ArrowDownIcon />
-						</IconButton>
+							<IconButton
+								aria-label="Move song down"
+								onClick={() => this.onMoveSongDown(song.id)}
+							>
+								<ArrowDownIcon />
+							</IconButton>
 
-						<IconButton
-							aria-label="Remove song"
-							onClick={() => this.removeSong(song.id)}
-						>
-							<DeleteIcon />
-						</IconButton>
-
-						<a
-							onClick={() => this.onMoveSongUp(song.id)}
-							title="move this song up the list"
-						>
-							<span className="icon is-small is-left">
-								<i className="fa fa-arrow-up" />
-							</span>
-						</a>
-						<a
-							onClick={() => this.onMoveSongDown(song.id)}
-							title="move this song down the list"
-						>
-							<span className="icon is-small is-left">
-								<i className="fa fa-arrow-down" />
-							</span>
-						</a>
-						<a
-							onClick={() => this.removeSong(song.id)}
-							title="remove this song from the list"
-						>
-							<span className="icon is-small is-left">
-								<i className="fa fa-trash" />
-							</span>
-						</a>
+							<IconButton
+								aria-label="Remove song"
+								onClick={() => this.removeSong(song.id)}
+							>
+								<DeleteIcon />
+							</IconButton>
+						</Grid>
 					</TableCell>
 				)}
 			</TableRow>

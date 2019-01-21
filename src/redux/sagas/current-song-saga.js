@@ -1,10 +1,10 @@
-import { put, takeEvery } from 'redux-saga/effects'
+import { put, select, takeEvery } from 'redux-saga/effects'
 //import { eventChannel } from 'redux-saga'
 
 import { db } from '../../firebase'
 import {
 	SET_CURRENT_SONG_ID,
-	//SET_CURRENT_SONG_USER_KEY,
+	SET_CURRENT_SONG_USER_KEY,
 	setCurrentSong
 	//setSong
 } from '../actions'
@@ -13,7 +13,7 @@ const songsCollection = db.collection('songs')
 
 export function* currentSongSaga() {
 	yield takeEvery(SET_CURRENT_SONG_ID, updateCurrentSongById)
-	//yield takeEvery( SET_CURRENT_SONG_USER_KEY, updateCurrentSongUserKey );
+	yield takeEvery(SET_CURRENT_SONG_USER_KEY, updateCurrentSongUserKey)
 }
 
 function* updateCurrentSongById({ payload }) {
@@ -30,8 +30,9 @@ function* updateCurrentSongById({ payload }) {
 	}
 }
 
-/*function* updateCurrentSongUserKey({ key }) {
+function* updateCurrentSongUserKey({ key }) {
 	const { currentSong, user: currentUser } = yield select()
+	currentSong.users = currentSong.users || []
 
 	const users = [...currentSong.users].filter(u => typeof u === 'object')
 	const user = users.find(u => u.id === currentUser.id)
@@ -47,7 +48,7 @@ function* updateCurrentSongById({ payload }) {
 
 	yield put(setCurrentSong({ users }))
 
-	const song = yield db.get(currentSong._id)
-	song.users = users
-	yield db.put(song)
-}*/
+	//const song = yield songsCollection.doc(currentSong.id).get()
+	//song.users = users
+	//yield db.put(song)
+}

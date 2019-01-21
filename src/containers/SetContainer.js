@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
 
 import * as actions from '../redux/actions'
-import { db } from '../database'
 import SongContainer from './SongContainer'
 import SetViewer from '../components/SetViewer'
 import transposeChord from '../utils/transpose-chord'
@@ -18,8 +17,8 @@ class SetContainer extends Component {
 		this.handleProps(this.props)
 	}
 
-	componentWillReceiveProps(nextProps) {
-		this.handleProps(nextProps)
+	componentDidUpdate() {
+		this.handleProps(this.props)
 	}
 
 	handleChangeKey = (songId, amount) => {
@@ -32,7 +31,7 @@ class SetContainer extends Component {
 			setSong.key = transposeChord(setSong.key, amount)
 
 			set.songs = setSongs
-			console.log(set)
+
 			if (set) {
 				this.props.setCurrentSet(set)
 				this.props.updateSet(set)
@@ -68,27 +67,14 @@ class SetContainer extends Component {
 		if (window.confirm('Are you very sure you want to delete this set?')) {
 			const set = this.props.currentSet
 
-			//const set = { ...this.props.currentSet };
-			alert('TODO: handle with redux')
-			return
+			this.props.removeSet(set.id)
+			if (this.props.history) {
+				const location = {
+					pathname: '/sets'
+				}
 
-			console.log('current set is', set._id, set._rev)
-
-			//1 delete from pouchDb
-			db.remove(set._id, set._rev)
-				.then(() => {
-					if (this.props.history) {
-						const location = {
-							pathname: '/sets'
-						}
-
-						this.props.history.replace(location)
-					}
-				})
-				.catch(err => {
-					alert('Unable to delete set')
-					console.warn(err)
-				})
+				this.props.history.replace(location)
+			}
 		}
 	}
 
