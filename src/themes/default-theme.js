@@ -15,8 +15,8 @@ const defaultTheme = {
 			contrastText: '#fff'
 		},
 		secondary: {
-			main: '#fff', //nav was 283149 then fff
-			contrastText: '#000' //was fff then 000
+			main: '#283149', //nav was 283149 then fff
+			contrastText: '#fff' //was fff then 000
 		}
 	},
 	spacing: {

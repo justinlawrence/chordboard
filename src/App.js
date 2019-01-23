@@ -10,7 +10,6 @@ import {
 } from 'react-router-dom'
 
 import CssBaseline from '@material-ui/core/CssBaseline'
-
 import * as actions from './redux/actions'
 import { db } from './database'
 import { db as firestore } from './firebase'

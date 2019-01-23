@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button'
 import Toolbar from '@material-ui/core/Toolbar'
 
 import * as actions from '../redux/actions'
-import chordboardLogo from '../chordboard-logo-dark.png'
+import chordboardLogo from '../chordboard-logo-light.png'
 
 const styles = theme => ({
 	root: {},
