@@ -15,11 +15,34 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Grid from '@material-ui/core/Grid'
+import IconButton from '@material-ui/core/IconButton'
+import InputBase from '@material-ui/core/InputBase'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
+import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 
+import { ArrowLeft as BackIcon, Magnify as SearchIcon } from 'mdi-material-ui'
+
 const styles = theme => ({
+	root: {
+		padding: '2px 4px',
+		display: 'flex',
+		alignItems: 'center',
+		width: '100%'
+	},
+	input: {
+		marginLeft: 8,
+		flex: 1
+	},
+	iconButton: {
+		padding: 10
+	},
+	divider: {
+		width: 1,
+		height: 28,
+		margin: 4
+	},
 	content: {
 		paddingLeft: 0,
 		paddingRight: 0
@@ -73,7 +96,20 @@ class SongSelectorDialog extends PureComponent {
 				aria-labelledby="song-selector-dialog"
 				open={open}
 			>
-				<DialogTitle id="song-selector-dialog">Add a song</DialogTitle>
+				<DialogTitle id="song-selector-dialog">
+					<Paper className={classes.root} elevation={1}>
+						<IconButton className={classes.iconButton} aria-label="Back">
+							<BackIcon />
+						</IconButton>
+						<InputBase
+							className={classes.input}
+							placeholder="Search songs and authors"
+						/>
+						<IconButton className={classes.iconButton} aria-label="Search">
+							<SearchIcon />
+						</IconButton>
+					</Paper>
+				</DialogTitle>
 				<DialogContent className={classes.content}>
 					<List>
 						{map(song => (
