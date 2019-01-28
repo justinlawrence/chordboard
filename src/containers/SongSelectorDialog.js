@@ -6,6 +6,7 @@ import flow from 'lodash/fp/flow'
 import includes from 'lodash/fp/includes'
 import map from 'lodash/fp/map'
 import reduce from 'lodash/fp/reduce'
+import toLower from 'lodash/fp/toLower'
 
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -63,7 +64,8 @@ class SongSelectorDialog extends PureComponent {
 	}
 
 	state = {
-		setSongs: []
+		setSongs: [],
+		searchValue: ''
 	}
 
 	handleClose = () => this.props.onClose([])
@@ -79,12 +81,17 @@ class SongSelectorDialog extends PureComponent {
 
 	handleSave = () => this.props.onClose(this.state.setSongs)
 
+	handleSearchChange = event =>
+		this.setState({ searchValue: event.target.value })
+
 	render() {
 		const { classes, songs, open } = this.props
-		const { setSongs } = this.state
+		const { searchValue, setSongs } = this.state
 
 		const categoryFilter = filter(() => true)
-		const searchFilter = filter(() => true)
+		const searchFilter = filter(song =>
+			includes(toLower(searchValue))(toLower(song.title))
+		)
 		const filteredSongs = flow(
 			categoryFilter,
 			searchFilter
@@ -103,7 +110,9 @@ class SongSelectorDialog extends PureComponent {
 						</IconButton>
 						<InputBase
 							className={classes.input}
+							onChange={this.handleSearchChange}
 							placeholder="Search songs and authors"
+							value={searchValue}
 						/>
 						<IconButton className={classes.iconButton} aria-label="Search">
 							<SearchIcon />
