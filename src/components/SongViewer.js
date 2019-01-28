@@ -381,10 +381,16 @@ class SongViewer extends Component {
 					<ContentLimiter>
 						<section className="section">
 							<div className="container">
-								<Song chordSize={chordSize} lines={lines} wordSize={wordSize} />
-								{/*<div className="song-viewer__song">
+								<Typography>
+									<Song
+										chordSize={chordSize}
+										lines={lines}
+										wordSize={wordSize}
+									/>
+									{/*<div className="song-viewer__song">
 									{parseSong( lines, sections, chordSize )}
 								</div>*/}
+								</Typography>
 							</div>
 						</section>
 					</ContentLimiter>
