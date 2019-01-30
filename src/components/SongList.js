@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom'
 
 import includes from 'lodash/fp/includes'
 import toLower from 'lodash/fp/toLower'
+import { withStyles } from '@material-ui/core/styles'
 
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Hidden from '@material-ui/core/Hidden'
+import { lighten } from '@material-ui/core/styles/colorManipulator'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -18,9 +20,29 @@ import ContentLimiter from './ContentLimiter'
 import Hero from './Hero'
 import SearchBox from './SearchBox'
 
+const styles = theme => ({
+	highlight:
+		theme.palette.type === 'light'
+			? {
+				color: theme.palette.secondary.main,
+				backgroundColor: lighten(theme.palette.secondary.light, 0.85)
+			  }
+			: {
+				color: theme.palette.text.primary,
+				backgroundColor: theme.palette.secondary.dark
+			  },
+	tableRow: {
+		cursor: 'pointer'
+	}
+})
+
 class SongList extends Component {
 	state = {
 		searchText: ''
+	}
+
+	handleSongClick = song => {
+		window.alert('TODO: redirect to the song URL')
 	}
 
 	addToSet = song => {
@@ -123,7 +145,7 @@ class SongList extends Component {
 
 					<TableBody>
 						{filteredSongs.map(song => (
-							<TableRow key={song.id}>
+							<TableRow hover key={song.id} classes={styles.tableRow}>
 								<TableCell>
 									<Typography variant="h6" gutterBottom>
 										<a href={`/songs/${song.id}`}>{song.title}</a>
@@ -153,4 +175,5 @@ class SongList extends Component {
 	}
 }
 
-export default SongList
+// export default SongList
+export default withStyles(styles)(SongList)
