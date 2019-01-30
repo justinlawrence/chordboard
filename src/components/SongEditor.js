@@ -219,12 +219,13 @@ class SongEditor extends Component {
 							</Grid>
 
 							<Grid item xs={12} sm={4}>
-								<Grid
-									container
-									className={classes.root}
-									justify="center"
-									hide="xsDown"
-								>
+								<Grid container className={classes.root} hide="xsDown">
+									<Typography
+										variant="caption"
+										className={classes.addPaddingBottom}
+									>
+										Song Editor
+									</Typography>
 									<Paper className={classes.form} component="form">
 										<Grid
 											container
@@ -288,7 +289,7 @@ class SongEditor extends Component {
 									</Paper>
 								</Grid>
 
-								<Grid item sm={4}>
+								<Grid item>
 									<Grid
 										container
 										className={classes.root}
