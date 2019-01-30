@@ -4,17 +4,21 @@ import { find, findIndex } from 'lodash'
 import { Link, matchPath, withRouter } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
+import IconButton from '@material-ui/core/IconButton'
 import Hidden from '@material-ui/core/Hidden'
 import {
 	ChevronLeft as ChevronLeftIcon,
 	ChevronRight as ChevronRightIcon,
-	FormatListBulleted as FormatListBulletedIcon
+	FormatListBulleted as SetListIcon
 } from 'mdi-material-ui'
 
 import { db } from '../database'
 import SongKey from './SongKey'
 import Song from '../utils/Song'
+import Tooltip from '@material-ui/core/Tooltip'
+
 //import './live-bar.scss';
 
 const styles = theme => ({
@@ -32,6 +36,15 @@ const styles = theme => ({
 	},
 	deleteButton: {
 		color: theme.palette.error.main
+	},
+	liveBar: {
+		alignItems: 'stretch',
+		// backgroundColor: '#F6F9FC',
+		backgroundColor: 'rgb(242, 242, 242)',
+		borderTopColor: 'rgb(206, 206, 206)',
+		borderTopWidth: '1px',
+		display: 'flex',
+		flex: '0 0 48px'
 	}
 })
 
@@ -167,7 +180,7 @@ class LiveBar extends Component {
 		})*/
 
 		return show ? (
-			<nav className="live-bar no-print">
+			<nav className={classes.liveBar}>
 				<Grid container className={classes.root} justify="space-between">
 					<Grid item xs={8} sm={7}>
 						<div className="live-bar__sections">
@@ -185,15 +198,33 @@ class LiveBar extends Component {
 
 					<Grid item xs={4} sm={5}>
 						<div className="live-bar__navigation-actions">
-							<Link
-								className="live-bar__navigation-actions__item live-bar__navigation-actions__setlistbutton"
-								to={`/sets/${currentSetId}`}
-								title="Go back to the setlist"
-							>
-								<FormatListBulletedIcon />
-								<Hidden xsDown>Setlist</Hidden>
-							</Link>
+							<Hidden xsDown>
+								<Tooltip title="Back to setlist">
+									<IconButton
+										href={`/sets/${currentSetId}`}
+										className={classes.button}
+									>
+										<SetListIcon />
+									</IconButton>
+								</Tooltip>
+							</Hidden>
 
+							<Tooltip title="Jump to previous song">
+								<IconButton
+									onClick={onGoToPreviousSong}
+									className={classes.button}
+								>
+									<ChevronLeftIcon />
+								</IconButton>
+							</Tooltip>
+
+							<Tooltip title="Jump to next song">
+								<IconButton onClick={onGoToNextSong} className={classes.button}>
+									<ChevronRightIcon />
+								</IconButton>
+							</Tooltip>
+
+							{/*
 							<a
 								className="live-bar__navigation-actions__item"
 								onClick={onGoToPreviousSong}
@@ -227,6 +258,8 @@ class LiveBar extends Component {
 
 								<ChevronRightIcon />
 							</a>
+							
+							*/}
 						</div>
 					</Grid>
 				</Grid>
@@ -236,36 +269,3 @@ class LiveBar extends Component {
 }
 
 export default withStyles(styles)(withRouter(LiveBar))
-//export default withRouter( LiveBar );
-
-/*
-
-TODO: delete me once you're happy
-
-<a className="live-bar__navigation-actions__item"
-	 onClick={onGoToPreviousSong}>
-
-	<span className="icon"><i className="fa fa-angle-left fa-lg"/></span>
-
-	{previousSongTitle && (
-		<div className="is-size-7 is-hidden-touch">
-			<SongKey value={previousSongKey}/>
-			{previousSongTitle}
-		</div>
-	)}
-
-</a>
-<a className="live-bar__navigation-actions__item" onClick={onGoToNextSong}>
-
-	<span className="icon"><i className="fa fa-angle-right fa-lg"/></span>
-
-	{nextSongTitle && (
-		<div className="is-size-7 is-hidden-touch">
-			<SongKey value={nextSongKey}/>
-			{nextSongTitle}
-		</div>
-	)}
-</a>
-
-
-*/
