@@ -90,7 +90,13 @@ class SongSelectorDialog extends PureComponent {
 
 		const categoryFilter = filter(() => true)
 		const searchFilter = filter(song =>
-			includes(toLower(searchValue))(toLower(song.title))
+			includes(toLower(searchValue))(
+				toLower(song.title) +
+					' ' +
+					toLower(song.author) +
+					' ' +
+					toLower(song.content)
+			)
 		)
 		const filteredSongs = flow(
 			categoryFilter,
@@ -111,7 +117,7 @@ class SongSelectorDialog extends PureComponent {
 						<InputBase
 							className={classes.input}
 							onChange={this.handleSearchChange}
-							placeholder="Search songs and authors"
+							placeholder="Search titles, authors & words"
 							value={searchValue}
 						/>
 						<IconButton className={classes.iconButton} aria-label="Search">
