@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles'
 import ChordLine from './ChordLine'
 import ChordPair from './ChordPair'
 import Line from './Line'
+import Typography from '@material-ui/core/Typography'
 
 const sectionData = [
 	{ abbreviation: 'BR', color: '#03a9f4', title: 'Bridge' },

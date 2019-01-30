@@ -39,6 +39,18 @@ const styles = theme => ({
 	},
 	addPaddingBottom: {
 		paddingBottom: theme.spacing.unit
+	},
+	textEditorContent: {
+		fontFamily: 'monospace',
+		fontSize: '1.2em',
+		width: '90%',
+		height: '80vh !important',
+		padding: '24px',
+		border: '1px solid silver'
+	},
+	songPreview: {
+		zoom: '0.3',
+		padding: '12px'
 	}
 })
 
@@ -169,86 +181,6 @@ class SongEditor extends Component {
 			<div className="song-editor">
 				<Hero>
 					<ContentLimiter>
-						<Grid container className={classes.root} justify="space-between">
-							<Grid item xs={12}>
-								<Paper className={classes.form} component="form">
-									<Grid
-										container
-										className={classes.root}
-										justify="space-between"
-									>
-										<Grid item xs={12}>
-											<TextField
-												id="title"
-												label="Song title"
-												className={classes.textField}
-												fullWidth
-												onChange={this.onTitleInput}
-												margin="normal"
-												value={title}
-											/>
-										</Grid>
-										<Grid item xs={12}>
-											<TextField
-												id="author"
-												label="Authors (comma separated)"
-												className={classes.textField}
-												fullWidth
-												onChange={this.onAuthorInput}
-												margin="normal"
-												value={author}
-											/>
-										</Grid>
-										<Grid item xs={12}>
-											<TextField
-												id="key"
-												label="Key"
-												className={classes.textField}
-												fullWidth
-												onChange={this.onKeyInput}
-												margin="normal"
-												value={key}
-											/>
-										</Grid>
-										<Grid item xs={4}>
-											<select
-												onChange={this.handleParserChange}
-												value={parserType}
-											>
-												<option value="chords-above-words">
-													Chords above words
-												</option>
-												<option value="chordpro">Onsong</option>
-											</select>
-										</Grid>
-										<Grid item xs={8}>
-											<Grid container justify="flex-end">
-												{!isNew && (
-													<Button onClick={this.onDeleteSong} color="primary">
-														Delete
-													</Button>
-												)}
-
-												<Button onClick={this.handleCancel}>Cancel</Button>
-
-												<Button
-													onClick={this.onSaveSong}
-													color="primary"
-													variant="contained"
-												>
-													Save
-												</Button>
-											</Grid>
-										</Grid>
-									</Grid>
-								</Paper>
-							</Grid>
-						</Grid>
-					</ContentLimiter>
-				</Hero>
-
-				<Hero>
-					<ContentLimiter>
 						<Grid
 							container
 							className={classes.root}
@@ -256,45 +188,129 @@ class SongEditor extends Component {
 							hide="xsDown"
 						>
 							<Grid item xs={12} sm={8}>
-								<Typography
-									variant="caption"
-									className={classes.addPaddingBottom}
-								>
-									Editor
-								</Typography>
-								{/* TODO: DELETE this if the textarea below is working nicely <textarea className="textarea song-editor__content" onInput={this.onContentInput} placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:" value={content} rows="25"></textarea> */}
+								<Grid container>
+									<Grid item>
+										<Typography
+											variant="caption"
+											className={classes.addPaddingBottom}
+										>
+											Song Editor
+										</Typography>
+									</Grid>
+									<Grid item>
+										<select
+											onChange={this.handleParserChange}
+											value={parserType}
+										>
+											<option value="chords-above-words">
+												Chords above words
+											</option>
+											<option value="chordpro">Onsong</option>
+										</select>
+									</Grid>
+								</Grid>
+
 								<Textarea
-									className="textarea song-editor__content"
+									className={classes.textEditorContent}
 									onChange={this.onContentInput}
 									placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:"
 									value={parsedContent}
 								/>
 							</Grid>
 
-							<Grid item sm={4}>
+							<Grid item xs={12} sm={4}>
 								<Grid
 									container
 									className={classes.root}
-									justify="space-between"
+									justify="center"
+									hide="xsDown"
 								>
-									<Grid item xs={12}>
-										<Typography
-											variant="caption"
-											className={classes.addPaddingBottom}
+									<Paper className={classes.form} component="form">
+										<Grid
+											container
+											className={classes.root}
+											justify="space-between"
 										>
-											Song Preview
-										</Typography>
+											<Grid item xs={12}>
+												<TextField
+													id="title"
+													label="Song title"
+													className={classes.textField}
+													fullWidth
+													onChange={this.onTitleInput}
+													margin="normal"
+													value={title}
+												/>
+											</Grid>
+											<Grid item xs={12}>
+												<TextField
+													id="author"
+													label="Authors (comma separated)"
+													className={classes.textField}
+													fullWidth
+													onChange={this.onAuthorInput}
+													margin="normal"
+													value={author}
+												/>
+											</Grid>
+											<Grid item xs={12}>
+												<TextField
+													id="key"
+													label="Key"
+													className={classes.textField}
+													fullWidth
+													onChange={this.onKeyInput}
+													margin="normal"
+													value={key}
+												/>
+											</Grid>
 
-										<Paper>
-											<div className="song-editor__preview">
-												<h1 className="title">{title}</h1>
-												<h2 className="subtitle">{author}</h2>
+											<Grid item xs={8}>
+												<Grid container justify="flex-end">
+													{!isNew && (
+														<Button onClick={this.onDeleteSong} color="primary">
+															Delete
+														</Button>
+													)}
 
-												<div className="song-editor__preview-content">
-													{previewSong}
+													<Button onClick={this.handleCancel}>Cancel</Button>
+
+													<Button
+														onClick={this.onSaveSong}
+														color="primary"
+														variant="contained"
+													>
+														Save
+													</Button>
+												</Grid>
+											</Grid>
+										</Grid>
+									</Paper>
+								</Grid>
+
+								<Grid item sm={4}>
+									<Grid
+										container
+										className={classes.root}
+										justify="space-between"
+									>
+										<Grid item xs={12}>
+											<Typography
+												variant="caption"
+												className={classes.addPaddingBottom}
+											>
+												Song Preview
+											</Typography>
+
+											<Paper>
+												<div className={classes.songPreview}>
+													<h1 className="title">{title}</h1>
+													<h2 className="subtitle">{author}</h2>
+
+													<div>{previewSong}</div>
 												</div>
-											</div>
-										</Paper>
+											</Paper>
+										</Grid>
 									</Grid>
 								</Grid>
 							</Grid>
