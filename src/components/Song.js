@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { forEach } from 'lodash'
-import cx from 'classnames'
 
 import { withStyles } from '@material-ui/core/styles'
 
@@ -9,14 +8,52 @@ import ChordLine from './ChordLine'
 import ChordPair from './ChordPair'
 import Line from './Line'
 
+const sectionData = [
+	{ abbreviation: 'BR', color: '#03a9f4', title: 'Bridge' },
+	{ abbreviation: 'CH', color: '#ff5252', title: 'Chorus' },
+	{ abbreviation: 'CH 2', color: '#ff5252', title: 'Chorus 2' }
+]
+
+const sectionStyles = {}
+forEach(sectionData, item => {
+	sectionStyles[`&[data-section*="${item.title}"]`] = {
+		borderLeft: `4px solid ${item.color}`,
+		'&:before': {
+			content: `"${item.abbreviation}"`,
+			backgroundColor: item.color
+		}
+	}
+})
+
 const styles = theme => ({
-	root: {
+	section: {
 		marginLeft: theme.spacing.keyline,
 		marginTop: theme.spacing.unit,
 		paddingBottom: 0,
 		paddingTop: 0,
 		paddingLeft: theme.spacing.unit * 2,
-		position: 'relative'
+		position: 'relative',
+
+		'&[data-section]:before': {
+			backgroundColor: '#eee',
+			borderRadius: theme.spacing.unit / 2,
+			color: 'white',
+			paddingBottom: theme.spacing.unit / 2,
+			paddingLeft: theme.spacing.unit,
+			paddingRight: theme.spacing.unit,
+			paddingTop: theme.spacing.unit / 2,
+			position: 'absolute',
+			transform: 'translate(calc(-100% - 1em), 0)',
+			transformOrigin: '0 0',
+			textTransform: 'uppercase',
+			zIndex: 1
+		},
+		...sectionStyles,
+
+		'&@media print': {
+			paddingLeft: theme.spacing.unit * 2,
+			marginLeft: theme.spacing.unit * 6
+		}
 	}
 })
 
@@ -82,7 +119,7 @@ class Song extends PureComponent {
 						<section
 							id={`section-${sectionIndex}`}
 							key={`section-${sectionIndex}`}
-							className={cx(classes.root, 'song-viewer__section')}
+							className={classes.section}
 							data-section={section}
 						>
 							{children}
@@ -107,7 +144,7 @@ class Song extends PureComponent {
 				<section
 					id={`section-${sectionIndex}`}
 					key={`section-${sectionIndex}`}
-					className="song-viewer__section"
+					className={classes.section}
 					data-section={section}
 				>
 					{children}

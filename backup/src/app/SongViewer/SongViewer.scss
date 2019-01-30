@@ -1,5 +1,5 @@
 $horiz-padding: 48px;
-$chord-gap: .75em;
+$chord-gap: 0.75em;
 .sheet {
 	padding-left: $horiz-padding;
 	padding-right: $horiz-padding;
@@ -9,7 +9,6 @@ $chord-gap: .75em;
 	height: 16px;
 }
 .song-viewer {
-
 	&__song {
 		position: relative;
 	}
@@ -29,7 +28,6 @@ $chord-gap: .75em;
 		@media print {
 			padding-left: 16px;
 			margin-left: 44px;
-
 		}
 
 		&[data-section]:before {
@@ -44,85 +42,85 @@ $chord-gap: .75em;
 			z-index: 1;
 		}
 
-		&[data-section*="Bridge"] {
+		&[data-section*='Bridge'] {
 			border-left: 4px solid #03a9f4;
 
 			&:before {
-				content: "BR";
+				content: 'BR';
 				background-color: #03a9f4;
 			}
 		}
 
-		&[data-section*="Chorus"] {
+		&[data-section*='Chorus'] {
 			border-left: 4px solid #ff5252;
 
 			&:before {
-				content: "CH";
+				content: 'CH';
 				background-color: #ff5252;
 			}
 		}
 
-		&[data-section*="Chorus 2"] {
+		&[data-section*='Chorus 2'] {
 			border-left: 4px solid #ff5252;
 
 			&:before {
-				content: "CH 2";
+				content: 'CH 2';
 				background-color: #ff5252;
 			}
 		}
 
-		&[data-section*="Chorus 3"] {
+		&[data-section*='Chorus 3'] {
 			border-left: 4px solid #ff5252;
 
 			&:before {
-				content: "CH 3";
+				content: 'CH 3';
 				background-color: #ff5252;
 			}
 		}
 
-		&[data-section*="Pre-chorus"],
-		&[data-section*="Pre-Chorus"],
-		&[data-section*="Pre chorus"],
-		&[data-section*="Pre Chorus"],
-		&[data-section*="Prechorus"] {
+		&[data-section*='Pre-chorus'],
+		&[data-section*='Pre-Chorus'],
+		&[data-section*='Pre chorus'],
+		&[data-section*='Pre Chorus'],
+		&[data-section*='Prechorus'] {
 			border-left: 4px solid #ff9800;
 
 			&:before {
-				content: "PC";
+				content: 'PC';
 				background-color: #ff9800;
 			}
 		}
 
-		&[data-section*="Intro"] {
+		&[data-section*='Intro'] {
 			border-left: 4px solid #00bcd4;
 
 			&:before {
-				content: "IN";
+				content: 'IN';
 				background-color: #00bcd4;
 			}
 		}
 
-		&[data-section*="Out"],
-		&[data-section*="Outtro"] {
+		&[data-section*='Out'],
+		&[data-section*='Outtro'] {
 			border-left: 4px solid #444;
 
 			&:before {
-				content: "OUT";
+				content: 'OUT';
 				background-color: #444;
 			}
 		}
 
-		&[data-section*="Interlude"],
-		&[data-section*="Instrumental"] {
+		&[data-section*='Interlude'],
+		&[data-section*='Instrumental'] {
 			border-left: 4px solid silver;
 
 			&:before {
-				content: "INST";
+				content: 'INST';
 				background-color: silver;
 			}
 		}
 
-		&[data-section*="Verse"] {
+		&[data-section*='Verse'] {
 			border-left: 4px solid #444;
 
 			&:before {
@@ -130,34 +128,55 @@ $chord-gap: .75em;
 			}
 		}
 
-		&[data-section*="Tag"] {
+		&[data-section*='Tag'] {
 			border-left: 4px solid #444;
 
 			&:before {
 				background-color: #444;
-				content: "Tag";
+				content: 'Tag';
 			}
 		}
-		&[data-section*="Hook"] {
+		&[data-section*='Hook'] {
 			border-left: 4px solid #444;
 
 			&:before {
 				background-color: #444;
-				content: "Hk";
+				content: 'Hk';
 			}
 		}
 
-		&[data-section*="Verse"]:before { content: "V"; }
-		&[data-section*="Verse 1"]:before { content: "1"; }
-		&[data-section*="Verse 2"]:before { content: "2"; }
-		&[data-section*="Verse 3"]:before { content: "3"; }
-		&[data-section*="Verse 4"]:before { content: "4"; }
-		&[data-section*="Verse 5"]:before { content: "5"; }
-		&[data-section*="Verse 6"]:before { content: "6"; }
-		&[data-section*="Verse 7"]:before { content: "7"; }
-		&[data-section*="Verse 8"]:before { content: "8"; }
-		&[data-section*="Verse 9"]:before { content: "9"; }
-		&[data-section*="Verse 10"]:before { content: "10"; }
-
+		&[data-section*='Verse']:before {
+			content: 'V';
+		}
+		&[data-section*='Verse 1']:before {
+			content: '1';
+		}
+		&[data-section*='Verse 2']:before {
+			content: '2';
+		}
+		&[data-section*='Verse 3']:before {
+			content: '3';
+		}
+		&[data-section*='Verse 4']:before {
+			content: '4';
+		}
+		&[data-section*='Verse 5']:before {
+			content: '5';
+		}
+		&[data-section*='Verse 6']:before {
+			content: '6';
+		}
+		&[data-section*='Verse 7']:before {
+			content: '7';
+		}
+		&[data-section*='Verse 8']:before {
+			content: '8';
+		}
+		&[data-section*='Verse 9']:before {
+			content: '9';
+		}
+		&[data-section*='Verse 10']:before {
+			content: '10';
+		}
 	}
 }

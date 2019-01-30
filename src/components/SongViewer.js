@@ -34,7 +34,6 @@ import transposeChord from '../utils/transpose-chord'
 import transposeLines from '../utils/transpose-lines'
 
 import { linesToNashville } from '../utils/convertToNashville'
-//import './SongViewer.scss';
 
 import {
 	Image as ImageIcon,
@@ -381,7 +380,7 @@ class SongViewer extends Component {
 					<ContentLimiter>
 						<section className="section">
 							<div className="container">
-								<Typography>
+								<Typography component="div">
 									<Song
 										chordSize={chordSize}
 										lines={lines}
