@@ -11,7 +11,33 @@ import Line from './Line'
 const sectionData = [
 	{ abbreviation: 'BR', color: '#03a9f4', title: 'Bridge' },
 	{ abbreviation: 'CH', color: '#ff5252', title: 'Chorus' },
-	{ abbreviation: 'CH 2', color: '#ff5252', title: 'Chorus 2' }
+	{ abbreviation: 'CH 2', color: '#ff5252', title: 'Chorus 2' },
+	{ abbreviation: 'CH 3', color: '#ff5252', title: 'Chorus 3' },
+	{ abbreviation: 'CH 4', color: '#ff5252', title: 'Chorus 4' },
+	{ abbreviation: 'PC', color: '#ff9800', title: 'Pre-chorus' },
+	{ abbreviation: 'PC', color: '#ff9800', title: 'Pre-Chorus' },
+	{ abbreviation: 'PC', color: '#ff9800', title: 'Pre chorus' },
+	{ abbreviation: 'PC', color: '#ff9800', title: 'Prechorus' },
+	{ abbreviation: 'PC', color: '#ff9800', title: 'Pre-chorus' },
+	{ abbreviation: 'IN', color: '#00bcd4', title: 'Intro' },
+	{ abbreviation: 'OUT', color: '#444', title: 'Outtro' },
+	{ abbreviation: 'OUT', color: '#444', title: 'Out' },
+	{ abbreviation: 'INST', color: 'silver', title: 'Interlude' },
+	{ abbreviation: 'INST', color: 'silver', title: 'Instrumental' },
+	{ abbreviation: 'TAG', color: '#444', title: 'Tag' },
+	{ abbreviation: 'HOOK', color: '#444', title: 'Hook' },
+	{ abbreviation: 'V', color: '#444', title: 'Verse' },
+	{ abbreviation: '1', color: '#444', title: 'Verse 1' },
+	{ abbreviation: '2', color: '#444', title: 'Verse 2' },
+	{ abbreviation: '3', color: '#444', title: 'Verse 3' },
+	{ abbreviation: '4', color: '#444', title: 'Verse 4' },
+	{ abbreviation: '5', color: '#444', title: 'Verse 5' },
+	{ abbreviation: '6', color: '#444', title: 'Verse 6' },
+	{ abbreviation: '7', color: '#444', title: 'Verse 7' },
+	{ abbreviation: '8', color: '#444', title: 'Verse 8' },
+	{ abbreviation: '9', color: '#444', title: 'Verse 9' },
+	{ abbreviation: '10', color: '#444', title: 'Verse 10' },
+	{ abbreviation: '10', color: '#444', title: 'Verse 11' }
 ]
 
 const sectionStyles = {}
