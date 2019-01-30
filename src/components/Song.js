@@ -23,6 +23,7 @@ const sectionData = [
 	{ abbreviation: 'IN', color: '#00bcd4', title: 'Intro' },
 	{ abbreviation: 'OUT', color: '#444', title: 'Outtro' },
 	{ abbreviation: 'OUT', color: '#444', title: 'Out' },
+	{ abbreviation: 'END', color: '#444', title: 'End' },
 	{ abbreviation: 'INST', color: 'silver', title: 'Interlude' },
 	{ abbreviation: 'INST', color: 'silver', title: 'Instrumental' },
 	{ abbreviation: 'TAG', color: '#444', title: 'Tag' },
