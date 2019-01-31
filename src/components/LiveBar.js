@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { find, findIndex } from 'lodash'
 import { Link, matchPath, withRouter } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import Hidden from '@material-ui/core/Hidden'
@@ -126,8 +126,7 @@ class LiveBar extends Component {
 						previousSongKey: previousSong ? previousSong.key : '-',
 						previousSongTitle: previousSong
 							? previousSong.title
-							: '-- BEGINNING --',
-						currentSetId: set._id
+							: '-- BEGINNING --'
 					})
 				})
 			})
@@ -135,15 +134,19 @@ class LiveBar extends Component {
 	}
 
 	render() {
-		const { onGoToNextSong, onGoToPreviousSong, classes } = this.props
+		const {
+			currentSet,
+			onGoToNextSong,
+			onGoToPreviousSong,
+			classes
+		} = this.props
 
 		const {
 			currentSong,
 			nextSongKey,
 			nextSongTitle,
 			previousSongKey,
-			previousSongTitle,
-			currentSetId
+			previousSongTitle
 		} = this.state
 
 		const sections = []
@@ -201,8 +204,9 @@ class LiveBar extends Component {
 							<Hidden xsDown>
 								<Tooltip title="Back to setlist">
 									<IconButton
-										href={`/sets/${currentSetId}`}
 										className={classes.button}
+										component={Link}
+										to={`/sets/${currentSet.id}`}
 									>
 										<SetListIcon />
 									</IconButton>
@@ -268,4 +272,8 @@ class LiveBar extends Component {
 	}
 }
 
-export default withStyles(styles)(withRouter(LiveBar))
+const mapStateToProps = state => ({
+	currentSet: state.currentSet
+})
+
+export default withRouter(connect(mapStateToProps)(withStyles(styles)(LiveBar)))

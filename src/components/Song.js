@@ -55,6 +55,7 @@ forEach(sectionData, item => {
 
 const styles = theme => ({
 	section: {
+		borderLeft: '4px solid #444',
 		marginLeft: theme.spacing.keyline,
 		marginTop: theme.spacing.unit,
 		paddingBottom: 0,
@@ -63,7 +64,7 @@ const styles = theme => ({
 		position: 'relative',
 
 		'&[data-section]:before': {
-			backgroundColor: '#eee',
+			backgroundColor: '#444',
 			borderRadius: theme.spacing.unit / 2,
 			color: 'white',
 			paddingBottom: theme.spacing.unit / 2,

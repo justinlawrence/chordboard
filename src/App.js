@@ -9,7 +9,10 @@ import {
 	withRouter
 } from 'react-router-dom'
 
+import { withStyles } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
+import Grid from '@material-ui/core/Grid'
+
 import * as actions from './redux/actions'
 import { db } from './database'
 import { db as firestore } from './firebase'
@@ -68,6 +71,19 @@ db.allDocs({ include_docs: true }).then(response => {
 	// 	})
 })
 //-------------------------------------------------------------------------
+
+const styles = theme => ({
+	root: {
+		height: '100vh'
+	},
+	content: {
+		minHeight: 0
+	},
+	scrollBars: {
+		height: '100%',
+		overflowY: 'auto'
+	}
+})
 
 class App extends Component {
 	exitLiveMode = () => {
@@ -151,58 +167,62 @@ class App extends Component {
 	}
 
 	render() {
-		const { user } = this.props
+		const { classes, user } = this.props
 		return (
-			<div className="app">
-				<div className="app__content">
-					<CssBaseline />
-					<Navbar />
-					<Switch>
-						<Route exact path="/privacy" component={Privacy} />
-						<Route exact path="/login" component={Login} />
-						<Route path="/sets" component={SetListContainer} />
+			<Grid container className={classes.root} direction="column" wrap="nowrap">
+				<CssBaseline />
+				<Grid className={classes.content} item xs>
+					<div className={classes.scrollBars}>
+						<Navbar />
+						<Switch>
+							<Route exact path="/privacy" component={Privacy} />
+							<Route exact path="/login" component={Login} />
+							<Route path="/sets" component={SetListContainer} />
 
-						{!user.name && <Redirect to="/login" />}
+							{!user.name && <Redirect to="/login" />}
 
-						<Route exact path="/songs" component={SongListContainer} />
+							<Route exact path="/songs" component={SongListContainer} />
 
-						<Route
-							exact
-							path="/songs/add-to-set/:setId"
-							render={props => (
-								<SongListContainer
-									setId={props.match.params.setId}
-									{...props}
-								/>
-							)}
-						/>
+							<Route
+								exact
+								path="/songs/add-to-set/:setId"
+								render={props => (
+									<SongListContainer
+										setId={props.match.params.setId}
+										{...props}
+									/>
+								)}
+							/>
 
-						<Route exact path="/songs/new" component={SongEditor} />
+							<Route exact path="/songs/new" component={SongEditor} />
 
-						<Route
-							exact
-							path="/songs/:id/edit"
-							render={props => (
-								<SongEditor id={props.match.params.id} {...props} />
-							)}
-						/>
+							<Route
+								exact
+								path="/songs/:id/edit"
+								render={props => (
+									<SongEditor id={props.match.params.id} {...props} />
+								)}
+							/>
 
-						<Route
-							exact
-							path="/songs/:id"
-							render={({ match }) => <SongContainer id={match.params.id} />}
-						/>
+							<Route
+								exact
+								path="/songs/:id"
+								render={({ match }) => <SongContainer id={match.params.id} />}
+							/>
 
-						<Redirect to="/sets" />
-					</Switch>
-				</div>
+							<Redirect to="/sets" />
+						</Switch>
+					</div>
+				</Grid>
 
-				<LiveBar
-					onExitLiveMode={this.exitLiveMode}
-					onGoToNextSong={this.goToNextSong}
-					onGoToPreviousSong={this.goToPreviousSong}
-				/>
-			</div>
+				<Grid item>
+					<LiveBar
+						onExitLiveMode={this.exitLiveMode}
+						onGoToNextSong={this.goToNextSong}
+						onGoToPreviousSong={this.goToPreviousSong}
+					/>
+				</Grid>
+			</Grid>
 		)
 	}
 }
@@ -215,5 +235,5 @@ export default withRouter(
 	connect(
 		mapStateToProps,
 		actions
-	)(App)
+	)(withStyles(styles)(App))
 )
