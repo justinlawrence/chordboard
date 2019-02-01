@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import { forEach } from 'lodash'
 
 import { withStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 
 import ChordLine from './ChordLine'
 import ChordPair from './ChordPair'
 import Line from './Line'
-import Typography from '@material-ui/core/Typography'
 
 const sectionData = [
 	{ abbreviation: 'BR', color: '#03a9f4', title: 'Bridge' },

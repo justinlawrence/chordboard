@@ -14,6 +14,7 @@ import {
 	FormatListBulleted as SetListIcon
 } from 'mdi-material-ui'
 
+import * as actions from '../redux/actions'
 import { db } from '../database'
 import SongKey from './SongKey'
 import Song from '../utils/Song'
@@ -52,8 +53,9 @@ class LiveBar extends Component {
 	static propTypes = {
 		classes: PropTypes.object,
 		location: PropTypes.object,
-		onGoToNextSong: PropTypes.func,
-		onGoToPreviousSong: PropTypes.func
+		// Redux props
+		goToNextSong: PropTypes.func,
+		goToPreviousSong: PropTypes.func
 	}
 
 	state = {
@@ -70,6 +72,9 @@ class LiveBar extends Component {
 	componentWillReceiveProps(nextProps) {
 		this.handleProps(nextProps)
 	}
+
+	handleGoToNextSong = () => this.props.goToNextSong()
+	handleGoToPreviousSong = () => this.props.goToPreviousSong()
 
 	handleProps = props => {
 		const { location } = props
@@ -215,15 +220,18 @@ class LiveBar extends Component {
 
 							<Tooltip title="Jump to previous song">
 								<IconButton
-									onClick={onGoToPreviousSong}
 									className={classes.button}
+									onClick={this.handleGoToPreviousSong}
 								>
 									<ChevronLeftIcon />
 								</IconButton>
 							</Tooltip>
 
 							<Tooltip title="Jump to next song">
-								<IconButton onClick={onGoToNextSong} className={classes.button}>
+								<IconButton
+									className={classes.button}
+									onClick={this.handleGoToNextSong}
+								>
 									<ChevronRightIcon />
 								</IconButton>
 							</Tooltip>
@@ -273,7 +281,13 @@ class LiveBar extends Component {
 }
 
 const mapStateToProps = state => ({
-	currentSet: state.currentSet
+	currentSet: state.currentSet,
+	currentSong: state.currentSong
 })
 
-export default withRouter(connect(mapStateToProps)(withStyles(styles)(LiveBar)))
+export default withRouter(
+	connect(
+		mapStateToProps,
+		actions
+	)(withStyles(styles)(LiveBar))
+)

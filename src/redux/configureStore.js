@@ -1,5 +1,6 @@
 import { applyMiddleware, createStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import { routerMiddleware } from 'react-router-redux'
 //import { persistentStore } from 'redux-pouchdb'
 //import PouchDB from 'pouchdb'
 import createSagaMiddleware from 'redux-saga'
