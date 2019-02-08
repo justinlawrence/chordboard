@@ -22,7 +22,17 @@ const byId = handleActions(
 				}
 				return acc
 			})({ ...state })(action.payload),
-		REMOVE_SET: (state, action) => omit(action.payload)({ ...state })
+		REMOVE_SET: (state, action) => omit(action.payload)({ ...state }),
+		SET_SET_SONGS: (state, action) => {
+			const newState = {
+				...state,
+				[action.payload.setId]: {
+					...state[action.payload.setId],
+					songs: action.payload.songs
+				}
+			}
+			return newState
+		}
 	},
 	initialState.byId
 )

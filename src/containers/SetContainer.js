@@ -78,73 +78,53 @@ class SetContainer extends Component {
 		}
 	}
 
-	handleRemoveSong = songId => {
-		const set = { ...this.props.currentSet }
-		const setSongs = set.songs.slice()
-		const songs = this.state.songs.slice()
-
-		remove(setSongs, { id: songId })
-		remove(songs, { id: songId })
-
-		set.songs = setSongs
-
-		this.setState({ songs })
-
-		if (set) {
-			this.props.setCurrentSet(set)
-			this.props.updateSet(set)
-		}
-	}
-
 	render() {
 		const { currentSet } = this.props
 
-		return (
-			currentSet && (
-				<div>
-					<Route
-						exact
-						path="/sets/:setId"
-						render={props => (
-							<SetViewer
-								onChangeKey={this.handleChangeKey}
-								onSongMove={this.handleSongMove}
-								onRemoveSet={this.handleRemoveSet}
-								onRemoveSong={this.handleRemoveSong}
-								set={currentSet}
-								{...props}
-							/>
-						)}
-					/>
-					<Route
-						exact
-						path="/sets/:setId/songs/:songId"
-						render={({ match }) => {
-							const songId = match.params.songId
+		return currentSet ? (
+			<div>
+				<Route
+					exact
+					path="/sets/:setId"
+					render={props => (
+						<SetViewer
+							onChangeKey={this.handleChangeKey}
+							onSongMove={this.handleSongMove}
+							onRemoveSet={this.handleRemoveSet}
+							onRemoveSong={this.handleRemoveSong}
+							setId={currentSet.id}
+							{...props}
+						/>
+					)}
+				/>
+				<Route
+					exact
+					path="/sets/:setId/songs/:songId"
+					render={({ match }) => {
+						const songId = match.params.songId
 
-							const index = findIndex(currentSet.songs, { id: songId })
-							const currentKey =
-								currentSet && currentSet.songs[index]
-									? currentSet.songs[index].key
-									: null
+						const index = findIndex(currentSet.songs, { id: songId })
+						const currentKey =
+							currentSet && currentSet.songs[index]
+								? currentSet.songs[index].key
+								: null
 
-							//TODO: catch errors where the set song key is empty
+						//TODO: catch errors where the set song key is empty
 
-							return (
-								<div>
-									<SongContainer currentKey={currentKey} id={songId} />
-								</div>
-							)
-						}}
-					/>
-				</div>
-			)
-		)
+						return (
+							<div>
+								<SongContainer currentKey={currentKey} id={songId} />
+							</div>
+						)
+					}}
+				/>
+			</div>
+		) : null
 	}
 }
 
 const mapStateToProps = state => ({
-	currentSet: state.currentSet
+	currentSet: state.sets.byId[state.currentSet.id]
 })
 
 export default connect(

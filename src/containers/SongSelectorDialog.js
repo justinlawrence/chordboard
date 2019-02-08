@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { compose } from 'recompose'
 import filter from 'lodash/fp/filter'
 import flow from 'lodash/fp/flow'
 import includes from 'lodash/fp/includes'
@@ -9,6 +10,7 @@ import reduce from 'lodash/fp/reduce'
 import toLower from 'lodash/fp/toLower'
 
 import { withStyles } from '@material-ui/core/styles'
+import withWidth, { isWidthUp } from '@material-ui/core/withWidth'
 import Button from '@material-ui/core/Button'
 import Checkbox from '@material-ui/core/Checkbox'
 import Dialog from '@material-ui/core/Dialog'
@@ -26,11 +28,9 @@ import Typography from '@material-ui/core/Typography'
 import { ArrowLeft as BackIcon, Magnify as SearchIcon } from 'mdi-material-ui'
 
 const styles = theme => ({
-	root: {
-		padding: '2px 4px',
-		display: 'flex',
-		alignItems: 'center',
-		width: '100%'
+	root: {},
+	scrollPaper: {
+		alignItems: 'flex-start'
 	},
 	input: {
 		marginLeft: 8,
@@ -45,8 +45,15 @@ const styles = theme => ({
 		margin: 4
 	},
 	content: {
+		flexGrow: '1',
 		paddingLeft: 0,
 		paddingRight: 0
+	},
+	searchBar: {
+		padding: '2px 4px',
+		display: 'flex',
+		alignItems: 'center',
+		width: '100%'
 	}
 })
 
@@ -59,6 +66,7 @@ class SongSelectorDialog extends PureComponent {
 		classes: PropTypes.object,
 		onClose: PropTypes.func.isRequired,
 		open: PropTypes.bool.isRequired,
+		width: PropTypes.string,
 		// Redux props
 		songs: PropTypes.array
 	}
@@ -105,12 +113,17 @@ class SongSelectorDialog extends PureComponent {
 
 		return (
 			<Dialog
-				onClose={this.handleClose}
 				aria-labelledby="song-selector-dialog"
+				classes={{
+					scrollPaper: classes.scrollPaper
+				}}
+				onClose={this.handleClose}
+				fullScreen={!isWidthUp('sm', this.props.width)}
+				fullWidth
 				open={open}
 			>
 				<DialogTitle id="song-selector-dialog">
-					<Paper className={classes.root} elevation={1}>
+					<Paper className={classes.searchBar} elevation={1}>
 						<IconButton className={classes.iconButton} aria-label="Back">
 							<BackIcon />
 						</IconButton>
@@ -171,4 +184,8 @@ const mapStateToProps = state => ({
 	})([])(state.songs.byId)
 })
 
-export default connect(mapStateToProps)(withStyles(styles)(SongSelectorDialog))
+export default compose(
+	connect(mapStateToProps),
+	withStyles(styles),
+	withWidth()
+)(SongSelectorDialog)

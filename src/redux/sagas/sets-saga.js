@@ -3,14 +3,17 @@ import { eventChannel } from 'redux-saga'
 import slugify from 'slugify'
 import map from 'lodash/fp/map'
 import pick from 'lodash/fp/pick'
+import filter from 'lodash/fp/filter'
 
 import { db } from '../../firebase'
 import {
 	ADD_SET,
 	REMOVE_SET,
+	REMOVE_SET_SONG,
 	UPDATE_SET,
 	mergeSets,
-	removeSet
+	removeSet,
+	setSetSongs
 } from '../actions'
 
 const setsCollection = db.collection('sets')
@@ -33,6 +36,7 @@ export function* setsSaga() {
 	yield takeEvery(setsChan, handleSetsEvent)
 	yield takeEvery(ADD_SET, handleAddSet)
 	yield takeEvery(REMOVE_SET, handleRemoveSet)
+	yield takeEvery(REMOVE_SET_SONG, handleRemoveSetSong)
 	yield takeEvery(UPDATE_SET, handleUpdateSet)
 }
 
@@ -58,6 +62,15 @@ function* handleRemoveSet({ payload: setId }) {
 	yield put(removeSet(setId))
 }
 
+function* handleRemoveSetSong({ payload }) {
+	const state = yield select()
+	const set = state.sets.byId[payload.setId]
+	const songs = filter(s => s.id !== payload.songId)(set.songs)
+	set.songs = songs
+	yield put(setSetSongs(payload.setId, songs))
+	yield setsCollection.doc(payload.setId).update({ songs })
+}
+
 function* handleUpdateSet({ payload: set }) {
 	if (set.title) {
 		set.slug = slugify(set.title)
@@ -79,8 +92,8 @@ function* handleUpdateSet({ payload: set }) {
 
 	set.songs = setSongs
 
-	yield setsCollection.doc(set.id).update(set)
 	yield put(mergeSets([set]))
+	yield setsCollection.doc(set.id).update(set)
 }
 
 function* handleSetsEvent(sets) {
