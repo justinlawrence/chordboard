@@ -18,6 +18,7 @@
 		"@sentry/browser": "^4.4.1",
 		"chord-magic": "^2.1.1",
 		"date-fns": "^2.0.0-alpha.26",
+		"history": "^4.7.2",
 		"lodash": "^4.17.11",
 		"material-ui-pickers": "^2.0.4",
 		"mdi-material-ui": "^5.7.0",

@@ -1,6 +1,6 @@
 import { applyMiddleware, createStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { routerMiddleware } from 'react-router-redux'
+//import { routerMiddleware } from 'react-router-redux'
 //import { persistentStore } from 'redux-pouchdb'
 //import PouchDB from 'pouchdb'
 import createSagaMiddleware from 'redux-saga'
@@ -8,6 +8,8 @@ import createSagaMiddleware from 'redux-saga'
 //import { setSyncState } from './actions'
 import { initSagas } from './init-sagas'
 import rootReducer from './reducers'
+import history from '../history'
+import { CHANGE_ROUTE } from './actions'
 
 //const syncEvents = ['active', 'change', 'complete', 'denied', 'error', 'paused']
 
@@ -38,7 +40,13 @@ const configureStore = () => {
 		retry: true,
 	})*/
 	const sagaMiddleware = createSagaMiddleware()
-	const middlewareChain = [sagaMiddleware]
+	const changeRouteMiddleware = () => next => action => {
+		if (action.type === CHANGE_ROUTE) {
+			history.push(action.payload)
+		}
+		return next(action)
+	}
+	const middlewareChain = [sagaMiddleware, changeRouteMiddleware]
 	const store = createStore(
 		rootReducer,
 		composeWithDevTools(

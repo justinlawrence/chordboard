@@ -10,6 +10,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
 import * as serviceWorker from './serviceWorker'
 import App from './App'
+import history from './history'
 import configureStore from './redux/configureStore'
 import defaultTheme from './themes/default-theme'
 
@@ -33,7 +34,7 @@ const theme = createMuiTheme(defaultTheme)
 
 ReactDOM.render(
 	<Provider store={store}>
-		<BrowserRouter>
+		<BrowserRouter history={history}>
 			<MuiThemeProvider theme={theme}>
 				<MuiPickersUtilsProvider utils={DateFnsUtils}>
 					<App />
