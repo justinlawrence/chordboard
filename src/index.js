@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter } from 'react-router-dom'
+import { Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import * as Sentry from '@sentry/browser'
 import DateFnsUtils from '@date-io/date-fns'
@@ -34,13 +34,13 @@ const theme = createMuiTheme(defaultTheme)
 
 ReactDOM.render(
 	<Provider store={store}>
-		<BrowserRouter history={history}>
+		<Router history={history}>
 			<MuiThemeProvider theme={theme}>
 				<MuiPickersUtilsProvider utils={DateFnsUtils}>
 					<App />
 				</MuiPickersUtilsProvider>
 			</MuiThemeProvider>
-		</BrowserRouter>
+		</Router>
 	</Provider>,
 	document.getElementById('root')
 )

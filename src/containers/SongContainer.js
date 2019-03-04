@@ -32,9 +32,9 @@ class SongContainer extends PureComponent {
 	}
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
 	currentSet: state.currentSet,
-	song: state.currentSong,
+	song: state.songs.byId[ownProps.id],
 	user: state.user
 })
 

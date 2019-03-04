@@ -17,3 +17,5 @@ export const currentSong = (state = initialState, action = {}) => {
 		return state
 	}
 }
+
+export const getCurrentSong = state => state.songs.byId[state.currentSong.id]
