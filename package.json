@@ -14,7 +14,7 @@
 	"homepage": "https://github.com/justinlawrence/chordboard#readme",
 	"dependencies": {
 		"@date-io/date-fns": "0.0.2",
-		"@material-ui/core": "^3.6.2",
+		"@material-ui/core": "^3.9.2",
 		"@sentry/browser": "^4.6.4",
 		"chord-magic": "^2.1.1",
 		"date-fns": "^2.0.0-alpha.26",
