@@ -33,7 +33,7 @@ class SetContainer extends Component {
 			set.songs = setSongs
 
 			if (set) {
-				this.props.setCurrentSet(set)
+				this.props.setCurrentSetId(set.id)
 				this.props.updateSet(set)
 			}
 		}
@@ -52,7 +52,7 @@ class SetContainer extends Component {
 		set.songs = setSongs
 
 		if (set) {
-			this.props.setCurrentSet(set)
+			this.props.setCurrentSetId(set.id)
 			this.props.updateSet(set)
 		}
 	}

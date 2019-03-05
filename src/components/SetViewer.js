@@ -203,6 +203,7 @@ class SetViewer extends Component {
 										<SetSong
 											key={song.id}
 											mode={mode}
+											onChangeKey={this.changeKey}
 											setId={set.id}
 											setKey={song.key}
 											songIndex={findIndex(set.songs, s => s.id === song.id)}

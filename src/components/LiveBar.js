@@ -140,7 +140,7 @@ class LiveBar extends Component {
 
 	render() {
 		const {
-			currentSet,
+			currentSetId,
 			onGoToNextSong,
 			onGoToPreviousSong,
 			classes
@@ -211,7 +211,7 @@ class LiveBar extends Component {
 									<IconButton
 										className={classes.button}
 										component={Link}
-										to={`/sets/${currentSet.id}`}
+										to={`/sets/${currentSetId}`}
 									>
 										<SetListIcon />
 									</IconButton>
@@ -281,8 +281,8 @@ class LiveBar extends Component {
 }
 
 const mapStateToProps = state => ({
-	currentSet: state.currentSet,
-	currentSong: state.currentSong
+	currentSetId: state.currentSet.id,
+	currentSong: state.songs.byId[state.currentSong.id]
 })
 
 export default withRouter(

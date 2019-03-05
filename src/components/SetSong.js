@@ -22,6 +22,7 @@ import KeySelector from './KeySelector'
 class SetSong extends PureComponent {
 	static propTypes = {
 		mode: PropTypes.string,
+		onChangeKey: PropTypes.func,
 		setId: PropTypes.string,
 		song: PropTypes.objext,
 		songId: PropTypes.string,
@@ -29,12 +30,15 @@ class SetSong extends PureComponent {
 		songKey: PropTypes.string
 	}
 
+	handleKeySelect = (key, amount) =>
+		this.props.onChangeKey && this.props.onChangeKey(this.props.songId, amount)
+
 	removeSong = songId => {
 		this.props.removeSetSong(this.props.setId, this.props.songId)
 	}
 
 	render() {
-		const { mode, setId, song, songId, songIndex, songKey } = this.props
+		const { mode, setId, setKey, song, songId, songIndex, songKey } = this.props
 
 		return (
 			<TableRow>
@@ -51,10 +55,7 @@ class SetSong extends PureComponent {
 				<TableCell>
 					<Grid container>
 						<Grid item>
-							<KeySelector
-								onSelect={(key, amount) => this.changeKey(songId, amount)}
-								songKey={songKey}
-							/>
+							<KeySelector onSelect={this.handleKeySelect} songKey={setKey} />
 						</Grid>
 
 						{mode === 'edit' && (

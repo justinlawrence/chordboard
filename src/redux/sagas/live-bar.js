@@ -18,8 +18,8 @@ export function* liveBarSaga() {
 
 function* handleGoToNextSong() {
 	const state = yield select()
-	const currentSet = state.currentSet
-	const currentSong = state.currentSong
+	const currentSet = state.sets.byId[state.currentSet.id]
+	const currentSong = state.songs.byId[state.currentSong.id]
 	if (currentSet) {
 		const index = findIndex(currentSet.songs, { id: currentSong.id })
 		const nextSong = currentSet.songs[index + 1]
@@ -34,8 +34,8 @@ function* handleGoToNextSong() {
 
 function* handleGoToPreviousSong() {
 	const state = yield select()
-	const currentSet = state.currentSet
-	const currentSong = state.currentSong
+	const currentSet = state.sets.byId[state.currentSet.id]
+	const currentSong = state.songs.byId[state.currentSong.id]
 	const index = findIndex(currentSet.songs, { id: currentSong.id })
 	const prevSong = currentSet.songs[index - 1]
 	if (prevSong) {

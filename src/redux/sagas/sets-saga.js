@@ -91,7 +91,7 @@ function* handleUpdateSet({ payload: set }) {
 	}
 
 	set.songs = setSongs
-
+	console.log(set)
 	yield put(mergeSets([set]))
 	yield setsCollection.doc(set.id).update(set)
 }
