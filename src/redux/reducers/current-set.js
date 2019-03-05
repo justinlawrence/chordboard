@@ -1,7 +1,7 @@
-import { SET_CURRENT_SET } from '../actions'
+import { SET_CURRENT_SET, SET_CURRENT_SET_ID } from '../actions'
 
 const initialState = {
-	_id: null,
+	id: null,
 	songs: []
 }
 
@@ -11,6 +11,11 @@ export const currentSet = (state = initialState, action = {}) => {
 		return {
 			...state,
 			...action.set
+		}
+
+	case SET_CURRENT_SET_ID:
+		return {
+			id: action.payload
 		}
 
 	default:

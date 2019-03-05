@@ -3,7 +3,9 @@ import { put, select, takeLatest } from 'redux-saga/effects'
 import { db } from '../../firebase'
 import {
 	FETCH_CURRENT_SET,
+	SET_CURRENT_SET_ID,
 	SET_CURRENT_SET_SONG_KEY,
+	changeRoute,
 	setCurrentSet,
 	setCurrentSong
 } from '../actions'
@@ -12,6 +14,7 @@ const setsCollection = db.collection('sets')
 
 export function* currentSetSaga() {
 	yield takeLatest(FETCH_CURRENT_SET, handleFetchSet)
+	yield takeLatest(SET_CURRENT_SET_ID, updateCurrentSetId)
 	//yield takeLatest( SET_CURRENT_SET_SONG_KEY, updateCurrentSetKey );
 }
 
@@ -41,6 +44,12 @@ function* handleFetchSet({ setId }) {
 		yield put(setCurrentSet(set))
 	} catch (e) {
 		console.error('currentSetSaga', e)
+	}
+}
+
+function* updateCurrentSetId({ payload }) {
+	if (payload === null) {
+		yield put(changeRoute('/sets'))
 	}
 }
 

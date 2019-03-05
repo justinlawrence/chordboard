@@ -1,12 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link, withRouter } from 'react-router-dom'
+import { Link, matchPath, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import map from 'lodash/map'
 
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
+import Grid from '@material-ui/core/Grid'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -35,8 +37,16 @@ class Navbar extends React.Component {
 	static propTypes = {
 		classes: PropTypes.object,
 		history: PropTypes.object,
+		location: PropTypes.object,
 		// Redux props
-		setCurrentUser: PropTypes.func.isRequired
+		currentSet: PropTypes.object,
+		setCurrentSetId: PropTypes.func.isRequired,
+		setCurrentUser: PropTypes.func.isRequired,
+		songs: PropTypes.array
+	}
+
+	handleBackButton = () => {
+		this.props.setCurrentSetId(null)
 	}
 
 	logout = () => {
@@ -68,28 +78,44 @@ class Navbar extends React.Component {
 	setUserTextSize = () => this.props.setCurrentUser({ textSize: 82 })
 
 	render() {
-		const { currentSet, classes } = this.props
+		const { classes, currentSet, location, songs } = this.props
+
+		let songId
+		const match = matchPath(location.pathname, {
+			path: '/sets/:setId/songs/:songId',
+			exact: true
+		})
+		if (match) {
+			songId = match.params.songId
+		}
 
 		return (
 			<div className={classes.root}>
 				<AppBar color="secondary" position="static" className="no-print">
 					<Toolbar>
 						{currentSet ? (
-							<Tabs indicatorColor="primary">
-								<Tab key={'close-tab'} icon={<ArrowLeftIcon />} />
-
-								{currentSet.songs.map(song => (
-									<Tab
-										label={song.title}
-										component={Link}
-										to={`/sets/${currentSet.id}/songs/${song.id}`}
-										key={`tabs-${song.id}`}
-										className={classes.tab}
-										color="inherit"
-										onClick={event => event.preventDefault()}
-									/>
-								))}
-							</Tabs>
+							<Grid container padding="none" wrap="nowrap" zeroMinWidth>
+								<Grid item>
+									<IconButton color="inherit" onClick={this.handleBackButton}>
+										<ArrowLeftIcon />
+									</IconButton>
+								</Grid>
+								<Grid item xs zeroMinWidth>
+									<Tabs indicatorColor="primary" value={songId}>
+										{map(songs, song => (
+											<Tab
+												key={`tabs-${song.id}`}
+												component={Link}
+												to={`/sets/${currentSet.id}/songs/${song.id}`}
+												label={song.title}
+												className={classes.tab}
+												color="inherit"
+												value={song.id}
+											/>
+										))}
+									</Tabs>
+								</Grid>
+							</Grid>
 						) : (
 							<React.Fragment>
 								<Link to="/">
@@ -111,8 +137,14 @@ class Navbar extends React.Component {
 }
 
 const mapStateToProps = state => ({
-	currentSet: state.currentSet,
-	currentSong: state.currentSong
+	currentSet: state.currentSet.id ? state.sets.byId[state.currentSet.id] : null,
+	currentSong: state.songs.byId[state.currentSong.id],
+	songs: state.currentSet.id
+		? map(
+			state.sets.byId[state.currentSet.id].songs,
+			song => state.songs.byId[song.id]
+		  )
+		: null
 })
 
 export default withRouter(
