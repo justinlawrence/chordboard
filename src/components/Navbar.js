@@ -6,10 +6,14 @@ import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 import Toolbar from '@material-ui/core/Toolbar'
 
 import * as actions from '../redux/actions'
 import chordboardLogo from '../chordboard-logo-light.png'
+import { ArrowLeft as ArrowLeftIcon } from 'mdi-material-ui'
 
 const styles = theme => ({
 	root: {},
@@ -23,7 +27,8 @@ const styles = theme => ({
 	logo: {
 		paddingRight: 8,
 		height: 16
-	}
+	},
+	tab: {}
 })
 
 class Navbar extends React.Component {
@@ -63,27 +68,41 @@ class Navbar extends React.Component {
 	setUserTextSize = () => this.props.setCurrentUser({ textSize: 82 })
 
 	render() {
-		const { classes } = this.props
+		const { currentSet, classes } = this.props
 
 		return (
 			<div className={classes.root}>
 				<AppBar color="secondary" position="static" className="no-print">
 					<Toolbar>
-						<Link to="/">
-							<img src={chordboardLogo} className={classes.logo} alt="" />
-						</Link>
+						{currentSet ? (
+							<Tabs indicatorColor="primary">
+								<Tab key={'close-tab'} icon={<ArrowLeftIcon />} />
 
-						{/*
-						<IconButton aria-label="Menu" className={classes.menuButton} color="inherit">
-							<MenuIcon/>
-						</IconButton> */}
-
-						<Button component={Link} color="inherit" to="/sets">
-							Sets
-						</Button>
-						<Button component={Link} color="inherit" to="/songs">
-							Songs
-						</Button>
+								{currentSet.songs.map(song => (
+									<Tab
+										label={song.title}
+										component={Link}
+										to={`/sets/${currentSet.id}/songs/${song.id}`}
+										key={`tabs-${song.id}`}
+										className={classes.tab}
+										color="inherit"
+										onClick={event => event.preventDefault()}
+									/>
+								))}
+							</Tabs>
+						) : (
+							<React.Fragment>
+								<Link to="/">
+									<img src={chordboardLogo} className={classes.logo} alt="" />
+								</Link>
+								<Button component={Link} color="inherit" to="/sets">
+									Sets
+								</Button>
+								<Button component={Link} color="inherit" to="/songs">
+									Songs
+								</Button>
+							</React.Fragment>
+						)}
 					</Toolbar>
 				</AppBar>
 			</div>
@@ -91,9 +110,14 @@ class Navbar extends React.Component {
 	}
 }
 
+const mapStateToProps = state => ({
+	currentSet: state.currentSet,
+	currentSong: state.currentSong
+})
+
 export default withRouter(
 	connect(
-		null,
+		mapStateToProps,
 		actions
 	)(withStyles(styles)(Navbar))
 )
