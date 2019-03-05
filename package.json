@@ -1,7 +1,7 @@
 {
 	"name": "chordboard",
 	"version": "0.1.0",
-	"description": "An open-source chord sheet manager for live musicians.",
+	"description": "The live, centralised setlist manager.",
 	"private": true,
 	"license": "ISC",
 	"repository": {
@@ -11,7 +11,7 @@
 	"bugs": {
 		"url": "https://github.com/justinlawrence/chordboard/issues"
 	},
-	"homepage": "https://github.com/justinlawrence/chordboard#readme",
+	"homepage": "https://chordboard.co",
 	"dependencies": {
 		"@date-io/date-fns": "0.0.2",
 		"@material-ui/core": "^3.9.2",
