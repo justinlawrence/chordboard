@@ -155,10 +155,8 @@ class SetViewer extends Component {
 										</Grow>
 									</Grid>
 									<Grid item>
-										<Typography variant="h6" gutterBottom>
-											{set.title}
-										</Typography>
-										<Typography gutterBottom>{set.author}</Typography>
+										<Typography variant="h4">{set.title}</Typography>
+										<Typography variant="caption">{set.author}</Typography>
 									</Grid>
 								</Grid>
 							)}
