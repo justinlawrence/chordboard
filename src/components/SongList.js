@@ -46,10 +46,6 @@ class SongList extends Component {
 		searchText: ''
 	}
 
-	handleSongClick = song => {
-		window.alert('TODO: redirect to the song URL')
-	}
-
 	addToSet = song => {
 		window.alert('TODO: move to redux')
 		/*db.get(this.props.setId)
