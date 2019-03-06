@@ -15,7 +15,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 
 import * as actions from '../redux/actions'
 import chordboardLogo from '../chordboard-logo-light.png'
-import { ArrowLeft as ArrowLeftIcon } from 'mdi-material-ui'
+import { Close as CloseIcon } from 'mdi-material-ui'
 
 const styles = theme => ({
 	root: {},
@@ -97,7 +97,7 @@ class Navbar extends React.Component {
 							<Grid container padding="none" wrap="nowrap" zeroMinWidth>
 								<Grid item>
 									<IconButton color="inherit" onClick={this.handleBackButton}>
-										<ArrowLeftIcon />
+										<CloseIcon />
 									</IconButton>
 								</Grid>
 								<Grid item xs zeroMinWidth>
