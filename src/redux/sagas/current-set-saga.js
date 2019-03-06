@@ -7,7 +7,6 @@ import {
 	SET_CURRENT_SET_SONG_KEY,
 	changeRoute,
 	setCurrentSetId,
-	setCurrentSong,
 	updateSet
 } from '../actions'
 

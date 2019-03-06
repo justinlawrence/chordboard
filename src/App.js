@@ -14,8 +14,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import Grid from '@material-ui/core/Grid'
 
 import * as actions from './redux/actions'
-import { db } from './database'
-import { db as firestore } from './firebase'
+import { db } from './firebase'
 import LiveBar from './components/LiveBar'
 import Login from './pages/Login'
 import Navbar from './components/Navbar'
@@ -24,53 +23,6 @@ import SongEditor from './components/SongEditor'
 import SongContainer from './containers/SongContainer'
 import SetListContainer from './containers/SetListContainer'
 import Privacy from './pages/Privacy'
-
-//-------------------------------------------------------------------------
-// SAVE SETS
-db.allDocs({ include_docs: true }).then(response => {
-	const sets = response.rows.map(i => i.doc).filter(d => d.type === 'set')
-	//console.log( sets );
-
-	sets.forEach(async set => {
-		const newSet = {
-			author: set.author,
-			setDate: set.setDate,
-			slug: set.slug,
-			songs: [],
-			title: set.title
-		}
-		//console.log('set', set);
-		/*for (let i = 0; i < set.songs.length; i++) {
-			const setSong = set.songs[i]
-			const doc = await db.get(setSong._id)
-			const querySnapshot = await firestore
-				.collection('songs')
-				.where('slug', '==', doc.slug)
-				.get()
-			querySnapshot.forEach(songDoc => {
-				newSet.songs.push({
-					id: songDoc.id,
-					ref: songDoc.ref,
-					key: setSong.key
-				})
-			})
-		}*/
-
-		//console.log('newSet', newSet);
-		// Uncomment to build new sets.
-		//firestore.collection( 'sets' ).add( newSet );
-	})
-
-	console.log('sets on pouchdb:', sets.length)
-
-	// firestore
-	// 	.collection('sets')
-	// 	.get()
-	// 	.then(querySnapshot => {
-	// 		console.log('sets on firebase:', querySnapshot.size)
-	// 	})
-})
-//-------------------------------------------------------------------------
 
 const styles = theme => ({
 	root: {
@@ -148,22 +100,6 @@ class App extends Component {
 
 			return set ? findIndex(set.songs, { id: match.params.songId }) : -1
 		})
-	}
-
-	_getListOfSongs = () => {
-		return db
-			.find({
-				selector: {
-					type: 'song'
-				}
-			})
-			.then(result => result.docs)
-			.catch(err => {
-				console.warn(
-					'App.constructor - pouchdb query failed: _getListOfSongs',
-					err
-				)
-			})
 	}
 
 	render() {

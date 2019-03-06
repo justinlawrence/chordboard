@@ -15,7 +15,6 @@ import {
 } from 'mdi-material-ui'
 
 import * as actions from '../redux/actions'
-import { db } from '../database'
 import SongKey from './SongKey'
 import Song from '../utils/Song'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -86,55 +85,55 @@ class LiveBar extends Component {
 		})
 
 		if (match) {
-			db.get(match.params.setId).then(set => {
-				const setSongs = set.songs
-				const index = findIndex(set.songs, { _id: match.params.songId })
-				const keys = [null, null, null]
-
-				const nextSetSong = setSongs && setSongs[index + 1]
-				const prevSetSong = setSongs && setSongs[index - 1]
-
-				if (match && match.params.songId) {
-					keys[1] = match.params.songId
-				}
-
-				if (index > -1) {
-					if (prevSetSong) {
-						keys[0] = prevSetSong._id
-					}
-					if (nextSetSong) {
-						keys[2] = nextSetSong._id
-					}
-				}
-
-				db.allDocs({
-					include_docs: true,
-					keys: keys.filter(k => k)
-				}).then(result => {
-					const songs = result.rows.map(r => r.doc).filter(r => !!r)
-
-					const currentSong = find(songs, { _id: keys[1] })
-					const nextSong = find(songs, { _id: keys[2] })
-					const previousSong = find(songs, { _id: keys[0] })
-
-					if (nextSong && nextSetSong) {
-						nextSong.key = nextSetSong.key
-					}
-					if (previousSong && prevSetSong) {
-						previousSong.key = prevSetSong.key
-					}
-
-					this.setState({
-						currentSong: currentSong ? new Song(currentSong) : null,
-						nextSongKey: nextSong ? nextSong.key : '-',
-						nextSongTitle: nextSong ? nextSong.title : '-- END --',
-						previousSongKey: previousSong ? previousSong.key : '-',
-						previousSongTitle: previousSong
-							? previousSong.title
-							: '-- BEGINNING --'
-					})
-				})
-			})
+			// db.get(match.params.setId).then(set => {
+			// 	const setSongs = set.songs
+			// 	const index = findIndex(set.songs, { _id: match.params.songId })
+			// 	const keys = [null, null, null]
+			//
+			// 	const nextSetSong = setSongs && setSongs[index + 1]
+			// 	const prevSetSong = setSongs && setSongs[index - 1]
+			//
+			// 	if (match && match.params.songId) {
+			// 		keys[1] = match.params.songId
+			// 	}
+			//
+			// 	if (index > -1) {
+			// 		if (prevSetSong) {
+			// 			keys[0] = prevSetSong._id
+			// 		}
+			// 		if (nextSetSong) {
+			// 			keys[2] = nextSetSong._id
+			// 		}
+			// 	}
+			//
+			// 	db.allDocs({
+			// 		include_docs: true,
+			// 		keys: keys.filter(k => k)
+			// 	}).then(result => {
+			// 		const songs = result.rows.map(r => r.doc).filter(r => !!r)
+			//
+			// 		const currentSong = find(songs, { _id: keys[1] })
+			// 		const nextSong = find(songs, { _id: keys[2] })
+			// 		const previousSong = find(songs, { _id: keys[0] })
+			//
+			// 		if (nextSong && nextSetSong) {
+			// 			nextSong.key = nextSetSong.key
+			// 		}
+			// 		if (previousSong && prevSetSong) {
+			// 			previousSong.key = prevSetSong.key
+			// 		}
+			//
+			// 		this.setState({
+			// 			currentSong: currentSong ? new Song(currentSong) : null,
+			// 			nextSongKey: nextSong ? nextSong.key : '-',
+			// 			nextSongTitle: nextSong ? nextSong.title : '-- END --',
+			// 			previousSongKey: previousSong ? previousSong.key : '-',
+			// 			previousSongTitle: previousSong
+			// 				? previousSong.title
+			// 				: '-- BEGINNING --'
+			// 		})
+			// 	})
+			// })
 		}
 	}
 

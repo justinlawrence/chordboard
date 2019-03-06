@@ -170,22 +170,6 @@ class App extends Component {
 			return set ? findIndex(set.songs, { id: match.params.songId }) : -1
 		})
 	}
-
-	_getListOfSongs = () => {
-		return db
-			.find({
-				selector: {
-					type: 'song'
-				}
-			})
-			.then(result => result.docs)
-			.catch(err => {
-				console.warn(
-					'App.constructor - pouchdb query failed: _getListOfSongs',
-					err
-				)
-			})
-	}
 }
 
 const mapStateToProps = state => ({

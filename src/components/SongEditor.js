@@ -12,7 +12,6 @@ import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 
-import { db } from '../database'
 import { parseSong } from './SongViewer'
 
 import * as actions from '../redux/actions'

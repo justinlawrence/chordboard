@@ -19,7 +19,6 @@ import Paper from '@material-ui/core/Paper'
 import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
 
-import { Sets, db, sync } from '../database'
 import * as actions from '../redux/actions'
 import ChordLine from './ChordLine'
 import ChordPair from './ChordPair'
@@ -86,63 +85,47 @@ class SongViewer extends Component {
 	}
 
 	componentDidMount() {
-		// Update an initial list when the component mounts.
-		this.updateListOfSets()
-
-		// Listen for any changes on the database.
-		sync.on('change', this.updateListOfSets.bind(this))
-
 		this.handleProps(this.props)
-
-		const songId = this.props.song.id
-		const setId = this.props.currentSet.id
-
-		console.log('songId', songId)
-		console.log('setId', setId)
 	}
 
 	componentWillReceiveProps(nextProps) {
 		this.handleProps(nextProps)
 	}
 
-	componentWillUnmount() {
-		sync.cancel()
-	}
-
 	addToSet = set => {
 		const { song } = this.props
 
-		db.get(set.id)
-			.then(doc => {
-				const data = {
-					...doc
-				}
-
-				data.songs = data.songs || []
-				data.songs.push({ id: song.id, key: song.key })
-				data.songs = uniqBy(data.songs, 'id')
-
-				db.put(data)
-					.then(() => {
-						if (this.props.history) {
-							const location = {
-								pathname: `/sets/${doc.id}`
-							}
-
-							this.props.history.push(location)
-						}
-					})
-					.catch(err => {
-						if (err.name === 'conflict') {
-							console.error('SongList.addToSet: conflict -', err)
-						} else {
-							console.error('SongList.addToSet -', err)
-						}
-					})
-			})
-			.catch(err => {
-				console.error(err)
-			})
+		// db.get(set.id)
+		// 	.then(doc => {
+		// 		const data = {
+		// 			...doc
+		// 		}
+		//
+		// 		data.songs = data.songs || []
+		// 		data.songs.push({ id: song.id, key: song.key })
+		// 		data.songs = uniqBy(data.songs, 'id')
+		//
+		// 		db.put(data)
+		// 			.then(() => {
+		// 				if (this.props.history) {
+		// 					const location = {
+		// 						pathname: `/sets/${doc.id}`
+		// 					}
+		//
+		// 					this.props.history.push(location)
+		// 				}
+		// 			})
+		// 			.catch(err => {
+		// 				if (err.name === 'conflict') {
+		// 					console.error('SongList.addToSet: conflict -', err)
+		// 				} else {
+		// 					console.error('SongList.addToSet -', err)
+		// 				}
+		// 			})
+		// 	})
+		// 	.catch(err => {
+		// 		console.error(err)
+		// 	})
 	}
 
 	createAddToSetHandler = set => () => {
@@ -245,9 +228,6 @@ class SongViewer extends Component {
 		this.setState(prevState => ({
 			isNashville: value !== undefined ? value : !prevState.isNashville
 		}))
-
-	updateListOfSets = () =>
-		Sets.getAll().then(setList => this.setState({ setList }))
 
 	render() {
 		const { classes, setKey, song, onClose } = this.props
