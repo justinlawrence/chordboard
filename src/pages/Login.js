@@ -146,7 +146,7 @@ class Login extends Component {
 
 								<img
 									src={chordboardLogo}
-									alt=""
+									alt="chordboard logo"
 									height="112px"
 									className={cx(
 										classes.addPaddingTop,
@@ -155,22 +155,22 @@ class Login extends Component {
 								/>
 
 								<TextField
-									id="name"
-									label="Full Name"
+									id="email"
+									label="Your E-mail Address"
 									className={classes.textField}
 									fullWidth
-									value={name}
-									onChange={this.handleNameChange}
+									value={email}
+									onChange={this.handleEmailChange}
 									margin="normal"
 								/>
 
 								<TextField
-									id="email"
-									label="Email"
+									id="name"
+									label="Your Name"
 									className={cx(classes.textField, classes.addPaddingBottom)}
 									fullWidth
-									value={email}
-									onChange={this.handleEmailChange}
+									value={name}
+									onChange={this.handleNameChange}
 									margin="normal"
 								/>
 
@@ -221,14 +221,6 @@ class Login extends Component {
 										</Button>
 									)}
 								/>
-
-								<Typography className={classes.addPaddingTop}>
-									Prefer not to log in?
-								</Typography>
-
-								<Button href={'https://immutable.chordboard.co'}>
-									Go to the previous version
-								</Button>
 							</Grid>
 						</Paper>
 					</form>
