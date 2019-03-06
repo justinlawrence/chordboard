@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-
 import includes from 'lodash/fp/includes'
 import toLower from 'lodash/fp/toLower'
-import { withStyles } from '@material-ui/core/styles'
 
+import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Hidden from '@material-ui/core/Hidden'
@@ -37,6 +37,11 @@ const styles = theme => ({
 })
 
 class SongList extends Component {
+	static propTypes = {
+		classes: PropTypes.object,
+		// Redux props
+		changeRoute: PropTypes.func.isRequired
+	}
 	state = {
 		searchText: ''
 	}
@@ -92,8 +97,11 @@ class SongList extends Component {
 
 	handleSearch = searchText => this.setState({ searchText })
 
+	handleTableRowClick = songId => () =>
+		this.props.changeRoute(`/songs/${songId}`)
+
 	render() {
-		const { songs } = this.props
+		const { classes, songs } = this.props
 
 		const filteredSongs = songs.filter(this.filterSongs)
 		//const isAddToSet = /\/add-to-set\//.test( path );
@@ -145,10 +153,15 @@ class SongList extends Component {
 
 					<TableBody>
 						{filteredSongs.map(song => (
-							<TableRow hover key={song.id} classes={styles.tableRow}>
+							<TableRow
+								className={classes.tableRow}
+								onClick={this.handleTableRowClick(song.id)}
+								hover
+								key={song.id}
+							>
 								<TableCell>
-									<Typography variant="h6" gutterBottom>
-										<a href={`/songs/${song.id}`}>{song.title}</a>
+									<Typography gutterBottom variant="h6">
+										{song.title}
 									</Typography>
 								</TableCell>
 

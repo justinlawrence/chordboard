@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { uniqBy } from 'lodash'
 import { connect } from 'react-redux'
 import { isAfter } from 'date-fns'
 
@@ -133,7 +132,7 @@ class SongViewer extends Component {
 		this.addToSet(set)
 	}
 
-	handleSelectSetKey = (option, amount) => {
+	handleSelectSetKey = option => {
 		const { song } = this.props
 		this.props.setCurrentSetSongKey({
 			key: option.key,
@@ -230,7 +229,7 @@ class SongViewer extends Component {
 		}))
 
 	render() {
-		const { classes, setKey, song, onClose } = this.props
+		const { classes, setKey, song } = this.props
 		const {
 			chordSize,
 			isNashville,
@@ -249,8 +248,6 @@ class SongViewer extends Component {
 		if (isNashville) {
 			lines = linesToNashville(displayKey, lines)
 		}
-
-		let sections = []
 
 		let capoKeyDescr = ''
 
