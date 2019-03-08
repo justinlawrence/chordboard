@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import includes from 'lodash/fp/includes'
+import sortBy from 'lodash/fp/sortBy'
 import toLower from 'lodash/fp/toLower'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -25,25 +26,28 @@ const styles = theme => ({
 		theme.palette.type === 'light'
 			? {
 				color: theme.palette.secondary.main,
-				backgroundColor: lighten(theme.palette.secondary.light, 0.85)
+				backgroundColor: lighten(
+					theme.palette.secondary.light,
+					0.85
+				),
 			  }
 			: {
 				color: theme.palette.text.primary,
-				backgroundColor: theme.palette.secondary.dark
+				backgroundColor: theme.palette.secondary.dark,
 			  },
 	tableRow: {
-		cursor: 'pointer'
-	}
+		cursor: 'pointer',
+	},
 })
 
 class SongList extends Component {
 	static propTypes = {
 		classes: PropTypes.object,
 		// Redux props
-		changeRoute: PropTypes.func.isRequired
+		changeRoute: PropTypes.func.isRequired,
 	}
 	state = {
-		searchText: ''
+		searchText: '',
 	}
 
 	addToSet = song => {
@@ -100,6 +104,7 @@ class SongList extends Component {
 		const { classes, songs } = this.props
 
 		const filteredSongs = songs.filter(this.filterSongs)
+		const sortedSongs = sortBy('title')(filteredSongs)
 		//const isAddToSet = /\/add-to-set\//.test( path );
 		const isAddToSet = /\/add-to-set\//.test(window.location.href)
 
@@ -107,13 +112,21 @@ class SongList extends Component {
 			<div>
 				<Hero>
 					<ContentLimiter>
-						<Grid container alignItems="center" justify="space-between">
+						<Grid
+							container
+							alignItems="center"
+							justify="space-between"
+						>
 							<Grid item>
 								<Typography variant="h4">Songs</Typography>
 							</Grid>
 
 							<Grid item>
-								<Grid container alignItems="center" spacing={16}>
+								<Grid
+									container
+									alignItems="center"
+									spacing={16}
+								>
 									<Grid item>
 										<SearchBox
 											onSearch={this.handleSearch}
@@ -148,7 +161,7 @@ class SongList extends Component {
 					</TableHead>
 
 					<TableBody>
-						{filteredSongs.map(song => (
+						{sortedSongs.map(song => (
 							<TableRow
 								className={classes.tableRow}
 								onClick={this.handleTableRowClick(song.id)}
@@ -184,5 +197,4 @@ class SongList extends Component {
 	}
 }
 
-// export default SongList
 export default withStyles(styles)(SongList)

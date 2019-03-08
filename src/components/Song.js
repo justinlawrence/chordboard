@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { forEach } from 'lodash'
 
 import { withStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
 
 import ChordLine from './ChordLine'
 import ChordPair from './ChordPair'
@@ -39,7 +38,7 @@ const sectionData = [
 	{ abbreviation: '8', color: '#444', title: 'Verse 8' },
 	{ abbreviation: '9', color: '#444', title: 'Verse 9' },
 	{ abbreviation: '10', color: '#444', title: 'Verse 10' },
-	{ abbreviation: '10', color: '#444', title: 'Verse 11' }
+	{ abbreviation: '10', color: '#444', title: 'Verse 11' },
 ]
 
 const sectionStyles = {}
@@ -48,8 +47,8 @@ forEach(sectionData, item => {
 		borderLeft: `4px solid ${item.color}`,
 		'&:before': {
 			content: `"${item.abbreviation}"`,
-			backgroundColor: item.color
-		}
+			backgroundColor: item.color,
+		},
 	}
 })
 
@@ -72,32 +71,36 @@ const styles = theme => ({
 			paddingRight: theme.spacing.unit,
 			paddingTop: theme.spacing.unit / 2,
 			position: 'absolute',
-			transform: 'translate(calc(-100% - 1em), 0)',
+			transform: 'translate(calc(-100% - 1em - 2px), 0)',
 			transformOrigin: '0 0',
 			textTransform: 'uppercase',
-			zIndex: 1
+			zIndex: 1,
 		},
 		...sectionStyles,
 
 		'&@media print': {
 			paddingLeft: theme.spacing.unit * 2,
-			marginLeft: theme.spacing.unit * 6
-		}
-	}
+			marginLeft: theme.spacing.unit * 6,
+		},
+
+		[theme.breakpoints.down('sm')]: {
+			marginLeft: 0,
+		},
+	},
 })
 
 class Song extends PureComponent {
 	static defaultProps = {
 		chordSize: 16,
 		lines: [],
-		wordSize: 20
+		wordSize: 20,
 	}
 
 	static propTypes = {
 		chordSize: PropTypes.number,
 		classes: PropTypes.object,
 		lines: PropTypes.array,
-		wordSize: PropTypes.number
+		wordSize: PropTypes.number,
 	}
 
 	render() {
@@ -138,7 +141,9 @@ class Song extends PureComponent {
 				break
 
 			case 'line':
-				children.push(<Line key={i} text={line.text} wordSize={wordSize} />)
+				children.push(
+					<Line key={i} text={line.text} wordSize={wordSize} />
+				)
 				break
 
 			case 'section':
