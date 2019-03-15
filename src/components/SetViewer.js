@@ -199,27 +199,38 @@ class SetViewer extends Component {
 								</Grid>
 							)}
 						</Grid>
-						<Grid item>
-							<Button
-								onClick={this.toggleEditMode(mode !== 'edit')}
-								variant="contained"
-							>
-								Edit set
-							</Button>
-						</Grid>
-						<Grid item>
-							<Button
-								color="primary"
-								onClick={this.handleAddASong}
-								variant="contained"
-							>
-								Add a song
-							</Button>
-							<SongSelectorDialog
-								onClose={this.handleSongSelectorClose}
-								open={isSongSelectorVisible}
-							/>
-						</Grid>
+
+						{mode !== 'edit' && (
+							<Grid item>
+								<Button
+									onClick={this.toggleEditMode(
+										mode !== 'edit'
+									)}
+									variant="contained"
+								>
+									Edit set
+								</Button>
+							</Grid>
+						)}
+
+						{mode !== 'edit' ? (
+							<Grid item>
+								<Button
+									color="primary"
+									onClick={this.handleAddASong}
+									variant="contained"
+								>
+									Add a song
+								</Button>
+							</Grid>
+						) : (
+							<Grid item>
+								<SongSelectorDialog
+									onClose={this.handleSongSelectorClose}
+									open={isSongSelectorVisible}
+								/>
+							</Grid>
+						)}
 					</Grid>
 				</Hero>
 
@@ -231,6 +242,7 @@ class SetViewer extends Component {
 						>
 							<TableHead>
 								<TableRow>
+									<TableCell>#</TableCell>
 									<TableCell>Song</TableCell>
 									<TableCell>Key</TableCell>
 								</TableRow>

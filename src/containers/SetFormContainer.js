@@ -10,23 +10,23 @@ import TextField from '@material-ui/core/TextField'
 import {
 	Calendar as CalendarIcon,
 	ChevronLeft as ChevronLeftIcon,
-	ChevronRight as ChevronRightIcon
+	ChevronRight as ChevronRightIcon,
 } from 'mdi-material-ui'
 
 const datePickerIcons = {
 	leftArrowIcon: <ChevronLeftIcon />,
-	rightArrowIcon: <ChevronRightIcon />
+	rightArrowIcon: <ChevronRightIcon />,
 }
 
 const modes = {
 	NEW: 'new',
-	EDIT: 'edit'
+	EDIT: 'edit',
 }
 
 const styles = theme => ({
 	deleteButton: {
-		color: theme.palette.error.main
-	}
+		color: theme.palette.error.main,
+	},
 })
 
 class SetFormContainer extends Component {
@@ -34,20 +34,20 @@ class SetFormContainer extends Component {
 		initialValues: {
 			author: '',
 			date: '',
-			title: ''
-		}
+			title: '',
+		},
 	}
 
 	static propTypes = {
 		initialValues: PropTypes.shape({
 			author: PropTypes.string,
 			date: PropTypes.string,
-			title: PropTypes.string
+			title: PropTypes.string,
 		}),
 		isEdit: PropTypes.bool,
 		onCancel: PropTypes.func.isRequired,
 		onDelete: PropTypes.func,
-		onSubmit: PropTypes.func.isRequired
+		onSubmit: PropTypes.func.isRequired,
 	}
 
 	state = {
@@ -55,21 +55,21 @@ class SetFormContainer extends Component {
 		newSet: {
 			author: this.props.initialValues.author || '',
 			date: this.props.initialValues.date || null,
-			title: this.props.initialValues.title || ''
-		}
+			title: this.props.initialValues.title || '',
+		},
 	}
 
 	handleChange = event => {
 		const value = event.target.value
 		const name = event.target.name
 		this.setState(prevState => ({
-			newSet: { ...prevState.newSet, [name]: value }
+			newSet: { ...prevState.newSet, [name]: value },
 		}))
 	}
 
 	handleDateChange = date =>
 		this.setState(prevState => ({
-			newSet: { ...prevState.newSet, date }
+			newSet: { ...prevState.newSet, date },
 		}))
 
 	handleClearForm = event => {
@@ -78,8 +78,8 @@ class SetFormContainer extends Component {
 			newSet: {
 				author: '',
 				date: '',
-				title: ''
-			}
+				title: '',
+			},
 		})
 	}
 
@@ -106,57 +106,63 @@ class SetFormContainer extends Component {
 		const currentDate = format(new Date(), 'd MMM yyyy')
 		return (
 			<form onSubmit={this.handleFormSubmit}>
-				<TextField
-					name="title"
-					label="Set title"
-					fullWidth
-					margin="normal"
-					onChange={this.handleChange}
-					value={newSet.title}
-				/>
+				<Grid container spacing={8}>
+					<Grid item xs={12} lg={4}>
+						<TextField
+							name="title"
+							label="Set title"
+							fullWidth
+							margin="normal"
+							onChange={this.handleChange}
+							value={newSet.title}
+						/>
+					</Grid>
 
-				{mode === modes.EDIT && (
-					<TextField
-						name="author"
-						label="Set author"
-						fullWidth
-						margin="normal"
-						onChange={this.handleChange}
-						value={newSet.author}
-					/>
-				)}
+					<Grid item xs={12} lg={4}>
+						<TextField
+							name="author"
+							label="Set author"
+							fullWidth
+							margin="normal"
+							onChange={this.handleChange}
+							value={newSet.author}
+						/>
+					</Grid>
 
-				<InlineDatePicker
-					label="Set date"
-					format="d MMM yyyy"
-					fullWidth
-					invalidDateMessage={`Invalid Date Format (eg. ${currentDate})`}
-					keyboard
-					keyboardIcon={<CalendarIcon />}
-					margin="normal"
-					value={newSet.date}
-					onChange={this.handleDateChange}
-					{...datePickerIcons}
-				/>
+					<Grid item xs={12} lg={2}>
+						<InlineDatePicker
+							label="Set date"
+							format="d MMM yyyy"
+							fullWidth
+							invalidDateMessage={`Invalid Date Format (eg. ${currentDate})`}
+							keyboard
+							keyboardIcon={<CalendarIcon />}
+							margin="normal"
+							value={newSet.date}
+							onChange={this.handleDateChange}
+							{...datePickerIcons}
+						/>
+					</Grid>
 
-				<Grid container justify="flex-end" spacing={8}>
-					{mode === modes.EDIT && (
-						<Grid item>
-							<Button
-								className={classes.deleteButton}
-								onClick={this.handleFormDelete}
-							>
-								Delete this set
-							</Button>
-						</Grid>
-					)}
+					<Grid item xs={8} lg={8}>
+						<Button
+							className={classes.deleteButton}
+							onClick={this.handleFormDelete}
+						>
+							Delete set
+						</Button>
+					</Grid>
 
-					<Grid item>
+					<Grid item xs={8} lg={1}>
 						<Button onClick={this.handleFormCancel}>Cancel</Button>
 					</Grid>
 
-					<Grid item>
-						<Button color="primary" type="submit" variant="contained">
+					<Grid item xs={8} lg={1}>
+						<Button
+							color="primary"
+							type="submit"
+							variant="contained"
+						>
 							Save
 						</Button>
 					</Grid>

@@ -19,18 +19,18 @@ const options = [
 	{ key: 'Ab', label: 'Ab', value: 'ab' },
 	{ key: 'A', label: 'A', value: 'a' },
 	{ key: 'Bb', label: 'Bb', value: 'bb' },
-	{ key: 'B', label: 'B', value: 'b' }
+	{ key: 'B', label: 'B', value: 'b' },
 ]
 
 const styles = theme => ({
 	root: {
-		minWidth: theme.spacing.unit * 9
-	}
+		minWidth: theme.spacing.unit * 9,
+	},
 })
 
 class KeySelector extends PureComponent {
 	state = {
-		value: 'c'
+		value: 'c',
 	}
 
 	componentDidMount() {
@@ -48,7 +48,10 @@ class KeySelector extends PureComponent {
 		this.setState({ value })
 
 		if (this.props.onSelect) {
-			this.props.onSelect(option, getKeyDiff(this.props.songKey, option.key))
+			this.props.onSelect(
+				option,
+				getKeyDiff(this.props.songKey, option.key)
+			)
 		}
 	}
 

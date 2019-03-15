@@ -54,13 +54,14 @@ class SetSong extends PureComponent {
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}
 				>
-					<TableCell>
-						<Typography variant="h6">
-							{songIndex + 1}. {song.title}
-						</Typography>
+					<TableCell padding={'dense'}>
+						<Typography variant="h6">{songIndex + 1}</Typography>
+					</TableCell>
+					<TableCell padding={'none'}>
+						<Typography variant="h6">{song.title}</Typography>
 					</TableCell>
 
-					<TableCell>
+					<TableCell padding={'none'}>
 						<Grid container>
 							<Grid item onClick={this.stopPropagation}>
 								<KeySelector
@@ -69,7 +70,7 @@ class SetSong extends PureComponent {
 								/>
 							</Grid>
 
-							{mode === 'edit' && (
+							{/*mode === 'edit' && (
 								<Grid item>
 									<IconButton
 										aria-label="Transpose down"
@@ -85,7 +86,7 @@ class SetSong extends PureComponent {
 										<PlusIcon />
 									</IconButton>
 								</Grid>
-							)}
+							)*/}
 						</Grid>
 					</TableCell>
 
