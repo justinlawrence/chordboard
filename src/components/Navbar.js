@@ -116,6 +116,8 @@ class Navbar extends React.Component {
 									<Tabs
 										indicatorColor="primary"
 										value={songId || false}
+										variant="scrollable"
+										scrollButtons="auto"
 									>
 										{map(songs, song => (
 											<Tab
