@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 
 import IconButton from '@material-ui/core/IconButton'
 import Grid from '@material-ui/core/Grid'
+import RootRef from '@material-ui/core/RootRef'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import Typography from '@material-ui/core/Typography'
@@ -13,7 +14,7 @@ import {
 	ArrowDown as ArrowDownIcon,
 	Delete as DeleteIcon,
 	Minus as MinusIcon,
-	Plus as PlusIcon
+	Plus as PlusIcon,
 } from 'mdi-material-ui'
 
 import * as actions from '../redux/actions'
@@ -23,94 +24,102 @@ class SetSong extends PureComponent {
 	static propTypes = {
 		mode: PropTypes.string,
 		onChangeKey: PropTypes.func,
+		provided: PropTypes.object,
 		setId: PropTypes.string,
 		song: PropTypes.objext,
 		songId: PropTypes.string,
 		songIndex: PropTypes.number,
-		songKey: PropTypes.string
+		songKey: PropTypes.string,
 	}
 
 	handleKeySelect = (key, amount) =>
-		this.props.onChangeKey && this.props.onChangeKey(this.props.songId, amount)
+		this.props.onChangeKey &&
+		this.props.onChangeKey(this.props.songId, amount)
 
-	removeSong = songId => {
+	onMoveSongDown = () => {}
+
+	onMoveSongUp = () => {}
+
+	removeSong = songId =>
 		this.props.removeSetSong(this.props.setId, this.props.songId)
-	}
 
 	render() {
-		const { mode, setId, setKey, song, songId, songIndex, songKey } = this.props
+		const {
+			mode,
+			provided,
+			setId,
+			setKey,
+			song,
+			songId,
+			songIndex,
+			songKey,
+		} = this.props
 
 		return (
-			<TableRow>
-				<TableCell>
-					<Typography
-						component={Link}
-						to={`/sets/${setId}/songs/${songId}`}
-						variant="h6"
-					>
-						{songIndex + 1}. {song.title}
-					</Typography>
-				</TableCell>
-
-				<TableCell>
-					<Grid container>
-						<Grid item>
-							<KeySelector onSelect={this.handleKeySelect} songKey={setKey} />
-						</Grid>
-
-						{mode === 'edit' && (
-							<Grid item>
-								<IconButton
-									aria-label="Transpose down"
-									onClick={() => this.transposeDown(song)}
-								>
-									<MinusIcon />
-								</IconButton>
-
-								<IconButton
-									aria-label="Transpose up"
-									onClick={() => this.transposeUp(song)}
-								>
-									<PlusIcon />
-								</IconButton>
-							</Grid>
-						)}
-					</Grid>
-				</TableCell>
-
-				{mode === 'edit' && (
+			<RootRef rootRef={provided.innerRef}>
+				<TableRow
+					{...provided.draggableProps}
+					{...provided.dragHandleProps}
+				>
 					<TableCell>
-						<Grid container wrap="nowrap">
-							<IconButton
-								aria-label="Move song up"
-								onClick={() => this.onMoveSongUp(songId)}
-							>
-								<ArrowUpIcon />
-							</IconButton>
+						<Typography
+							component={Link}
+							to={`/sets/${setId}/songs/${songId}`}
+							variant="h6"
+						>
+							{songIndex + 1}. {song.title}
+						</Typography>
+					</TableCell>
 
-							<IconButton
-								aria-label="Move song down"
-								onClick={() => this.onMoveSongDown(songId)}
-							>
-								<ArrowDownIcon />
-							</IconButton>
+					<TableCell>
+						<Grid container>
+							<Grid item>
+								<KeySelector
+									onSelect={this.handleKeySelect}
+									songKey={setKey}
+								/>
+							</Grid>
 
-							<IconButton
-								aria-label="Remove song"
-								onClick={() => this.removeSong(songId)}
-							>
-								<DeleteIcon />
-							</IconButton>
+							{mode === 'edit' && (
+								<Grid item>
+									<IconButton
+										aria-label="Transpose down"
+										onClick={() => this.transposeDown(song)}
+									>
+										<MinusIcon />
+									</IconButton>
+
+									<IconButton
+										aria-label="Transpose up"
+										onClick={() => this.transposeUp(song)}
+									>
+										<PlusIcon />
+									</IconButton>
+								</Grid>
+							)}
 						</Grid>
 					</TableCell>
-				)}
-			</TableRow>
+
+					{mode === 'edit' && (
+						<TableCell>
+							<Grid container wrap="nowrap">
+								<IconButton
+									aria-label="Remove song"
+									onClick={() => this.removeSong(songId)}
+								>
+									<DeleteIcon />
+								</IconButton>
+							</Grid>
+						</TableCell>
+					)}
+				</TableRow>
+			</RootRef>
 		)
 	}
 }
 
 const mapStateToProps = (state, ownProps) => ({
-	song: state.songs.byId[ownProps.songId]
+	song: state.songs.byId[ownProps.songId],
 })
 
 export default connect(

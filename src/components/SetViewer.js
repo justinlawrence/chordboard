@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { findIndex } from 'lodash'
 import uniqBy from 'lodash/fp/uniqBy'
-import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Grow from '@material-ui/core/Grow'
+import RootRef from '@material-ui/core/RootRef'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -25,19 +27,19 @@ import SongSelectorDialog from '../containers/SongSelectorDialog'
 const styles = theme => ({
 	container: {
 		display: 'flex',
-		flexWrap: 'wrap'
+		flexWrap: 'wrap',
 	},
 	form: theme.mixins.gutters({
 		paddingBottom: theme.spacing.unit * 2,
 		paddingTop: theme.spacing.unit * 2,
-		width: 500
+		width: 500,
 	}),
 	formFooter: {
-		marginTop: theme.spacing.unit * 2
+		marginTop: theme.spacing.unit * 2,
 	},
 	deleteButton: {
-		color: theme.palette.error.main
-	}
+		color: theme.palette.error.main,
+	},
 })
 
 class SetViewer extends Component {
@@ -50,13 +52,13 @@ class SetViewer extends Component {
 		user: PropTypes.object,
 		// Redux props
 		set: PropTypes.object,
-		updateSet: PropTypes.func.isRequired
+		updateSet: PropTypes.func.isRequired,
 	}
 
 	state = {
 		isLoading: false,
 		isSongSelectorVisible: false,
-		mode: ''
+		mode: '',
 	}
 
 	componentDidMount() {
@@ -86,6 +88,8 @@ class SetViewer extends Component {
 			this.props.onRemoveSet()
 		}
 	}
+
+	handleDragEnd = ({ destination, source }) => {}
 
 	handleSongSelectorClose = setSongs => {
 		this.setState({ isSongSelectorVisible: false })
@@ -138,7 +142,7 @@ class SetViewer extends Component {
 									initialValues={{
 										author: set.author,
 										date: set.setDate,
-										title: set.title
+										title: set.title,
 									}}
 									onCancel={this.toggleEditMode(false)}
 									onDelete={this.handleDeleteSet}
@@ -148,15 +152,24 @@ class SetViewer extends Component {
 							) : (
 								<Grid container spacing={24}>
 									<Grid item className="is-hidden-mobile">
-										<Grow in={Boolean(set.setDate)} mountOnEnter>
+										<Grow
+											in={Boolean(set.setDate)}
+											mountOnEnter
+										>
 											<div>
-												<DateSignifier date={set.setDate} />
+												<DateSignifier
+													date={set.setDate}
+												/>
 											</div>
 										</Grow>
 									</Grid>
 									<Grid item>
-										<Typography variant="h4">{set.title}</Typography>
-										<Typography variant="caption">{set.author}</Typography>
+										<Typography variant="h4">
+											{set.title}
+										</Typography>
+										<Typography variant="caption">
+											{set.author}
+										</Typography>
 									</Grid>
 								</Grid>
 							)}
@@ -187,7 +200,10 @@ class SetViewer extends Component {
 
 				<section className="section">
 					<div className="container">
-						<Table className={classes.table} aria-labelledby="tableTitle">
+						<Table
+							className={classes.table}
+							aria-labelledby="tableTitle"
+						>
 							<TableHead>
 								<TableRow>
 									<TableCell>Song</TableCell>
@@ -195,31 +211,69 @@ class SetViewer extends Component {
 								</TableRow>
 							</TableHead>
 
-							<TableBody>
-								{set.songs.length ? (
-									set.songs.map(song => (
-										<SetSong
-											key={song.id}
-											mode={mode}
-											onChangeKey={this.changeKey}
-											setId={set.id}
-											setKey={song.key}
-											songIndex={findIndex(set.songs, s => s.id === song.id)}
-											songId={song.id}
-										/>
-									))
-								) : (
-									<TableRow key="id-none">
-										<TableCell />
+							<DragDropContext onDragEnd={this.handleDragEnd}>
+								<Droppable droppableId="droppable">
+									{provided => (
+										<RootRef rootRef={provided.innerRef}>
+											<TableBody
+												{...provided.droppableProps}
+											>
+												{set.songs.length ? (
+													set.songs.map(
+														(song, index) => (
+															<Draggable
+																draggableId={
+																	song.id
+																}
+																index={index}
+																key={song.id}
+															>
+																{provided => (
+																	<SetSong
+																		mode={
+																			mode
+																		}
+																		onChangeKey={
+																			this
+																				.changeKey
+																		}
+																		provided={
+																			provided
+																		}
+																		setId={
+																			set.id
+																		}
+																		setKey={
+																			song.key
+																		}
+																		songIndex={
+																			index
+																		}
+																		songId={
+																			song.id
+																		}
+																	/>
+																)}
+															</Draggable>
+														)
+													)
+												) : (
+													<TableRow key="id-none">
+														<TableCell />
 
-										<TableCell>
-											<Typography variant="h6">
-												This set has no songs
-											</Typography>
-										</TableCell>
-									</TableRow>
-								)}
-							</TableBody>
+														<TableCell>
+															<Typography variant="h6">
+																This set has no
+																songs
+															</Typography>
+														</TableCell>
+													</TableRow>
+												)}
+											</TableBody>
+										</RootRef>
+									)}
+								</Droppable>
+							</DragDropContext>
 						</Table>
 					</div>
 				</section>
@@ -229,7 +283,7 @@ class SetViewer extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-	set: state.sets.byId[ownProps.setId]
+	set: state.sets.byId[ownProps.setId],
 })
 
 export default connect(
