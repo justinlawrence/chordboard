@@ -20,7 +20,7 @@ import SetLink from './SetLink'
 
 import { Magnify as MagnifyIcon } from 'mdi-material-ui'
 
-class SetList extends Component {
+class Sets extends Component {
 	state = {
 		searchText: ''
 	}
@@ -122,4 +122,4 @@ class SetList extends Component {
 	}
 }
 
-export default SetList
+export default Sets

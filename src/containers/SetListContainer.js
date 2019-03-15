@@ -5,7 +5,7 @@ import reduce from 'lodash/fp/reduce'
 
 import * as actions from '../redux/actions'
 import SetEditor from '../components/SetEditor'
-import SetList from '../components/SetList'
+import Sets from '../components/Sets'
 import SetContainer from '../containers/SetContainer'
 
 class SetListContainer extends Component {
@@ -18,7 +18,7 @@ class SetListContainer extends Component {
 						exact
 						path="/sets"
 						render={props => (
-							<SetList setFocusedSet={setFocusedSet} sets={sets} {...props} />
+							<Sets setFocusedSet={setFocusedSet} sets={sets} {...props} />
 						)}
 					/>
 					<Route exact path="/sets/new" component={SetEditor} />
