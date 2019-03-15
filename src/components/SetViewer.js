@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
-import { findIndex } from 'lodash'
 import uniqBy from 'lodash/fp/uniqBy'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -83,13 +82,22 @@ class SetViewer extends Component {
 		this.props.updateSet(data)
 	}
 
-	handleDeleteSet = () => {
-		if (this.props.onRemoveSet) {
-			this.props.onRemoveSet()
+	handleDeleteSet = () => this.props.onRemoveSet && this.props.onRemoveSet()
+
+	handleDragEnd = ({ destination, source }) => {
+		const set = { ...this.props.set }
+		const setSongs = Array.from(set.songs)
+
+		const [song] = setSongs.splice(source.index, 1)
+		setSongs.splice(destination.index, 0, song)
+
+		set.songs = setSongs
+
+		if (set) {
+			this.props.setCurrentSetId(set.id)
+			this.props.updateSet(set)
 		}
 	}
-
-	handleDragEnd = ({ destination, source }) => {}
 
 	handleSongSelectorClose = setSongs => {
 		this.setState({ isSongSelectorVisible: false })
@@ -98,36 +106,53 @@ class SetViewer extends Component {
 		this.handleSaveSet(set)
 	}
 
-	onMoveSongDown = songId => {
-		const index = findIndex(this.props.set.songs, { id: songId })
-
-		if (index > -1) {
-			if (this.props.onSongMove) {
-				this.props.onSongMove(songId, index + 1)
-			}
-		}
-	}
-
-	onMoveSongUp = songId => {
-		const index = findIndex(this.props.set.songs, { id: songId })
-
-		if (index > -1) {
-			if (this.props.onSongMove) {
-				this.props.onSongMove(songId, index - 1)
-			}
-		}
-	}
-
-	changeKey = (songId, amount) => {
-		if (this.props.onChangeKey) {
-			this.props.onChangeKey(songId, amount)
-		}
-	}
+	changeKey = (songId, amount) =>
+		this.props.onChangeKey && this.props.onChangeKey(songId, amount)
 
 	toggleEditMode = value => () => this.setState({ mode: value ? 'edit' : '' })
 
 	transposeDown = song => this.changeKey(song.id, -1)
 	transposeUp = song => this.changeKey(song.id, 1)
+
+	renderTableContent = provided => {
+		const { set } = this.props
+		const { mode } = this.state
+		return (
+			<TableBody {...provided.droppableProps}>
+				{set.songs.length ? (
+					set.songs.map((song, index) => (
+						<Draggable
+							draggableId={song.id}
+							index={index}
+							key={song.id}
+						>
+							{provided => (
+								<SetSong
+									mode={mode}
+									onChangeKey={this.changeKey}
+									provided={provided}
+									setId={set.id}
+									setKey={song.key}
+									songIndex={index}
+									songId={song.id}
+								/>
+							)}
+						</Draggable>
+					))
+				) : (
+					<TableRow key="id-none">
+						<TableCell />
+
+						<TableCell>
+							<Typography variant="h6">
+								This set has no songs
+							</Typography>
+						</TableCell>
+					</TableRow>
+				)}
+			</TableBody>
+		)
+	}
 
 	render() {
 		const { set, classes } = this.props
@@ -215,61 +240,7 @@ class SetViewer extends Component {
 								<Droppable droppableId="droppable">
 									{provided => (
 										<RootRef rootRef={provided.innerRef}>
-											<TableBody
-												{...provided.droppableProps}
-											>
-												{set.songs.length ? (
-													set.songs.map(
-														(song, index) => (
-															<Draggable
-																draggableId={
-																	song.id
-																}
-																index={index}
-																key={song.id}
-															>
-																{provided => (
-																	<SetSong
-																		mode={
-																			mode
-																		}
-																		onChangeKey={
-																			this
-																				.changeKey
-																		}
-																		provided={
-																			provided
-																		}
-																		setId={
-																			set.id
-																		}
-																		setKey={
-																			song.key
-																		}
-																		songIndex={
-																			index
-																		}
-																		songId={
-																			song.id
-																		}
-																	/>
-																)}
-															</Draggable>
-														)
-													)
-												) : (
-													<TableRow key="id-none">
-														<TableCell />
-
-														<TableCell>
-															<Typography variant="h6">
-																This set has no
-																songs
-															</Typography>
-														</TableCell>
-													</TableRow>
-												)}
-											</TableBody>
+											{this.renderTableContent(provided)}
 										</RootRef>
 									)}
 								</Droppable>

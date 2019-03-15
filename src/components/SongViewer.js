@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { isAfter } from 'date-fns'
+import filter from 'lodash/fp/filter'
+import reduce from 'lodash/fp/reduce'
 
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -39,35 +41,39 @@ import {
 	PlaylistPlus as PlaylistPlusIcon,
 	Plus as PlusIcon,
 	Pencil as PencilIcon,
-	Settings as SettingsIcon
+	Settings as SettingsIcon,
 } from 'mdi-material-ui'
 
 const styles = theme => ({
 	capoButton: {
 		borderRadius: 3,
 		flexDirection: 'column',
-		padding: theme.spacing.unit
+		padding: theme.spacing.unit,
 	},
 	root: {
-		flexGrow: 1
+		flexGrow: 1,
 	},
 	paper: {
 		padding: theme.spacing.unit * 2,
 		height: '100%',
-		color: theme.palette.text.secondary
+		color: theme.palette.text.secondary,
 	},
 	control: {
-		padding: theme.spacing.unit * 2
+		padding: theme.spacing.unit * 2,
 	},
 	select: {
-		width: theme.spacing.unit * 7
-	}
+		width: theme.spacing.unit * 7,
+	},
 })
 
 class SongViewer extends Component {
+	static defaultProps = {
+		song: {},
+	}
+
 	static propTypes = {
 		setKey: PropTypes.string,
-		song: PropTypes.object
+		song: PropTypes.object,
 	}
 
 	state = {
@@ -75,12 +81,12 @@ class SongViewer extends Component {
 		chordSize: 16,
 		capoKey: null,
 		isNashville: false,
+		isSetListDialogVisible: false,
 		isSongKeyDialogOpen: false,
-		setListMenuAnchorEl: null,
 		displayKey: '',
 		lines: [],
 		setList: [],
-		wordSize: 20
+		wordSize: 20,
 	}
 
 	componentDidMount() {
@@ -128,7 +134,7 @@ class SongViewer extends Component {
 	}
 
 	createAddToSetHandler = set => () => {
-		this.showSetListDropdown(false)()
+		this.closeSetListDialog()
 		this.addToSet(set)
 	}
 
@@ -136,7 +142,7 @@ class SongViewer extends Component {
 		const { song } = this.props
 		this.props.setCurrentSetSongKey({
 			key: option.key,
-			song
+			song,
 		})
 	}
 
@@ -145,16 +151,20 @@ class SongViewer extends Component {
 
 		this.setState({
 			displayKey: key,
-			isNashville: option.value === 'nashville'
+			isNashville: option.value === 'nashville',
 		})
 
 		if (this.props.song.id) {
-			localStorage.setItem(`chordboard.${this.props.song.id}.capoKey`, key)
+			localStorage.setItem(
+				`chordboard.${this.props.song.id}.capoKey`,
+				key
+			)
 		}
 		this.props.setCurrentSongUserKey(key)
 	}
 
-	handleSongKeyDialogClose = () => this.setState({ isSongKeyDialogOpen: false })
+	handleSongKeyDialogClose = () =>
+		this.setState({ isSongKeyDialogOpen: false })
 	handleSongKeyDialogOpen = () => this.setState({ isSongKeyDialogOpen: true })
 
 	handleProps = props => {
@@ -169,8 +179,11 @@ class SongViewer extends Component {
 		/*console.log( 'song key', props.song.key );
 				console.log( 'set key', props.setKey );
 				console.log( 'user key', songUser.key );*/
-		const capoKey = localStorage.getItem(`chordboard.${props.song.id}.capoKey`)
-		const displayKey = capoKey || songUser.key || props.setKey || props.song.key
+		const capoKey = localStorage.getItem(
+			`chordboard.${props.song.id}.capoKey`
+		)
+		const displayKey =
+			capoKey || songUser.key || props.setKey || props.song.key
 
 		const parser = new Parser()
 		const lines = parser.parse(props.song.content)
@@ -206,9 +219,14 @@ class SongViewer extends Component {
 	chordSizeUp = () =>
 		this.setState(prevState => ({ chordSize: prevState.chordSize + 1 }))
 
-	showSetListDropdown = isVisible => event =>
+	closeSetListDialog = () =>
 		this.setState({
-			setListMenuAnchorEl: isVisible ? event.currentTarget : null
+			isSetListDialogVisible: false,
+		})
+
+	openSetListDialog = () =>
+		this.setState({
+			isSetListDialogVisible: true,
 		})
 
 	transposeDown = () => {
@@ -225,20 +243,19 @@ class SongViewer extends Component {
 
 	toggleNashville = value => () =>
 		this.setState(prevState => ({
-			isNashville: value !== undefined ? value : !prevState.isNashville
+			isNashville: value !== undefined ? value : !prevState.isNashville,
 		}))
 
 	render() {
-		const { classes, setKey, song } = this.props
+		const { classes, setKey, setList, song } = this.props
 		const {
 			chordSize,
 			isNashville,
+			isSetListDialogVisible,
 			isSongKeyDialogOpen,
-			setListMenuAnchorEl,
 			displayKey,
 			lines: linesState,
-			setList,
-			wordSize
+			wordSize,
 		} = this.state
 
 		const capo = getKeyDiff(displayKey, setKey || song.key) //this is only for display purposes, telling the user where to put the capo
@@ -257,19 +274,27 @@ class SongViewer extends Component {
 			capoKeyDescr = 'Capo key'
 		}
 
-		var setListActive = setList.filter(function(set) {
-			return isAfter(set.setDate, new Date())
-		})
+		const setListActive = filter(set => isAfter(set.setDate, new Date()))(
+			setList
+		)
 
 		return (
 			<Fade in={Boolean(song)} appear mountOnEnter unmountOnExit>
 				<div className="song-viewer">
 					<Hero>
 						<ContentLimiter>
-							<Grid container className={classes.root} justify="space-between">
+							<Grid
+								container
+								className={classes.root}
+								justify="space-between"
+							>
 								<Grid item xs={12} sm={8}>
-									<Typography variant="h4">{song.title}</Typography>
-									<Typography variant="subtitle1">{song.author}</Typography>
+									<Typography variant="h4">
+										{song.title}
+									</Typography>
+									<Typography variant="subtitle1">
+										{song.author}
+									</Typography>
 								</Grid>
 
 								<Grid item xs={12} sm={4} className="no-print">
@@ -278,7 +303,9 @@ class SongViewer extends Component {
 											<Tooltip title="The key everyone will be playing in">
 												<KeySelector
 													label="Set key"
-													onSelect={this.handleSelectSetKey}
+													onSelect={
+														this.handleSelectSetKey
+													}
 													songKey={setKey}
 												/>
 											</Tooltip>
@@ -287,7 +314,9 @@ class SongViewer extends Component {
 										<Tooltip title="The key you will be playing in">
 											<KeySelector
 												label={capoKeyDescr}
-												onSelect={this.handleSelectDisplayKey}
+												onSelect={
+													this.handleSelectDisplayKey
+												}
 												songKey={displayKey || setKey}
 												className={classes.select}
 											/>
@@ -305,16 +334,17 @@ class SongViewer extends Component {
 										<Tooltip title="Add to set">
 											<IconButton
 												className={classes.button}
-												onClick={this.showSetListDropdown(true)}
+												onClick={this.openSetListDialog}
 											>
 												<PlaylistPlusIcon />
 											</IconButton>
 										</Tooltip>
 
 										<Dialog
-											anchorEl={setListMenuAnchorEl}
-											onClose={this.showSetListDropdown(false)}
-											open={Boolean(setListMenuAnchorEl)}
+											onClose={this.closeSetListDropdown}
+											open={Boolean(
+												isSetListDialogVisible
+											)}
 										>
 											<DialogTitle id="add-to-set-title">
 												Add to Set
@@ -324,7 +354,9 @@ class SongViewer extends Component {
 													<ListItem
 														button
 														key={set.id}
-														onClick={this.createAddToSetHandler(set)}
+														onClick={this.createAddToSetHandler(
+															set
+														)}
 														value={set.id}
 													>
 														<Avatar>
@@ -332,8 +364,14 @@ class SongViewer extends Component {
 														</Avatar>
 
 														<ListItemText
-															primary={set.author + ' • ' + set.title}
-															secondary={set.setDate}
+															primary={
+																set.author +
+																' • ' +
+																set.title
+															}
+															secondary={
+																set.setDate
+															}
 														/>
 													</ListItem>
 												))}
@@ -343,7 +381,9 @@ class SongViewer extends Component {
 										<Tooltip title="Song settings">
 											<IconButton
 												className={classes.button}
-												onClick={this.handleSongKeyDialogOpen}
+												onClick={
+													this.handleSongKeyDialogOpen
+												}
 											>
 												<SettingsIcon />
 											</IconButton>
@@ -376,14 +416,18 @@ class SongViewer extends Component {
 						onClose={this.handleSongKeyDialogClose}
 						open={isSongKeyDialogOpen}
 					>
-						<DialogTitle id="songkey-dialog-title">Song Settings</DialogTitle>
+						<DialogTitle id="songkey-dialog-title">
+							Song Settings
+						</DialogTitle>
 
 						<Paper className={classes.control}>
 							<Grid container className={classes.root}>
 								<Grid item xs={12}>
 									<Grid container spacing={16}>
 										<Grid item xs={6}>
-											<Typography variant="h5">Capo Key</Typography>
+											<Typography variant="h5">
+												Capo Key
+											</Typography>
 										</Grid>
 
 										<Grid item xs={6}>
@@ -401,7 +445,9 @@ class SongViewer extends Component {
 												<PlusIcon />
 											</IconButton>
 											<KeySelector
-												onSelect={this.handleSelectDisplayKey}
+												onSelect={
+													this.handleSelectDisplayKey
+												}
 												songKey={displayKey}
 											/>
 										</Grid>
@@ -411,7 +457,9 @@ class SongViewer extends Component {
 								<Grid item xs={12}>
 									<Grid container spacing={16}>
 										<Grid item xs={6}>
-											<Typography variant="h5">Word Size</Typography>
+											<Typography variant="h5">
+												Word Size
+											</Typography>
 										</Grid>
 
 										<Grid item xs={6}>
@@ -435,7 +483,9 @@ class SongViewer extends Component {
 								<Grid item xs={12}>
 									<Grid container spacing={16}>
 										<Grid item xs={6}>
-											<Typography variant="h5">Chord Size</Typography>
+											<Typography variant="h5">
+												Chord Size
+											</Typography>
 										</Grid>
 
 										<Grid item xs={6}>
@@ -459,7 +509,9 @@ class SongViewer extends Component {
 								<Grid item xs={12}>
 									<Grid container spacing={16}>
 										<Grid item xs={6}>
-											<Typography variant="h5">Nashville Numbering</Typography>
+											<Typography variant="h5">
+												Nashville Numbering
+											</Typography>
 										</Grid>
 
 										<Grid item xs={6}>
@@ -482,8 +534,15 @@ class SongViewer extends Component {
 	}
 }
 
+const mapStateToProps = state => ({
+	setList: reduce((acc, set) => {
+		acc.push(set)
+		return acc
+	})([])(state.sets.byId),
+})
+
 export default connect(
-	null,
+	mapStateToProps,
 	actions
 )(withStyles(styles)(SongViewer))
 

@@ -20,17 +20,17 @@ import { Close as CloseIcon } from 'mdi-material-ui'
 const styles = theme => ({
 	root: {},
 	flex: {
-		flex: 1
+		flex: 1,
 	},
 	menuButton: {
 		marginLeft: -12,
-		marginRight: 20
+		marginRight: 20,
 	},
 	logo: {
 		paddingRight: 8,
-		height: 16
+		height: 16,
 	},
-	tab: {}
+	tab: {},
 })
 
 class Navbar extends React.Component {
@@ -42,7 +42,7 @@ class Navbar extends React.Component {
 		currentSet: PropTypes.object,
 		setCurrentSetId: PropTypes.func.isRequired,
 		setCurrentUser: PropTypes.func.isRequired,
-		songs: PropTypes.array
+		songs: PropTypes.array,
 	}
 
 	handleBackButton = () => {
@@ -83,7 +83,7 @@ class Navbar extends React.Component {
 		let songId
 		const match = matchPath(location.pathname, {
 			path: '/sets/:setId/songs/:songId',
-			exact: true
+			exact: true,
 		})
 		if (match) {
 			songId = match.params.songId
@@ -91,22 +91,39 @@ class Navbar extends React.Component {
 
 		return (
 			<div className={classes.root}>
-				<AppBar color="secondary" position="static" className="no-print">
+				<AppBar
+					color="secondary"
+					position="static"
+					className="no-print"
+				>
 					<Toolbar>
 						{currentSet ? (
-							<Grid container padding="none" wrap="nowrap" zeroMinWidth>
+							<Grid
+								container
+								padding="none"
+								wrap="nowrap"
+								zeroMinWidth
+							>
 								<Grid item>
-									<IconButton color="inherit" onClick={this.handleBackButton}>
+									<IconButton
+										color="inherit"
+										onClick={this.handleBackButton}
+									>
 										<CloseIcon />
 									</IconButton>
 								</Grid>
 								<Grid item xs zeroMinWidth>
-									<Tabs indicatorColor="primary" value={songId}>
+									<Tabs
+										indicatorColor="primary"
+										value={songId || false}
+									>
 										{map(songs, song => (
 											<Tab
 												key={`tabs-${song.id}`}
 												component={Link}
-												to={`/sets/${currentSet.id}/songs/${song.id}`}
+												to={`/sets/${
+													currentSet.id
+												}/songs/${song.id}`}
 												label={song.title}
 												className={classes.tab}
 												color="inherit"
@@ -119,12 +136,24 @@ class Navbar extends React.Component {
 						) : (
 							<React.Fragment>
 								<Link to="/">
-									<img src={chordboardLogo} className={classes.logo} alt="" />
+									<img
+										src={chordboardLogo}
+										className={classes.logo}
+										alt=""
+									/>
 								</Link>
-								<Button component={Link} color="inherit" to="/sets">
+								<Button
+									component={Link}
+									color="inherit"
+									to="/sets"
+								>
 									Sets
 								</Button>
-								<Button component={Link} color="inherit" to="/songs">
+								<Button
+									component={Link}
+									color="inherit"
+									to="/songs"
+								>
 									Songs
 								</Button>
 							</React.Fragment>
@@ -137,14 +166,16 @@ class Navbar extends React.Component {
 }
 
 const mapStateToProps = state => ({
-	currentSet: state.currentSet.id ? state.sets.byId[state.currentSet.id] : null,
+	currentSet: state.currentSet.id
+		? state.sets.byId[state.currentSet.id]
+		: null,
 	currentSong: state.songs.byId[state.currentSong.id],
 	songs: state.currentSet.id
 		? map(
 			state.sets.byId[state.currentSet.id].songs,
 			song => state.songs.byId[song.id]
 		  )
-		: null
+		: null,
 })
 
 export default withRouter(
