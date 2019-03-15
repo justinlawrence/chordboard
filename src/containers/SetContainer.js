@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { find, findIndex, remove } from 'lodash'
+import { find, findIndex } from 'lodash'
 import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
 
@@ -10,7 +10,7 @@ import transposeChord from '../utils/transpose-chord'
 
 class SetContainer extends Component {
 	state = {
-		songs: []
+		songs: [],
 	}
 
 	componentDidMount() {
@@ -58,7 +58,10 @@ class SetContainer extends Component {
 	}
 
 	handleProps = props => {
-		if (!this.props.currentSet || this.props.currentSet.id !== props.setId) {
+		if (
+			!this.props.currentSet ||
+			this.props.currentSet.id !== props.setId
+		) {
 			props.fetchCurrentSet(props.setId)
 		}
 	}
@@ -70,7 +73,7 @@ class SetContainer extends Component {
 			this.props.removeSet(set.id)
 			if (this.props.history) {
 				const location = {
-					pathname: '/sets'
+					pathname: '/sets',
 				}
 
 				this.props.history.replace(location)
@@ -103,7 +106,9 @@ class SetContainer extends Component {
 					render={({ match }) => {
 						const songId = match.params.songId
 
-						const index = findIndex(currentSet.songs, { id: songId })
+						const index = findIndex(currentSet.songs, {
+							id: songId,
+						})
 						const currentKey =
 							currentSet && currentSet.songs[index]
 								? currentSet.songs[index].key
@@ -113,7 +118,10 @@ class SetContainer extends Component {
 
 						return (
 							<div>
-								<SongContainer currentKey={currentKey} id={songId} />
+								<SongContainer
+									currentKey={currentKey}
+									id={songId}
+								/>
 							</div>
 						)
 					}}
@@ -124,7 +132,7 @@ class SetContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-	currentSet: state.sets.byId[state.currentSet.id]
+	currentSet: state.sets.byId[state.currentSet.id],
 })
 
 export default connect(

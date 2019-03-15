@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import IconButton from '@material-ui/core/IconButton'
@@ -10,8 +9,6 @@ import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import Typography from '@material-ui/core/Typography'
 import {
-	ArrowUp as ArrowUpIcon,
-	ArrowDown as ArrowDownIcon,
 	Delete as DeleteIcon,
 	Minus as MinusIcon,
 	Plus as PlusIcon,
@@ -26,7 +23,7 @@ class SetSong extends PureComponent {
 		onChangeKey: PropTypes.func,
 		provided: PropTypes.object,
 		setId: PropTypes.string,
-		song: PropTypes.objext,
+		song: PropTypes.object,
 		songId: PropTypes.string,
 		songIndex: PropTypes.number,
 		songKey: PropTypes.string,
@@ -36,44 +33,36 @@ class SetSong extends PureComponent {
 		this.props.onChangeKey &&
 		this.props.onChangeKey(this.props.songId, amount)
 
-	onMoveSongDown = () => {}
+	handleTableRowClick = () =>
+		this.props.changeRoute(
+			`/sets/${this.props.setId}/songs/${this.props.songId}`
+		)
 
-	onMoveSongUp = () => {}
-
-	removeSong = songId =>
+	removeSong = () =>
 		this.props.removeSetSong(this.props.setId, this.props.songId)
 
+	stopPropagation = event => event.stopPropagation()
+
 	render() {
-		const {
-			mode,
-			provided,
-			setId,
-			setKey,
-			song,
-			songId,
-			songIndex,
-			songKey,
-		} = this.props
+		const { mode, provided, setKey, song, songIndex } = this.props
 
 		return (
 			<RootRef rootRef={provided.innerRef}>
 				<TableRow
+					hover
+					onClick={this.handleTableRowClick}
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}
 				>
 					<TableCell>
-						<Typography
-							component={Link}
-							to={`/sets/${setId}/songs/${songId}`}
-							variant="h6"
-						>
+						<Typography variant="h6">
 							{songIndex + 1}. {song.title}
 						</Typography>
 					</TableCell>
 
 					<TableCell>
 						<Grid container>
-							<Grid item>
+							<Grid item onClick={this.stopPropagation}>
 								<KeySelector
 									onSelect={this.handleKeySelect}
 									songKey={setKey}
@@ -105,7 +94,7 @@ class SetSong extends PureComponent {
 							<Grid container wrap="nowrap">
 								<IconButton
 									aria-label="Remove song"
-									onClick={() => this.removeSong(songId)}
+									onClick={this.removeSong}
 								>
 									<DeleteIcon />
 								</IconButton>

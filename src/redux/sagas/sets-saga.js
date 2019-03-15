@@ -13,11 +13,10 @@ import {
 	UPDATE_SET,
 	mergeSets,
 	removeSet,
-	setSetSongs
+	setSetSongs,
 } from '../actions'
 
 const setsCollection = db.collection('sets')
-const songsCollection = db.collection('songs')
 
 const setsChannel = () =>
 	eventChannel(emitter => {
@@ -51,8 +50,8 @@ function* handleAddSet({ payload: newSet }) {
 		mergeSets([
 			{
 				...newSet,
-				id: set.id
-			}
+				id: set.id,
+			},
 		])
 	)
 }
@@ -79,20 +78,18 @@ function* handleUpdateSet({ payload: set }) {
 		set.setDate = set.date
 	}
 
+	yield put(mergeSets([set]))
+
 	const setSongs = []
 	for (let i = 0; i < set.songs.length; i++) {
 		const song = set.songs[i]
-		const songDoc = yield songsCollection.doc(song.id).get()
 		setSongs.push({
 			id: song.id,
 			key: song.key,
-			ref: songDoc.ref
 		})
 	}
 
 	set.songs = setSongs
-	console.log(set)
-	yield put(mergeSets([set]))
 	yield setsCollection.doc(set.id).update(set)
 }
 

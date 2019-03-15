@@ -43,6 +43,7 @@ const styles = theme => ({
 class SongList extends Component {
 	static propTypes = {
 		classes: PropTypes.object,
+		songs: PropTypes.array,
 		// Redux props
 		changeRoute: PropTypes.func.isRequired,
 	}
