@@ -24,20 +24,20 @@ import Parser from '../parsers/song-parser'
 
 const styles = theme => ({
 	root: {
-		flexGrow: 1
+		flexGrow: 1,
 	},
 	form: theme.mixins.gutters({
 		paddingBottom: theme.spacing.unit * 2,
-		paddingTop: theme.spacing.unit * 2
+		paddingTop: theme.spacing.unit * 2,
 	}),
 	formFooter: {
-		marginTop: theme.spacing.unit * 2
+		marginTop: theme.spacing.unit * 2,
 	},
 	control: {
-		padding: theme.spacing.unit * 2
+		padding: theme.spacing.unit * 2,
 	},
 	addPaddingBottom: {
-		paddingBottom: theme.spacing.unit
+		paddingBottom: theme.spacing.unit,
 	},
 	textEditorContent: {
 		fontFamily: 'monospace',
@@ -45,12 +45,12 @@ const styles = theme => ({
 		width: '90%',
 		height: '80vh !important',
 		padding: '24px',
-		border: '1px solid silver'
+		border: '1px solid silver',
 	},
 	songPreview: {
 		zoom: '0.3',
-		padding: '12px'
-	}
+		padding: '12px',
+	},
 })
 
 class SongEditor extends Component {
@@ -63,7 +63,7 @@ class SongEditor extends Component {
 		addSong: PropTypes.func.isRequired,
 		deleteSong: PropTypes.func.isRequired,
 		song: PropTypes.object,
-		updateSong: PropTypes.func.isRequired
+		updateSong: PropTypes.func.isRequired,
 	}
 
 	state = {
@@ -72,7 +72,7 @@ class SongEditor extends Component {
 		isLoading: false,
 		key: '',
 		title: '',
-		parserType: 'chords-above-words'
+		parserType: 'chords-above-words',
 	}
 
 	componentDidMount() {
@@ -136,7 +136,7 @@ class SongEditor extends Component {
 			author,
 			content,
 			key,
-			title
+			title,
 		}
 
 		if (isNew) {
@@ -158,7 +158,7 @@ class SongEditor extends Component {
 				author: song.author,
 				content: song.content,
 				key: song.key,
-				title: song.title
+				title: song.title,
 			})
 		}
 	}
@@ -204,7 +204,9 @@ class SongEditor extends Component {
 											<option value="chords-above-words">
 												Chords above words
 											</option>
-											<option value="chordpro">Onsong</option>
+											<option value="chordpro">
+												Onsong
+											</option>
 										</select>
 									</Grid>
 								</Grid>
@@ -218,14 +220,21 @@ class SongEditor extends Component {
 							</Grid>
 
 							<Grid item xs={12} sm={4}>
-								<Grid container className={classes.root} hide="xsDown">
+								<Grid
+									container
+									className={classes.root}
+									hide="xsDown"
+								>
 									<Typography
 										variant="caption"
 										className={classes.addPaddingBottom}
 									>
 										Song Editor
 									</Typography>
-									<Paper className={classes.form} component="form">
+									<Paper
+										className={classes.form}
+										component="form"
+									>
 										<Grid
 											container
 											className={classes.root}
@@ -235,7 +244,9 @@ class SongEditor extends Component {
 												<TextField
 													id="title"
 													label="Song title"
-													className={classes.textField}
+													className={
+														classes.textField
+													}
 													fullWidth
 													onChange={this.onTitleInput}
 													margin="normal"
@@ -246,9 +257,13 @@ class SongEditor extends Component {
 												<TextField
 													id="author"
 													label="Authors (comma separated)"
-													className={classes.textField}
+													className={
+														classes.textField
+													}
 													fullWidth
-													onChange={this.onAuthorInput}
+													onChange={
+														this.onAuthorInput
+													}
 													margin="normal"
 													value={author}
 												/>
@@ -257,7 +272,9 @@ class SongEditor extends Component {
 												<TextField
 													id="key"
 													label="Key"
-													className={classes.textField}
+													className={
+														classes.textField
+													}
 													fullWidth
 													onChange={this.onKeyInput}
 													margin="normal"
@@ -266,17 +283,34 @@ class SongEditor extends Component {
 											</Grid>
 
 											<Grid item xs={8}>
-												<Grid container justify="flex-end">
+												<Grid
+													container
+													justify="flex-end"
+												>
 													{!isNew && (
-														<Button onClick={this.onDeleteSong} color="primary">
+														<Button
+															onClick={
+																this
+																	.onDeleteSong
+															}
+															color="primary"
+														>
 															Delete
 														</Button>
 													)}
 
-													<Button onClick={this.handleCancel}>Cancel</Button>
+													<Button
+														onClick={
+															this.handleCancel
+														}
+													>
+														Cancel
+													</Button>
 
 													<Button
-														onClick={this.onSaveSong}
+														onClick={
+															this.onSaveSong
+														}
 														color="primary"
 														variant="contained"
 													>
@@ -297,15 +331,25 @@ class SongEditor extends Component {
 										<Grid item xs={12}>
 											<Typography
 												variant="caption"
-												className={classes.addPaddingBottom}
+												className={
+													classes.addPaddingBottom
+												}
 											>
 												Song Preview
 											</Typography>
 
 											<Paper>
-												<div className={classes.songPreview}>
-													<h1 className="title">{title}</h1>
-													<h2 className="subtitle">{author}</h2>
+												<div
+													className={
+														classes.songPreview
+													}
+												>
+													<h1 className="title">
+														{title}
+													</h1>
+													<h2 className="subtitle">
+														{author}
+													</h2>
 
 													<div>{previewSong}</div>
 												</div>
@@ -323,7 +367,7 @@ class SongEditor extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-	song: state.songs.byId[ownProps.id]
+	song: state.songs.byId[ownProps.id],
 })
 
 export default connect(

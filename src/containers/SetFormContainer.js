@@ -144,7 +144,7 @@ class SetFormContainer extends Component {
 						/>
 					</Grid>
 
-					<Grid item xs={8} lg={8}>
+					<Grid item xs={6} lg={8}>
 						<Button
 							className={classes.deleteButton}
 							onClick={this.handleFormDelete}
@@ -153,11 +153,11 @@ class SetFormContainer extends Component {
 						</Button>
 					</Grid>
 
-					<Grid item xs={8} lg={1}>
+					<Grid item xs={3} lg={1}>
 						<Button onClick={this.handleFormCancel}>Cancel</Button>
 					</Grid>
 
-					<Grid item xs={8} lg={1}>
+					<Grid item xs={3} lg={1}>
 						<Button
 							color="primary"
 							type="submit"

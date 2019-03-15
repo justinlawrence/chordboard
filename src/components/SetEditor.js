@@ -8,6 +8,9 @@
 #
 #
 #   Most of this functionality has been merged into setviewer
+#		
+#		Mostly just used when creating a new set now
+# 		
 #		TODO: move across the song.create
 #
 #
@@ -32,19 +35,18 @@ import SetFormContainer from '../containers/SetFormContainer'
 
 const styles = theme => ({
 	root: {
-		flexGrow: 1
+		flexGrow: 1,
 	},
 	form: theme.mixins.gutters({
-		maxWidth: theme.spacing.keyline * 8,
 		paddingBottom: theme.spacing.unit * 2,
-		paddingTop: theme.spacing.unit * 2
+		paddingTop: theme.spacing.unit * 2,
 	}),
 	formFooter: {
-		marginTop: theme.spacing.unit * 2
+		marginTop: theme.spacing.unit * 2,
 	},
 	control: {
-		padding: theme.spacing.unit * 2
-	}
+		padding: theme.spacing.unit * 2,
+	},
 })
 
 class SetEditor extends Component {
@@ -52,7 +54,7 @@ class SetEditor extends Component {
 		classes: PropTypes.object,
 		history: PropTypes.object,
 		// Redux props
-		addSet: PropTypes.func.isRequired
+		addSet: PropTypes.func.isRequired,
 	}
 
 	handleFormCancel = () => {
@@ -64,11 +66,11 @@ class SetEditor extends Component {
 	handleFormSubmit = setData => {
 		this.props.addSet({
 			title: setData.title,
-			setDate: format(setData.date, 'yyyy-MM-dd')
+			setDate: format(setData.date, 'yyyy-MM-dd'),
 		})
 		if (this.props.history) {
 			this.props.history.push({
-				pathname: '/sets'
+				pathname: '/sets',
 			})
 		}
 	}
@@ -94,7 +96,7 @@ class SetEditor extends Component {
 }
 
 const mapStateToProps = state => ({
-	user: state.user
+	user: state.user,
 })
 
 export default connect(
