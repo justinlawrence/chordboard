@@ -13,30 +13,30 @@
 	},
 	"homepage": "https://chordboard.co",
 	"dependencies": {
-		"@date-io/date-fns": "0.0.2",
+		"@date-io/date-fns": "1.1.0",
 		"@material-ui/core": "^3.9.2",
 		"@sentry/browser": "^4.6.4",
 		"chord-magic": "^2.1.1",
 		"date-fns": "^2.0.0-alpha.26",
-		"history": "^4.7.2",
+		"history": "^4.9.0",
 		"lodash": "^4.17.11",
 		"material-ui-pickers": "^2.2.4",
 		"mdi-material-ui": "^5.10.0",
-		"prop-types": "^15.6.2",
-		"react": "^16.6.3",
+		"prop-types": "^15.7.2",
+		"react": "^16.8.4",
 		"react-beautiful-dnd": "^10.1.0",
-		"react-dom": "^16.6.3",
+		"react-dom": "^16.8.4",
 		"react-facebook-login": "^4.1.1",
-		"react-google-login": "^4.0.0",
-		"react-redux": "^5.1.1",
-		"react-router-dom": "^4.3.1",
+		"react-google-login": "^5.0.2",
+		"react-redux": "^6.0.1",
+		"react-router-dom": "^4.4.0",
 		"react-router-redux": "^4.0.8",
-		"react-scripts": "^2.1.3",
+		"react-scripts": "^2.1.8",
 		"react-textarea-autosize": "^7.1.0",
 		"redux": "^4.0.1",
-		"redux-actions": "^2.6.4",
-		"redux-devtools-extension": "^2.13.7",
-		"redux-saga": "^0.16.2",
+		"redux-actions": "^2.6.5",
+		"redux-devtools-extension": "^2.13.8",
+		"redux-saga": "^1.0.2",
 		"slugify": "^1.3.4"
 	},
 	"scripts": {
@@ -57,9 +57,9 @@
 		"not op_mini all"
 	],
 	"devDependencies": {
-		"eslint-config-prettier": "^3.3.0",
-		"eslint-plugin-prettier": "^3.0.0",
-		"eslint-plugin-react": "^7.11.1",
-		"prettier": "^1.15.3"
+		"eslint-config-prettier": "^4.1.0",
+		"eslint-plugin-prettier": "^3.0.1",
+		"eslint-plugin-react": "^7.12.4",
+		"prettier": "^1.16.4"
 	}
 }

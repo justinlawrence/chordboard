@@ -8,6 +8,7 @@ import includes from 'lodash/fp/includes'
 import map from 'lodash/fp/map'
 import reduce from 'lodash/fp/reduce'
 import toLower from 'lodash/fp/toLower'
+import sortBy from 'lodash/fp/sortBy'
 
 import { withStyles } from '@material-ui/core/styles'
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth'
@@ -29,37 +30,35 @@ import { ArrowLeft as BackIcon, Magnify as SearchIcon } from 'mdi-material-ui'
 
 const styles = theme => ({
 	root: {},
+	checkbox: {
+		padding: theme.spacing.unit,
+	},
 	scrollPaper: {
-		alignItems: 'flex-start'
+		alignItems: 'flex-start',
 	},
 	input: {
-		marginLeft: 8,
-		flex: 1
+		marginLeft: theme.spacing.unit,
+		flex: 1,
 	},
 	iconButton: {
-		padding: 10
-	},
-	divider: {
-		width: 1,
-		height: 28,
-		margin: 4
+		padding: theme.spacing.unit,
 	},
 	content: {
-		flexGrow: '1',
+		flexGrow: 1,
 		paddingLeft: 0,
-		paddingRight: 0
+		paddingRight: 0,
 	},
 	searchBar: {
 		padding: '2px 4px',
 		display: 'flex',
 		alignItems: 'center',
-		width: '100%'
-	}
+		width: '100%',
+	},
 })
 
 class SongSelectorDialog extends PureComponent {
 	static defaultProps = {
-		songs: []
+		songs: [],
 	}
 
 	static propTypes = {
@@ -68,12 +67,12 @@ class SongSelectorDialog extends PureComponent {
 		open: PropTypes.bool.isRequired,
 		width: PropTypes.string,
 		// Redux props
-		songs: PropTypes.array
+		songs: PropTypes.array,
 	}
 
 	state = {
 		setSongs: [],
-		searchValue: ''
+		searchValue: '',
 	}
 
 	handleClose = () => this.props.onClose([])
@@ -81,7 +80,7 @@ class SongSelectorDialog extends PureComponent {
 	handleCheckboxClick = value => event => {
 		event.stopPropagation()
 		this.setState(prevState => ({
-			setSongs: [...prevState.setSongs, value]
+			setSongs: [...prevState.setSongs, value],
 		}))
 	}
 
@@ -108,14 +107,15 @@ class SongSelectorDialog extends PureComponent {
 		)
 		const filteredSongs = flow(
 			categoryFilter,
-			searchFilter
+			searchFilter,
+			sortBy('title')
 		)(songs)
 
 		return (
 			<Dialog
 				aria-labelledby="song-selector-dialog"
 				classes={{
-					scrollPaper: classes.scrollPaper
+					scrollPaper: classes.scrollPaper,
 				}}
 				onClose={this.handleClose}
 				fullScreen={!isWidthUp('sm', this.props.width)}
@@ -124,7 +124,10 @@ class SongSelectorDialog extends PureComponent {
 			>
 				<DialogTitle id="song-selector-dialog">
 					<Paper className={classes.searchBar} elevation={1}>
-						<IconButton className={classes.iconButton} aria-label="Back">
+						<IconButton
+							className={classes.iconButton}
+							aria-label="Back"
+						>
 							<BackIcon />
 						</IconButton>
 						<InputBase
@@ -133,7 +136,10 @@ class SongSelectorDialog extends PureComponent {
 							placeholder="Search titles, authors & words"
 							value={searchValue}
 						/>
-						<IconButton className={classes.iconButton} aria-label="Search">
+						<IconButton
+							className={classes.iconButton}
+							aria-label="Search"
+						>
 							<SearchIcon />
 						</IconButton>
 					</Paper>
@@ -149,14 +155,22 @@ class SongSelectorDialog extends PureComponent {
 								<Grid container spacing={8} wrap="nowrap">
 									<Grid item>
 										<Checkbox
+											className={classes.checkbox}
 											checked={includes(song)(setSongs)}
-											onClick={this.handleCheckboxClick(song)}
+											onClick={this.handleCheckboxClick(
+												song
+											)}
 										/>
 									</Grid>
 									<Grid item xs>
 										<Grid container direction="column">
-											<Typography>{song.title}</Typography>
-											<Typography color="textSecondary" variant="caption">
+											<Typography>
+												{song.title}
+											</Typography>
+											<Typography
+												color="textSecondary"
+												variant="caption"
+											>
 												{song.author}
 											</Typography>
 										</Grid>
@@ -181,7 +195,7 @@ const mapStateToProps = state => ({
 	songs: reduce((acc, song) => {
 		acc.push(song)
 		return acc
-	})([])(state.songs.byId)
+	})([])(state.songs.byId),
 })
 
 export default compose(

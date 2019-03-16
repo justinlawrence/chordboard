@@ -19,6 +19,15 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Paper from '@material-ui/core/Paper'
 import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
+import {
+	Close as CloseIcon,
+	Image as ImageIcon,
+	Minus as MinusIcon,
+	PlaylistPlus as PlaylistPlusIcon,
+	Plus as PlusIcon,
+	Pencil as PencilIcon,
+	Settings as SettingsIcon,
+} from 'mdi-material-ui'
 
 import * as actions from '../redux/actions'
 import ChordLine from './ChordLine'
@@ -32,26 +41,21 @@ import Parser from '../parsers/song-parser'
 import Song from './Song'
 import transposeChord from '../utils/transpose-chord'
 import transposeLines from '../utils/transpose-lines'
-
 import { linesToNashville } from '../utils/convertToNashville'
 
-import {
-	Image as ImageIcon,
-	Minus as MinusIcon,
-	PlaylistPlus as PlaylistPlusIcon,
-	Plus as PlusIcon,
-	Pencil as PencilIcon,
-	Settings as SettingsIcon,
-} from 'mdi-material-ui'
-
 const styles = theme => ({
+	root: {
+		flexGrow: 1,
+	},
 	capoButton: {
 		borderRadius: 3,
 		flexDirection: 'column',
 		padding: theme.spacing.unit,
 	},
-	root: {
-		flexGrow: 1,
+	closeButton: {
+		position: 'absolute',
+		right: theme.spacing.unit,
+		top: theme.spacing.unit,
 	},
 	paper: {
 		padding: theme.spacing.unit * 2,
@@ -341,13 +345,24 @@ class SongViewer extends Component {
 										</Tooltip>
 
 										<Dialog
-											onClose={this.closeSetListDropdown}
+											onClose={this.closeSetListDialog}
 											open={Boolean(
 												isSetListDialogVisible
 											)}
 										>
 											<DialogTitle id="add-to-set-title">
 												Add to Set
+												<IconButton
+													aria-label="Close"
+													className={
+														classes.closeButton
+													}
+													onClick={
+														this.closeSetListDialog
+													}
+												>
+													<CloseIcon />
+												</IconButton>
 											</DialogTitle>
 											<List component="nav">
 												{setListActive.map(set => (

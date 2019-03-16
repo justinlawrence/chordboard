@@ -213,24 +213,19 @@ class SetViewer extends Component {
 							</Grid>
 						)}
 
-						{mode !== 'edit' ? (
-							<Grid item>
-								<Button
-									color="primary"
-									onClick={this.handleAddASong}
-									variant="contained"
-								>
-									Add a song
-								</Button>
-							</Grid>
-						) : (
-							<Grid item>
-								<SongSelectorDialog
-									onClose={this.handleSongSelectorClose}
-									open={isSongSelectorVisible}
-								/>
-							</Grid>
-						)}
+						<Grid item>
+							<Button
+								color="primary"
+								onClick={this.handleAddASong}
+								variant="contained"
+							>
+								Add a song
+							</Button>
+							<SongSelectorDialog
+								onClose={this.handleSongSelectorClose}
+								open={isSongSelectorVisible}
+							/>
+						</Grid>
 					</Grid>
 				</Hero>
 
