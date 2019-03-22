@@ -20,7 +20,6 @@ import Hero from './Hero'
 import Song from '../utils/Song'
 import chordproParser from '../parsers/chordpro-parser'
 import Parser from '../parsers/song-parser'
-//import '../SongEditor/SongEditor.scss';
 
 const styles = theme => ({
 	root: {
@@ -61,6 +60,7 @@ class SongEditor extends Component {
 		history: PropTypes.object,
 		// Redux props
 		addSong: PropTypes.func.isRequired,
+		changeRoute: PropTypes.func.isRequired,
 		deleteSong: PropTypes.func.isRequired,
 		song: PropTypes.object,
 		updateSong: PropTypes.func.isRequired,
@@ -145,9 +145,10 @@ class SongEditor extends Component {
 			this.props.updateSong(song.id, newSong)
 		}
 
-		// TODO: change this because it seems to cause a refresh
-		if (this.props.history) {
-			//this.props.history.goBack()
+		if (song.id) {
+			this.props.changeRoute(`/songs/${song.id}`)
+		} else {
+			this.props.changeRoute('/songs')
 		}
 	}
 
@@ -166,6 +167,7 @@ class SongEditor extends Component {
 	render() {
 		const { classes, match } = this.props
 		const { author, content, key, title, parserType } = this.state
+		console.log(this.props)
 
 		const isNew = match.path === '/songs/new'
 
