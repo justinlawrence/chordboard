@@ -1,12 +1,14 @@
 import { put, select, takeLatest } from 'redux-saga/effects'
+import first from 'lodash/first'
 import findIndex from 'lodash/findIndex'
+import last from 'lodash/last'
 
 //import { db } from '../../firebase'
 import {
 	GO_TO_NEXT_SONG,
 	GO_TO_PREVIOUS_SONG,
 	changeRoute,
-	setCurrentSongId
+	setCurrentSongId,
 } from '../actions'
 
 //const songsCollection = db.collection('songs')
@@ -19,13 +21,18 @@ export function* liveBarSaga() {
 function* handleGoToNextSong() {
 	const state = yield select()
 	const currentSet = state.sets.byId[state.currentSet.id]
-	const currentSong = state.songs.byId[state.currentSong.id]
+	const currentSongId = state.currentSong.id
+		? state.currentSong.id
+		: first(currentSet.songs).id
+	const currentSong = state.songs.byId[currentSongId]
 	if (currentSet) {
 		const index = findIndex(currentSet.songs, { id: currentSong.id })
 		const nextSong = currentSet.songs[index + 1]
 		if (nextSong) {
 			yield put(setCurrentSongId(nextSong.id))
-			yield put(changeRoute(`/sets/${currentSet.id}/songs/${nextSong.id}`))
+			yield put(
+				changeRoute(`/sets/${currentSet.id}/songs/${nextSong.id}`)
+			)
 		} else {
 			console.log('no next song')
 		}
@@ -35,7 +42,10 @@ function* handleGoToNextSong() {
 function* handleGoToPreviousSong() {
 	const state = yield select()
 	const currentSet = state.sets.byId[state.currentSet.id]
-	const currentSong = state.songs.byId[state.currentSong.id]
+	const currentSongId = state.currentSong.id
+		? state.currentSong.id
+		: last(currentSet.songs).id
+	const currentSong = state.songs.byId[currentSongId]
 	const index = findIndex(currentSet.songs, { id: currentSong.id })
 	const prevSong = currentSet.songs[index - 1]
 	if (prevSong) {

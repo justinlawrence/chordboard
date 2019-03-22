@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { find, findIndex } from 'lodash'
 import { Link, matchPath, withRouter } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -11,12 +10,10 @@ import Hidden from '@material-ui/core/Hidden'
 import {
 	ChevronLeft as ChevronLeftIcon,
 	ChevronRight as ChevronRightIcon,
-	FormatListBulleted as SetListIcon
+	FormatListBulleted as SetListIcon,
 } from 'mdi-material-ui'
 
 import * as actions from '../redux/actions'
-import SongKey from './SongKey'
-import Song from '../utils/Song'
 import Tooltip from '@material-ui/core/Tooltip'
 
 //import './live-bar.scss';
@@ -24,18 +21,18 @@ import Tooltip from '@material-ui/core/Tooltip'
 const styles = theme => ({
 	container: {
 		display: 'flex',
-		flexWrap: 'wrap'
+		flexWrap: 'wrap',
 	},
 	form: theme.mixins.gutters({
 		paddingBottom: theme.spacing.unit * 2,
 		paddingTop: theme.spacing.unit * 2,
-		width: 500
+		width: 500,
 	}),
 	formFooter: {
-		marginTop: theme.spacing.unit * 2
+		marginTop: theme.spacing.unit * 2,
 	},
 	deleteButton: {
-		color: theme.palette.error.main
+		color: theme.palette.error.main,
 	},
 	liveBar: {
 		alignItems: 'stretch',
@@ -44,8 +41,8 @@ const styles = theme => ({
 		borderTopColor: 'rgb(206, 206, 206)',
 		borderTopWidth: '1px',
 		display: 'flex',
-		flex: '0 0 48px'
-	}
+		flex: '0 0 48px',
+	},
 })
 
 class LiveBar extends Component {
@@ -54,14 +51,14 @@ class LiveBar extends Component {
 		location: PropTypes.object,
 		// Redux props
 		goToNextSong: PropTypes.func,
-		goToPreviousSong: PropTypes.func
+		goToPreviousSong: PropTypes.func,
 	}
 
 	state = {
 		nextSongKey: '',
 		nextSongTitle: '',
 		previousSongKey: '',
-		previousSongTitle: ''
+		previousSongTitle: '',
 	}
 
 	componentDidMount() {
@@ -81,7 +78,7 @@ class LiveBar extends Component {
 		//see if we're currently on a song and therefore need to show the livebar
 
 		const match = matchPath(location.pathname, {
-			path: '/sets/:setId/songs/:songId'
+			path: '/sets/:setId/songs/:songId',
 		})
 
 		if (match) {
@@ -142,7 +139,7 @@ class LiveBar extends Component {
 			currentSetId,
 			onGoToNextSong,
 			onGoToPreviousSong,
-			classes
+			classes,
 		} = this.props
 
 		const {
@@ -150,7 +147,7 @@ class LiveBar extends Component {
 			nextSongKey,
 			nextSongTitle,
 			previousSongKey,
-			previousSongTitle
+			previousSongTitle,
 		} = this.state
 
 		const sections = []
@@ -161,7 +158,7 @@ class LiveBar extends Component {
 				if (line.type === 'section') {
 					sections.push({
 						index: ++sectionIndex,
-						text: line.text
+						text: line.text,
 					})
 				}
 			})
@@ -169,7 +166,7 @@ class LiveBar extends Component {
 
 		const routes = [
 			//'/songs/:id',
-			'/sets/:setId/songs/:songsId'
+			'/sets/:setId/songs/:songsId',
 		]
 		const { location } = this.props
 		let show = false
@@ -188,7 +185,11 @@ class LiveBar extends Component {
 
 		return show ? (
 			<nav className={classes.liveBar}>
-				<Grid container className={classes.root} justify="space-between">
+				<Grid
+					container
+					className={classes.root}
+					justify="space-between"
+				>
 					<Grid item xs={8} sm={7}>
 						<div className="live-bar__sections">
 							{sections.map(section => (
@@ -281,7 +282,7 @@ class LiveBar extends Component {
 
 const mapStateToProps = state => ({
 	currentSetId: state.currentSet.id,
-	currentSong: state.songs.byId[state.currentSong.id]
+	currentSong: state.songs.byId[state.currentSong.id],
 })
 
 export default withRouter(
