@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import Hidden from '@material-ui/core/Hidden'
+import Tooltip from '@material-ui/core/Tooltip'
 import {
 	ChevronLeft as ChevronLeftIcon,
 	ChevronRight as ChevronRightIcon,
@@ -14,7 +15,7 @@ import {
 } from 'mdi-material-ui'
 
 import * as actions from '../redux/actions'
-import Tooltip from '@material-ui/core/Tooltip'
+import getSongSections from '../utils/getSongSections'
 
 //import './live-bar.scss';
 
@@ -150,7 +151,7 @@ class LiveBar extends Component {
 			previousSongTitle,
 		} = this.state
 
-		const sections = []
+		const sections = getSongSections(currentSong)
 		let sectionIndex = 0
 
 		if (currentSong && currentSong.lines) {
