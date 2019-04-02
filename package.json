@@ -20,7 +20,7 @@
 		"date-fns": "^2.0.0-alpha.26",
 		"history": "^4.9.0",
 		"lodash": "^4.17.11",
-		"material-ui-pickers": "^2.2.4",
+		"material-ui-pickers": "^2.0.4",
 		"mdi-material-ui": "^5.10.0",
 		"prop-types": "^15.7.2",
 		"react": "^16.8.4",
