@@ -22,7 +22,7 @@ import { Magnify as MagnifyIcon } from 'mdi-material-ui'
 
 class Sets extends Component {
 	state = {
-		searchText: ''
+		searchText: '',
 	}
 
 	componentDidMount() {
@@ -39,24 +39,32 @@ class Sets extends Component {
 
 	handleSearchChange = event => {
 		this.setState({
-			searchText: event.target.value
+			searchText: event.target.value,
 		})
 	}
 
 	render() {
-		const { setFocusedSet, sets = [] } = this.props
+		const { setCurrentSetId, sets = [] } = this.props
 		const { searchText } = this.state
 
 		return (
 			<div>
 				<Hero>
 					<ContentLimiter>
-						<Grid container alignItems="center" justify="space-between">
+						<Grid
+							container
+							alignItems="center"
+							justify="space-between"
+						>
 							<Grid item>
 								<Typography variant="h4">Sets</Typography>
 							</Grid>
 							<Grid item>
-								<Grid container alignItems="center" spacing={16}>
+								<Grid
+									container
+									alignItems="center"
+									spacing={16}
+								>
 									<Grid item>
 										<TextField
 											onChange={this.handleSearchChange}
@@ -67,7 +75,7 @@ class Sets extends Component {
 													<InputAdornment position="end">
 														<MagnifyIcon />
 													</InputAdornment>
-												)
+												),
 											}}
 										/>
 									</Grid>
@@ -96,24 +104,30 @@ class Sets extends Component {
 						</TableHead>
 
 						<TableBody>
-							{reverse(sortBy(sets.filter(this.filterSets), 'setDate')).map(
-								set => (
-									<TableRow key={set.id}>
-										<TableCell>
-											<DateSignifier date={set.setDate} />
-										</TableCell>
+							{reverse(
+								sortBy(sets.filter(this.filterSets), 'setDate')
+							).map(set => (
+								<TableRow key={set.id}>
+									<TableCell>
+										<DateSignifier date={set.setDate} />
+									</TableCell>
 
-										<TableCell>
-											<SetLink setFocusedSet={setFocusedSet} set={set}>
-												<Typography variant="h6" gutterBottom>
-													{set.title}
-												</Typography>
-											</SetLink>
-											<Typography>{set.author}</Typography>
-										</TableCell>
-									</TableRow>
-								)
-							)}
+									<TableCell>
+										<SetLink
+											setCurrentSetId={setCurrentSetId}
+											set={set}
+										>
+											<Typography
+												variant="h6"
+												gutterBottom
+											>
+												{set.title}
+											</Typography>
+										</SetLink>
+										<Typography>{set.author}</Typography>
+									</TableCell>
+								</TableRow>
+							))}
 						</TableBody>
 					</Table>
 				</ContentLimiter>

@@ -5,12 +5,12 @@ import { Link } from 'react-router-dom'
 class SetLink extends PureComponent {
 	static propTypes = {
 		children: PropTypes.any,
-		setFocusedSet: PropTypes.func,
-		set: PropTypes.object.isRequired
+		setCurrentSetId: PropTypes.func,
+		set: PropTypes.object.isRequired,
 	}
 
 	handleClick = () => {
-		this.props.setFocusedSet(this.props.set)
+		this.props.setCurrentSetId(this.props.set.id)
 	}
 
 	render() {

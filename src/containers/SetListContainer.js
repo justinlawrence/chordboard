@@ -10,7 +10,7 @@ import SetContainer from '../containers/SetContainer'
 
 class SetListContainer extends Component {
 	render() {
-		const { setFocusedSet, sets } = this.props
+		const { setCurrentSetId, sets } = this.props
 		return (
 			<div>
 				<Switch>
@@ -18,14 +18,21 @@ class SetListContainer extends Component {
 						exact
 						path="/sets"
 						render={props => (
-							<Sets setFocusedSet={setFocusedSet} sets={sets} {...props} />
+							<Sets
+								setCurrentSetId={setCurrentSetId}
+								sets={sets}
+								{...props}
+							/>
 						)}
 					/>
 					<Route exact path="/sets/new" component={SetEditor} />
 					<Route
 						path="/sets/:setId"
 						render={props => (
-							<SetContainer setId={props.match.params.setId} {...props} />
+							<SetContainer
+								setId={props.match.params.setId}
+								{...props}
+							/>
 						)}
 					/>
 				</Switch>
@@ -38,7 +45,7 @@ const mapStateToProps = state => ({
 	sets: reduce((acc, song) => {
 		acc.push(song)
 		return acc
-	})([])(state.sets.byId)
+	})([])(state.sets.byId),
 })
 
 export default connect(

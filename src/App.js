@@ -6,7 +6,7 @@ import {
 	Route,
 	Switch,
 	matchPath,
-	withRouter
+	withRouter,
 } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -26,20 +26,20 @@ import Privacy from './pages/Privacy'
 
 const styles = theme => ({
 	root: {
-		height: '100vh'
+		height: '100vh',
 	},
 	content: {
-		minHeight: 0
+		minHeight: 0,
 	},
 	scrollBars: {
 		height: '100%',
-		overflowY: 'auto'
-	}
+		overflowY: 'auto',
+	},
 })
 
 class App extends Component {
 	exitLiveMode = () => {
-		this.setFocusedSet(null)
+		this.props.setCurrentSetId(null)
 	}
 
 	goToNextSong = () => {
@@ -82,7 +82,7 @@ class App extends Component {
 		if (this.props.location) {
 			const match = matchPath(this.props.location.pathname, {
 				path: '/sets/:setId/songs/:songId',
-				exact: true
+				exact: true,
 			})
 
 			if (match) {
@@ -95,7 +95,7 @@ class App extends Component {
 		return this._getSet().then(set => {
 			const match = matchPath(this.props.location.pathname, {
 				path: '/sets/:setId/songs/:songId',
-				exact: true
+				exact: true,
 			})
 
 			return set ? findIndex(set.songs, { id: match.params.songId }) : -1
@@ -105,7 +105,12 @@ class App extends Component {
 	render() {
 		const { classes, user } = this.props
 		return (
-			<Grid container className={classes.root} direction="column" wrap="nowrap">
+			<Grid
+				container
+				className={classes.root}
+				direction="column"
+				wrap="nowrap"
+			>
 				<CssBaseline />
 				<Grid className={classes.content} item xs>
 					<div className={classes.scrollBars}>
@@ -117,7 +122,11 @@ class App extends Component {
 
 							{!user.name && <Redirect to="/login" />}
 
-							<Route exact path="/songs" component={SongListContainer} />
+							<Route
+								exact
+								path="/songs"
+								component={SongListContainer}
+							/>
 
 							<Route
 								exact
@@ -130,20 +139,29 @@ class App extends Component {
 								)}
 							/>
 
-							<Route exact path="/songs/new" component={SongEditor} />
+							<Route
+								exact
+								path="/songs/new"
+								component={SongEditor}
+							/>
 
 							<Route
 								exact
 								path="/songs/:id/edit"
 								render={props => (
-									<SongEditor id={props.match.params.id} {...props} />
+									<SongEditor
+										id={props.match.params.id}
+										{...props}
+									/>
 								)}
 							/>
 
 							<Route
 								exact
 								path="/songs/:id"
-								render={({ match }) => <SongContainer id={match.params.id} />}
+								render={({ match }) => (
+									<SongContainer id={match.params.id} />
+								)}
 							/>
 
 							<Redirect to="/sets" />
@@ -164,7 +182,7 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-	user: state.user
+	user: state.user,
 })
 
 export default withRouter(

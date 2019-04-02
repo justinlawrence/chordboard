@@ -7,7 +7,7 @@ firebase.initializeApp({
 	databaseURL: 'https://chordboard-209821.firebaseio.com',
 	projectId: 'chordboard-209821',
 	storageBucket: 'chordboard-209821.appspot.com',
-	messagingSenderId: '839278764423'
+	messagingSenderId: '839278764423',
 })
 
 export const firestore = firebase.firestore()
@@ -25,6 +25,6 @@ firestore.enablePersistence().catch(err => {
 		// features required to enable persistence
 		// ...
 	} else {
-		console.err(err)
+		console.error(err)
 	}
 })
