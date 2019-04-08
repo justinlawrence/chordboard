@@ -4,10 +4,12 @@ import { connect } from 'react-redux'
 import { Link, matchPath, withRouter } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles'
+import ButtonBase from '@material-ui/core/ButtonBase'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import Hidden from '@material-ui/core/Hidden'
 import Tooltip from '@material-ui/core/Tooltip'
+import Typography from '@material-ui/core/Typography'
 import {
 	ChevronLeft as ChevronLeftIcon,
 	ChevronRight as ChevronRightIcon,
@@ -43,6 +45,27 @@ const styles = theme => ({
 		borderTopWidth: '1px',
 		display: 'flex',
 		flex: '0 0 48px',
+	},
+	sections: {
+		alignItems: 'center',
+		display: 'flex',
+		flex: '1 1 0',
+		height: '100%',
+		overflowX: 'auto',
+	},
+	section: {
+		backgroundColor: '#eee',
+		border: 2,
+		color: theme.palette.common.white,
+		height: '100%',
+		marginRight: theme.spacing.unit / 2,
+		minWidth: theme.spacing.unit * 3,
+		paddingLeft: theme.spacing.unit * 2,
+		paddingRight: theme.spacing.unit * 2,
+		position: 'relative',
+	},
+	sectionText: {
+		fontWeight: 500,
 	},
 })
 
@@ -138,13 +161,13 @@ class LiveBar extends Component {
 	render() {
 		const {
 			currentSetId,
+			currentSong,
 			onGoToNextSong,
 			onGoToPreviousSong,
 			classes,
 		} = this.props
 
 		const {
-			currentSong,
 			nextSongKey,
 			nextSongTitle,
 			previousSongKey,
@@ -154,16 +177,16 @@ class LiveBar extends Component {
 		const sections = getSongSections(currentSong)
 		let sectionIndex = 0
 
-		if (currentSong && currentSong.lines) {
-			currentSong.lines.forEach(line => {
-				if (line.type === 'section') {
-					sections.push({
-						index: ++sectionIndex,
-						text: line.text,
-					})
-				}
-			})
-		}
+		// if (currentSong && currentSong.lines) {
+		// 	currentSong.lines.forEach(line => {
+		// 		if (line.type === 'section') {
+		// 			sections.push({
+		// 				index: ++sectionIndex,
+		// 				text: line.text,
+		// 			})
+		// 		}
+		// 	})
+		// }
 
 		const routes = [
 			//'/songs/:id',
@@ -192,15 +215,23 @@ class LiveBar extends Component {
 					justify="space-between"
 				>
 					<Grid item xs={8} sm={7}>
-						<div className="live-bar__sections">
+						<div className={classes.sections}>
 							{sections.map(section => (
-								<a
+								<ButtonBase
+									component="a"
 									key={`section-${section.index}`}
 									href={`#section-${section.index}`}
-									className="live-bar__section-link song-viewer__section"
-									data-section={section.text}
-									title={`Jump to the ${section.text}`}
-								/>
+									className={classes.section}
+									title={`Jump to ${section.title}`}
+									style={{ backgroundColor: section.color }}
+								>
+									<Typography
+										className={classes.sectionText}
+										color="inherit"
+									>
+										{section.abbreviation}
+									</Typography>
+								</ButtonBase>
 							))}
 						</div>
 					</Grid>

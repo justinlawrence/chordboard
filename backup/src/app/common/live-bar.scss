@@ -1,6 +1,6 @@
 .live-bar {
 	align-items: stretch;
-	background-color: #F6F9FC;
+	background-color: #f6f9fc;
 	display: flex;
 	flex: 0 0 48px;
 
@@ -17,31 +17,6 @@
 		padding: 0.5rem 0.5rem 0;
 	}
 
-	&__sections {
-		align-items: center;
-		display: flex;
-		flex: 1 1 0;
-		overflow-x: auto;
-	}
-
-	&__section-link {
-		border: 0 !important;
-		margin: 0 .25em 0 0 !important;
-		padding: 0 !important;
-		position: relative !important;
-		min-width: 3em !important;
-
-		&:before {
-			display: block !important;
-			line-height: 2em !important;
-			min-height: 2em !important;
-			min-width: 3em !important;
-			position: relative !important;
-			text-align: center !important;
-			transform: none !important;
-		}
-	}
-
 	&__navigation-actions {
 		display: flex;
 		flex-wrap: nowrap;
@@ -49,7 +24,7 @@
 		padding: 0 16px;
 		overflow-y: hidden;
 		text-transform: uppercase;
-		font-size: .9em;
+		font-size: 0.9em;
 
 		&__setlistbutton {
 			width: 100px !important;
@@ -58,7 +33,7 @@
 		&__item {
 			align-items: center;
 			box-sizing: border-box;
-			border-radius: .25em;
+			border-radius: 0.25em;
 			color: black;
 			cursor: pointer;
 			display: flex;
@@ -69,18 +44,16 @@
 			white-space: nowrap;
 
 			& + & {
-				margin-left: .25em;
+				margin-left: 0.25em;
 			}
 
 			&:hover {
-				background-color: darken(#F6F9FC, 3%);
+				background-color: darken(#f6f9fc, 3%);
 			}
 
 			.song-key {
 				margin-right: 0.5em;
 			}
-
 		}
-
 	}
 }

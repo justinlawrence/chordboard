@@ -301,7 +301,7 @@ class SongViewer extends Component {
 									</Typography>
 								</Grid>
 
-								<Grid item xs={12} sm={4} displayPrint="none" className="no-print">
+								<Grid item xs={12} sm={4} className="no-print">
 									<form autoComplete="off">
 										{setKey && (
 											<Tooltip title="The key everyone will be playing in">

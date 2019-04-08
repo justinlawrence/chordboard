@@ -18,6 +18,7 @@ import { db } from './firebase'
 import LiveBar from './components/LiveBar'
 import Login from './pages/Login'
 import Navbar from './components/Navbar'
+import SetCurrentSong from './components/SetCurrentSong'
 import SongListContainer from './containers/SongListContainer'
 import SongEditor from './components/SongEditor'
 import SongContainer from './containers/SongContainer'
@@ -112,6 +113,7 @@ class App extends Component {
 				wrap="nowrap"
 			>
 				<CssBaseline />
+				<SetCurrentSong />
 				<Grid className={classes.content} item xs>
 					<div className={classes.scrollBars}>
 						<Navbar />
