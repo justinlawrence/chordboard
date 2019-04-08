@@ -150,6 +150,7 @@ class SetViewer extends Component {
 						</TableCell>
 					</TableRow>
 				)}
+				{provided.placeholder}
 			</TableBody>
 		)
 	}
