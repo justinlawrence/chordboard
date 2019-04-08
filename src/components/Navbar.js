@@ -14,7 +14,7 @@ import Tab from '@material-ui/core/Tab'
 import Toolbar from '@material-ui/core/Toolbar'
 
 import * as actions from '../redux/actions'
-import chordboardLogo from '../chordboard-logo-light.png'
+import chordboardLogo from '../chordboard-logo-dark.png'
 import { Close as CloseIcon } from 'mdi-material-ui'
 
 const styles = theme => ({
