@@ -119,7 +119,7 @@ class Navbar extends React.Component {
 										variant="scrollable"
 										scrollButtons="auto"
 									>
-										<Tab
+										{/*<Tab
 											key={'tabs-setlist'}
 											component={Link}
 											to={`/sets/${currentSet.id}`}
@@ -127,7 +127,7 @@ class Navbar extends React.Component {
 											className={classes.tab}
 											color="inherit"
 											value={0}
-										/>
+										/>*/}
 
 										{map(songs, song => (
 											<Tab
