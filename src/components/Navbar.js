@@ -8,16 +8,13 @@ import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
-import Grid from '@material-ui/core/Grid'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Toolbar from '@material-ui/core/Toolbar'
-import Tooltip from '@material-ui/core/Tooltip'
 
 import * as actions from '../redux/actions'
 import chordboardLogo from '../chordboard-logo-dark.png'
 import { Close as CloseIcon } from 'mdi-material-ui'
-import { ArrowLeft as ArrowLeftIcon } from 'mdi-material-ui'
 
 const styles = theme => ({
 	root: {},
@@ -103,7 +100,7 @@ class Navbar extends React.Component {
 
 		return (
 			<div className={classes.root}>
-				<AppBar dense color="secondary" position="sticky">
+				<AppBar color="secondary" position="sticky">
 					<Toolbar variant="dense">
 						<Link to="/">
 							<img
@@ -126,7 +123,6 @@ class Navbar extends React.Component {
 								indicatorColor="primary"
 								value={songId || false}
 								variant="scrollable"
-								scrollButtons="auto"
 								className={classes.tabs}
 							>
 								<Tab
