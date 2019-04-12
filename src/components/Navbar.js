@@ -12,10 +12,12 @@ import Grid from '@material-ui/core/Grid'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Toolbar from '@material-ui/core/Toolbar'
+import Tooltip from '@material-ui/core/Tooltip'
 
 import * as actions from '../redux/actions'
 import chordboardLogo from '../chordboard-logo-dark.png'
 import { Close as CloseIcon } from 'mdi-material-ui'
+import { ArrowLeft as ArrowLeftIcon } from 'mdi-material-ui'
 
 const styles = theme => ({
 	root: {},
@@ -30,7 +32,17 @@ const styles = theme => ({
 		paddingRight: 8,
 		height: 16,
 	},
-	tab: {},
+	tab: {
+		borderRight: '1px solid rgba(0,0,0,0.1)',
+		borderLeft: '1px solid rgba(0,0,0,0.1)',
+	},
+	tabs: {},
+	setToolbar: {
+		//backgroundColor: '#e0f4fa',
+	},
+	miniButton: {
+		zoom: 0.7,
+	},
 })
 
 class Navbar extends React.Component {
@@ -91,82 +103,65 @@ class Navbar extends React.Component {
 
 		return (
 			<div className={classes.root}>
-				<AppBar className="no-print" color="secondary">
-					<Toolbar>
-						{currentSet ? (
-							<Grid
-								container
-								padding="none"
-								wrap="nowrap"
-								zeroMinWidth
-							>
-								<Grid item>
-									<IconButton
-										color="inherit"
-										onClick={this.handleBackButton}
-									>
-										<CloseIcon />
-									</IconButton>
-								</Grid>
-								<Grid item xs zeroMinWidth>
-									<Tabs
-										indicatorColor="primary"
-										value={songId || false}
-										variant="scrollable"
-										scrollButtons="auto"
-									>
-										{/*<Tab
-											key={'tabs-setlist'}
-											component={Link}
-											to={`/sets/${currentSet.id}`}
-											label={'Set'}
-											className={classes.tab}
-											color="inherit"
-											value={0}
-										/>*/}
-
-										{map(songs, song => (
-											<Tab
-												key={`tabs-${song.id}`}
-												component={Link}
-												to={`/sets/${
-													currentSet.id
-												}/songs/${song.id}`}
-												label={song.title}
-												className={classes.tab}
-												color="inherit"
-												value={song.id}
-											/>
-										))}
-									</Tabs>
-								</Grid>
-							</Grid>
-						) : (
-							<React.Fragment>
-								<Link to="/">
-									<img
-										src={chordboardLogo}
-										className={classes.logo}
-										alt=""
-									/>
-								</Link>
-								<Button
-									component={Link}
-									color="inherit"
-									to="/sets"
-								>
-									Sets
-								</Button>
-								<Button
-									component={Link}
-									color="inherit"
-									to="/songs"
-								>
-									Songs
-								</Button>
-							</React.Fragment>
-						)}
+				<AppBar dense color="secondary" position="sticky">
+					<Toolbar variant="dense">
+						<Link to="/">
+							<img
+								src={chordboardLogo}
+								className={classes.logo}
+								alt="chordboard logo"
+							/>
+						</Link>
+						<Button component={Link} color="inherit" to="/sets">
+							Sets
+						</Button>
+						<Button component={Link} color="inherit" to="/songs">
+							Songs
+						</Button>
 					</Toolbar>
+
+					{currentSet && (
+						<Toolbar variant="dense" className={classes.setToolbar}>
+							<Tabs
+								indicatorColor="primary"
+								value={songId || false}
+								variant="scrollable"
+								scrollButtons="auto"
+								className={classes.tabs}
+							>
+								<Tab
+									key={'tabs-setlist'}
+									component={Link}
+									to={`/sets/${currentSet.id}`}
+									label={'Setlist'}
+									className={classes.tab}
+									color="inherit"
+									value={0}
+								/>
+
+								{map(songs, song => (
+									<Tab
+										key={`tabs-${song.id}`}
+										component={Link}
+										to={`/sets/${currentSet.id}/songs/${
+											song.id
+										}`}
+										label={song.title}
+										className={classes.tab}
+										color="inherit"
+										value={song.id}
+									/>
+								))}
+							</Tabs>
+							<IconButton
+								color="inherit"
+								onClick={this.handleBackButton}
+								className={classes.miniButton}
+							>
+								<CloseIcon />
+							</IconButton>
+						</Toolbar>
+					)}
 				</AppBar>
 			</div>
 		)

@@ -12,9 +12,9 @@ const styles = theme => ({
 		paddingTop: theme.spacing.unit * 2,
 
 		'& Input': {
-			color: theme.heroContrastText
-		}
-	})
+			color: theme.heroContrastText,
+		},
+	}),
 })
 
 const Hero = ({ children, classes, className }) => (

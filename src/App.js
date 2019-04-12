@@ -30,7 +30,6 @@ const styles = theme => ({
 		height: '100vh',
 	},
 	content: {
-		marginTop: theme.spacing.keyline,
 		minHeight: 0,
 	},
 	scrollBars: {
