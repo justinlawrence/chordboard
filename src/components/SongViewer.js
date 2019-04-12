@@ -68,6 +68,12 @@ const styles = theme => ({
 	select: {
 		width: theme.spacing.unit * 7,
 	},
+
+	noPrint: {
+		'@media print': {
+			display: 'none !important',
+		},
+	},
 })
 
 class SongViewer extends Component {
@@ -307,7 +313,7 @@ class SongViewer extends Component {
 										item
 										xs={12}
 										sm={4}
-										className="no-print"
+										className={classes.noPrint}
 									>
 										<form autoComplete="off">
 											{setKey && (

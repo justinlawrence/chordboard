@@ -18,6 +18,11 @@ import { Close as CloseIcon } from 'mdi-material-ui'
 
 const styles = theme => ({
 	root: {},
+	appBar: {
+		'@media print': {
+			display: 'none !important',
+		},
+	},
 	flex: {
 		flex: 1,
 	},
@@ -100,7 +105,11 @@ class Navbar extends React.Component {
 
 		return (
 			<div className={classes.root}>
-				<AppBar color="secondary" position="sticky">
+				<AppBar
+					color="secondary"
+					position="sticky"
+					className={classes.appBar}
+				>
 					<Toolbar variant="dense">
 						<Link to="/">
 							<img
@@ -118,7 +127,7 @@ class Navbar extends React.Component {
 					</Toolbar>
 
 					{currentSet && (
-						<Toolbar variant="dense" className={classes.setToolbar}>
+						<Toolbar variant="dense" className={classes.noPrint}>
 							<Tabs
 								indicatorColor="primary"
 								value={songId || false}

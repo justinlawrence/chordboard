@@ -46,12 +46,12 @@ const styles = theme => ({
 		},
 		...sectionStyles,
 
-		'&@media print': {
+		'@media print': {
 			paddingLeft: theme.spacing.unit * 2,
 			marginLeft: theme.spacing.unit * 6,
 		},
 
-		[theme.breakpoints.down('sm')]: {
+		[theme.breakpoints.down('xs')]: {
 			marginLeft: 0,
 		},
 	},

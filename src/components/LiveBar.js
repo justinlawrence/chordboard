@@ -45,6 +45,10 @@ const styles = theme => ({
 		borderTopWidth: '1px',
 		display: 'flex',
 		flex: '0 0 48px',
+
+		'@media print': {
+			display: 'none !important',
+		},
 	},
 	sections: {
 		alignItems: 'center',
@@ -209,11 +213,7 @@ class LiveBar extends Component {
 
 		return show ? (
 			<nav className={classes.liveBar}>
-				<Grid
-					container
-					className={classes.root}
-					justify="space-between"
-				>
+				<Grid container className={classes.root}>
 					<Grid item xs={8} sm={7}>
 						<div className={classes.sections}>
 							{sections.map(section => (
