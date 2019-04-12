@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { reverse, sortBy } from 'lodash'
 import { Link } from 'react-router-dom'
 
@@ -15,6 +16,7 @@ import TableRow from '@material-ui/core/TableRow'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 
+import * as actions from '../redux/actions'
 import ContentLimiter from './ContentLimiter'
 import DateSignifier from './DateSignifier'
 import Hero from './Hero'
@@ -152,4 +154,7 @@ class Sets extends PureComponent {
 	}
 }
 
-export default withStyles(styles)(Sets)
+export default connect(
+	null,
+	actions
+)(withStyles(styles)(Sets))

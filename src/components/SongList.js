@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import includes from 'lodash/fp/includes'
 import sortBy from 'lodash/fp/sortBy'
@@ -17,6 +18,7 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Typography from '@material-ui/core/Typography'
 
+import * as actions from '../redux/actions'
 import ContentLimiter from './ContentLimiter'
 import Hero from './Hero'
 import SearchBox from './SearchBox'
@@ -198,4 +200,7 @@ class SongList extends Component {
 	}
 }
 
-export default withStyles(styles)(SongList)
+export default connect(
+	null,
+	actions
+)(withStyles(styles)(SongList))
