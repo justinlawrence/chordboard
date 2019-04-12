@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { isNil } from 'lodash'
 import { connect } from 'react-redux'
-import slugify from 'slugify'
 import Textarea from 'react-textarea-autosize'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -12,12 +11,11 @@ import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 
-import { parseSong } from './SongViewer'
+import SongViewer from './SongViewer'
 
 import * as actions from '../redux/actions'
 import ContentLimiter from './ContentLimiter'
 import Hero from './Hero'
-import Song from '../utils/Song'
 import chordproParser from '../parsers/chordpro-parser'
 import Parser from '../parsers/song-parser'
 
@@ -38,17 +36,24 @@ const styles = theme => ({
 	addPaddingBottom: {
 		paddingBottom: theme.spacing.unit,
 	},
-	textEditorContent: {
-		fontFamily: 'monospace',
-		fontSize: '1.2em',
-		width: '90%',
-		height: '80vh !important',
-		padding: '24px',
-		border: '1px solid silver',
-	},
 	songPreview: {
-		zoom: '0.3',
-		padding: '12px',
+		overflow: 'hidden',
+		width: '100%',
+		zoom: '0.6',
+	},
+	textEditor: {
+		border: 'none',
+		fontFamily: 'monospace',
+		fontSize: theme.typography.h6.fontSize,
+		minHeight: '80vh',
+		padding: '24px',
+		resize: 'none',
+		width: '100%',
+	},
+	textEditorWrapper: {
+		display: 'flex',
+		overflow: 'hidden',
+		width: '100%',
 	},
 })
 
@@ -173,7 +178,14 @@ class SongEditor extends Component {
 			parsedContent = chordproParser(content)
 		}
 		const parser = new Parser()
-		const previewSong = parseSong(parser.parse(parsedContent), [])
+		//const previewSong = parseSong(parser.parse(parsedContent), [])
+		const previewSong = {
+			author,
+			content: parsedContent,
+			key,
+			lines: parser.parse(parsedContent),
+			title,
+		}
 
 		return (
 			<div className="song-editor">
@@ -182,8 +194,8 @@ class SongEditor extends Component {
 						<Grid
 							container
 							className={classes.root}
-							justify="center"
 							hide="xsDown"
+							spacing={24}
 						>
 							<Grid item xs={12} sm={8}>
 								<Grid container>
@@ -210,17 +222,28 @@ class SongEditor extends Component {
 									</Grid>
 								</Grid>
 
-								<Textarea
-									className={classes.textEditorContent}
-									onChange={this.onContentInput}
-									placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:"
-									value={parsedContent}
-								/>
+								<Paper className={classes.textEditorWrapper}>
+									<Textarea
+										className={classes.textEditor}
+										onChange={this.onContentInput}
+										placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:"
+										value={parsedContent}
+									/>
+								</Paper>
 							</Grid>
 
-							<Grid item xs={12} sm={4}>
+							<Grid
+								container
+								item
+								direction="column"
+								justify="flex-start"
+								xs={12}
+								sm={4}
+								spacing={24}
+							>
 								<Grid
 									container
+									item
 									className={classes.root}
 									hide="xsDown"
 								>
@@ -322,39 +345,19 @@ class SongEditor extends Component {
 								</Grid>
 
 								<Grid item>
-									<Grid
-										container
-										className={classes.root}
-										justify="space-between"
+									<Typography
+										variant="caption"
+										className={classes.addPaddingBottom}
 									>
-										<Grid item xs={12}>
-											<Typography
-												variant="caption"
-												className={
-													classes.addPaddingBottom
-												}
-											>
-												Song Preview
-											</Typography>
+										Song Preview
+									</Typography>
 
-											<Paper>
-												<div
-													className={
-														classes.songPreview
-													}
-												>
-													<h1 className="title">
-														{title}
-													</h1>
-													<h2 className="subtitle">
-														{author}
-													</h2>
-
-													<div>{previewSong}</div>
-												</div>
-											</Paper>
-										</Grid>
-									</Grid>
+									<Paper className={classes.songPreview}>
+										<SongViewer
+											isPreview
+											song={previewSong}
+										/>
+									</Paper>
 								</Grid>
 							</Grid>
 						</Grid>

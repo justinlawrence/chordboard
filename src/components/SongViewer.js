@@ -76,6 +76,8 @@ class SongViewer extends Component {
 	}
 
 	static propTypes = {
+		classes: PropTypes.object,
+		isPreview: PropTypes.bool,
 		setKey: PropTypes.string,
 		song: PropTypes.object,
 	}
@@ -251,7 +253,7 @@ class SongViewer extends Component {
 		}))
 
 	render() {
-		const { classes, setKey, setList, song } = this.props
+		const { classes, isPreview, setKey, setList, song } = this.props
 		const {
 			chordSize,
 			isNashville,
@@ -300,111 +302,129 @@ class SongViewer extends Component {
 										{song.author}
 									</Typography>
 								</Grid>
+								{!isPreview && (
+									<Grid
+										item
+										xs={12}
+										sm={4}
+										className="no-print"
+									>
+										<form autoComplete="off">
+											{setKey && (
+												<Tooltip title="The key everyone will be playing in">
+													<KeySelector
+														label="Set key"
+														onSelect={
+															this
+																.handleSelectSetKey
+														}
+														songKey={setKey}
+													/>
+												</Tooltip>
+											)}
 
-								<Grid item xs={12} sm={4} className="no-print">
-									<form autoComplete="off">
-										{setKey && (
-											<Tooltip title="The key everyone will be playing in">
+											<Tooltip title="The key you will be playing in">
 												<KeySelector
-													label="Set key"
+													label={capoKeyDescr}
 													onSelect={
-														this.handleSelectSetKey
+														this
+															.handleSelectDisplayKey
 													}
-													songKey={setKey}
+													songKey={
+														displayKey || setKey
+													}
+													className={classes.select}
 												/>
 											</Tooltip>
-										)}
 
-										<Tooltip title="The key you will be playing in">
-											<KeySelector
-												label={capoKeyDescr}
-												onSelect={
-													this.handleSelectDisplayKey
-												}
-												songKey={displayKey || setKey}
-												className={classes.select}
-											/>
-										</Tooltip>
-
-										<Tooltip title="Edit song">
-											<IconButton
-												className={classes.button}
-												href={`/songs/${song.id}/edit`}
-											>
-												<PencilIcon />
-											</IconButton>
-										</Tooltip>
-
-										<Tooltip title="Add to set">
-											<IconButton
-												className={classes.button}
-												onClick={this.openSetListDialog}
-											>
-												<PlaylistPlusIcon />
-											</IconButton>
-										</Tooltip>
-
-										<Dialog
-											onClose={this.closeSetListDialog}
-											open={Boolean(
-												isSetListDialogVisible
-											)}
-										>
-											<DialogTitle id="add-to-set-title">
-												Add to Set
+											<Tooltip title="Edit song">
 												<IconButton
-													aria-label="Close"
-													className={
-														classes.closeButton
-													}
+													className={classes.button}
+													href={`/songs/${
+														song.id
+													}/edit`}
+												>
+													<PencilIcon />
+												</IconButton>
+											</Tooltip>
+
+											<Tooltip title="Add to set">
+												<IconButton
+													className={classes.button}
 													onClick={
-														this.closeSetListDialog
+														this.openSetListDialog
 													}
 												>
-													<CloseIcon />
+													<PlaylistPlusIcon />
 												</IconButton>
-											</DialogTitle>
-											<List component="nav">
-												{setListActive.map(set => (
-													<ListItem
-														button
-														key={set.id}
-														onClick={this.createAddToSetHandler(
-															set
-														)}
-														value={set.id}
-													>
-														<Avatar>
-															<ImageIcon />
-														</Avatar>
+											</Tooltip>
 
-														<ListItemText
-															primary={
-																set.author +
-																' • ' +
-																set.title
-															}
-															secondary={
-																set.setDate
-															}
-														/>
-													</ListItem>
-												))}
-											</List>
-										</Dialog>
-
-										<Tooltip title="Song settings">
-											<IconButton
-												className={classes.button}
-												onClick={
-													this.handleSongKeyDialogOpen
+											<Dialog
+												onClose={
+													this.closeSetListDialog
 												}
+												open={Boolean(
+													isSetListDialogVisible
+												)}
 											>
-												<SettingsIcon />
-											</IconButton>
-										</Tooltip>
-									</form>
-								</Grid>
+												<DialogTitle id="add-to-set-title">
+													Add to Set
+													<IconButton
+														aria-label="Close"
+														className={
+															classes.closeButton
+														}
+														onClick={
+															this
+																.closeSetListDialog
+														}
+													>
+														<CloseIcon />
+													</IconButton>
+												</DialogTitle>
+												<List component="nav">
+													{setListActive.map(set => (
+														<ListItem
+															button
+															key={set.id}
+															onClick={this.createAddToSetHandler(
+																set
+															)}
+															value={set.id}
+														>
+															<Avatar>
+																<ImageIcon />
+															</Avatar>
+
+															<ListItemText
+																primary={
+																	set.author +
+																	' • ' +
+																	set.title
+																}
+																secondary={
+																	set.setDate
+																}
+															/>
+														</ListItem>
+													))}
+												</List>
+											</Dialog>
+
+											<Tooltip title="Song settings">
+												<IconButton
+													className={classes.button}
+													onClick={
+														this
+															.handleSongKeyDialogOpen
+													}
+												>
+													<SettingsIcon />
+												</IconButton>
+											</Tooltip>
+										</form>
+									</Grid>
+								)}
 							</Grid>
 						</ContentLimiter>
 					</Hero>
@@ -426,123 +446,126 @@ class SongViewer extends Component {
 						</section>
 					</ContentLimiter>
 
-					<Dialog
-						aria-labelledby="songkey-dialog-title"
-						onClose={this.handleSongKeyDialogClose}
-						open={isSongKeyDialogOpen}
-					>
-						<DialogTitle id="songkey-dialog-title">
-							Song Settings
-						</DialogTitle>
+					{!isPreview && (
+						<Dialog
+							aria-labelledby="songkey-dialog-title"
+							onClose={this.handleSongKeyDialogClose}
+							open={isSongKeyDialogOpen}
+						>
+							<DialogTitle id="songkey-dialog-title">
+								Song Settings
+							</DialogTitle>
 
-						<Paper className={classes.control}>
-							<Grid container className={classes.root}>
-								<Grid item xs={12}>
-									<Grid container spacing={16}>
-										<Grid item xs={6}>
-											<Typography variant="h5">
-												Capo Key
-											</Typography>
+							<Paper className={classes.control}>
+								<Grid container className={classes.root}>
+									<Grid item xs={12}>
+										<Grid container spacing={16}>
+											<Grid item xs={6}>
+												<Typography variant="h5">
+													Capo Key
+												</Typography>
+											</Grid>
+
+											<Grid item xs={6}>
+												<IconButton
+													aria-label="Transpose down"
+													onClick={this.transposeDown}
+												>
+													<MinusIcon />
+												</IconButton>
+
+												<IconButton
+													aria-label="Transpose up"
+													onClick={this.transposeUp}
+												>
+													<PlusIcon />
+												</IconButton>
+												<KeySelector
+													onSelect={
+														this
+															.handleSelectDisplayKey
+													}
+													songKey={displayKey}
+												/>
+											</Grid>
 										</Grid>
+									</Grid>
 
-										<Grid item xs={6}>
-											<IconButton
-												aria-label="Transpose down"
-												onClick={this.transposeDown}
-											>
-												<MinusIcon />
-											</IconButton>
+									<Grid item xs={12}>
+										<Grid container spacing={16}>
+											<Grid item xs={6}>
+												<Typography variant="h5">
+													Word Size
+												</Typography>
+											</Grid>
 
-											<IconButton
-												aria-label="Transpose up"
-												onClick={this.transposeUp}
-											>
-												<PlusIcon />
-											</IconButton>
-											<KeySelector
-												onSelect={
-													this.handleSelectDisplayKey
-												}
-												songKey={displayKey}
-											/>
+											<Grid item xs={6}>
+												<IconButton
+													aria-label="Word size down"
+													onClick={this.wordSizeDown}
+												>
+													<MinusIcon />
+												</IconButton>
+
+												<IconButton
+													aria-label="Word size up"
+													onClick={this.wordSizeUp}
+												>
+													<PlusIcon />
+												</IconButton>
+											</Grid>
+										</Grid>
+									</Grid>
+
+									<Grid item xs={12}>
+										<Grid container spacing={16}>
+											<Grid item xs={6}>
+												<Typography variant="h5">
+													Chord Size
+												</Typography>
+											</Grid>
+
+											<Grid item xs={6}>
+												<IconButton
+													aria-label="Chord size down"
+													onClick={this.chordSizeDown}
+												>
+													<MinusIcon />
+												</IconButton>
+
+												<IconButton
+													aria-label="Chord size up"
+													onClick={this.chordSizeUp}
+												>
+													<PlusIcon />
+												</IconButton>
+											</Grid>
+										</Grid>
+									</Grid>
+
+									<Grid item xs={12}>
+										<Grid container spacing={16}>
+											<Grid item xs={6}>
+												<Typography variant="h5">
+													Nashville Numbering
+												</Typography>
+											</Grid>
+
+											<Grid item xs={6}>
+												<Button
+													variant="contained"
+													aria-label="Toggle Nashville Numbering"
+													onClick={this.toggleNashville()}
+												>
+													Toggle
+												</Button>
+											</Grid>
 										</Grid>
 									</Grid>
 								</Grid>
-
-								<Grid item xs={12}>
-									<Grid container spacing={16}>
-										<Grid item xs={6}>
-											<Typography variant="h5">
-												Word Size
-											</Typography>
-										</Grid>
-
-										<Grid item xs={6}>
-											<IconButton
-												aria-label="Word size down"
-												onClick={this.wordSizeDown}
-											>
-												<MinusIcon />
-											</IconButton>
-
-											<IconButton
-												aria-label="Word size up"
-												onClick={this.wordSizeUp}
-											>
-												<PlusIcon />
-											</IconButton>
-										</Grid>
-									</Grid>
-								</Grid>
-
-								<Grid item xs={12}>
-									<Grid container spacing={16}>
-										<Grid item xs={6}>
-											<Typography variant="h5">
-												Chord Size
-											</Typography>
-										</Grid>
-
-										<Grid item xs={6}>
-											<IconButton
-												aria-label="Chord size down"
-												onClick={this.chordSizeDown}
-											>
-												<MinusIcon />
-											</IconButton>
-
-											<IconButton
-												aria-label="Chord size up"
-												onClick={this.chordSizeUp}
-											>
-												<PlusIcon />
-											</IconButton>
-										</Grid>
-									</Grid>
-								</Grid>
-
-								<Grid item xs={12}>
-									<Grid container spacing={16}>
-										<Grid item xs={6}>
-											<Typography variant="h5">
-												Nashville Numbering
-											</Typography>
-										</Grid>
-
-										<Grid item xs={6}>
-											<Button
-												variant="contained"
-												aria-label="Toggle Nashville Numbering"
-												onClick={this.toggleNashville()}
-											>
-												Toggle
-											</Button>
-										</Grid>
-									</Grid>
-								</Grid>
-							</Grid>
-						</Paper>
-					</Dialog>
+							</Paper>
+						</Dialog>
+					)}
 				</div>
 			</Fade>
 		)
