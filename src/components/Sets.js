@@ -1,7 +1,9 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
 import { reverse, sortBy } from 'lodash'
 import { Link } from 'react-router-dom'
 
+import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import InputAdornment from '@material-ui/core/InputAdornment'
@@ -16,11 +18,25 @@ import Typography from '@material-ui/core/Typography'
 import ContentLimiter from './ContentLimiter'
 import DateSignifier from './DateSignifier'
 import Hero from './Hero'
-import SetLink from './SetLink'
 
 import { Magnify as MagnifyIcon } from 'mdi-material-ui'
 
-class Sets extends Component {
+const styles = theme => ({
+	shrinkCell: {
+		maxWidth: 0,
+	},
+	tableRow: {
+		cursor: 'pointer',
+	},
+})
+
+class Sets extends PureComponent {
+	static propTypes = {
+		classes: PropTypes.object,
+		// Redux props
+		changeRoute: PropTypes.func.isRequired,
+	}
+
 	state = {
 		searchText: '',
 	}
@@ -43,8 +59,11 @@ class Sets extends Component {
 		})
 	}
 
+	handleTableRowClick = setId => () =>
+		this.props.changeRoute(`/sets/${setId}`)
+
 	render() {
-		const { setCurrentSetId, sets = [] } = this.props
+		const { classes, setCurrentSetId, sets = [] } = this.props
 		const { searchText } = this.state
 
 		return (
@@ -107,23 +126,20 @@ class Sets extends Component {
 							{reverse(
 								sortBy(sets.filter(this.filterSets), 'setDate')
 							).map(set => (
-								<TableRow key={set.id}>
-									<TableCell>
+								<TableRow
+									className={classes.tableRow}
+									onClick={this.handleTableRowClick(set.id)}
+									hover
+									key={set.id}
+								>
+									<TableCell className={classes.shrinkCell}>
 										<DateSignifier date={set.setDate} />
 									</TableCell>
 
 									<TableCell>
-										<SetLink
-											setCurrentSetId={setCurrentSetId}
-											set={set}
-										>
-											<Typography
-												variant="h6"
-												gutterBottom
-											>
-												{set.title}
-											</Typography>
-										</SetLink>
+										<Typography variant="h6" gutterBottom>
+											{set.title}
+										</Typography>
 										<Typography>{set.author}</Typography>
 									</TableCell>
 								</TableRow>
@@ -136,4 +152,4 @@ class Sets extends Component {
 	}
 }
 
-export default Sets
+export default withStyles(styles)(Sets)
