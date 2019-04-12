@@ -110,9 +110,7 @@ class SongEditor extends Component {
 	onDeleteSong = () => {
 		if (window.confirm('Are you very sure you want to delete this song?')) {
 			this.props.deleteSong(this.props.song.id)
-			if (this.props.history) {
-				this.props.history.push({ pathname: '/songs' })
-			}
+			this.props.changeRoute('/songs')
 		}
 	}
 
@@ -145,7 +143,7 @@ class SongEditor extends Component {
 			this.props.updateSong(song.id, newSong)
 		}
 
-		if (song.id) {
+		if (song && song.id) {
 			this.props.changeRoute(`/songs/${song.id}`)
 		} else {
 			this.props.changeRoute('/songs')
@@ -167,7 +165,6 @@ class SongEditor extends Component {
 	render() {
 		const { classes, match } = this.props
 		const { author, content, key, title, parserType } = this.state
-		console.log(this.props)
 
 		const isNew = match.path === '/songs/new'
 
