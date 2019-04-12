@@ -91,11 +91,7 @@ class Navbar extends React.Component {
 
 		return (
 			<div className={classes.root}>
-				<AppBar
-					color="secondary"
-					position="static"
-					className="no-print"
-				>
+				<AppBar className="no-print" color="secondary">
 					<Toolbar>
 						{currentSet ? (
 							<Grid

@@ -30,6 +30,7 @@ const styles = theme => ({
 		height: '100vh',
 	},
 	content: {
+		marginTop: theme.spacing.keyline,
 		minHeight: 0,
 	},
 	scrollBars: {
@@ -114,9 +115,9 @@ class App extends Component {
 			>
 				<CssBaseline />
 				<SetCurrentSong />
+				<Navbar />
 				<Grid className={classes.content} item xs>
 					<div className={classes.scrollBars}>
-						<Navbar />
 						<Switch>
 							<Route exact path="/privacy" component={Privacy} />
 							<Route exact path="/login" component={Login} />
