@@ -116,6 +116,12 @@ class App extends Component {
 				<CssBaseline />
 				<SetCurrentSong />
 				<Navbar />
+				<LiveBar
+					onExitLiveMode={this.exitLiveMode}
+					onGoToNextSong={this.goToNextSong}
+					onGoToPreviousSong={this.goToPreviousSong}
+				/>
+
 				<Grid className={classes.content} item xs>
 					<div className={classes.scrollBars}>
 						<Switch>
@@ -170,14 +176,6 @@ class App extends Component {
 							<Redirect to="/sets" />
 						</Switch>
 					</div>
-				</Grid>
-
-				<Grid item>
-					<LiveBar
-						onExitLiveMode={this.exitLiveMode}
-						onGoToNextSong={this.goToNextSong}
-						onGoToPreviousSong={this.goToPreviousSong}
-					/>
 				</Grid>
 			</Grid>
 		)

@@ -22,6 +22,24 @@ import getSongSections from '../utils/getSongSections'
 //import './live-bar.scss';
 
 const styles = theme => ({
+	root: {
+		alignItems: 'stretch',
+		// backgroundColor: '#F6F9FC',
+		backgroundColor: 'rgb(242, 242, 242)',
+		borderTopColor: 'rgb(206, 206, 206)',
+		borderTopWidth: '1px',
+		bottom: 0,
+		display: 'flex',
+		flex: '0 0 48px',
+		left: 0,
+		position : 'fixed',
+		right: 0,
+		zIndex: 24,
+
+		'@media print': {
+			display: 'none !important',
+		},
+	},
 	container: {
 		display: 'flex',
 		flexWrap: 'wrap',
@@ -36,19 +54,6 @@ const styles = theme => ({
 	},
 	deleteButton: {
 		color: theme.palette.error.main,
-	},
-	liveBar: {
-		alignItems: 'stretch',
-		// backgroundColor: '#F6F9FC',
-		backgroundColor: 'rgb(242, 242, 242)',
-		borderTopColor: 'rgb(206, 206, 206)',
-		borderTopWidth: '1px',
-		display: 'flex',
-		flex: '0 0 48px',
-
-		'@media print': {
-			display: 'none !important',
-		},
 	},
 	sections: {
 		alignItems: 'center',
@@ -212,7 +217,7 @@ class LiveBar extends Component {
 		})*/
 
 		return show ? (
-			<nav className={classes.liveBar}>
+			<nav className={classes.root}>
 				<Grid container className={classes.root}>
 					<Grid item xs={8} sm={7}>
 						<div className={classes.sections}>
