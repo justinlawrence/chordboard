@@ -35,7 +35,8 @@ const styles = theme => ({
 	scrollBars: {
 		height: '100%',
 		overflowY: 'auto',
-		webkitOverflowScrolling: 'touch',
+		overflowScrolling: 'touch',
+		WebkitOverflowScrolling: 'touch',
 	},
 })
 

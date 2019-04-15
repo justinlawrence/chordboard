@@ -38,10 +38,10 @@ const styles = theme => ({
 		borderRight: '1px solid rgba(0,0,0,0.1)',
 		borderLeft: '1px solid rgba(0,0,0,0.1)',
 	},
-	tabs: {},
-	setToolbar: {
-		//backgroundColor: '#e0f4fa',
+	tabs: {
+		// color: 'blue',
 	},
+	setToolbar: {},
 	miniButton: {
 		zoom: 0.7,
 	},
