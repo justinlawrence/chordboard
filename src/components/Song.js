@@ -21,6 +21,9 @@ forEach(sectionData, item => {
 })
 
 const styles = theme => ({
+	root: {
+		paddingBottom: theme.spacing.unit * 3,
+	},
 	section: {
 		borderLeft: '4px solid #444',
 		marginLeft: theme.spacing.keyline,
@@ -157,7 +160,7 @@ class Song extends PureComponent {
 			result = result.concat(children)
 		}
 
-		return <div>{result}</div>
+		return <div className={classes.root}>{result}</div>
 	}
 }
 

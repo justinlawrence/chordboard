@@ -19,22 +19,13 @@ import {
 import * as actions from '../redux/actions'
 import getSongSections from '../utils/getSongSections'
 
-//import './live-bar.scss';
-
 const styles = theme => ({
 	root: {
 		alignItems: 'stretch',
-		// backgroundColor: '#F6F9FC',
 		backgroundColor: 'rgb(242, 242, 242)',
 		borderTopColor: 'rgb(206, 206, 206)',
 		borderTopWidth: '1px',
-		bottom: 0,
 		display: 'flex',
-		flex: '0 0 48px',
-		left: 0,
-		position : 'fixed',
-		right: 0,
-		zIndex: 24,
 
 		'@media print': {
 			display: 'none !important',

@@ -117,13 +117,8 @@ class App extends Component {
 				<CssBaseline />
 				<SetCurrentSong />
 				<Navbar />
-				<LiveBar
-					onExitLiveMode={this.exitLiveMode}
-					onGoToNextSong={this.goToNextSong}
-					onGoToPreviousSong={this.goToPreviousSong}
-				/>
-
-				<Grid className={classes.content} item xs>
+				
+				<Grid className={classes.content} item xs>				
 					<div className={classes.scrollBars}>
 						<Switch>
 							<Route exact path="/privacy" component={Privacy} />
@@ -178,6 +173,12 @@ class App extends Component {
 						</Switch>
 					</div>
 				</Grid>
+
+				<LiveBar
+					onExitLiveMode={this.exitLiveMode}
+					onGoToNextSong={this.goToNextSong}
+					onGoToPreviousSong={this.goToPreviousSong}
+				/>
 			</Grid>
 		)
 	}
