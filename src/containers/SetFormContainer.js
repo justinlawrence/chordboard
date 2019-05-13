@@ -41,7 +41,7 @@ class SetFormContainer extends Component {
 	static propTypes = {
 		initialValues: PropTypes.shape({
 			author: PropTypes.string,
-			date: PropTypes.string,
+			date: PropTypes.object,
 			title: PropTypes.string,
 		}),
 		isEdit: PropTypes.bool,
@@ -54,7 +54,7 @@ class SetFormContainer extends Component {
 		mode: this.props.isEdit ? modes.EDIT : modes.NEW,
 		newSet: {
 			author: this.props.initialValues.author || '',
-			date: this.props.initialValues.date || null,
+			setDate: this.props.initialValues.date || null,
 			title: this.props.initialValues.title || '',
 		},
 	}
@@ -104,6 +104,7 @@ class SetFormContainer extends Component {
 		const { classes } = this.props
 		const { mode, newSet } = this.state
 		const currentDate = format(new Date(), 'd MMM yyyy')
+		console.log(newSet)
 		return (
 			<form onSubmit={this.handleFormSubmit}>
 				<Grid container spacing={8}>

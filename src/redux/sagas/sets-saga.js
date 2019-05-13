@@ -1,6 +1,7 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 import slugify from 'slugify'
+import { format } from 'date-fns'
 import map from 'lodash/fp/map'
 import pick from 'lodash/fp/pick'
 import filter from 'lodash/fp/filter'
@@ -22,8 +23,16 @@ const setsChannel = () =>
 	eventChannel(emitter => {
 		setsCollection.onSnapshot(querySnapshot => {
 			const sets = []
-			querySnapshot.forEach(doc => {
-				sets.push({ id: doc.id, ...doc.data() })
+			querySnapshot.forEach(snapshot => {
+				const data = snapshot.data()
+				if (typeof data.setDate === 'object') {
+					data.setDate = format(
+						new Date(data.setDate.seconds * 1000),
+						'yyyy-MM-dd'
+					)
+					console.log(data)
+				}
+				sets.push({ id: snapshot.id, ...data })
 			})
 			emitter(sets)
 		})
@@ -80,16 +89,19 @@ function* handleUpdateSet({ payload: set }) {
 
 	yield put(mergeSets([set]))
 
-	const setSongs = []
-	for (let i = 0; i < set.songs.length; i++) {
-		const song = set.songs[i]
-		setSongs.push({
-			id: song.id,
-			key: song.key,
-		})
+	if (set.songs) {
+		const setSongs = []
+		for (let i = 0; i < set.songs.length; i++) {
+			const song = set.songs[i]
+			setSongs.push({
+				id: song.id,
+				key: song.key,
+			})
+		}
+
+		set.songs = setSongs
 	}
 
-	set.songs = setSongs
 	yield setsCollection.doc(set.id).update(set)
 }
 
