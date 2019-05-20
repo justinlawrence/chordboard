@@ -1,5 +1,7 @@
 import * as sagas from './sagas'
 
 export const initSagas = sagaMiddleware => {
-	Object.values(sagas).forEach(sagaMiddleware.run.bind(sagaMiddleware))
+	Object.keys(sagas)
+		.map(key => sagas[key])
+		.forEach(sagaMiddleware.run.bind(sagaMiddleware))
 }
