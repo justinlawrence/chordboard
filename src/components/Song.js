@@ -22,7 +22,7 @@ forEach(sectionData, item => {
 
 const styles = theme => ({
 	root: {
-		paddingBottom: theme.spacing.unit * 3,
+		paddingBottom: theme.spacing.unit * 8,
 	},
 	section: {
 		borderLeft: '4px solid #444',

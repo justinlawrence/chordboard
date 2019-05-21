@@ -32,12 +32,6 @@ const styles = theme => ({
 	content: {
 		minHeight: 0,
 	},
-	scrollBars: {
-		height: '100%',
-		overflowY: 'auto',
-		overflowScrolling: 'touch',
-		WebkitOverflowScrolling: 'touch',
-	},
 })
 
 class App extends Component {
@@ -117,61 +111,55 @@ class App extends Component {
 				<CssBaseline />
 				<SetCurrentSong />
 				<Navbar />
-				
-				<Grid className={classes.content} item xs>				
-					<div className={classes.scrollBars}>
-						<Switch>
-							<Route exact path="/privacy" component={Privacy} />
-							<Route exact path="/login" component={Login} />
-							<Route path="/sets" component={SetListContainer} />
 
-							{!user.name && <Redirect to="/login" />}
+				<Grid className={classes.content} item xs>
+					<Switch>
+						<Route exact path="/privacy" component={Privacy} />
+						<Route exact path="/login" component={Login} />
+						<Route path="/sets" component={SetListContainer} />
 
-							<Route
-								exact
-								path="/songs"
-								component={SongListContainer}
-							/>
+						{!user.name && <Redirect to="/login" />}
 
-							<Route
-								exact
-								path="/songs/add-to-set/:setId"
-								render={props => (
-									<SongListContainer
-										setId={props.match.params.setId}
-										{...props}
-									/>
-								)}
-							/>
+						<Route
+							exact
+							path="/songs"
+							component={SongListContainer}
+						/>
 
-							<Route
-								exact
-								path="/songs/new"
-								component={SongEditor}
-							/>
+						<Route
+							exact
+							path="/songs/add-to-set/:setId"
+							render={props => (
+								<SongListContainer
+									setId={props.match.params.setId}
+									{...props}
+								/>
+							)}
+						/>
 
-							<Route
-								exact
-								path="/songs/:id/edit"
-								render={props => (
-									<SongEditor
-										id={props.match.params.id}
-										{...props}
-									/>
-								)}
-							/>
+						<Route exact path="/songs/new" component={SongEditor} />
 
-							<Route
-								exact
-								path="/songs/:id"
-								render={({ match }) => (
-									<SongContainer id={match.params.id} />
-								)}
-							/>
+						<Route
+							exact
+							path="/songs/:id/edit"
+							render={props => (
+								<SongEditor
+									id={props.match.params.id}
+									{...props}
+								/>
+							)}
+						/>
 
-							<Redirect to="/sets" />
-						</Switch>
-					</div>
+						<Route
+							exact
+							path="/songs/:id"
+							render={({ match }) => (
+								<SongContainer id={match.params.id} />
+							)}
+						/>
+
+						<Redirect to="/sets" />
+					</Switch>
 				</Grid>
 
 				<LiveBar

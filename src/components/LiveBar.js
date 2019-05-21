@@ -27,6 +27,14 @@ const styles = theme => ({
 		borderTopWidth: '1px',
 		display: 'flex',
 
+		// Live bar has a fixed position so that the scroll can be natural
+		// and not break the print view.
+		bottom: 0,
+		left: 0,
+		position: 'fixed',
+		right: 0,
+		zIndex: 1,
+
 		'@media print': {
 			display: 'none !important',
 		},
