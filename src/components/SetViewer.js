@@ -8,6 +8,8 @@ import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Grow from '@material-ui/core/Grow'
+import Hidden from '@material-ui/core/Hidden'
+import IconButton from '@material-ui/core/IconButton'
 import RootRef from '@material-ui/core/RootRef'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -22,6 +24,7 @@ import Hero from './Hero'
 import SetSong from '../components/SetSong'
 import SetFormContainer from '../containers/SetFormContainer'
 import SongSelectorDialog from '../containers/SongSelectorDialog'
+import { Pencil as PencilIcon } from 'mdi-material-ui'
 
 const styles = theme => ({
 	container: {
@@ -177,18 +180,20 @@ class SetViewer extends Component {
 								/>
 							) : (
 								<Grid container spacing={24}>
-									<Grid item className="is-hidden-mobile">
-										<Grow
-											in={Boolean(set.setDate)}
-											mountOnEnter
-										>
-											<div>
-												<DateSignifier
-													date={set.setDate}
-												/>
-											</div>
-										</Grow>
-									</Grid>
+									<Hidden smDown>
+										<Grid item>
+											<Grow
+												in={Boolean(set.setDate)}
+												mountOnEnter
+											>
+												<div>
+													<DateSignifier
+														date={set.setDate}
+													/>
+												</div>
+											</Grow>
+										</Grid>
+									</Hidden>
 									<Grid item>
 										<Typography variant="h4">
 											{set.title}
@@ -203,14 +208,28 @@ class SetViewer extends Component {
 
 						{mode !== 'edit' && (
 							<Grid item>
-								<Button
-									onClick={this.toggleEditMode(
-										mode !== 'edit'
-									)}
-									variant="contained"
-								>
-									Edit set
-								</Button>
+								<Hidden smUp>
+									<IconButton
+										size="small"
+										variant="contained"
+										aria-label="Edit"
+										onClick={this.toggleEditMode(
+											mode !== 'edit'
+										)}
+									>
+										<PencilIcon />
+									</IconButton>
+								</Hidden>
+								<Hidden only="xs">
+									<Button
+										onClick={this.toggleEditMode(
+											mode !== 'edit'
+										)}
+										variant="contained"
+									>
+										Edit set
+									</Button>
+								</Hidden>
 							</Grid>
 						)}
 
@@ -220,7 +239,8 @@ class SetViewer extends Component {
 								onClick={this.handleAddASong}
 								variant="contained"
 							>
-								Add a song
+								<Hidden only="xs">Add a song</Hidden>
+								<Hidden smUp>Add</Hidden>
 							</Button>
 							<SongSelectorDialog
 								onClose={this.handleSongSelectorClose}
