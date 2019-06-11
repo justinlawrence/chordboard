@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Link, matchPath, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import map from 'lodash/map'
+import truncate from 'lodash/truncate'
 
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
@@ -14,6 +15,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 
 import * as actions from '../redux/actions'
 import chordboardLogo from '../chordboard-logo-dark.png'
+import chordboardLogoSmall from '../chordboard-logo-short.png'
 import { Close as CloseIcon } from 'mdi-material-ui'
 
 const styles = theme => ({
@@ -30,20 +32,18 @@ const styles = theme => ({
 		marginLeft: -12,
 		marginRight: 20,
 	},
-	logo: {
+	logoBig: {
 		paddingRight: 8,
 		height: 16,
 	},
-	tab: {
-		borderRight: '1px solid rgba(0,0,0,0.1)',
-		borderLeft: '1px solid rgba(0,0,0,0.1)',
-	},
 	tabs: {
-		// color: 'blue',
+		flexGrow: 1,
+		width: '100%',
 	},
+	tab: { paddingRight: 10 },
 	setToolbar: {},
 	miniButton: {
-		zoom: 0.7,
+		zoom: 0.8,
 	},
 })
 
@@ -110,28 +110,40 @@ class Navbar extends React.Component {
 					position="sticky"
 					className={classes.appBar}
 				>
-					<Toolbar variant="dense">
-						<Link to="/">
-							<img
-								src={chordboardLogo}
-								className={classes.logo}
-								alt="chordboard logo"
-							/>
-						</Link>
-						<Button component={Link} color="inherit" to="/sets">
-							Sets
-						</Button>
-						<Button component={Link} color="inherit" to="/songs">
-							Songs
-						</Button>
-					</Toolbar>
+					{!currentSet && (
+						<Toolbar variant="dense">
+							<Link to="/">
+								<img
+									src={chordboardLogo}
+									className={classes.logoBig}
+									alt="chordboard logo"
+								/>
+							</Link>
+							<Button component={Link} color="inherit" to="/sets">
+								Sets
+							</Button>
+							<Button
+								component={Link}
+								color="inherit"
+								to="/songs"
+							>
+								Songs
+							</Button>
+						</Toolbar>
+					)}
 
 					{currentSet && (
-						<Toolbar variant="dense" className={classes.noPrint}>
+						<Toolbar className={classes.noPrint} variant="dense">
+							<IconButton
+								color="inherit"
+								onClick={this.handleBackButton}
+								className={classes.miniButton}
+							>
+								<CloseIcon />
+							</IconButton>
 							<Tabs
 								indicatorColor="primary"
 								value={songId || false}
-								variant="scrollable"
 								className={classes.tabs}
 							>
 								<Tab
@@ -151,20 +163,15 @@ class Navbar extends React.Component {
 										to={`/sets/${currentSet.id}/songs/${
 											song.id
 										}`}
-										label={song.title}
+										label={truncate(song.title, {
+											length: 15,
+										})}
 										className={classes.tab}
 										color="inherit"
 										value={song.id}
 									/>
 								))}
 							</Tabs>
-							<IconButton
-								color="inherit"
-								onClick={this.handleBackButton}
-								className={classes.miniButton}
-							>
-								<CloseIcon />
-							</IconButton>
 						</Toolbar>
 					)}
 				</AppBar>
