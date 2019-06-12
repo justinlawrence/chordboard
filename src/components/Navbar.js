@@ -145,6 +145,8 @@ class Navbar extends React.Component {
 								indicatorColor="primary"
 								value={songId || false}
 								className={classes.tabs}
+								variant="scrollable"
+								scrollButtons="auto"
 							>
 								<Tab
 									key={'tabs-setlist'}
