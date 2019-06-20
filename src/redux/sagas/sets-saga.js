@@ -30,7 +30,6 @@ const setsChannel = () =>
 						new Date(data.setDate.seconds * 1000),
 						'yyyy-MM-dd'
 					)
-					console.log(data)
 				}
 				sets.push({ id: snapshot.id, ...data })
 			})
