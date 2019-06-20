@@ -66,7 +66,6 @@ const styles = theme => ({
 		border: 2,
 		color: theme.palette.common.white,
 		height: '100%',
-		marginRight: theme.spacing.unit / 2,
 		minWidth: theme.spacing.unit * 3,
 		paddingLeft: theme.spacing.unit * 2,
 		paddingRight: theme.spacing.unit * 2,
