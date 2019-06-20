@@ -121,6 +121,7 @@ class Sets extends PureComponent {
 							<TableRow>
 								<TableCell>Date</TableCell>
 								<TableCell>Set</TableCell>
+								<TableCell>Author</TableCell>
 							</TableRow>
 						</TableHead>
 
@@ -139,7 +140,7 @@ class Sets extends PureComponent {
 									</TableCell>
 
 									<TableCell>
-										<Typography variant="h6" gutterBottom>
+										<Typography variant="h6">
 											{set.title}
 										</Typography>
 										<Typography>{set.author}</Typography>
