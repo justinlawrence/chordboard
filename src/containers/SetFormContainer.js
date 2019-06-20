@@ -160,7 +160,7 @@ class SetFormContainer extends Component {
 						/>
 					</Grid>
 					{this.props.isEdit && (
-						<Grid item xs={6} lg={10} gutterBottom>
+						<Grid item xs={6} lg={10}>
 							<Button
 								className={classes.deleteButton}
 								onClick={this.handleFormDelete}
@@ -170,11 +170,9 @@ class SetFormContainer extends Component {
 						</Grid>
 					)}
 
-					<Grid item xs={3} lg={1}>
+					<Grid item xs={6} lg={2}>
 						<Button onClick={this.handleFormCancel}>Cancel</Button>
-					</Grid>
 
-					<Grid item xs={3} lg={1}>
 						<Button
 							color="primary"
 							type="submit"
