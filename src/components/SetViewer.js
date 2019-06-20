@@ -83,6 +83,7 @@ class SetViewer extends Component {
 	handleSaveSet = data => {
 		data.id = this.props.set.id
 		this.props.updateSet(data)
+		this.toggleEditMode(false)()
 	}
 
 	handleDeleteSet = () => this.props.onRemoveSet && this.props.onRemoveSet()
@@ -172,6 +173,7 @@ class SetViewer extends Component {
 										author: set.author,
 										date: set.setDate,
 										title: set.title,
+										venue: set.venue,
 									}}
 									onCancel={this.toggleEditMode(false)}
 									onDelete={this.handleDeleteSet}
@@ -200,6 +202,7 @@ class SetViewer extends Component {
 										</Typography>
 										<Typography variant="caption">
 											{set.author}
+											{set.venue ? ' @ ' + set.venue : ''}
 										</Typography>
 									</Grid>
 								</Grid>
@@ -230,18 +233,18 @@ class SetViewer extends Component {
 										Edit set
 									</Button>
 								</Hidden>
+								<Button
+									color="primary"
+									onClick={this.handleAddASong}
+									variant="contained"
+								>
+									<Hidden only="xs">Add a song</Hidden>
+									<Hidden smUp>Add</Hidden>
+								</Button>
 							</Grid>
 						)}
 
 						<Grid item>
-							<Button
-								color="primary"
-								onClick={this.handleAddASong}
-								variant="contained"
-							>
-								<Hidden only="xs">Add a song</Hidden>
-								<Hidden smUp>Add</Hidden>
-							</Button>
 							<SongSelectorDialog
 								onClose={this.handleSongSelectorClose}
 								open={isSongSelectorVisible}

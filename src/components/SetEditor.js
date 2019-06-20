@@ -68,11 +68,16 @@ class SetEditor extends Component {
 			title: setData.title,
 			setDate: format(setData.date, 'yyyy-MM-dd'),
 		})
+
+		console.log('here we go')
+		this.props.history.goBack()
+
+		/*
 		if (this.props.history) {
 			this.props.history.push({
 				pathname: '/sets',
 			})
-		}
+		}		*/
 	}
 
 	render() {

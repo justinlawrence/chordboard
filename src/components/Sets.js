@@ -51,7 +51,8 @@ class Sets extends PureComponent {
 	filterSets = set => {
 		return (
 			set.title.toLowerCase().includes(this.state.searchText) ||
-			set.author.toLowerCase().includes(this.state.searchText)
+			set.author.toLowerCase().includes(this.state.searchText) ||
+			set.venue.toLowerCase().includes(this.state.searchText)
 		)
 	}
 
@@ -89,7 +90,7 @@ class Sets extends PureComponent {
 									<Grid item>
 										<TextField
 											onChange={this.handleSearchChange}
-											placeholder="Titles, authors"
+											placeholder="Titles, authors, venues"
 											value={searchText}
 											InputProps={{
 												endAdornment: (
@@ -121,7 +122,6 @@ class Sets extends PureComponent {
 							<TableRow>
 								<TableCell>Date</TableCell>
 								<TableCell>Set</TableCell>
-								<TableCell>Author</TableCell>
 							</TableRow>
 						</TableHead>
 
@@ -143,7 +143,10 @@ class Sets extends PureComponent {
 										<Typography variant="h6">
 											{set.title}
 										</Typography>
-										<Typography>{set.author}</Typography>
+										<Typography>
+											{set.author}
+											{set.venue ? ' @ ' + set.venue : ''}
+										</Typography>
 									</TableCell>
 								</TableRow>
 							))}

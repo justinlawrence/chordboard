@@ -35,6 +35,7 @@ class SetFormContainer extends Component {
 			author: '',
 			date: '',
 			title: '',
+			venue: '',
 		},
 	}
 
@@ -43,6 +44,7 @@ class SetFormContainer extends Component {
 			author: PropTypes.string,
 			date: PropTypes.object,
 			title: PropTypes.string,
+			venue: PropTypes.string,
 		}),
 		isEdit: PropTypes.bool,
 		onCancel: PropTypes.func.isRequired,
@@ -56,6 +58,7 @@ class SetFormContainer extends Component {
 			author: this.props.initialValues.author || '',
 			setDate: this.props.initialValues.date || null,
 			title: this.props.initialValues.title || '',
+			venue: this.props.initialValues.venue || '',
 		},
 	}
 
@@ -79,6 +82,7 @@ class SetFormContainer extends Component {
 				author: '',
 				date: '',
 				title: '',
+				venue: '',
 			},
 		})
 	}
@@ -104,11 +108,11 @@ class SetFormContainer extends Component {
 		const { classes } = this.props
 		const { mode, newSet } = this.state
 		const currentDate = format(new Date(), 'd MMM yyyy')
-		console.log(newSet)
+
 		return (
 			<form onSubmit={this.handleFormSubmit}>
 				<Grid container spacing={8}>
-					<Grid item xs={12} lg={4}>
+					<Grid item xs={12} lg={6}>
 						<TextField
 							name="title"
 							label="Set title"
@@ -119,18 +123,7 @@ class SetFormContainer extends Component {
 						/>
 					</Grid>
 
-					<Grid item xs={12} lg={4}>
-						<TextField
-							name="author"
-							label="Set author"
-							fullWidth
-							margin="normal"
-							onChange={this.handleChange}
-							value={newSet.author}
-						/>
-					</Grid>
-
-					<Grid item xs={12} lg={2}>
+					<Grid item xs={12} lg={6}>
 						<InlineDatePicker
 							label="Set date"
 							format="d MMM yyyy"
@@ -145,14 +138,37 @@ class SetFormContainer extends Component {
 						/>
 					</Grid>
 
-					<Grid item xs={6} lg={8}>
-						<Button
-							className={classes.deleteButton}
-							onClick={this.handleFormDelete}
-						>
-							Delete set
-						</Button>
+					<Grid item xs={12} lg={6}>
+						<TextField
+							name="author"
+							label="Set author"
+							fullWidth
+							margin="normal"
+							onChange={this.handleChange}
+							value={newSet.author}
+						/>
 					</Grid>
+
+					<Grid item xs={12} lg={6}>
+						<TextField
+							name="venue"
+							label="Venue"
+							fullWidth
+							margin="normal"
+							onChange={this.handleChange}
+							value={newSet.venue}
+						/>
+					</Grid>
+					{this.props.isEdit && (
+						<Grid item xs={6} lg={10} gutterBottom>
+							<Button
+								className={classes.deleteButton}
+								onClick={this.handleFormDelete}
+							>
+								Delete set
+							</Button>
+						</Grid>
+					)}
 
 					<Grid item xs={3} lg={1}>
 						<Button onClick={this.handleFormCancel}>Cancel</Button>
