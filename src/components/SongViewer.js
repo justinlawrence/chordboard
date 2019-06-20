@@ -156,6 +156,13 @@ class SongViewer extends Component {
 			key: option.key,
 			song,
 		})
+
+		if (this.state.displayKey === option.key) {
+			if (this.props.song.id) {
+				localStorage.removeItem(`chordboard.${this.props.song.id}.capoKey`)
+			}
+		}
+
 	}
 
 	handleSelectDisplayKey = option => {

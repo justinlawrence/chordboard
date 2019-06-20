@@ -36,7 +36,7 @@ const styles = theme => ({
 	},
 })
 
-const DateSignifier = ({ classes, date }) => (
+const DateSignifier = ({ classes, date }) => date ? (
 	<Paper className={classes.root}>
 		<Grid container direction="column">
 			<Grid item>
@@ -71,7 +71,7 @@ const DateSignifier = ({ classes, date }) => (
 			</Grid>
 		</Grid>
 	</Paper>
-)
+) : null
 
 DateSignifier.propTypes = {
 	classes: PropTypes.object,
