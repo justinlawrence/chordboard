@@ -12,19 +12,20 @@ import IconButton from '@material-ui/core/IconButton'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Toolbar from '@material-ui/core/Toolbar'
+import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
 
 import * as actions from '../redux/actions'
 import { getThemeId } from '../redux/reducers/theme'
-import chordboardLogo from '../chordboard-logo-dark.png'
-import chordboardLogoSmall from '../chordboard-logo-short.png'
+import chordboardLogoDark from '../chordboard-logo-light.png'
+import chordboardLogoLight from '../chordboard-logo-dark.png'
 import {
 	Brightness4 as LightModeIcon,
 	Brightness5 as DarkModeIcon,
 	Close as CloseIcon,
 } from 'mdi-material-ui'
 
-const styles = theme => ( {
+const styles = theme => ({
 	root: {
 		'@media print': {
 			display: 'none !important',
@@ -58,7 +59,7 @@ const styles = theme => ( {
 	miniButton: {
 		zoom: 0.8,
 	},
-} )
+})
 
 class Navbar extends React.Component {
 	static propTypes = {
@@ -74,27 +75,27 @@ class Navbar extends React.Component {
 	}
 
 	handleBackButton = () => {
-		this.props.setCurrentSetId( null )
+		this.props.setCurrentSetId(null)
 	}
 
 	logout = () => {
-		localStorage.setItem( 'user', '' )
+		localStorage.setItem('user', '')
 
-		this.props.setCurrentUser( { name: null } )
+		this.props.setCurrentUser({ name: null })
 
-		if ( this.props.history ) {
-			this.props.history.push( { pathname: '/login' } )
+		if (this.props.history) {
+			this.props.history.push({ pathname: '/login' })
 		}
 
-		let loginFrom = localStorage.getItem( 'loginFrom' )
+		let loginFrom = localStorage.getItem('loginFrom')
 
-		if ( loginFrom === 'google' ) {
+		if (loginFrom === 'google') {
 			//google logout as per https://developers.google.com/identity/sign-in/web/sign-in
 			var auth2 = window.gapi.auth2.getAuthInstance()
-			auth2.signOut().then( () => {
-				console.log( 'Google user signed out' )
-			} )
-		} else if ( loginFrom === 'facebook' ) {
+			auth2.signOut().then(() => {
+				console.log('Google user signed out')
+			})
+		} else if (loginFrom === 'facebook') {
 			//facebook logout as per https://developers.facebook.com/docs/facebook-login/web/
 			/*FB.logout( function ( response ) {
 				// Person is now logged out
@@ -103,14 +104,14 @@ class Navbar extends React.Component {
 		}
 	}
 
-	setUserTextSize = () => this.props.setCurrentUser( { textSize: 82 } )
+	setUserTextSize = () => this.props.setCurrentUser({ textSize: 82 })
 
 	toggleTheme = () => {
 		const { themeId } = this.props
-		if ( themeId === 'light' ) {
-			this.props.updateTheme( 'dark' )
+		if (themeId === 'light') {
+			this.props.updateTheme('dark')
 		} else {
-			this.props.updateTheme( 'light' )
+			this.props.updateTheme('light')
 		}
 	}
 
@@ -118,11 +119,11 @@ class Navbar extends React.Component {
 		const { classes, currentSet, location, songs, themeId } = this.props
 
 		let songId
-		const match = matchPath( location.pathname, {
+		const match = matchPath(location.pathname, {
 			path: '/sets/:setId/songs/:songId',
 			exact: true,
-		} )
-		if ( match ) {
+		})
+		if (match) {
 			songId = match.params.songId
 		}
 
@@ -138,12 +139,20 @@ class Navbar extends React.Component {
 							<Grid item xs>
 								<Link to="/" className={classes.logoWrapper}>
 									<img
-										src={themeId === 'dark' ? chordboardLogo : chordboardLogo}
+										src={
+											themeId === 'dark'
+												? chordboardLogoDark
+												: chordboardLogoLight
+										}
 										className={classes.logoBig}
 										alt="chordboard logo"
 									/>
 								</Link>
-								<Button component={Link} color="inherit" to="/sets">
+								<Button
+									component={Link}
+									color="inherit"
+									to="/sets"
+								>
 									Sets
 								</Button>
 								<Button
@@ -156,13 +165,21 @@ class Navbar extends React.Component {
 							</Grid>
 
 							<Grid item>
-								<IconButton onClick={this.toggleTheme}>
-									{themeId === 'dark' ? (
-										<LightModeIcon/>
-									) : (
-										<DarkModeIcon/>
-									)}
-								</IconButton>
+								<Tooltip
+									title={
+										themeId === 'dark'
+											? 'light mode'
+											: 'dark mode'
+									}
+								>
+									<IconButton onClick={this.toggleTheme}>
+										{themeId === 'dark' ? (
+											<LightModeIcon />
+										) : (
+											<DarkModeIcon />
+										)}
+									</IconButton>
+								</Tooltip>
 							</Grid>
 						</Grid>
 					</Toolbar>
@@ -175,7 +192,7 @@ class Navbar extends React.Component {
 							onClick={this.handleBackButton}
 							className={classes.miniButton}
 						>
-							<CloseIcon/>
+							<CloseIcon />
 						</IconButton>
 						<Tabs
 							indicatorColor="primary"
@@ -194,19 +211,23 @@ class Navbar extends React.Component {
 								value={0}
 							/>
 
-							{map( songs, song => (
+							{map(songs, song => (
 								<Tab
 									key={`tabs-${song.id}`}
 									component={Link}
 									to={`/sets/${currentSet.id}/songs/${
 										song.id
-										}`}
-									label={<Typography noWrap>{song.title}</Typography>}
+									}`}
+									label={
+										<Typography noWrap>
+											{song.title}
+										</Typography>
+									}
 									classes={{ root: classes.tab }}
 									color="inherit"
 									value={song.id}
 								/>
-							) )}
+							))}
 						</Tabs>
 					</Toolbar>
 				)}
@@ -215,23 +236,23 @@ class Navbar extends React.Component {
 	}
 }
 
-const mapStateToProps = state => ( {
+const mapStateToProps = state => ({
 	currentSet: state.currentSet.id
-		? state.sets.byId[ state.currentSet.id ]
+		? state.sets.byId[state.currentSet.id]
 		: null,
-	currentSong: state.songs.byId[ state.currentSong.id ],
-	themeId: getThemeId( state ),
+	currentSong: state.songs.byId[state.currentSong.id],
+	themeId: getThemeId(state),
 	songs: state.currentSet.id
 		? map(
-			state.sets.byId[ state.currentSet.id ].songs,
-			song => state.songs.byId[ song.id ],
-		)
+			state.sets.byId[state.currentSet.id].songs,
+			song => state.songs.byId[song.id]
+		  )
 		: null,
-} )
+})
 
 export default withRouter(
 	connect(
 		mapStateToProps,
-		actions,
-	)( withStyles( styles )( Navbar ) ),
+		actions
+	)(withStyles(styles)(Navbar))
 )
