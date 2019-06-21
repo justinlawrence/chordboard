@@ -22,7 +22,7 @@ import getSongSections from '../utils/getSongSections'
 const styles = theme => ({
 	root: {
 		alignItems: 'stretch',
-		backgroundColor: 'rgb(242, 242, 242)',
+		backgroundColor: theme.palette.background.hero,
 		borderTopColor: 'rgb(206, 206, 206)',
 		borderTopWidth: '1px',
 		display: 'flex',
