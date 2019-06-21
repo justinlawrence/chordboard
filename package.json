@@ -18,7 +18,7 @@
 		"@sentry/browser": "^4.6.4",
 		"chord-magic": "^2.1.1",
 		"date-fns": "^2.0.0-alpha.26",
-		"firebase": "^6.0.2",
+		"firebase": "^6.2.1",
 		"history": "^4.9.0",
 		"lodash": "^4.17.11",
 		"material-ui": "^0.20.2",
