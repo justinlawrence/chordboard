@@ -195,9 +195,6 @@ class SongViewer extends Component {
 				props.song.users.find(u => u.id === props.user.id)) ||
 			{}
 
-		/*console.log( 'song key', props.song.key );
-				console.log( 'set key', props.setKey );
-				console.log( 'user key', songUser.key );*/
 		const capoKey = localStorage.getItem(
 			`chordboard.${props.song.id}.capoKey`
 		)

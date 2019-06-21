@@ -24,7 +24,7 @@ const options = [
 
 const styles = theme => ({
 	root: {
-		// minWidth: theme.spacing.unit * 9,
+		minWidth: theme.spacing.unit * 9,
 	},
 })
 

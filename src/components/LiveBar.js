@@ -21,7 +21,7 @@ import getSongSections from '../utils/getSongSections'
 
 const styles = theme => ({
 	root: {
-		alignItems: 'stretch',
+		// alignItems: 'stretch',
 		backgroundColor: theme.palette.background.hero,
 		borderTopColor: 'rgb(206, 206, 206)',
 		borderTopWidth: '1px',
@@ -70,9 +70,6 @@ const styles = theme => ({
 		paddingLeft: theme.spacing.unit * 2,
 		paddingRight: theme.spacing.unit * 2,
 		position: 'relative',
-	},
-	sectionText: {
-		fontWeight: 500,
 	},
 })
 
@@ -217,7 +214,7 @@ class LiveBar extends Component {
 		return show ? (
 			<nav className={classes.root}>
 				<Grid container className={classes.root}>
-					<Grid item xs={8} sm={7}>
+					<Grid item xs={10}>
 						<div className={classes.sections}>
 							{sections.map(section => (
 								<ButtonBase
@@ -239,7 +236,7 @@ class LiveBar extends Component {
 						</div>
 					</Grid>
 
-					<Grid item xs={4} sm={5}>
+					<Grid item xs={2}>
 						<div className="live-bar__navigation-actions">
 							<Hidden xsDown>
 								<Tooltip title="Back to setlist">
@@ -270,43 +267,6 @@ class LiveBar extends Component {
 									<ChevronRightIcon />
 								</IconButton>
 							</Tooltip>
-
-							{/*
-							<a
-								className="live-bar__navigation-actions__item"
-								onClick={onGoToPreviousSong}
-								title="Jump to the previous song"
-							>
-								<ChevronLeftIcon />
-
-								<Hidden xsDown>
-									{previousSongTitle && (
-										<React.Fragment>
-											<SongKey value={previousSongKey} />
-											{previousSongTitle}
-										</React.Fragment>
-									)}
-								</Hidden>
-							</a>
-
-							<a
-								className="live-bar__navigation-actions__item"
-								onClick={onGoToNextSong}
-								title="Jump to the next song"
-							>
-								<Hidden xsDown>
-									{nextSongTitle && (
-										<React.Fragment>
-											<SongKey value={nextSongKey} />
-											{nextSongTitle}
-										</React.Fragment>
-									)}
-								</Hidden>
-
-								<ChevronRightIcon />
-							</a>
-							
-							*/}
 						</div>
 					</Grid>
 				</Grid>
