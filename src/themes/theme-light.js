@@ -5,19 +5,31 @@ http://colorhunt.co/c/114174
 
 */
 
-const defaultTheme = {
+import { createMuiTheme } from '@material-ui/core/styles'
+
+const baseTheme = createMuiTheme( {
+	typography: { useNextVariants: true },
+} )
+
+export const lightTheme = {
 	typography: {
 		useNextVariants: true,
 	},
 	palette: {
+		...baseTheme.palette,
+		background: {
+			...baseTheme.palette.background,
+			hero: '#f5f5f5'
+		},
 		primary: {
 			main: '#F73859', //fab
 			contrastText: '#fff',
 		},
 		secondary: {
-			main: '#fff', //nav was 283149 then fff then 283149
+			main: '#fff', //nav was 283149 then fff then d283149
 			contrastText: '#000', //was fff then 000
 		},
+
 	},
 	spacing: {
 		keyline: 64,
@@ -79,5 +91,3 @@ const defaultTheme = {
 };
 
 */
-
-export default defaultTheme

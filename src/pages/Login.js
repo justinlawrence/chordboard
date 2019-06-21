@@ -19,7 +19,7 @@ import chordboardLogo from '../chordboard-logo-inline.png'
 
 const styles = theme => ({
 	root: {
-		backgroundColor: theme.heroBackgroundColor,
+		backgroundColor: theme.palette.background.hero,
 		display: 'flex',
 		flexGrow: 1,
 		height: '90vh',

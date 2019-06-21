@@ -7,6 +7,7 @@ import map from 'lodash/map'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
@@ -14,9 +15,14 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 
 import * as actions from '../redux/actions'
+import { getThemeId } from '../redux/reducers/theme'
 import chordboardLogo from '../chordboard-logo-dark.png'
 import chordboardLogoSmall from '../chordboard-logo-short.png'
-import { Close as CloseIcon } from 'mdi-material-ui'
+import {
+	Brightness4 as LightModeIcon,
+	Brightness5 as DarkModeIcon,
+	Close as CloseIcon,
+} from 'mdi-material-ui'
 
 const styles = theme => ( {
 	root: {
@@ -32,8 +38,12 @@ const styles = theme => ( {
 		marginRight: 20,
 	},
 	logoBig: {
-		paddingRight: 8,
-		height: 16,
+		height: theme.spacing.unit * 2,
+		verticalAlign: 'middle',
+	},
+	logoWrapper: {
+		paddingRight: theme.spacing.unit,
+		paddingTop: theme.spacing.unit,
 	},
 	tabs: {
 		flexGrow: 1,
@@ -60,6 +70,7 @@ class Navbar extends React.Component {
 		setCurrentSetId: PropTypes.func.isRequired,
 		setCurrentUser: PropTypes.func.isRequired,
 		songs: PropTypes.array,
+		updateTheme: PropTypes.func.isRequired,
 	}
 
 	handleBackButton = () => {
@@ -94,8 +105,17 @@ class Navbar extends React.Component {
 
 	setUserTextSize = () => this.props.setCurrentUser( { textSize: 82 } )
 
+	toggleTheme = () => {
+		const { themeId } = this.props
+		if ( themeId === 'light' ) {
+			this.props.updateTheme( 'dark' )
+		} else {
+			this.props.updateTheme( 'light' )
+		}
+	}
+
 	render() {
-		const { classes, currentSet, location, songs } = this.props
+		const { classes, currentSet, location, songs, themeId } = this.props
 
 		let songId
 		const match = matchPath( location.pathname, {
@@ -114,23 +134,37 @@ class Navbar extends React.Component {
 			>
 				{!currentSet && (
 					<Toolbar variant="dense">
-						<Link to="/">
-							<img
-								src={chordboardLogo}
-								className={classes.logoBig}
-								alt="chordboard logo"
-							/>
-						</Link>
-						<Button component={Link} color="inherit" to="/sets">
-							Sets
-						</Button>
-						<Button
-							component={Link}
-							color="inherit"
-							to="/songs"
-						>
-							Songs
-						</Button>
+						<Grid container alignItems="center">
+							<Grid item xs>
+								<Link to="/" className={classes.logoWrapper}>
+									<img
+										src={themeId === 'dark' ? chordboardLogo : chordboardLogo}
+										className={classes.logoBig}
+										alt="chordboard logo"
+									/>
+								</Link>
+								<Button component={Link} color="inherit" to="/sets">
+									Sets
+								</Button>
+								<Button
+									component={Link}
+									color="inherit"
+									to="/songs"
+								>
+									Songs
+								</Button>
+							</Grid>
+
+							<Grid item>
+								<IconButton onClick={this.toggleTheme}>
+									{themeId === 'dark' ? (
+										<LightModeIcon/>
+									) : (
+										<DarkModeIcon/>
+									)}
+								</IconButton>
+							</Grid>
+						</Grid>
 					</Toolbar>
 				)}
 
@@ -186,6 +220,7 @@ const mapStateToProps = state => ( {
 		? state.sets.byId[ state.currentSet.id ]
 		: null,
 	currentSong: state.songs.byId[ state.currentSong.id ],
+	themeId: getThemeId( state ),
 	songs: state.currentSet.id
 		? map(
 			state.sets.byId[ state.currentSet.id ].songs,
