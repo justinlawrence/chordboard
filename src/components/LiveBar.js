@@ -21,7 +21,7 @@ import getSongSections from '../utils/getSongSections'
 
 const styles = theme => ({
 	root: {
-		// alignItems: 'stretch',
+		alignItems: 'stretch',
 		backgroundColor: theme.palette.background.hero,
 		borderTopColor: 'rgb(206, 206, 206)',
 		borderTopWidth: '1px',
@@ -214,7 +214,7 @@ class LiveBar extends Component {
 		return show ? (
 			<nav className={classes.root}>
 				<Grid container className={classes.root}>
-					<Grid item xs={10}>
+					<Grid item xs={9} sm={7}>
 						<div className={classes.sections}>
 							{sections.map(section => (
 								<ButtonBase
@@ -236,7 +236,7 @@ class LiveBar extends Component {
 						</div>
 					</Grid>
 
-					<Grid item xs={2}>
+					<Grid item xs={3} sm={5}>
 						<div className="live-bar__navigation-actions">
 							<Hidden xsDown>
 								<Tooltip title="Back to setlist">
