@@ -1,15 +1,20 @@
-/*
+import { createMuiTheme } from '@material-ui/core/styles'
 
-Based on this theme
-http://colorhunt.co/c/114174
+const baseDarkTheme = createMuiTheme( {
+	palette: { type: 'dark' },
+	typography: { useNextVariants: true },
+} )
 
-*/
-
-const defaultTheme = {
+export const darkTheme = {
 	typography: {
 		useNextVariants: true,
 	},
 	palette: {
+		...baseDarkTheme.palette,
+		background: {
+			...baseDarkTheme.palette.background,
+			hero: '#2a2a2a'
+		},
 		primary: {
 			main: '#F73859', //fab
 			contrastText: '#fff',
@@ -79,5 +84,3 @@ const defaultTheme = {
 };
 
 */
-
-export default defaultTheme
