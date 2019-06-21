@@ -28,3 +28,4 @@ function* handleUpdateTheme( { payload: themeId } ) {
 		return console.error( `ThemeSaga - failed to set theme: ${themeId}`, err )
 	}
 }
+
