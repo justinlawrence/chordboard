@@ -1,0 +1,17 @@
+@media print {
+
+	.song-viewer__song {
+		zoom: .8;
+	}
+
+	.no-print, .no-print * {
+		display: none !important;
+	}
+
+	.app {
+		&__content {
+			overflow-y: visible; //hide the livebar for printing? play with this try (auto, show, hidden, inherit)
+		}
+	}
+
+}

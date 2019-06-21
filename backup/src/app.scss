@@ -1,0 +1,19 @@
+.has-fixed-navbar {
+	padding-top: 52px;
+}
+.app {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	&__content {
+		display: flex;
+		flex: 1 1 0;
+		flex-direction: column;
+		overflow-y: auto; //so the live bar shows
+		-webkit-overflow-scrolling: touch;
+	}
+}
+a {
+	text-decoration: none;
+}
