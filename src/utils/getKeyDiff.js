@@ -5,7 +5,7 @@ const getKeyDiff = (keyFrom, keyTo) => {
 
 	const diff = octave.indexOf(keyTo) - octave.indexOf(keyFrom)
 
-	//console.log( `getKeyDiff - from '${keyFrom}' to '${keyTo}'`, diff );
+	console.log(`getKeyDiff - from '${keyFrom}' to '${keyTo}'`, diff)
 
 	return diff < 0 ? diff + octave.length : diff
 }

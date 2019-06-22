@@ -157,12 +157,11 @@ class SongViewer extends Component {
 			song,
 		})
 
-		if (this.state.displayKey === option.key) {
-			if (this.props.song.id) {
-				localStorage.removeItem(`chordboard.${this.props.song.id}.capoKey`)
-			}
-		}
+		console.log(option.key, this.state.displayKey)
 
+		if (this.state.displayKey === option.key && this.props.song.id) {
+			localStorage.removeItem(`chordboard.${this.props.song.id}.capoKey`)
+		}
 	}
 
 	handleSelectDisplayKey = option => {
@@ -174,10 +173,16 @@ class SongViewer extends Component {
 		})
 
 		if (this.props.song.id) {
-			localStorage.setItem(
-				`chordboard.${this.props.song.id}.capoKey`,
-				key
-			)
+			if (this.props.setKey === option.key) {
+				localStorage.removeItem(
+					`chordboard.${this.props.song.id}.capoKey`
+				)
+			} else {
+				localStorage.setItem(
+					`chordboard.${this.props.song.id}.capoKey`,
+					key
+				)
+			}
 		}
 		this.props.setCurrentSongUserKey(key)
 	}
@@ -276,7 +281,7 @@ class SongViewer extends Component {
 
 		const capo = getKeyDiff(displayKey, setKey || song.key) //this is only for display purposes, telling the user where to put the capo
 		const transposeAmount = getKeyDiff(song.key, displayKey) //this is how much to transpose by
-
+		
 		let lines = transposeLines(linesState, transposeAmount)
 		if (isNashville) {
 			lines = linesToNashville(displayKey, lines)
