@@ -40,8 +40,11 @@ class SetSong extends PureComponent {
 			`/sets/${this.props.setId}/songs/${this.props.songId}`
 		)
 
-	removeSong = () =>
+	removeSong = event => {
 		this.props.removeSetSong(this.props.setId, this.props.songId)
+		event.stopPropagation()
+	}
+		
 
 	stopPropagation = event => event.stopPropagation()
 
