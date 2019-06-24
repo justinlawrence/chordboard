@@ -62,14 +62,14 @@ class SetSong extends PureComponent {
 					{...provided.dragHandleProps}
 				>
 					{mode === 'edit' && (
-						<TableCell>
+						<TableCell style={{width:0}}>
 							<Tooltip title="Drag to reorder song">
 								<DragIcon />
 							</Tooltip>
 						</TableCell>
 					)}
 
-					<TableCell padding={'dense'}>
+					<TableCell padding={'dense'}  style={{width:0}}>
 						<Typography variant="h6">{songIndex + 1}</Typography>
 					</TableCell>
 					<TableCell>
@@ -106,7 +106,7 @@ class SetSong extends PureComponent {
 					</TableCell>
 
 					{mode === 'edit' && (
-						<TableCell>
+						<TableCell style={{width:0}}>
 							<Tooltip title="Remove song from set">
 								<IconButton
 									aria-label="Remove song"

@@ -263,17 +263,17 @@ class SetViewer extends Component {
 							<TableHead>
 								<TableRow>
 									{mode === 'edit' && (
-										<TableCell padding="checkbox">
+										<TableCell padding="checkbox" style={{width:0}}>
 											Move
 										</TableCell>
 									)}
-									<TableCell padding="checkbox">#</TableCell>
+									<TableCell padding="checkbox" style={{width:0}}>#</TableCell>
 									<TableCell>Song</TableCell>
-									<TableCell padding="checkbox">
+									<TableCell padding="checkbox" style={{width:0}}>
 										Key
 									</TableCell>
 									{mode === 'edit' && (
-										<TableCell padding="checkbox">
+										<TableCell padding="checkbox" style={{width:0}}>
 											Delete
 										</TableCell>
 									)}
