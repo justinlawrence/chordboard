@@ -15,13 +15,14 @@ import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
+import Tooltip from '@material-ui/core/Tooltip'
 import TableRow from '@material-ui/core/TableRow'
 import Typography from '@material-ui/core/Typography'
 
 import * as actions from '../redux/actions'
 import DateSignifier from './DateSignifier'
 import Hero from './Hero'
-import SetSong from '../components/SetSong'
+import SetSongRow from './SetSongRow'
 import SetFormContainer from '../containers/SetFormContainer'
 import SongSelectorDialog from '../containers/SongSelectorDialog'
 import { Pencil as PencilIcon } from 'mdi-material-ui'
@@ -131,7 +132,7 @@ class SetViewer extends Component {
 							key={song.id}
 						>
 							{provided => (
-								<SetSong
+								<SetSongRow
 									mode={mode}
 									onChangeKey={this.changeKey}
 									provided={provided}
@@ -261,9 +262,21 @@ class SetViewer extends Component {
 						>
 							<TableHead>
 								<TableRow>
-									<TableCell>#</TableCell>
+									{mode === 'edit' && (
+										<TableCell padding="checkbox" style={{width:0}}>
+											Move
+										</TableCell>
+									)}
+									<TableCell padding="checkbox" style={{width:0}}>#</TableCell>
 									<TableCell>Song</TableCell>
-									<TableCell>Key</TableCell>
+									<TableCell padding="checkbox" style={{width:0}}>
+										Key
+									</TableCell>
+									{mode === 'edit' && (
+										<TableCell padding="checkbox" style={{width:0}}>
+											Delete
+										</TableCell>
+									)}
 								</TableRow>
 							</TableHead>
 
