@@ -36,42 +36,43 @@ const styles = theme => ({
 	},
 })
 
-const DateSignifier = ({ classes, date }) => date ? (
-	<Paper className={classes.root}>
-		<Grid container direction="column">
-			<Grid item>
-				<Typography
-					className={cx(classes.month, {
-						[classes.monthPast]: isBefore(date, new Date()),
-					})}
-					align="center"
-					variant="caption"
-				>
-					{format(date, 'MMM')}
-				</Typography>
+const DateSignifier = ({ classes, date }) =>
+	date ? (
+		<Paper className={classes.root}>
+			<Grid container direction="column">
+				<Grid item>
+					<Typography
+						className={cx(classes.month, {
+							[classes.monthPast]: isBefore(date, new Date()),
+						})}
+						align="center"
+						variant="caption"
+					>
+						{format(date, 'MMM')}
+					</Typography>
+				</Grid>
+				<Grid item>
+					<Typography
+						className={classes.date}
+						align="center"
+						variant="h5"
+					>
+						{format(date, 'd')}
+					</Typography>
+				</Grid>
+				<Grid item className={classes.divider} />
+				<Grid item>
+					<Typography
+						className={classes.day}
+						align="center"
+						variant="caption"
+					>
+						{format(date, 'EEE')}
+					</Typography>
+				</Grid>
 			</Grid>
-			<Grid item>
-				<Typography
-					className={classes.date}
-					align="center"
-					variant="h5"
-				>
-					{format(date, 'd')}
-				</Typography>
-			</Grid>
-			<Grid item className={classes.divider} />
-			<Grid item>
-				<Typography
-					className={classes.day}
-					align="center"
-					variant="caption"
-				>
-					{format(date, 'EEE')}
-				</Typography>
-			</Grid>
-		</Grid>
-	</Paper>
-) : null
+		</Paper>
+	) : null
 
 DateSignifier.propTypes = {
 	classes: PropTypes.object,
