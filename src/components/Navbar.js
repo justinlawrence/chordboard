@@ -39,12 +39,12 @@ const styles = theme => ({
 		marginRight: 20,
 	},
 	logoBig: {
-		height: theme.spacing.unit * 2,
+		height: 24,
 		verticalAlign: 'middle',
 	},
 	logoWrapper: {
-		paddingRight: theme.spacing.unit,
-		paddingTop: theme.spacing.unit,
+		paddingRight: theme.spacing(1),
+		paddingTop: theme.spacing(1),
 	},
 	tabs: {
 		flexGrow: 1,
@@ -215,9 +215,7 @@ class Navbar extends React.Component {
 								<Tab
 									key={`tabs-${song.id}`}
 									component={Link}
-									to={`/sets/${currentSet.id}/songs/${
-										song.id
-									}`}
+									to={`/sets/${currentSet.id}/songs/${song.id}`}
 									label={
 										<Typography noWrap>
 											{song.title}

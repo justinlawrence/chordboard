@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import uniqBy from 'lodash/fp/uniqBy'
 
+import { parseISO } from 'date-fns'
+
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
@@ -162,6 +164,14 @@ class SetViewer extends Component {
 	render() {
 		const { set, classes } = this.props
 		const { mode, isSongSelectorVisible } = this.state
+		console.log('setviewer setDate is ', set.setDate)
+		if (!(set.setDate instanceof Date) && !isNaN(set.setDate)) {
+			console.log(
+				'TODO: setviewer needs work - setDate is not a javascript date'
+			)
+			set.setDate = parseISO(set.setDate)
+		}
+
 		return set ? (
 			<div className="set-viewer">
 				<Hero>

@@ -44,7 +44,6 @@ class SetSong extends PureComponent {
 		this.props.removeSetSong(this.props.setId, this.props.songId)
 		event.stopPropagation()
 	}
-		
 
 	stopPropagation = event => event.stopPropagation()
 
@@ -62,16 +61,17 @@ class SetSong extends PureComponent {
 					{...provided.dragHandleProps}
 				>
 					{mode === 'edit' && (
-						<TableCell style={{width:0}}>
+						<TableCell style={{ width: 0 }}>
 							<Tooltip title="Drag to reorder song">
 								<DragIcon />
 							</Tooltip>
 						</TableCell>
 					)}
 
-					<TableCell padding={'dense'}  style={{width:0}}>
+					<TableCell padding={'checkbox'} style={{ width: 0 }}>
 						<Typography variant="h6">{songIndex + 1}</Typography>
 					</TableCell>
+
 					<TableCell>
 						<Typography variant="h6">{song.title}</Typography>
 					</TableCell>
@@ -106,7 +106,7 @@ class SetSong extends PureComponent {
 					</TableCell>
 
 					{mode === 'edit' && (
-						<TableCell style={{width:0}}>
+						<TableCell style={{ width: 0 }}>
 							<Tooltip title="Remove song from set">
 								<IconButton
 									aria-label="Remove song"

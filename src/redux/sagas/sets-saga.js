@@ -1,7 +1,7 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 import slugify from 'slugify'
-import { parseISO, format } from 'date-fns'
+import { parseISO } from 'date-fns'
 import map from 'lodash/fp/map'
 import pick from 'lodash/fp/pick'
 import filter from 'lodash/fp/filter'
@@ -25,11 +25,10 @@ const setsChannel = () =>
 			const sets = []
 			querySnapshot.forEach(snapshot => {
 				const data = snapshot.data()
-				console.log('saga before', data.setDate, data.title)
+				console.log('saga before', data.setDate, data.id, data.title)
 
 				if (typeof data.setDate === 'object') {
 					data.setDate = new Date(data.setDate.seconds * 1000)
-
 					console.log('saga new Date', data.setDate)
 				} else {
 					data.setDate = parseISO(data.setDate)
@@ -86,7 +85,7 @@ function* handleUpdateSet({ payload: set }) {
 	if (set.title) {
 		set.slug = slugify(set.title)
 	}
-	/*
+	/* JL 30 Jun 2019: I've removed all the extra fields in 5 of the sets data manually via firebase
 	if (set.date) {
 		console.log('sets saga handleUpdateSet saving setDate as', set.date)
 		set.setDate = set.date
