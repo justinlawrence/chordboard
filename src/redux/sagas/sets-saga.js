@@ -1,12 +1,12 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 import slugify from 'slugify'
-import { format } from 'date-fns'
+import { parseISO, format } from 'date-fns'
 import map from 'lodash/fp/map'
 import pick from 'lodash/fp/pick'
 import filter from 'lodash/fp/filter'
-
 import { db } from '../../firebase'
+
 import {
 	ADD_SET,
 	REMOVE_SET,
@@ -25,11 +25,15 @@ const setsChannel = () =>
 			const sets = []
 			querySnapshot.forEach(snapshot => {
 				const data = snapshot.data()
+				console.log('saga before', data.setDate, data.title)
+
 				if (typeof data.setDate === 'object') {
-					data.setDate = format(
-						new Date(data.setDate.seconds * 1000),
-						'yyyy-MM-dd'
-					)
+					data.setDate = new Date(data.setDate.seconds * 1000)
+
+					console.log('saga new Date', data.setDate)
+				} else {
+					data.setDate = parseISO(data.setDate)
+					console.log('saga parseISO', data.setDate)
 				}
 				sets.push({ id: snapshot.id, ...data })
 			})
@@ -82,9 +86,12 @@ function* handleUpdateSet({ payload: set }) {
 	if (set.title) {
 		set.slug = slugify(set.title)
 	}
+	/*
 	if (set.date) {
+		console.log('sets saga handleUpdateSet saving setDate as', set.date)
 		set.setDate = set.date
 	}
+	*/
 
 	yield put(mergeSets([set]))
 

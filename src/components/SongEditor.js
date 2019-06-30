@@ -191,12 +191,7 @@ class SongEditor extends Component {
 			<div className="song-editor">
 				<Hero>
 					<ContentLimiter>
-						<Grid
-							container
-							className={classes.root}
-							hide="xsDown"
-							spacing={24}
-						>
+						<Grid container className={classes.root} hide="xsDown">
 							<Grid item xs={12} sm={8}>
 								<Grid container>
 									<Grid item>
@@ -239,7 +234,6 @@ class SongEditor extends Component {
 								justify="flex-start"
 								xs={12}
 								sm={4}
-								spacing={24}
 							>
 								<Grid
 									container

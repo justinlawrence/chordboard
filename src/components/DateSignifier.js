@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { format, isBefore } from 'date-fns'
+import { format, isBefore, parseISO } from 'date-fns'
 import cx from 'classnames'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -37,7 +37,7 @@ const styles = theme => ({
 })
 
 const DateSignifier = ({ classes, date }) =>
-	date ? (
+	date || (date = parseISO(date)) ? (
 		<Paper className={classes.root}>
 			<Grid container direction="column">
 				<Grid item>
@@ -76,7 +76,7 @@ const DateSignifier = ({ classes, date }) =>
 
 DateSignifier.propTypes = {
 	classes: PropTypes.object,
-	date: PropTypes.object.isRequired,
+	date: PropTypes.any,
 }
 
 export default withStyles(styles)(DateSignifier)
