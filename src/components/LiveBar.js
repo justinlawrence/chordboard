@@ -214,7 +214,7 @@ class LiveBar extends Component {
 		return show ? (
 			<nav className={classes.root}>
 				<Grid container className={classes.root}>
-					<Grid item xs={9} sm={7}>
+					<Grid item xs>
 						<div className={classes.sections}>
 							{sections.map(section => (
 								<ButtonBase
@@ -236,38 +236,36 @@ class LiveBar extends Component {
 						</div>
 					</Grid>
 
-					<Grid item xs={3} sm={5}>
-						<div className="live-bar__navigation-actions">
-							<Hidden xsDown>
-								<Tooltip title="Back to setlist">
-									<IconButton
-										className={classes.button}
-										component={Link}
-										to={`/sets/${currentSetId}`}
-									>
-										<SetListIcon />
-									</IconButton>
-								</Tooltip>
-							</Hidden>
-
-							<Tooltip title="Jump to previous song">
+					<Grid item>
+						<Hidden xsDown>
+							<Tooltip title="Back to setlist">
 								<IconButton
 									className={classes.button}
-									onClick={this.handleGoToPreviousSong}
+									component={Link}
+									to={`/sets/${currentSetId}`}
 								>
-									<ChevronLeftIcon />
+									<SetListIcon />
 								</IconButton>
 							</Tooltip>
+						</Hidden>
 
-							<Tooltip title="Jump to next song">
-								<IconButton
-									className={classes.button}
-									onClick={this.handleGoToNextSong}
-								>
-									<ChevronRightIcon />
-								</IconButton>
-							</Tooltip>
-						</div>
+						<Tooltip title="Jump to previous song">
+							<IconButton
+								className={classes.button}
+								onClick={this.handleGoToPreviousSong}
+							>
+								<ChevronLeftIcon />
+							</IconButton>
+						</Tooltip>
+
+						<Tooltip title="Jump to next song">
+							<IconButton
+								className={classes.button}
+								onClick={this.handleGoToNextSong}
+							>
+								<ChevronRightIcon />
+							</IconButton>
+						</Tooltip>
 					</Grid>
 				</Grid>
 			</nav>
