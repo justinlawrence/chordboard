@@ -24,9 +24,6 @@ export const darkTheme = {
 			contrastText: '#fff', //was fff then 000
 		},
 	},
-	spacing: {
-		keyline: 64,
-	},
 
 	// Custom values
 	maxPageWidth: 1344,

@@ -5,7 +5,7 @@ import cx from 'classnames'
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import GoogleLogin from 'react-google-login'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
@@ -29,35 +29,35 @@ const styles = theme => ({
 		flexGrow: 1
 	},
 	form: theme.mixins.gutters({
-		paddingBottom: theme.spacing.unit * 8,
-		paddingTop: theme.spacing.unit * 2,
-		width: theme.spacing.unit * theme.spacing.unit * 5
+		paddingBottom: theme.spacing(8),
+		paddingTop: theme.spacing(2),
+		width: theme.spacing(40)
 	}),
 	formFooter: {
-		marginTop: theme.spacing.unit * 2
+		marginTop: theme.spacing(2)
 	},
 	control: {
-		padding: theme.spacing.unit * 2
+		padding: theme.spacing(2)
 	},
 	leftIcon: {
-		marginRight: theme.spacing.unit
+		marginRight: theme.spacing()
 	},
 	rightIcon: {
-		marginLeft: theme.spacing.unit
+		marginLeft: theme.spacing()
 	},
 	facebookButton: {
 		backgroundColor: '#4c69ba',
-		margin: theme.spacing.unit
+		margin: theme.spacing()
 	},
 	googleButton: {
 		backgroundColor: 'rgb(209, 72, 54)',
-		margin: theme.spacing.unit
+		margin: theme.spacing()
 	},
 	addPaddingBottom: {
-		paddingBottom: theme.spacing.unit * 4
+		paddingBottom: theme.spacing(4)
 	},
 	addPaddingTop: {
-		paddingTop: theme.spacing.unit * 4
+		paddingTop: theme.spacing(4)
 	}
 })
 

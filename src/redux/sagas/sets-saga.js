@@ -25,14 +25,10 @@ const setsChannel = () =>
 			const sets = []
 			querySnapshot.forEach(snapshot => {
 				const data = snapshot.data()
-				console.log('saga before', data.setDate, data.id, data.title)
-
 				if (typeof data.setDate === 'object') {
 					data.setDate = new Date(data.setDate.seconds * 1000)
-					console.log('saga new Date', data.setDate)
 				} else {
 					data.setDate = parseISO(data.setDate)
-					console.log('saga parseISO', data.setDate)
 				}
 				sets.push({ id: snapshot.id, ...data })
 			})
@@ -91,6 +87,8 @@ function* handleUpdateSet({ payload: set }) {
 		set.setDate = set.date
 	}
 	*/
+
+	console.log('sets-saga - set', set)
 
 	yield put(mergeSets([set]))
 

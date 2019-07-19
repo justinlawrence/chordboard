@@ -1,15 +1,15 @@
 import React from 'react';
 import { range } from "lodash";
 
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ( {
 	text: {
 		display: 'inline-block',
 		height: 0,
-		lineHeight: `${theme.spacing.unit * 3}px`,
+		lineHeight: `${theme.spacing(3)}px`,
 		marginRight: '.75em',
-		marginTop: theme.spacing.unit * 3,
+		marginTop: theme.spacing(3),
 		position: 'relative',
 		verticalAlign: 'middle',
 		visibility: 'hidden',

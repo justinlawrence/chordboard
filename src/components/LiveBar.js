@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link, matchPath, withRouter } from 'react-router-dom'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
 import ButtonBase from '@material-ui/core/ButtonBase'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
@@ -44,12 +44,12 @@ const styles = theme => ({
 		flexWrap: 'wrap',
 	},
 	form: theme.mixins.gutters({
-		paddingBottom: theme.spacing.unit * 2,
-		paddingTop: theme.spacing.unit * 2,
+		paddingBottom: theme.spacing(2),
+		paddingTop: theme.spacing(2),
 		width: 500,
 	}),
 	formFooter: {
-		marginTop: theme.spacing.unit * 2,
+		marginTop: theme.spacing(2),
 	},
 	deleteButton: {
 		color: theme.palette.error.main,
@@ -66,9 +66,9 @@ const styles = theme => ({
 		border: 2,
 		color: theme.palette.common.white,
 		height: '100%',
-		minWidth: theme.spacing.unit * 3,
-		paddingLeft: theme.spacing.unit * 2,
-		paddingRight: theme.spacing.unit * 2,
+		minWidth: theme.spacing(3),
+		paddingLeft: theme.spacing(2),
+		paddingRight: theme.spacing(2),
 		position: 'relative',
 	},
 })

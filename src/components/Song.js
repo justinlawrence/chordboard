@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { forEach } from 'lodash'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
 
 import { sectionData } from '../utils/getSongSections'
 import ChordLine from './ChordLine'
@@ -22,25 +22,25 @@ forEach(sectionData, item => {
 
 const styles = theme => ({
 	root: {
-		paddingBottom: theme.spacing.unit * 8,
+		paddingBottom: theme.spacing(14),
 	},
 	section: {
 		borderLeft: '4px solid #444',
-		marginLeft: theme.spacing.keyline,
-		marginTop: theme.spacing.unit,
+		marginLeft: theme.spacing(8),
+		marginTop: theme.spacing(),
 		paddingBottom: 0,
 		paddingTop: 0,
-		paddingLeft: theme.spacing.unit * 2,
+		paddingLeft: theme.spacing(2),
 		position: 'relative',
 
 		'&[data-section]:before': {
 			backgroundColor: '#444',
-			borderRadius: theme.spacing.unit / 2,
+			borderRadius: theme.spacing(0.5),
 			color: 'white',
-			paddingBottom: theme.spacing.unit / 2,
-			paddingLeft: theme.spacing.unit,
-			paddingRight: theme.spacing.unit,
-			paddingTop: theme.spacing.unit / 2,
+			paddingBottom: theme.spacing(0.5),
+			paddingLeft: theme.spacing(),
+			paddingRight: theme.spacing(),
+			paddingTop: theme.spacing(0.5),
 			position: 'absolute',
 			transform: 'translate(calc(-100% - 1em - 2px), 0)',
 			transformOrigin: '0 0',
@@ -54,7 +54,7 @@ const styles = theme => ({
 		},
 
 		'@media print': {
-			marginLeft: theme.spacing.unit * 6,
+			marginLeft: theme.spacing(6),
 		},
 	},
 })

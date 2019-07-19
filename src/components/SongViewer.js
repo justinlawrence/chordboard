@@ -5,7 +5,7 @@ import { isAfter } from 'date-fns'
 import filter from 'lodash/fp/filter'
 import reduce from 'lodash/fp/reduce'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
@@ -50,23 +50,23 @@ const styles = theme => ({
 	capoButton: {
 		borderRadius: 3,
 		flexDirection: 'column',
-		padding: theme.spacing.unit,
+		padding: theme.spacing(),
 	},
 	closeButton: {
 		position: 'absolute',
-		right: theme.spacing.unit,
-		top: theme.spacing.unit,
+		right: theme.spacing(),
+		top: theme.spacing(),
 	},
 	paper: {
-		padding: theme.spacing.unit * 2,
+		padding: theme.spacing(2),
 		height: '100%',
 		color: theme.palette.text.secondary,
 	},
 	control: {
-		padding: theme.spacing.unit * 2,
+		padding: theme.spacing(2),
 	},
 	select: {
-		width: theme.spacing.unit * 7,
+		width: theme.spacing(7),
 	},
 
 	noPrint: {
@@ -474,7 +474,7 @@ class SongViewer extends Component {
 							<Paper className={classes.control}>
 								<Grid container className={classes.root}>
 									<Grid item xs={12}>
-										<Grid container spacing={16}>
+										<Grid container spacing={2}>
 											<Grid item xs={6}>
 												<Typography variant="h5">
 													Capo Key
@@ -507,7 +507,7 @@ class SongViewer extends Component {
 									</Grid>
 
 									<Grid item xs={12}>
-										<Grid container spacing={16}>
+										<Grid container spacing={2}>
 											<Grid item xs={6}>
 												<Typography variant="h5">
 													Word Size
@@ -533,7 +533,7 @@ class SongViewer extends Component {
 									</Grid>
 
 									<Grid item xs={12}>
-										<Grid container spacing={16}>
+										<Grid container spacing={2}>
 											<Grid item xs={6}>
 												<Typography variant="h5">
 													Chord Size
@@ -559,7 +559,7 @@ class SongViewer extends Component {
 									</Grid>
 
 									<Grid item xs={12}>
-										<Grid container spacing={16}>
+										<Grid container spacing={2}>
 											<Grid item xs={6}>
 												<Typography variant="h5">
 													Nashville Numbering

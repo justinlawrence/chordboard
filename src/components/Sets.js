@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { reverse, sortBy } from 'lodash'
 import { Link } from 'react-router-dom'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import InputAdornment from '@material-ui/core/InputAdornment'
@@ -69,6 +69,8 @@ class Sets extends PureComponent {
 		const { classes, setCurrentSetId, sets = [] } = this.props
 		const { searchText } = this.state
 
+		console.log(reverse(sets).slice(0,10))
+
 		return (
 			<div>
 				<Hero>
@@ -85,7 +87,7 @@ class Sets extends PureComponent {
 								<Grid
 									container
 									alignItems="center"
-									spacing={16}
+									spacing={2}
 								>
 									<Grid item>
 										<TextField

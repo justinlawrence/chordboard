@@ -4,7 +4,7 @@ import { isNil } from 'lodash'
 import { connect } from 'react-redux'
 import Textarea from 'react-textarea-autosize'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
@@ -24,17 +24,17 @@ const styles = theme => ({
 		flexGrow: 1,
 	},
 	form: theme.mixins.gutters({
-		paddingBottom: theme.spacing.unit * 2,
-		paddingTop: theme.spacing.unit * 2,
+		paddingBottom: theme.spacing(2),
+		paddingTop: theme.spacing(2),
 	}),
 	formFooter: {
-		marginTop: theme.spacing.unit * 2,
+		marginTop: theme.spacing(2),
 	},
 	control: {
-		padding: theme.spacing.unit * 2,
+		padding: theme.spacing(2),
 	},
 	addPaddingBottom: {
-		paddingBottom: theme.spacing.unit,
+		paddingBottom: theme.spacing(),
 	},
 	songPreview: {
 		overflow: 'hidden',

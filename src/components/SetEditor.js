@@ -25,7 +25,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { format } from 'date-fns'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
 import Paper from '@material-ui/core/Paper'
 
 import * as actions from '../redux/actions'
@@ -38,14 +38,14 @@ const styles = theme => ({
 		flexGrow: 1,
 	},
 	form: theme.mixins.gutters({
-		paddingBottom: theme.spacing.unit * 2,
-		paddingTop: theme.spacing.unit * 2,
+		paddingBottom: theme.spacing(2),
+		paddingTop: theme.spacing(2),
 	}),
 	formFooter: {
-		marginTop: theme.spacing.unit * 2,
+		marginTop: theme.spacing(2),
 	},
 	control: {
-		padding: theme.spacing.unit * 2,
+		padding: theme.spacing(2),
 	},
 })
 

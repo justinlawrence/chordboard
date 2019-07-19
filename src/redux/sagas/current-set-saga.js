@@ -1,3 +1,4 @@
+import { parseISO } from "date-fns"
 import { put, select, takeLatest } from 'redux-saga/effects'
 
 import { db } from '../../firebase'
@@ -26,10 +27,13 @@ function* handleFetchSet({ setId }) {
 			...setQuery.data()
 		}
 
+		set.setDate = new Date(set.setDate.seconds * 1000)
+
 		for (let i = 0; i < set.songs.length; i++) {
 			const ref = set.songs[i].ref
 			try {
 				const songQuery = yield ref.get()
+				console.log(songQuery.data())
 				set.songs[i] = {
 					id: songQuery.id,
 					...songQuery.data(),

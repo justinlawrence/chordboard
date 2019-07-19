@@ -6,7 +6,7 @@ import uniqBy from 'lodash/fp/uniqBy'
 
 import { parseISO } from 'date-fns'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Grow from '@material-ui/core/Grow'
@@ -34,12 +34,12 @@ const styles = theme => ({
 		flexWrap: 'wrap',
 	},
 	form: theme.mixins.gutters({
-		paddingBottom: theme.spacing.unit * 2,
-		paddingTop: theme.spacing.unit * 2,
+		paddingBottom: theme.spacing(2),
+		paddingTop: theme.spacing(2),
 		width: 500,
 	}),
 	formFooter: {
-		marginTop: theme.spacing.unit * 2,
+		marginTop: theme.spacing(2),
 	},
 	deleteButton: {
 		color: theme.palette.error.main,
@@ -164,7 +164,6 @@ class SetViewer extends Component {
 	render() {
 		const { set, classes } = this.props
 		const { mode, isSongSelectorVisible } = this.state
-		console.log('setviewer setDate is ', set.setDate)
 		if (!(set.setDate instanceof Date) && !isNaN(set.setDate)) {
 			console.log(
 				'TODO: setviewer needs work - setDate is not a javascript date'
@@ -175,13 +174,13 @@ class SetViewer extends Component {
 		return set ? (
 			<div className="set-viewer">
 				<Hero>
-					<Grid container spacing={8}>
+					<Grid container spacing={1}>
 						<Grid item xs>
 							{mode === 'edit' ? (
 								<SetFormContainer
 									initialValues={{
 										author: set.author,
-										date: set.setDate,
+										setDate: set.setDate,
 										title: set.title,
 										venue: set.venue,
 									}}
@@ -191,7 +190,7 @@ class SetViewer extends Component {
 									isEdit
 								/>
 							) : (
-								<Grid container spacing={24}>
+								<Grid container spacing={3}>
 									<Hidden smDown>
 										<Grid item>
 											<Grow

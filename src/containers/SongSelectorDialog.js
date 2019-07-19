@@ -10,7 +10,7 @@ import reduce from 'lodash/fp/reduce'
 import toLower from 'lodash/fp/toLower'
 import sortBy from 'lodash/fp/sortBy'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth'
 import Button from '@material-ui/core/Button'
 import Checkbox from '@material-ui/core/Checkbox'
@@ -31,17 +31,17 @@ import { ArrowLeft as BackIcon, Magnify as SearchIcon } from 'mdi-material-ui'
 const styles = theme => ({
 	root: {},
 	checkbox: {
-		padding: theme.spacing.unit,
+		padding: theme.spacing(),
 	},
 	scrollPaper: {
 		alignItems: 'flex-start',
 	},
 	input: {
-		marginLeft: theme.spacing.unit,
+		marginLeft: theme.spacing(),
 		flex: 1,
 	},
 	iconButton: {
-		padding: theme.spacing.unit,
+		padding: theme.spacing(),
 	},
 	content: {
 		flexGrow: 1,
@@ -152,7 +152,7 @@ class SongSelectorDialog extends PureComponent {
 								onClick={this.handleListItemClick(song)}
 								key={song.id}
 							>
-								<Grid container spacing={8} wrap="nowrap">
+								<Grid container spacing={1} wrap="nowrap">
 									<Grid item>
 										<Checkbox
 											className={classes.checkbox}

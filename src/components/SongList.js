@@ -6,11 +6,11 @@ import includes from 'lodash/fp/includes'
 import sortBy from 'lodash/fp/sortBy'
 import toLower from 'lodash/fp/toLower'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
+import { lighten } from '@material-ui/core/styles/colorManipulator'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Hidden from '@material-ui/core/Hidden'
-import { lighten } from '@material-ui/core/styles/colorManipulator'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -128,7 +128,7 @@ class SongList extends Component {
 								<Grid
 									container
 									alignItems="center"
-									spacing={16}
+									spacing={2}
 								>
 									<Grid item>
 										<SearchBox
