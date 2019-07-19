@@ -39,12 +39,12 @@ const styles = theme => ({
 		marginRight: 20,
 	},
 	logoBig: {
-		height: 24,
+		height: theme.spacing(2),
 		verticalAlign: 'middle',
 	},
 	logoWrapper: {
-		paddingRight: theme.spacing(1),
-		paddingTop: theme.spacing(1),
+		paddingRight: theme.spacing(),
+		paddingTop: theme.spacing(),
 	},
 	tabs: {
 		flexGrow: 1,
@@ -205,7 +205,11 @@ class Navbar extends React.Component {
 								key={'tabs-setlist'}
 								component={Link}
 								to={`/sets/${currentSet.id}`}
-								label={'Setlist'}
+								label={
+									<Typography variant="button" noWrap>
+										Setlist
+									</Typography>
+								}
 								className={classes.tab}
 								color="inherit"
 								value={0}
@@ -217,11 +221,11 @@ class Navbar extends React.Component {
 									component={Link}
 									to={`/sets/${currentSet.id}/songs/${song.id}`}
 									label={
-										<Typography noWrap>
+										<Typography variant="button" noWrap>
 											{song.title}
 										</Typography>
 									}
-									classes={{ root: classes.tab }}
+									className={classes.tab}
 									color="inherit"
 									value={song.id}
 								/>
