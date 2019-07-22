@@ -236,36 +236,38 @@ class LiveBar extends Component {
 						</div>
 					</Grid>
 
-					<Grid item>
-						<Hidden xsDown>
-							<Tooltip title="Back to setlist">
+					<Grid item xs={3}>
+						<div className="live-bar__navigation-actions">
+							<Hidden xsDown>
+								<Tooltip title="Back to setlist">
+									<IconButton
+										className={classes.button}
+										component={Link}
+										to={`/sets/${currentSetId}`}
+									>
+										<SetListIcon />
+									</IconButton>
+								</Tooltip>
+							</Hidden>
+
+							<Tooltip title="Jump to previous song">
 								<IconButton
 									className={classes.button}
-									component={Link}
-									to={`/sets/${currentSetId}`}
+									onClick={this.handleGoToPreviousSong}
 								>
-									<SetListIcon />
+									<ChevronLeftIcon />
 								</IconButton>
 							</Tooltip>
-						</Hidden>
 
-						<Tooltip title="Jump to previous song">
-							<IconButton
-								className={classes.button}
-								onClick={this.handleGoToPreviousSong}
-							>
-								<ChevronLeftIcon />
-							</IconButton>
-						</Tooltip>
-
-						<Tooltip title="Jump to next song">
-							<IconButton
-								className={classes.button}
-								onClick={this.handleGoToNextSong}
-							>
-								<ChevronRightIcon />
-							</IconButton>
-						</Tooltip>
+							<Tooltip title="Jump to next song">
+								<IconButton
+									className={classes.button}
+									onClick={this.handleGoToNextSong}
+								>
+									<ChevronRightIcon />
+								</IconButton>
+							</Tooltip>
+						</div>
 					</Grid>
 				</Grid>
 			</nav>
