@@ -101,7 +101,6 @@ class SetFormContainer extends Component {
 		event.preventDefault()
 		const setData = this.state.newSet
 		// TODO: set validation
-		console.log({ setData })
 		this.props.onSubmit(setData)
 	}
 

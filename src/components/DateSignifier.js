@@ -36,50 +36,49 @@ const styles = theme => ({
 	},
 })
 
-const DateSignifier = ({ classes, date }) =>
-	date instanceof Date && !isNaN(date) ? (
-		<Paper className={classes.root}>
-			<Grid container direction="column">
-				<Grid item>
-					<Typography
-						className={cx(classes.month, {
-							[classes.monthPast]: isBefore(date, new Date()),
-						})}
-						align="center"
-						display="block"
-						variant="caption"
-					>
-						{format(date, 'MMM')}
-					</Typography>
-				</Grid>
-				<Grid item>
-					<Typography
-						className={classes.date}
-						align="center"
-						display="block"
-						variant="h5"
-					>
-						{format(date, 'd')}
-					</Typography>
-				</Grid>
-				<Grid item className={classes.divider} />
-				<Grid item>
-					<Typography
-						className={classes.day}
-						align="center"
-						display="block"
-						variant="caption"
-					>
-						{format(date, 'EEE')}
-					</Typography>
-				</Grid>
+const DateSignifier = ({ classes, date }) => (
+	<Paper className={classes.root}>
+		<Grid container direction="column">
+			<Grid item>
+				<Typography
+					className={cx(classes.month, {
+						[classes.monthPast]: isBefore(date, new Date()),
+					})}
+					align="center"
+					display="block"
+					variant="caption"
+				>
+					{format(date, 'MMM')}
+				</Typography>
 			</Grid>
-		</Paper>
-	) : null
+			<Grid item>
+				<Typography
+					className={classes.date}
+					align="center"
+					display="block"
+					variant="h5"
+				>
+					{format(date, 'd')}
+				</Typography>
+			</Grid>
+			<Grid item className={classes.divider} />
+			<Grid item>
+				<Typography
+					className={classes.day}
+					align="center"
+					display="block"
+					variant="caption"
+				>
+					{format(date, 'EEE')}
+				</Typography>
+			</Grid>
+		</Grid>
+	</Paper>
+)
 
 DateSignifier.propTypes = {
 	classes: PropTypes.object,
-	date: PropTypes.any,
+	date: PropTypes.object,
 }
 
 export default withStyles(styles)(DateSignifier)

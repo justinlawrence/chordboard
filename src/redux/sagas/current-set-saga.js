@@ -8,7 +8,7 @@ import {
 	SET_CURRENT_SET_SONG_KEY,
 	changeRoute,
 	setCurrentSetId,
-	updateSet
+	mergeSets,
 } from '../actions'
 
 const setsCollection = db.collection('sets')
@@ -24,29 +24,32 @@ function* handleFetchSet({ setId }) {
 		const setQuery = yield setsCollection.doc(setId).get()
 		const set = {
 			id: setQuery.id,
-			...setQuery.data()
+			...setQuery.data(),
 		}
 
-		set.setDate = new Date(set.setDate.seconds * 1000)
+		if (typeof set.setDate === 'object') {
+			set.setDate = new Date(set.setDate.seconds * 1000)
+		} else {
+			set.setDate = parseISO(set.setDate)
+		}
 
 		for (let i = 0; i < set.songs.length; i++) {
 			const ref = set.songs[i].ref
 			try {
 				const songQuery = yield ref.get()
-				console.log(songQuery.data())
 				set.songs[i] = {
 					id: songQuery.id,
 					...songQuery.data(),
 					// Override song keys with values from the set.
-					key: set.songs[i].key
+					key: set.songs[i].key,
 				}
 			} catch (err) {
-				console.warn('Song doesn\'t have a ref', set.songs[i])
+				console.warn("Song doesn't have a ref", set.songs[i])
 			}
 		}
 
 		yield put(setCurrentSetId(set.id))
-		yield put(updateSet(set))
+		yield put(mergeSets([set]))
 	} catch (e) {
 		console.error('currentSetSaga', e)
 	}
@@ -69,9 +72,9 @@ function* updateCurrentSetKey({ payload }) {
 
 	songs.splice(songs.indexOf(setSong), 1, {
 		...setSong,
-		key
+		key,
 	})
 
 	yield put(setCurrentSetId(currentSet.id))
-	yield put(updateSet({ ...currentSet, songs }))
+	yield put(mergeSets([{ ...currentSet, songs }]))
 }

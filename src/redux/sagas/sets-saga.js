@@ -88,8 +88,6 @@ function* handleUpdateSet({ payload: set }) {
 	}
 	*/
 
-	console.log('sets-saga - set', set)
-
 	yield put(mergeSets([set]))
 
 	if (set.songs) {
