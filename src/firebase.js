@@ -34,7 +34,7 @@ export const db = firestore
 
 const unsupportedPersistence =
 	browserName === 'Mobile Safari' &&
-	semver.satisfies(semver.valid(semver.coerce(browserVersion)), '>=9.0.0')
+	semver.satisfies(semver.valid(semver.coerce(browserVersion)), '<=9.0.0')
 if (!unsupportedPersistence) {
 	firestore.enablePersistence().catch(err => {
 		if (err.code === 'failed-precondition') {

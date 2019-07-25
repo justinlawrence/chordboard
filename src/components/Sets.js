@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { reverse, sortBy } from 'lodash'
+import { lowerCase, reverse, sortBy } from 'lodash'
 import { Link } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/styles'
@@ -50,9 +50,9 @@ class Sets extends PureComponent {
 
 	filterSets = set => {
 		return (
-			set.title.toLowerCase().includes(this.state.searchText) ||
-			set.author.toLowerCase().includes(this.state.searchText) ||
-			set.venue.toLowerCase().includes(this.state.searchText)
+			lowerCase(set.title).includes(this.state.searchText) ||
+			lowerCase(set.author).includes(this.state.searchText) ||
+			lowerCase(set.venue).includes(this.state.searchText)
 		)
 	}
 
@@ -68,8 +68,6 @@ class Sets extends PureComponent {
 	render() {
 		const { classes, setCurrentSetId, sets = [] } = this.props
 		const { searchText } = this.state
-
-		console.log(reverse(sets).slice(0,10))
 
 		return (
 			<div>

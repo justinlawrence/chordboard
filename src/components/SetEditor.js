@@ -66,10 +66,9 @@ class SetEditor extends Component {
 	handleFormSubmit = setData => {
 		this.props.addSet({
 			title: setData.title,
-			setDate: format(setData.date, 'yyyy-MM-dd'),
+			setDate: setData.setDate,
 		})
 
-		console.log('here we go')
 		this.props.history.goBack()
 
 		/*

@@ -33,7 +33,7 @@ class SetFormContainer extends Component {
 	static defaultProps = {
 		initialValues: {
 			author: '',
-			setDate: '',
+			setDate: null,
 			title: '',
 			venue: '',
 		},
@@ -55,10 +55,10 @@ class SetFormContainer extends Component {
 	state = {
 		mode: this.props.isEdit ? modes.EDIT : modes.NEW,
 		newSet: {
-			author: this.props.initialValues.author || '',
-			setDate: this.props.initialValues.setDate || null,
-			title: this.props.initialValues.title || '',
-			venue: this.props.initialValues.venue || '',
+			author: this.props.initialValues.author,
+			setDate: this.props.initialValues.setDate,
+			title: this.props.initialValues.title,
+			venue: this.props.initialValues.venue,
 		},
 	}
 
@@ -108,6 +108,8 @@ class SetFormContainer extends Component {
 		const { classes } = this.props
 		const { mode, newSet } = this.state
 		const currentDate = format(new Date(), 'd MMM yyyy')
+
+		console.log(this.props.initialValues.setDate)
 
 		return (
 			<form onSubmit={this.handleFormSubmit}>

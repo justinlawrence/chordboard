@@ -130,6 +130,7 @@ class SetViewer extends Component {
 						<Draggable
 							draggableId={song.id}
 							index={index}
+							isDragDisabled={mode !== 'edit'}
 							key={song.id}
 						>
 							{provided => (
