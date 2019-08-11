@@ -199,9 +199,11 @@ class SetViewer extends Component {
 												mountOnEnter
 											>
 												<div>
-													<DateSignifier
-														date={set.setDate}
-													/>
+													{set.setDate && (
+														<DateSignifier
+															date={set.setDate}
+														/>
+													)}
 												</div>
 											</Grow>
 										</Grid>

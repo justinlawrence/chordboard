@@ -82,11 +82,7 @@ class Sets extends PureComponent {
 								<Typography variant="h4">Sets</Typography>
 							</Grid>
 							<Grid item>
-								<Grid
-									container
-									alignItems="center"
-									spacing={2}
-								>
+								<Grid container alignItems="center" spacing={2}>
 									<Grid item>
 										<TextField
 											onChange={this.handleSearchChange}
@@ -136,7 +132,9 @@ class Sets extends PureComponent {
 									key={set.id}
 								>
 									<TableCell className={classes.shrinkCell}>
-										<DateSignifier date={set.setDate} />
+										{set.setDate && (
+											<DateSignifier date={set.setDate} />
+										)}
 									</TableCell>
 
 									<TableCell>
