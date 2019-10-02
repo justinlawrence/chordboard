@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { compose } from 'recompose'
+import debounce from 'lodash/debounce'
 import filter from 'lodash/fp/filter'
 import flow from 'lodash/fp/flow'
 import includes from 'lodash/fp/includes'
@@ -88,8 +89,7 @@ class SongSelectorDialog extends PureComponent {
 
 	handleSave = () => this.props.onClose(this.state.setSongs)
 
-	handleSearchChange = event =>
-		this.setState({ searchValue: event.target.value })
+	handleSearchChange = event => this.setState({ searchValue: event.target.value })
 
 	render() {
 		const { classes, songs, open } = this.props

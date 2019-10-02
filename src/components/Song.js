@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
+import Hammer from 'react-hammerjs'
 import { forEach } from 'lodash'
-
 import { withStyles } from '@material-ui/styles'
 
 import { sectionData } from '../utils/getSongSections'
@@ -73,8 +73,28 @@ class Song extends PureComponent {
 		wordSize: PropTypes.number,
 	}
 
+	state = {
+		scale: 1,
+	}
+
+	prevScale = 1
+
+	handlePinch = event =>
+		this.setState({ scale: event.scale * this.prevScale })
+
+	handlePinchEnd = event => (this.prevScale = this.state.scale)
+
 	render() {
-		const { chordSize, classes, lines, wordSize } = this.props
+		const {
+			chordSize: chordSizeProp,
+			classes,
+			lines,
+			wordSize: wordSizeProp,
+		} = this.props
+		const { scale } = this.state
+
+		const chordSize = chordSizeProp * scale
+		const wordSize = wordSizeProp * scale
 
 		let children = []
 		let result = []
@@ -83,63 +103,63 @@ class Song extends PureComponent {
 
 		forEach(lines, (line, i) => {
 			switch (line.type) {
-			case 'chord-line':
-				children.push(
-					<ChordLine
-						key={i}
-						chords={line.chords}
-						chordSize={chordSize}
-						wordSize={wordSize}
-					/>
-				)
-				break
-
-			case 'chord-pair':
-				children.push(
-					<ChordPair
-						key={i}
-						chords={line.chords}
-						chordSize={chordSize}
-						text={line.text}
-						wordSize={wordSize}
-					/>
-				)
-				break
-
-			case 'empty':
-				children.push(<div key={i} className="empty-line" />)
-				break
-
-			case 'line':
-				children.push(
-					<Line key={i} text={line.text} wordSize={wordSize} />
-				)
-				break
-
-			case 'section':
-				if (section) {
-					// Finish off last section
-					result.push(
-						<section
-							id={`section-${sectionIndex}`}
-							key={`section-${sectionIndex}`}
-							className={classes.section}
-							data-section={section}
-						>
-							{children}
-						</section>
+				case 'chord-line':
+					children.push(
+						<ChordLine
+							key={i}
+							chords={line.chords}
+							chordSize={chordSize}
+							wordSize={wordSize}
+						/>
 					)
-					children = []
-				} else {
-					result = result.concat(children)
-				}
+					break
 
-				section = line.text
-				//sections.push( { title: line.text, index: sectionIndex } );
+				case 'chord-pair':
+					children.push(
+						<ChordPair
+							key={i}
+							chords={line.chords}
+							chordSize={chordSize}
+							text={line.text}
+							wordSize={wordSize}
+						/>
+					)
+					break
 
-				sectionIndex++
+				case 'empty':
+					children.push(<div key={i} className="empty-line" />)
+					break
 
-				break
+				case 'line':
+					children.push(
+						<Line key={i} text={line.text} wordSize={wordSize} />
+					)
+					break
+
+				case 'section':
+					if (section) {
+						// Finish off last section
+						result.push(
+							<section
+								id={`section-${sectionIndex}`}
+								key={`section-${sectionIndex}`}
+								className={classes.section}
+								data-section={section}
+							>
+								{children}
+							</section>
+						)
+						children = []
+					} else {
+						result = result.concat(children)
+					}
+
+					section = line.text
+					//sections.push( { title: line.text, index: sectionIndex } );
+
+					sectionIndex++
+
+					break
 			}
 		})
 
@@ -160,7 +180,25 @@ class Song extends PureComponent {
 			result = result.concat(children)
 		}
 
-		return <div className={classes.root}>{result}</div>
+		return (
+			<Hammer
+				onPinch={this.handlePinch}
+				onPinchCancel={this.handlePinchEnd}
+				onPinchEnd={this.handlePinchEnd}
+				options={{
+					touchAction: 'pan-y',
+					recognizers: {
+						pan: { enable: false },
+						pinch: { enable: true },
+						press: { enable: false },
+						swipe: { enable: false },
+						tap: { enable: false },
+					},
+				}}
+			>
+				<div className={classes.root}>{result}</div>
+			</Hammer>
+		)
 	}
 }
 

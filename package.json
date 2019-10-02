@@ -33,6 +33,7 @@
 		"react-dom": "^16.8.6",
 		"react-facebook-login": "^4.1.1",
 		"react-google-login": "^5.0.4",
+		"react-hammerjs": "^1.0.1",
 		"react-redux": "^6.0.1",
 		"react-router-dom": "^5.0.1",
 		"react-router-redux": "^4.0.8",
