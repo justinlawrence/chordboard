@@ -25,10 +25,12 @@ const setsChannel = () =>
 			const sets = []
 			querySnapshot.forEach(snapshot => {
 				const data = snapshot.data()
-				if (typeof data.setDate === 'object') {
-					data.setDate = new Date(data.setDate.seconds * 1000)
-				} else {
-					data.setDate = parseISO(data.setDate)
+				if (data.setDate) {
+					if (typeof data.setDate === 'object') {
+						data.setDate = new Date(data.setDate.seconds * 1000)
+					} else {
+						data.setDate = parseISO(data.setDate)
+					}
 				}
 				sets.push({ id: snapshot.id, ...data })
 			})
