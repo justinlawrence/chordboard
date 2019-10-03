@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { compose } from 'recompose'
+import { VariableSizeList } from 'react-window'
 import debounce from 'lodash/debounce'
 import filter from 'lodash/fp/filter'
 import flow from 'lodash/fp/flow'
@@ -9,6 +10,7 @@ import includes from 'lodash/fp/includes'
 import map from 'lodash/fp/map'
 import reduce from 'lodash/fp/reduce'
 import toLower from 'lodash/fp/toLower'
+import size from 'lodash/fp/size'
 import sortBy from 'lodash/fp/sortBy'
 
 import { withStyles } from '@material-ui/styles'
@@ -76,6 +78,34 @@ class SongSelectorDialog extends PureComponent {
 		searchValue: '',
 	}
 
+	listRef = null
+
+	get listSize() {
+		// TODO: Figure out how to get the correct dimensions
+		return { height: 500, width: 600 }
+	}
+
+	get filteredSongs() {
+		const categoryFilter = filter(() => true)
+		const searchFilter = filter(song =>
+			includes(toLower(this.state.searchValue))(
+				toLower(song.title) +
+					' ' +
+					toLower(song.author) +
+					' ' +
+					toLower(song.content)
+			)
+		)
+
+		return flow(
+			categoryFilter,
+			searchFilter,
+			sortBy('title')
+		)(this.props.songs)
+	}
+
+	getItemSize = index => 50
+
 	handleClose = () => this.props.onClose([])
 
 	handleCheckboxClick = value => event => {
@@ -89,27 +119,46 @@ class SongSelectorDialog extends PureComponent {
 
 	handleSave = () => this.props.onClose(this.state.setSongs)
 
-	handleSearchChange = event => this.setState({ searchValue: event.target.value })
+	handleSearchChange = event =>
+		this.setState({ searchValue: event.target.value })
+
+	setListRef = node => (this.listRef = node)
+
+	renderItem = filteredSongs => ({ index, style }) => {
+		const { classes } = this.props
+		const { setSongs } = this.state
+		const song = filteredSongs[index]
+		return (
+			<ListItem
+				button
+				onClick={this.handleListItemClick(song)}
+				key={song.id}
+				style={style}
+			>
+				<Grid container spacing={1} wrap="nowrap">
+					<Grid item>
+						<Checkbox
+							className={classes.checkbox}
+							checked={includes(song)(setSongs)}
+							onClick={this.handleCheckboxClick(song)}
+						/>
+					</Grid>
+					<Grid item xs>
+						<Grid container direction="column">
+							<Typography>{song.title}</Typography>
+							<Typography color="textSecondary" variant="caption">
+								{song.author}
+							</Typography>
+						</Grid>
+					</Grid>
+				</Grid>
+			</ListItem>
+		)
+	}
 
 	render() {
-		const { classes, songs, open } = this.props
-		const { searchValue, setSongs } = this.state
-
-		const categoryFilter = filter(() => true)
-		const searchFilter = filter(song =>
-			includes(toLower(searchValue))(
-				toLower(song.title) +
-					' ' +
-					toLower(song.author) +
-					' ' +
-					toLower(song.content)
-			)
-		)
-		const filteredSongs = flow(
-			categoryFilter,
-			searchFilter,
-			sortBy('title')
-		)(songs)
+		const { classes, open } = this.props
+		const { searchValue } = this.state
 
 		return (
 			<Dialog
@@ -146,38 +195,17 @@ class SongSelectorDialog extends PureComponent {
 				</DialogTitle>
 				<DialogContent className={classes.content}>
 					<List>
-						{map(song => (
-							<ListItem
-								button
-								onClick={this.handleListItemClick(song)}
-								key={song.id}
+						<div ref={this.setListRef}>
+							<VariableSizeList
+								estimatedItemSize={50}
+								height={this.listSize.height}
+								itemCount={size(this.filteredSongs)}
+								itemSize={this.getItemSize}
+								width={this.listSize.width}
 							>
-								<Grid container spacing={1} wrap="nowrap">
-									<Grid item>
-										<Checkbox
-											className={classes.checkbox}
-											checked={includes(song)(setSongs)}
-											onClick={this.handleCheckboxClick(
-												song
-											)}
-										/>
-									</Grid>
-									<Grid item xs>
-										<Grid container direction="column">
-											<Typography>
-												{song.title}
-											</Typography>
-											<Typography
-												color="textSecondary"
-												variant="caption"
-											>
-												{song.author}
-											</Typography>
-										</Grid>
-									</Grid>
-								</Grid>
-							</ListItem>
-						))(filteredSongs)}
+								{this.renderItem(this.filteredSongs)}
+							</VariableSizeList>
+						</div>
 					</List>
 				</DialogContent>
 				<DialogActions>

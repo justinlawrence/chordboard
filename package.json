@@ -39,6 +39,7 @@
 		"react-router-redux": "^4.0.8",
 		"react-scripts": "^2.1.8",
 		"react-textarea-autosize": "^7.1.0",
+		"react-window": "^1.8.5",
 		"recompose": "^0.30.0",
 		"redux": "^4.0.1",
 		"redux-actions": "^2.6.5",
