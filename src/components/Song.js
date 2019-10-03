@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import Hammer from 'react-hammerjs'
-import { forEach } from 'lodash'
+import { clamp, forEach } from 'lodash'
 import { withStyles } from '@material-ui/styles'
 
 import { sectionData } from '../utils/getSongSections'
@@ -80,7 +80,7 @@ class Song extends PureComponent {
 	prevScale = 1
 
 	handlePinch = event =>
-		this.setState({ scale: event.scale * this.prevScale })
+		this.setState({ scale: clamp(event.scale * this.prevScale, .5, 3) })
 
 	handlePinchEnd = event => (this.prevScale = this.state.scale)
 
