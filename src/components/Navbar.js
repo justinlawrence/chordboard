@@ -17,6 +17,7 @@ import Typography from '@material-ui/core/Typography'
 
 import * as actions from '../redux/actions'
 import { getThemeId } from '../redux/reducers/theme'
+import { getSongsForCurrentSet } from '../redux/reducers/current-set'
 import chordboardLogoDark from '../chordboard-logo-light.png'
 import chordboardLogoLight from '../chordboard-logo-dark.png'
 import {
@@ -244,12 +245,7 @@ const mapStateToProps = state => ({
 		: null,
 	currentSong: state.songs.byId[state.currentSong.id],
 	themeId: getThemeId(state),
-	songs: state.currentSet.id
-		? map(
-			state.sets.byId[state.currentSet.id].songs,
-			song => state.songs.byId[song.id]
-		  )
-		: null,
+	songs: getSongsForCurrentSet(state),
 })
 
 export default withRouter(

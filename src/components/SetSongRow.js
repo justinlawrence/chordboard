@@ -20,6 +20,13 @@ import * as actions from '../redux/actions'
 import KeySelector from './KeySelector'
 
 class SetSong extends PureComponent {
+	static defaultProps = {
+		song: {
+			needsFetching: true,
+			title: 'Loading...'
+		}
+	}
+
 	static propTypes = {
 		mode: PropTypes.string,
 		onChangeKey: PropTypes.func,
@@ -29,6 +36,15 @@ class SetSong extends PureComponent {
 		songId: PropTypes.string,
 		songIndex: PropTypes.number,
 		songKey: PropTypes.string,
+		// Redux props
+		fetchSong: PropTypes.func.isRequired,
+	}
+
+
+	componentDidMount() {
+		if (this.props.song.needsFetching) {
+			this.props.fetchSong(this.props.songId)
+		}
 	}
 
 	handleKeySelect = (key, amount) =>

@@ -1,3 +1,6 @@
+import filter from 'lodash/fp/filter'
+import map from 'lodash/fp/map'
+
 import { SET_CURRENT_SET, SET_CURRENT_SET_ID } from '../actions'
 
 const initialState = {
@@ -22,3 +25,12 @@ export const currentSet = (state = initialState, action = {}) => {
 		return state
 	}
 }
+
+export const getSongsForCurrentSet = state => state.currentSet.id
+	? filter(s => s)(
+		map(
+			state.sets.byId[state.currentSet.id].songs,
+			song => state.songs.byId[song.id]
+		)
+	)
+	: []
