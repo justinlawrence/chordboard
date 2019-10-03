@@ -80,9 +80,11 @@ class Song extends PureComponent {
 	prevScale = 1
 
 	handlePinch = event =>
-		this.setState({ scale: clamp(event.scale * this.prevScale, .5, 3) })
+		this.setState({ scale: clamp(event.scale * this.prevScale, 0.8, 1.2) })
+	//this.setState({ scale: event.scale * this.prevScale })
 
-	handlePinchEnd = event => (this.prevScale = this.state.scale)
+	handlePinchEnd = event =>
+		this.prevScale = this.state.scale
 
 	render() {
 		const {
@@ -103,63 +105,63 @@ class Song extends PureComponent {
 
 		forEach(lines, (line, i) => {
 			switch (line.type) {
-				case 'chord-line':
-					children.push(
-						<ChordLine
-							key={i}
-							chords={line.chords}
-							chordSize={chordSize}
-							wordSize={wordSize}
-						/>
+			case 'chord-line':
+				children.push(
+					<ChordLine
+						key={i}
+						chords={line.chords}
+						chordSize={chordSize}
+						wordSize={wordSize}
+					/>
+				)
+				break
+
+			case 'chord-pair':
+				children.push(
+					<ChordPair
+						key={i}
+						chords={line.chords}
+						chordSize={chordSize}
+						text={line.text}
+						wordSize={wordSize}
+					/>
+				)
+				break
+
+			case 'empty':
+				children.push(<div key={i} className="empty-line" />)
+				break
+
+			case 'line':
+				children.push(
+					<Line key={i} text={line.text} wordSize={wordSize} />
+				)
+				break
+
+			case 'section':
+				if (section) {
+					// Finish off last section
+					result.push(
+						<section
+							id={`section-${sectionIndex}`}
+							key={`section-${sectionIndex}`}
+							className={classes.section}
+							data-section={section}
+						>
+							{children}
+						</section>
 					)
-					break
+					children = []
+				} else {
+					result = result.concat(children)
+				}
 
-				case 'chord-pair':
-					children.push(
-						<ChordPair
-							key={i}
-							chords={line.chords}
-							chordSize={chordSize}
-							text={line.text}
-							wordSize={wordSize}
-						/>
-					)
-					break
+				section = line.text
+				//sections.push( { title: line.text, index: sectionIndex } );
 
-				case 'empty':
-					children.push(<div key={i} className="empty-line" />)
-					break
+				sectionIndex++
 
-				case 'line':
-					children.push(
-						<Line key={i} text={line.text} wordSize={wordSize} />
-					)
-					break
-
-				case 'section':
-					if (section) {
-						// Finish off last section
-						result.push(
-							<section
-								id={`section-${sectionIndex}`}
-								key={`section-${sectionIndex}`}
-								className={classes.section}
-								data-section={section}
-							>
-								{children}
-							</section>
-						)
-						children = []
-					} else {
-						result = result.concat(children)
-					}
-
-					section = line.text
-					//sections.push( { title: line.text, index: sectionIndex } );
-
-					sectionIndex++
-
-					break
+				break
 			}
 		})
 

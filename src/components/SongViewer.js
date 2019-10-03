@@ -309,7 +309,7 @@ class SongViewer extends Component {
 								className={classes.root}
 								justify="space-between"
 							>
-								<Grid item xs={12} sm={8}>
+								<Grid item xs={12} sm={7}>
 									<Typography variant="h4">
 										{song.title}
 									</Typography>
@@ -320,8 +320,7 @@ class SongViewer extends Component {
 								{!isPreview && (
 									<Grid
 										item
-										xs={12}
-										sm={4}
+										xs={12} sm={5}
 										className={classes.noPrint}
 									>
 										<form autoComplete="off">
@@ -371,6 +370,17 @@ class SongViewer extends Component {
 													}
 												>
 													<PlaylistPlusIcon />
+												</IconButton>
+											</Tooltip>
+											<Tooltip title="Song settings">
+												<IconButton
+													className={classes.button}
+													onClick={
+														this
+															.handleSongKeyDialogOpen
+													}
+												>
+													<SettingsIcon />
 												</IconButton>
 											</Tooltip>
 
@@ -426,17 +436,7 @@ class SongViewer extends Component {
 												</List>
 											</Dialog>
 
-											<Tooltip title="Song settings">
-												<IconButton
-													className={classes.button}
-													onClick={
-														this
-															.handleSongKeyDialogOpen
-													}
-												>
-													<SettingsIcon />
-												</IconButton>
-											</Tooltip>
+											
 										</form>
 									</Grid>
 								)}
@@ -473,10 +473,11 @@ class SongViewer extends Component {
 
 							<Paper className={classes.control}>
 								<Grid container className={classes.root}>
+									{/* Capo key is already editable via the song header
 									<Grid item xs={12}>
 										<Grid container spacing={2}>
 											<Grid item xs={6}>
-												<Typography variant="h5">
+												<Typography>
 													Capo Key
 												</Typography>
 											</Grid>
@@ -495,6 +496,7 @@ class SongViewer extends Component {
 												>
 													<PlusIcon />
 												</IconButton>
+
 												<KeySelector
 													onSelect={
 														this
@@ -502,15 +504,16 @@ class SongViewer extends Component {
 													}
 													songKey={displayKey}
 												/>
+
 											</Grid>
 										</Grid>
-									</Grid>
+									</Grid> */}
 
 									<Grid item xs={12}>
 										<Grid container spacing={2}>
 											<Grid item xs={6}>
-												<Typography variant="h5">
-													Word Size
+												<Typography>
+													Word and Chord Size
 												</Typography>
 											</Grid>
 
@@ -532,6 +535,7 @@ class SongViewer extends Component {
 										</Grid>
 									</Grid>
 
+{/* JL currently chord size doesn't do anything.
 									<Grid item xs={12}>
 										<Grid container spacing={2}>
 											<Grid item xs={6}>
@@ -557,11 +561,11 @@ class SongViewer extends Component {
 											</Grid>
 										</Grid>
 									</Grid>
-
+ */}
 									<Grid item xs={12}>
 										<Grid container spacing={2}>
 											<Grid item xs={6}>
-												<Typography variant="h5">
+												<Typography>
 													Nashville Numbering
 												</Typography>
 											</Grid>
