@@ -26,8 +26,11 @@ const songsChannel = () =>
 	})
 
 export function* songsSaga() {
-	//const songsChan = yield call(songsChannel)
-	//yield takeEvery(songsChan, handleSongsEvent)
+	//comment these out to test lazy loading
+	const songsChan = yield call(songsChannel)
+	yield takeEvery(songsChan, handleSongsEvent)
+	//end
+
 	yield takeEvery(ADD_SONG, handleAddSong)
 	yield takeEvery(DELETE_SONG, handleDeleteSong)
 	yield takeEvery(FETCH_SONG, handleFetchSong)
