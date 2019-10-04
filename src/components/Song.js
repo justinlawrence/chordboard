@@ -1,8 +1,12 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { clamp, forEach } from 'lodash'
+
 import { withStyles } from '@material-ui/styles'
 
+import * as actions from '../redux/actions'
+import { getFontSize } from '../redux/reducers/user'
 import { sectionData } from '../utils/getSongSections'
 import ChordLine from './ChordLine'
 import ChordPair from './ChordPair'
@@ -72,26 +76,28 @@ class Song extends PureComponent {
 		wordSize: PropTypes.number,
 	}
 
-	state = {
-		scale: 1,
-	}
-
-	prevScale = 1
-
-	handlePinch = event =>
-		this.setState({ scale: clamp(event.scale * this.prevScale, 0.8, 1.2) })
-	//this.setState({ scale: event.scale * this.prevScale })
-
-	handlePinchEnd = event => (this.prevScale = this.state.scale)
-
 	render() {
 		const {
 			chordSize: chordSizeProp,
 			classes,
+			fontSize,
 			lines,
 			wordSize: wordSizeProp,
 		} = this.props
-		const { scale } = this.state
+
+		let scale
+		switch (fontSize) {
+			case 'small':
+				scale = 0.8
+				break
+			case 'medium':
+			default:
+				scale = 1
+				break
+			case 'large':
+				scale = 1.5
+				break
+		}
 
 		const chordSize = chordSizeProp * scale
 		const wordSize = wordSizeProp * scale
@@ -184,4 +190,11 @@ class Song extends PureComponent {
 	}
 }
 
-export default withStyles(styles)(Song)
+const mapStateToProps = state => ({
+	fontSize: getFontSize(state),
+})
+
+export default connect(
+	mapStateToProps,
+	actions
+)(withStyles(styles)(Song))

@@ -7,7 +7,7 @@ import { withStyles } from '@material-ui/styles'
 const styles = theme => ({
 	text: {
 		display: 'inline-block',
-		lineHeight: `${theme.spacing(3)}px`,
+		lineHeight: 1.5,
 		marginTop: theme.spacing(3),
 		minHeight: theme.spacing(3),
 		position: 'relative',
