@@ -11,8 +11,6 @@ import {
 	setCurrentSongId,
 } from '../actions'
 
-//const songsCollection = db.collection('songs')
-
 export function* liveBarSaga() {
 	yield takeLatest(GO_TO_NEXT_SONG, handleGoToNextSong)
 	yield takeLatest(GO_TO_PREVIOUS_SONG, handleGoToPreviousSong)

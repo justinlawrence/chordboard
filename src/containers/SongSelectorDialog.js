@@ -3,20 +3,26 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { compose } from 'recompose'
 import { VariableSizeList } from 'react-window'
-import debounce from 'lodash/debounce'
+import cx from 'classnames'
 import filter from 'lodash/fp/filter'
+import first from 'lodash/fp/first'
 import flow from 'lodash/fp/flow'
+import groupBy from 'lodash/fp/groupBy'
 import includes from 'lodash/fp/includes'
 import map from 'lodash/fp/map'
 import reduce from 'lodash/fp/reduce'
 import toLower from 'lodash/fp/toLower'
 import size from 'lodash/fp/size'
 import sortBy from 'lodash/fp/sortBy'
+import startsWith from 'lodash/fp/startsWith'
+import upperCase from 'lodash/fp/upperCase'
 
 import { withStyles } from '@material-ui/styles'
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth'
 import Button from '@material-ui/core/Button'
+import ButtonBase from '@material-ui/core/ButtonBase'
 import Checkbox from '@material-ui/core/Checkbox'
+import Collapse from '@material-ui/core/Collapse'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -28,8 +34,13 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+import {
+	Alphabetical as AlphabeticalIcon,
+	ArrowLeft as BackIcon,
+	Magnify as SearchIcon,
+} from 'mdi-material-ui'
 
-import { ArrowLeft as BackIcon, Magnify as SearchIcon } from 'mdi-material-ui'
+const mapWithKey = map.convert({ cap: false })
 
 const styles = theme => ({
 	root: {},
@@ -57,6 +68,21 @@ const styles = theme => ({
 		alignItems: 'center',
 		width: '100%',
 	},
+	sectionButton: {
+		alignItems: 'center',
+		borderRadius: theme.shape.borderRadius,
+		display: 'flex',
+		height: theme.spacing(4),
+		justifyContent: 'center',
+		transition: theme.transitions.create(),
+		width: theme.spacing(4),
+	},
+	sectionButtonSelected: {
+		backgroundColor: theme.palette.action.selected,
+	},
+	sectionLabels: {
+		marginTop: theme.spacing(),
+	},
 })
 
 class SongSelectorDialog extends PureComponent {
@@ -74,8 +100,10 @@ class SongSelectorDialog extends PureComponent {
 	}
 
 	state = {
+		sectionFilter: '',
 		setSongs: [],
 		searchValue: '',
+		showFilters: false,
 	}
 
 	listRef = null
@@ -86,7 +114,6 @@ class SongSelectorDialog extends PureComponent {
 	}
 
 	get filteredSongs() {
-		const categoryFilter = filter(() => true)
 		const searchFilter = filter(song =>
 			includes(toLower(this.state.searchValue))(
 				toLower(song.title) +
@@ -97,9 +124,17 @@ class SongSelectorDialog extends PureComponent {
 			)
 		)
 
+		const sectionFilter = filter(song =>
+			this.state.sectionFilter
+				? startsWith(toLower(this.state.sectionFilter))(
+						toLower(song.title)
+				  )
+				: true
+		)
+
 		return flow(
-			categoryFilter,
 			searchFilter,
+			sectionFilter,
 			sortBy('title')
 		)(this.props.songs)
 	}
@@ -121,6 +156,22 @@ class SongSelectorDialog extends PureComponent {
 
 	handleSearchChange = event =>
 		this.setState({ searchValue: event.target.value })
+
+	handleSectionClick = key => event => {
+		if (this.state.sectionFilter === key) {
+			this.setState({ sectionFilter: '' })
+		} else {
+			this.setState({ sectionFilter: key })
+		}
+	}
+
+	toggleSectionFilter = () =>
+		this.setState(prevState => ({
+			sectionFilter: !prevState.showFilters
+				? prevState.sectionFilter
+				: '',
+			showFilters: !prevState.showFilters,
+		}))
 
 	setListRef = node => (this.listRef = node)
 
@@ -157,8 +208,18 @@ class SongSelectorDialog extends PureComponent {
 	}
 
 	render() {
-		const { classes, open } = this.props
-		const { searchValue } = this.state
+		const { classes, open, songs } = this.props
+		const { searchValue, sectionFilter, showFilters } = this.state
+
+		const firstLetter = song => upperCase(first(song.title))
+		const sections = flow(
+			groupBy(firstLetter),
+			mapWithKey((songs, key) => ({
+				key,
+				isSelected: sectionFilter === key,
+			})),
+			sortBy('key')
+		)(songs)
 
 		return (
 			<Dialog
@@ -185,13 +246,46 @@ class SongSelectorDialog extends PureComponent {
 							placeholder="Search titles, authors & words"
 							value={searchValue}
 						/>
-						<IconButton
+						{/*<IconButton
 							className={classes.iconButton}
 							aria-label="Search"
 						>
 							<SearchIcon />
+						</IconButton>*/}
+						<IconButton
+							className={classes.iconButton}
+							onClick={this.toggleSectionFilter}
+						>
+							<AlphabeticalIcon />
 						</IconButton>
 					</Paper>
+
+					<Collapse in={showFilters}>
+						<div className={classes.sectionLabels}>
+							<Grid container spacing={1}>
+								{map(section => (
+									<Grid item key={section.key}>
+										<ButtonBase
+											className={cx(
+												classes.sectionButton,
+												{
+													[classes.sectionButtonSelected]:
+														section.isSelected,
+												}
+											)}
+											onClick={this.handleSectionClick(
+												section.key
+											)}
+										>
+											<Typography variant="subtitle1">
+												{section.key}
+											</Typography>
+										</ButtonBase>
+									</Grid>
+								))(sections)}
+							</Grid>
+						</div>
+					</Collapse>
 				</DialogTitle>
 				<DialogContent className={classes.content}>
 					<List>

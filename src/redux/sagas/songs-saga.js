@@ -15,14 +15,13 @@ const songsCollection = db.collection('songs')
 
 const songsChannel = () =>
 	eventChannel(emitter => {
-		songsCollection.onSnapshot(querySnapshot => {
+		return songsCollection.onSnapshot(querySnapshot => {
 			const songs = []
 			querySnapshot.forEach(doc => {
 				songs.push({ id: doc.id, ...doc.data() })
 			})
 			emitter(songs)
 		})
-		return () => {}
 	})
 
 export function* songsSaga() {
