@@ -196,11 +196,11 @@ class Navbar extends React.Component {
 							<CloseIcon />
 						</IconButton>
 						<Tabs
-							indicatorColor="primary"
-							value={songId || false}
 							className={classes.tabs}
-							variant="scrollable"
+							indicatorColor="primary"
 							scrollButtons="auto"
+							value={songId || 0}
+							variant="scrollable"
 						>
 							<Tab
 								key={'tabs-setlist'}
