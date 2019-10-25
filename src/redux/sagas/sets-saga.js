@@ -50,7 +50,7 @@ export function* setsSaga() {
 
 function* handleAddSet({ payload: newSet }) {
 	const state = yield select()
-	newSet.author = state.user.name
+	newSet.author = newSet.author || state.user.name
 	newSet.slug = slugify(newSet.title)
 	newSet.songs = newSet.songs || []
 

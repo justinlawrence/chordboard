@@ -50,9 +50,9 @@ class Sets extends PureComponent {
 
 	filterSets = set => {
 		return (
-			lowerCase(set.title).includes(this.state.searchText) ||
-			lowerCase(set.author).includes(this.state.searchText) ||
-			lowerCase(set.venue).includes(this.state.searchText)
+			lowerCase(set.title).includes(lowerCase(this.state.searchText)) ||
+			lowerCase(set.author).includes(lowerCase(this.state.searchText)) ||
+			lowerCase(set.venue).includes(lowerCase(this.state.searchText))
 		)
 	}
 

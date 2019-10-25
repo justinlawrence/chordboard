@@ -56,7 +56,7 @@ class SetFormContainer extends Component {
 		mode: this.props.isEdit ? modes.EDIT : modes.NEW,
 		newSet: {
 			author: this.props.initialValues.author,
-			setDate: this.props.initialValues.setDate,
+			setDate: this.props.initialValues.setDate || new Date(),
 			title: this.props.initialValues.title,
 			venue: this.props.initialValues.venue,
 		},
