@@ -22,9 +22,7 @@ const config = {
   databaseURL: "my-db-url.com",
   projectId: "my-pid",
   storageBucket: "my-storage-bucket",
-  messagingSenderId: "my-sender-id",
-  ALGOLIA_APP_ID: "my-app-id",
-  ALGOLIA_USER_SEARCH_KEY: "my-user-search-key"
+  messagingSenderId: "my-sender-id",  
 };
 
 export default config;
