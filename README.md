@@ -54,8 +54,8 @@ firebase deploy
 
 ## About
 
-This project is maintained by [https://github.com/justinlawrence](Justin Lawrence) and [https://github.com/brettsvoid](Brett Henderson)
+This project is maintained by [Justin Lawrence](https://github.com/justinlawrence) and [Brett Henderson](https://github.com/brettsvoid])
 
 ## License
 
-License: [https://creativecommons.org/licenses/by/3.0/](CC-BY)
+License: [CC-BY](https://creativecommons.org/licenses/by/3.0/)
