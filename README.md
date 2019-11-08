@@ -48,9 +48,10 @@ npm start
 
 Use firebase-cli to initalize a project in the root directory. Then build your project and deploy.
 
+```
 npm run build
 firebase deploy
-
+```
 
 ## About
 
