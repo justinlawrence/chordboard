@@ -15,6 +15,7 @@ export const sectionData = [
 	{ abbreviation: 'PC', color: '#ff9800', title: 'Pre-chorus' },
 	{ abbreviation: 'IN', color: '#00bcd4', title: 'Intro' },
 	{ abbreviation: 'OUT', color: '#444', title: 'Outtro' },
+	{ abbreviation: 'OUT', color: '#444', title: 'Outro' },
 	{ abbreviation: 'OUT', color: '#444', title: 'Out' },
 	{ abbreviation: 'END', color: '#444', title: 'End' },
 	{ abbreviation: 'INST', color: 'silver', title: 'Interlude' },

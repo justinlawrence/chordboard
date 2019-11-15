@@ -586,7 +586,7 @@ class SongViewer extends Component {
 							</Paper>
 						</Dialog>
 					)}
-				</div>
+				</Container>
 			</Fade>
 		)
 	}

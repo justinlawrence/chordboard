@@ -14,7 +14,7 @@ import Line from './Line'
 
 const sectionStyles = {}
 forEach(sectionData, item => {
-	sectionStyles[`&[data-section*="${item.title}"]`] = {
+	sectionStyles[`&[data-section="${item.title}"]`] = {
 		borderLeft: `4px solid ${item.color}`,
 		'&:before': {
 			content: `"${item.abbreviation}"`,
@@ -30,7 +30,7 @@ const styles = theme => ({
 	section: {
 		borderLeft: '4px solid #444',
 		marginLeft: theme.spacing(8),
-		marginTop: theme.spacing(),
+		marginTop: theme.spacing(4),
 		paddingBottom: 0,
 		paddingTop: 0,
 		paddingLeft: theme.spacing(2),

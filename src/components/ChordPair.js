@@ -8,8 +8,8 @@ const styles = theme => ({
 	text: {
 		display: 'inline-block',
 		lineHeight: 1.5,
-		marginTop: theme.spacing(3),
-		minHeight: theme.spacing(3),
+		marginTop: theme.spacing(1),
+		minHeight: theme.spacing(1),
 		position: 'relative',
 		verticalAlign: 'middle',
 		whiteSpace: 'pre-wrap',
