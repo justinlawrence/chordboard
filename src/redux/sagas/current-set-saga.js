@@ -27,7 +27,7 @@ function* handleFetchSet({ setId }) {
 			...setQuery.data(),
 		}
 
-		if (typeof set.setDate === 'object') {
+		if (typeof set.setDate === 'object' && set.setDate !== null) {
 			set.setDate = new Date(set.setDate.seconds * 1000)
 		} else {
 			set.setDate = parseISO(set.setDate)

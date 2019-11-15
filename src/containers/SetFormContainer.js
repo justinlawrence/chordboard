@@ -109,8 +109,6 @@ class SetFormContainer extends Component {
 		const { mode, newSet } = this.state
 		const currentDate = format(new Date(), 'd MMM yyyy')
 
-		console.log(this.props.initialValues.setDate)
-
 		return (
 			<form onSubmit={this.handleFormSubmit}>
 				<Grid container spacing={1}>
