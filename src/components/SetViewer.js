@@ -8,6 +8,7 @@ import { parseISO } from 'date-fns'
 
 import { withStyles } from '@material-ui/styles'
 import Button from '@material-ui/core/Button'
+import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import Grow from '@material-ui/core/Grow'
 import Hidden from '@material-ui/core/Hidden'
@@ -29,10 +30,6 @@ import SongSelectorDialog from '../containers/SongSelectorDialog'
 import { Pencil as PencilIcon } from 'mdi-material-ui'
 
 const styles = theme => ({
-	container: {
-		display: 'flex',
-		flexWrap: 'wrap',
-	},
 	form: theme.mixins.gutters({
 		paddingBottom: theme.spacing(2),
 		paddingTop: theme.spacing(2),
@@ -266,7 +263,7 @@ class SetViewer extends Component {
 				</Hero>
 
 				<section className="section">
-					<div className="container">
+					<Container maxWidth={'xl'}>
 						<Table
 							className={classes.table}
 							aria-labelledby="tableTitle"
@@ -315,7 +312,7 @@ class SetViewer extends Component {
 								</Droppable>
 							</DragDropContext>
 						</Table>
-					</div>
+					</Container>
 				</section>
 			</div>
 		) : null

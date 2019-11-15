@@ -7,6 +7,7 @@ import reduce from 'lodash/fp/reduce'
 
 import { withStyles } from '@material-ui/styles'
 import Button from '@material-ui/core/Button'
+import Container from '@material-ui/core/Container'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Fade from '@material-ui/core/Fade'
@@ -301,7 +302,7 @@ class SongViewer extends Component {
 
 		return (
 			<Fade in={Boolean(song)} appear mountOnEnter unmountOnExit>
-				<div className="song-viewer">
+				<Container className="song-viewer">
 					<Hero>
 						<ContentLimiter>
 							<Grid
@@ -446,7 +447,7 @@ class SongViewer extends Component {
 
 					<ContentLimiter>
 						<section className="section">
-							<div className="container">
+							<Container maxWidth={'xl'}>
 								<Typography component="div">
 									<Song
 										chordSize={chordSize}
@@ -457,7 +458,7 @@ class SongViewer extends Component {
 									{parseSong( lines, sections, chordSize )}
 								</div>*/}
 								</Typography>
-							</div>
+							</Container>
 						</section>
 					</ContentLimiter>
 
