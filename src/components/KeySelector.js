@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { find, toLower } from 'lodash'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
 import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
 
@@ -24,7 +24,7 @@ const options = [
 
 const styles = theme => ({
 	root: {
-		minWidth: theme.spacing.unit * 9,
+		minWidth: theme.spacing(9),
 	},
 })
 

@@ -2,18 +2,27 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { compose } from 'recompose'
+import { VariableSizeList } from 'react-window'
+import cx from 'classnames'
 import filter from 'lodash/fp/filter'
+import first from 'lodash/fp/first'
 import flow from 'lodash/fp/flow'
+import groupBy from 'lodash/fp/groupBy'
 import includes from 'lodash/fp/includes'
 import map from 'lodash/fp/map'
 import reduce from 'lodash/fp/reduce'
 import toLower from 'lodash/fp/toLower'
+import size from 'lodash/fp/size'
 import sortBy from 'lodash/fp/sortBy'
+import startsWith from 'lodash/fp/startsWith'
+import upperCase from 'lodash/fp/upperCase'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth'
 import Button from '@material-ui/core/Button'
+import ButtonBase from '@material-ui/core/ButtonBase'
 import Checkbox from '@material-ui/core/Checkbox'
+import Collapse from '@material-ui/core/Collapse'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -25,23 +34,28 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+import {
+	Alphabetical as AlphabeticalIcon,
+	ArrowLeft as BackIcon,
+	Magnify as SearchIcon,
+} from 'mdi-material-ui'
 
-import { ArrowLeft as BackIcon, Magnify as SearchIcon } from 'mdi-material-ui'
+const mapWithKey = map.convert({ cap: false })
 
 const styles = theme => ({
 	root: {},
 	checkbox: {
-		padding: theme.spacing.unit,
+		padding: theme.spacing(),
 	},
 	scrollPaper: {
 		alignItems: 'flex-start',
 	},
 	input: {
-		marginLeft: theme.spacing.unit,
+		marginLeft: theme.spacing(),
 		flex: 1,
 	},
 	iconButton: {
-		padding: theme.spacing.unit,
+		padding: theme.spacing(),
 	},
 	content: {
 		flexGrow: 1,
@@ -53,6 +67,21 @@ const styles = theme => ({
 		display: 'flex',
 		alignItems: 'center',
 		width: '100%',
+	},
+	sectionButton: {
+		alignItems: 'center',
+		borderRadius: theme.shape.borderRadius,
+		display: 'flex',
+		height: theme.spacing(4),
+		justifyContent: 'center',
+		transition: theme.transitions.create(),
+		width: theme.spacing(4),
+	},
+	sectionButtonSelected: {
+		backgroundColor: theme.palette.action.selected,
+	},
+	sectionLabels: {
+		marginTop: theme.spacing(),
 	},
 })
 
@@ -71,9 +100,46 @@ class SongSelectorDialog extends PureComponent {
 	}
 
 	state = {
+		sectionFilter: '',
 		setSongs: [],
 		searchValue: '',
+		showFilters: false,
 	}
+
+	listRef = null
+
+	get listSize() {
+		// TODO: Figure out how to get the correct dimensions
+		return { height: 500, width: 600 }
+	}
+
+	get filteredSongs() {
+		const searchFilter = filter(song =>
+			includes(toLower(this.state.searchValue))(
+				toLower(song.title) +
+					' ' +
+					toLower(song.author) +
+					' ' +
+					toLower(song.content)
+			)
+		)
+
+		const sectionFilter = filter(song =>
+			this.state.sectionFilter
+				? startsWith(toLower(this.state.sectionFilter))(
+						toLower(song.title)
+				  )
+				: true
+		)
+
+		return flow(
+			searchFilter,
+			sectionFilter,
+			sortBy('title')
+		)(this.props.songs)
+	}
+
+	getItemSize = index => 50
 
 	handleClose = () => this.props.onClose([])
 
@@ -91,24 +157,68 @@ class SongSelectorDialog extends PureComponent {
 	handleSearchChange = event =>
 		this.setState({ searchValue: event.target.value })
 
-	render() {
-		const { classes, songs, open } = this.props
-		const { searchValue, setSongs } = this.state
+	handleSectionClick = key => event => {
+		if (this.state.sectionFilter === key) {
+			this.setState({ sectionFilter: '' })
+		} else {
+			this.setState({ sectionFilter: key })
+		}
+	}
 
-		const categoryFilter = filter(() => true)
-		const searchFilter = filter(song =>
-			includes(toLower(searchValue))(
-				toLower(song.title) +
-					' ' +
-					toLower(song.author) +
-					' ' +
-					toLower(song.content)
-			)
+	toggleSectionFilter = () =>
+		this.setState(prevState => ({
+			sectionFilter: !prevState.showFilters
+				? prevState.sectionFilter
+				: '',
+			showFilters: !prevState.showFilters,
+		}))
+
+	setListRef = node => (this.listRef = node)
+
+	renderItem = filteredSongs => ({ index, style }) => {
+		const { classes } = this.props
+		const { setSongs } = this.state
+		const song = filteredSongs[index]
+		return (
+			<ListItem
+				button
+				onClick={this.handleListItemClick(song)}
+				key={song.id}
+				style={style}
+			>
+				<Grid container spacing={1} wrap="nowrap">
+					<Grid item>
+						<Checkbox
+							className={classes.checkbox}
+							checked={includes(song)(setSongs)}
+							onClick={this.handleCheckboxClick(song)}
+						/>
+					</Grid>
+					<Grid item xs>
+						<Grid container direction="column">
+							<Typography>{song.title}</Typography>
+							<Typography color="textSecondary" variant="caption">
+								{song.author}
+							</Typography>
+						</Grid>
+					</Grid>
+				</Grid>
+			</ListItem>
 		)
-		const filteredSongs = flow(
-			categoryFilter,
-			searchFilter,
-			sortBy('title')
+	}
+
+	render() {
+		const { classes, open, songs } = this.props
+		const { searchValue, sectionFilter, showFilters } = this.state
+
+		const firstLetter = song => upperCase(first(song.title))
+		const sections = flow(
+			groupBy(firstLetter),
+			mapWithKey((songs, key) => ({
+				key,
+				isSelected: sectionFilter === key,
+			})),
+			sortBy('key')
 		)(songs)
 
 		return (
@@ -136,48 +246,60 @@ class SongSelectorDialog extends PureComponent {
 							placeholder="Search titles, authors & words"
 							value={searchValue}
 						/>
-						<IconButton
+						{/*<IconButton
 							className={classes.iconButton}
 							aria-label="Search"
 						>
 							<SearchIcon />
+						</IconButton>*/}
+						<IconButton
+							className={classes.iconButton}
+							onClick={this.toggleSectionFilter}
+						>
+							<AlphabeticalIcon />
 						</IconButton>
 					</Paper>
+
+					<Collapse in={showFilters}>
+						<div className={classes.sectionLabels}>
+							<Grid container spacing={1}>
+								{map(section => (
+									<Grid item key={section.key}>
+										<ButtonBase
+											className={cx(
+												classes.sectionButton,
+												{
+													[classes.sectionButtonSelected]:
+														section.isSelected,
+												}
+											)}
+											onClick={this.handleSectionClick(
+												section.key
+											)}
+										>
+											<Typography variant="subtitle1">
+												{section.key}
+											</Typography>
+										</ButtonBase>
+									</Grid>
+								))(sections)}
+							</Grid>
+						</div>
+					</Collapse>
 				</DialogTitle>
 				<DialogContent className={classes.content}>
 					<List>
-						{map(song => (
-							<ListItem
-								button
-								onClick={this.handleListItemClick(song)}
-								key={song.id}
+						<div ref={this.setListRef}>
+							<VariableSizeList
+								estimatedItemSize={50}
+								height={this.listSize.height}
+								itemCount={size(this.filteredSongs)}
+								itemSize={this.getItemSize}
+								width={this.listSize.width}
 							>
-								<Grid container spacing={8} wrap="nowrap">
-									<Grid item>
-										<Checkbox
-											className={classes.checkbox}
-											checked={includes(song)(setSongs)}
-											onClick={this.handleCheckboxClick(
-												song
-											)}
-										/>
-									</Grid>
-									<Grid item xs>
-										<Grid container direction="column">
-											<Typography>
-												{song.title}
-											</Typography>
-											<Typography
-												color="textSecondary"
-												variant="caption"
-											>
-												{song.author}
-											</Typography>
-										</Grid>
-									</Grid>
-								</Grid>
-							</ListItem>
-						))(filteredSongs)}
+								{this.renderItem(this.filteredSongs)}
+							</VariableSizeList>
+						</div>
 					</List>
 				</DialogContent>
 				<DialogActions>

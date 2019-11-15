@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { reverse, sortBy } from 'lodash'
+import { lowerCase, reverse, sortBy } from 'lodash'
 import { Link } from 'react-router-dom'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import InputAdornment from '@material-ui/core/InputAdornment'
@@ -50,9 +50,9 @@ class Sets extends PureComponent {
 
 	filterSets = set => {
 		return (
-			set.title.toLowerCase().includes(this.state.searchText) ||
-			set.author.toLowerCase().includes(this.state.searchText) ||
-			set.venue.toLowerCase().includes(this.state.searchText)
+			lowerCase(set.title).includes(lowerCase(this.state.searchText)) ||
+			lowerCase(set.author).includes(lowerCase(this.state.searchText)) ||
+			lowerCase(set.venue).includes(lowerCase(this.state.searchText))
 		)
 	}
 
@@ -82,11 +82,7 @@ class Sets extends PureComponent {
 								<Typography variant="h4">Sets</Typography>
 							</Grid>
 							<Grid item>
-								<Grid
-									container
-									alignItems="center"
-									spacing={16}
-								>
+								<Grid container alignItems="center" spacing={2}>
 									<Grid item>
 										<TextField
 											onChange={this.handleSearchChange}
@@ -136,7 +132,9 @@ class Sets extends PureComponent {
 									key={set.id}
 								>
 									<TableCell className={classes.shrinkCell}>
-										<DateSignifier date={set.setDate} />
+										{set.setDate && (
+											<DateSignifier date={set.setDate} />
+										)}
 									</TableCell>
 
 									<TableCell>

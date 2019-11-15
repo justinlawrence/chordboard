@@ -2,14 +2,14 @@ import React from 'react'
 import { range } from 'lodash'
 import cx from 'classnames'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
 
 const styles = theme => ({
 	text: {
 		display: 'inline-block',
-		lineHeight: `${theme.spacing.unit * 3}px`,
-		marginTop: theme.spacing.unit * 3,
-		minHeight: theme.spacing.unit * 3,
+		lineHeight: 1.5,
+		marginTop: theme.spacing(3),
+		minHeight: theme.spacing(3),
 		position: 'relative',
 		verticalAlign: 'middle',
 		whiteSpace: 'pre-wrap',

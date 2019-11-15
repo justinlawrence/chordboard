@@ -8,16 +8,25 @@ import RootRef from '@material-ui/core/RootRef'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import Typography from '@material-ui/core/Typography'
+import Tooltip from '@material-ui/core/Tooltip'
 import {
 	Delete as DeleteIcon,
 	Minus as MinusIcon,
 	Plus as PlusIcon,
+	Drag as DragIcon,
 } from 'mdi-material-ui'
 
 import * as actions from '../redux/actions'
 import KeySelector from './KeySelector'
 
 class SetSong extends PureComponent {
+	static defaultProps = {
+		song: {
+			needsFetching: true,
+			title: 'Loading...'
+		}
+	}
+
 	static propTypes = {
 		mode: PropTypes.string,
 		onChangeKey: PropTypes.func,
@@ -27,6 +36,15 @@ class SetSong extends PureComponent {
 		songId: PropTypes.string,
 		songIndex: PropTypes.number,
 		songKey: PropTypes.string,
+		// Redux props
+		fetchSong: PropTypes.func.isRequired,
+	}
+
+
+	componentDidMount() {
+		if (this.props.song.needsFetching) {
+			this.props.fetchSong(this.props.songId)
+		}
 	}
 
 	handleKeySelect = (key, amount) =>
@@ -38,13 +56,17 @@ class SetSong extends PureComponent {
 			`/sets/${this.props.setId}/songs/${this.props.songId}`
 		)
 
-	removeSong = () =>
+	removeSong = event => {
 		this.props.removeSetSong(this.props.setId, this.props.songId)
+		event.stopPropagation()
+	}
 
 	stopPropagation = event => event.stopPropagation()
 
 	render() {
 		const { mode, provided, setKey, song, songIndex } = this.props
+
+		//FYI the header for this table is in SetViewer.js
 
 		return (
 			<RootRef rootRef={provided.innerRef}>
@@ -54,10 +76,19 @@ class SetSong extends PureComponent {
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}
 				>
-					<TableCell padding={'dense'}>
+					{mode === 'edit' && (
+						<TableCell style={{ width: 0 }}>
+							<Tooltip title="Drag to reorder song">
+								<DragIcon />
+							</Tooltip>
+						</TableCell>
+					)}
+
+					<TableCell padding={'checkbox'} style={{ width: 0 }}>
 						<Typography variant="h6">{songIndex + 1}</Typography>
 					</TableCell>
-					<TableCell padding={'none'}>
+
+					<TableCell>
 						<Typography variant="h6">{song.title}</Typography>
 					</TableCell>
 
@@ -91,15 +122,15 @@ class SetSong extends PureComponent {
 					</TableCell>
 
 					{mode === 'edit' && (
-						<TableCell>
-							<Grid container wrap="nowrap">
+						<TableCell style={{ width: 0 }}>
+							<Tooltip title="Remove song from set">
 								<IconButton
 									aria-label="Remove song"
 									onClick={this.removeSong}
 								>
 									<DeleteIcon />
 								</IconButton>
-							</Grid>
+							</Tooltip>
 						</TableCell>
 					)}
 				</TableRow>

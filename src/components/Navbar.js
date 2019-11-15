@@ -4,7 +4,7 @@ import { Link, matchPath, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import map from 'lodash/map'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
@@ -17,6 +17,7 @@ import Typography from '@material-ui/core/Typography'
 
 import * as actions from '../redux/actions'
 import { getThemeId } from '../redux/reducers/theme'
+import { getSongsForCurrentSet } from '../redux/reducers/current-set'
 import chordboardLogoDark from '../chordboard-logo-light.png'
 import chordboardLogoLight from '../chordboard-logo-dark.png'
 import {
@@ -39,12 +40,12 @@ const styles = theme => ({
 		marginRight: 20,
 	},
 	logoBig: {
-		height: theme.spacing.unit * 2,
+		height: theme.spacing(2),
 		verticalAlign: 'middle',
 	},
 	logoWrapper: {
-		paddingRight: theme.spacing.unit,
-		paddingTop: theme.spacing.unit,
+		paddingRight: theme.spacing(),
+		paddingTop: theme.spacing(),
 	},
 	tabs: {
 		flexGrow: 1,
@@ -195,17 +196,21 @@ class Navbar extends React.Component {
 							<CloseIcon />
 						</IconButton>
 						<Tabs
-							indicatorColor="primary"
-							value={songId || false}
 							className={classes.tabs}
-							variant="scrollable"
+							indicatorColor="primary"
 							scrollButtons="auto"
+							value={songId || 0}
+							variant="scrollable"
 						>
 							<Tab
 								key={'tabs-setlist'}
 								component={Link}
 								to={`/sets/${currentSet.id}`}
-								label={'Setlist'}
+								label={
+									<Typography variant="button" noWrap>
+										Setlist
+									</Typography>
+								}
 								className={classes.tab}
 								color="inherit"
 								value={0}
@@ -215,15 +220,13 @@ class Navbar extends React.Component {
 								<Tab
 									key={`tabs-${song.id}`}
 									component={Link}
-									to={`/sets/${currentSet.id}/songs/${
-										song.id
-									}`}
+									to={`/sets/${currentSet.id}/songs/${song.id}`}
 									label={
-										<Typography noWrap>
+										<Typography variant="button" noWrap>
 											{song.title}
 										</Typography>
 									}
-									classes={{ root: classes.tab }}
+									className={classes.tab}
 									color="inherit"
 									value={song.id}
 								/>
@@ -242,12 +245,7 @@ const mapStateToProps = state => ({
 		: null,
 	currentSong: state.songs.byId[state.currentSong.id],
 	themeId: getThemeId(state),
-	songs: state.currentSet.id
-		? map(
-			state.sets.byId[state.currentSet.id].songs,
-			song => state.songs.byId[song.id]
-		  )
-		: null,
+	songs: getSongsForCurrentSet(state),
 })
 
 export default withRouter(

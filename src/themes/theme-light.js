@@ -31,9 +31,6 @@ export const lightTheme = {
 		},
 
 	},
-	spacing: {
-		keyline: 64,
-	},
 
 	// Custom values
 	maxPageWidth: 1344,

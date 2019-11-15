@@ -9,9 +9,9 @@ import {
 	withRouter,
 } from 'react-router-dom'
 import DateFnsUtils from '@date-io/date-fns'
-import { MuiPickersUtilsProvider } from 'material-ui-pickers'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 
-import { MuiThemeProvider, withStyles } from '@material-ui/core/styles'
+import { ThemeProvider, withStyles } from '@material-ui/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Grid from '@material-ui/core/Grid'
 
@@ -109,7 +109,7 @@ class App extends Component {
 	render() {
 		const { classes, muiTheme, user } = this.props
 		return (
-			<MuiThemeProvider theme={muiTheme}>
+			<ThemeProvider  theme={muiTheme}>
 				<MuiPickersUtilsProvider utils={DateFnsUtils}>
 					<Grid
 						container
@@ -178,7 +178,7 @@ class App extends Component {
 						/>
 					</Grid>
 				</MuiPickersUtilsProvider>
-			</MuiThemeProvider>
+			</ThemeProvider>
 		)
 	}
 }

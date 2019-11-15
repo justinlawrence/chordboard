@@ -2,15 +2,19 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link, matchPath, withRouter } from 'react-router-dom'
+import map from 'lodash/fp/map'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
 import ButtonBase from '@material-ui/core/ButtonBase'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import Hidden from '@material-ui/core/Hidden'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
 import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
 import {
+	ArrowUpDown as ArrowUpDownIcon,
 	ChevronLeft as ChevronLeftIcon,
 	ChevronRight as ChevronRightIcon,
 	FormatListBulleted as SetListIcon,
@@ -44,12 +48,12 @@ const styles = theme => ({
 		flexWrap: 'wrap',
 	},
 	form: theme.mixins.gutters({
-		paddingBottom: theme.spacing.unit * 2,
-		paddingTop: theme.spacing.unit * 2,
+		paddingBottom: theme.spacing(2),
+		paddingTop: theme.spacing(2),
 		width: 500,
 	}),
 	formFooter: {
-		marginTop: theme.spacing.unit * 2,
+		marginTop: theme.spacing(2),
 	},
 	deleteButton: {
 		color: theme.palette.error.main,
@@ -66,9 +70,9 @@ const styles = theme => ({
 		border: 2,
 		color: theme.palette.common.white,
 		height: '100%',
-		minWidth: theme.spacing.unit * 3,
-		paddingLeft: theme.spacing.unit * 2,
-		paddingRight: theme.spacing.unit * 2,
+		minWidth: theme.spacing(3),
+		paddingLeft: theme.spacing(2),
+		paddingRight: theme.spacing(2),
 		position: 'relative',
 	},
 })
@@ -80,9 +84,11 @@ class LiveBar extends Component {
 		// Redux props
 		goToNextSong: PropTypes.func,
 		goToPreviousSong: PropTypes.func,
+		setFontSize: PropTypes.func.isRequired,
 	}
 
 	state = {
+		anchorEl: null,
 		nextSongKey: '',
 		nextSongTitle: '',
 		previousSongKey: '',
@@ -97,8 +103,18 @@ class LiveBar extends Component {
 		this.handleProps(nextProps)
 	}
 
+	handleFontSizeChange = event =>
+		this.setState({ anchorEl: event.currentTarget })
+
+	handleFontSizeClick = fontSize => event => {
+		this.props.setFontSize(fontSize)
+		this.handleMenuClose()
+	}
+
 	handleGoToNextSong = () => this.props.goToNextSong()
 	handleGoToPreviousSong = () => this.props.goToPreviousSong()
+
+	handleMenuClose = () => this.setState({ anchorEl: null })
 
 	handleProps = props => {
 		const { location } = props
@@ -172,11 +188,18 @@ class LiveBar extends Component {
 		} = this.props
 
 		const {
+			anchorEl,
 			nextSongKey,
 			nextSongTitle,
 			previousSongKey,
 			previousSongTitle,
 		} = this.state
+
+		const fontSizes = [
+			{ size: 'small', label: 'Small' },
+			{ size: 'medium', label: 'Medium' },
+			{ size: 'large', label: 'Large' },
+		]
 
 		const sections = getSongSections(currentSong)
 		let sectionIndex = 0
@@ -214,9 +237,9 @@ class LiveBar extends Component {
 		return show ? (
 			<nav className={classes.root}>
 				<Grid container className={classes.root}>
-					<Grid item xs={9} sm={7}>
+					<Grid item xs>
 						<div className={classes.sections}>
-							{sections.map(section => (
+							{map(section => (
 								<ButtonBase
 									component="a"
 									key={`section-${section.index}`}
@@ -232,12 +255,21 @@ class LiveBar extends Component {
 										{section.abbreviation}
 									</Typography>
 								</ButtonBase>
-							))}
+							))(sections)}
 						</div>
 					</Grid>
 
-					<Grid item xs={3} sm={5}>
+					<Grid item xs={3}>
 						<div className="live-bar__navigation-actions">
+							<Tooltip title="Set font size">
+								<IconButton
+									className={classes.button}
+									onClick={this.handleFontSizeChange}
+								>
+									<ArrowUpDownIcon />
+								</IconButton>
+							</Tooltip>
+
 							<Hidden xsDown>
 								<Tooltip title="Back to setlist">
 									<IconButton
@@ -269,6 +301,21 @@ class LiveBar extends Component {
 							</Tooltip>
 						</div>
 					</Grid>
+
+					<Menu
+						anchorEl={anchorEl}
+						onClose={this.handleMenuClose}
+						open={Boolean(anchorEl)}
+					>
+						{map(fontSize => (
+							<MenuItem
+								key={fontSize.size}
+								onClick={this.handleFontSizeClick(fontSize.size)}
+							>
+								{fontSize.label}
+							</MenuItem>
+						))(fontSizes)}
+					</Menu>
 				</Grid>
 			</nav>
 		) : null

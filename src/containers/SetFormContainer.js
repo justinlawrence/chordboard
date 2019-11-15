@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { format } from 'date-fns'
-import { InlineDatePicker } from 'material-ui-pickers'
+import { DatePicker  } from '@material-ui/pickers'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
@@ -33,7 +33,7 @@ class SetFormContainer extends Component {
 	static defaultProps = {
 		initialValues: {
 			author: '',
-			date: '',
+			setDate: null,
 			title: '',
 			venue: '',
 		},
@@ -42,7 +42,7 @@ class SetFormContainer extends Component {
 	static propTypes = {
 		initialValues: PropTypes.shape({
 			author: PropTypes.string,
-			date: PropTypes.object,
+			setDate: PropTypes.object,
 			title: PropTypes.string,
 			venue: PropTypes.string,
 		}),
@@ -55,10 +55,10 @@ class SetFormContainer extends Component {
 	state = {
 		mode: this.props.isEdit ? modes.EDIT : modes.NEW,
 		newSet: {
-			author: this.props.initialValues.author || '',
-			setDate: this.props.initialValues.date || null,
-			title: this.props.initialValues.title || '',
-			venue: this.props.initialValues.venue || '',
+			author: this.props.initialValues.author,
+			setDate: this.props.initialValues.setDate || new Date(),
+			title: this.props.initialValues.title,
+			venue: this.props.initialValues.venue,
 		},
 	}
 
@@ -72,7 +72,7 @@ class SetFormContainer extends Component {
 
 	handleDateChange = date =>
 		this.setState(prevState => ({
-			newSet: { ...prevState.newSet, date },
+			newSet: { ...prevState.newSet, setDate: date },
 		}))
 
 	handleClearForm = event => {
@@ -80,7 +80,7 @@ class SetFormContainer extends Component {
 		this.setState({
 			newSet: {
 				author: '',
-				date: '',
+				setDate: '',
 				title: '',
 				venue: '',
 			},
@@ -109,9 +109,11 @@ class SetFormContainer extends Component {
 		const { mode, newSet } = this.state
 		const currentDate = format(new Date(), 'd MMM yyyy')
 
+		console.log(this.props.initialValues.setDate)
+
 		return (
 			<form onSubmit={this.handleFormSubmit}>
-				<Grid container spacing={8}>
+				<Grid container spacing={1}>
 					<Grid item xs={12} lg={6}>
 						<TextField
 							name="title"
@@ -124,16 +126,15 @@ class SetFormContainer extends Component {
 					</Grid>
 
 					<Grid item xs={12} lg={6}>
-						<InlineDatePicker
+						<DatePicker
 							label="Set date"
 							format="d MMM yyyy"
 							fullWidth
 							invalidDateMessage={`Invalid Date Format (eg. ${currentDate})`}
-							keyboard
-							keyboardIcon={<CalendarIcon />}
 							margin="normal"
-							value={newSet.date}
+							value={newSet.setDate}
 							onChange={this.handleDateChange}
+							variant="inline"
 							{...datePickerIcons}
 						/>
 					</Grid>

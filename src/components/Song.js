@@ -1,9 +1,12 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { forEach } from 'lodash'
+import { connect } from 'react-redux'
+import { clamp, forEach } from 'lodash'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
 
+import * as actions from '../redux/actions'
+import { getFontSize } from '../redux/reducers/user'
 import { sectionData } from '../utils/getSongSections'
 import ChordLine from './ChordLine'
 import ChordPair from './ChordPair'
@@ -22,25 +25,25 @@ forEach(sectionData, item => {
 
 const styles = theme => ({
 	root: {
-		paddingBottom: theme.spacing.unit * 8,
+		paddingBottom: theme.spacing(14),
 	},
 	section: {
 		borderLeft: '4px solid #444',
-		marginLeft: theme.spacing.keyline,
-		marginTop: theme.spacing.unit,
+		marginLeft: theme.spacing(8),
+		marginTop: theme.spacing(),
 		paddingBottom: 0,
 		paddingTop: 0,
-		paddingLeft: theme.spacing.unit * 2,
+		paddingLeft: theme.spacing(2),
 		position: 'relative',
 
 		'&[data-section]:before': {
 			backgroundColor: '#444',
-			borderRadius: theme.spacing.unit / 2,
+			borderRadius: theme.spacing(0.5),
 			color: 'white',
-			paddingBottom: theme.spacing.unit / 2,
-			paddingLeft: theme.spacing.unit,
-			paddingRight: theme.spacing.unit,
-			paddingTop: theme.spacing.unit / 2,
+			paddingBottom: theme.spacing(0.5),
+			paddingLeft: theme.spacing(),
+			paddingRight: theme.spacing(),
+			paddingTop: theme.spacing(0.5),
 			position: 'absolute',
 			transform: 'translate(calc(-100% - 1em - 2px), 0)',
 			transformOrigin: '0 0',
@@ -54,7 +57,7 @@ const styles = theme => ({
 		},
 
 		'@media print': {
-			marginLeft: theme.spacing.unit * 6,
+			marginLeft: theme.spacing(6),
 		},
 	},
 })
@@ -74,7 +77,30 @@ class Song extends PureComponent {
 	}
 
 	render() {
-		const { chordSize, classes, lines, wordSize } = this.props
+		const {
+			chordSize: chordSizeProp,
+			classes,
+			fontSize,
+			lines,
+			wordSize: wordSizeProp,
+		} = this.props
+
+		let scale
+		switch (fontSize) {
+			case 'small':
+				scale = 0.8
+				break
+			case 'medium':
+			default:
+				scale = 1
+				break
+			case 'large':
+				scale = 1.5
+				break
+		}
+
+		const chordSize = chordSizeProp * scale
+		const wordSize = wordSizeProp * scale
 
 		let children = []
 		let result = []
@@ -83,63 +109,63 @@ class Song extends PureComponent {
 
 		forEach(lines, (line, i) => {
 			switch (line.type) {
-			case 'chord-line':
-				children.push(
-					<ChordLine
-						key={i}
-						chords={line.chords}
-						chordSize={chordSize}
-						wordSize={wordSize}
-					/>
-				)
-				break
-
-			case 'chord-pair':
-				children.push(
-					<ChordPair
-						key={i}
-						chords={line.chords}
-						chordSize={chordSize}
-						text={line.text}
-						wordSize={wordSize}
-					/>
-				)
-				break
-
-			case 'empty':
-				children.push(<div key={i} className="empty-line" />)
-				break
-
-			case 'line':
-				children.push(
-					<Line key={i} text={line.text} wordSize={wordSize} />
-				)
-				break
-
-			case 'section':
-				if (section) {
-					// Finish off last section
-					result.push(
-						<section
-							id={`section-${sectionIndex}`}
-							key={`section-${sectionIndex}`}
-							className={classes.section}
-							data-section={section}
-						>
-							{children}
-						</section>
+				case 'chord-line':
+					children.push(
+						<ChordLine
+							key={i}
+							chords={line.chords}
+							chordSize={chordSize}
+							wordSize={wordSize}
+						/>
 					)
-					children = []
-				} else {
-					result = result.concat(children)
-				}
+					break
 
-				section = line.text
-				//sections.push( { title: line.text, index: sectionIndex } );
+				case 'chord-pair':
+					children.push(
+						<ChordPair
+							key={i}
+							chords={line.chords}
+							chordSize={chordSize}
+							text={line.text}
+							wordSize={wordSize}
+						/>
+					)
+					break
 
-				sectionIndex++
+				case 'empty':
+					children.push(<div key={i} className="empty-line" />)
+					break
 
-				break
+				case 'line':
+					children.push(
+						<Line key={i} text={line.text} wordSize={wordSize} />
+					)
+					break
+
+				case 'section':
+					if (section) {
+						// Finish off last section
+						result.push(
+							<section
+								id={`section-${sectionIndex}`}
+								key={`section-${sectionIndex}`}
+								className={classes.section}
+								data-section={section}
+							>
+								{children}
+							</section>
+						)
+						children = []
+					} else {
+						result = result.concat(children)
+					}
+
+					section = line.text
+					//sections.push( { title: line.text, index: sectionIndex } );
+
+					sectionIndex++
+
+					break
 			}
 		})
 
@@ -164,4 +190,11 @@ class Song extends PureComponent {
 	}
 }
 
-export default withStyles(styles)(Song)
+const mapStateToProps = state => ({
+	fontSize: getFontSize(state),
+})
+
+export default connect(
+	mapStateToProps,
+	actions
+)(withStyles(styles)(Song))

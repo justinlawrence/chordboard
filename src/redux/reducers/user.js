@@ -1,8 +1,9 @@
-import { SET_CURRENT_USER } from '../actions'
+import { SET_CURRENT_USER, SET_FONT_SIZE } from '../actions'
 
 let initialUser = {
 	id: null,
-	name: ''
+	name: '',
+	fontSize: 'medium',
 }
 
 try {
@@ -19,13 +20,22 @@ try {
 
 export const user = (state = initialUser, action = {}) => {
 	switch (action.type) {
-	case SET_CURRENT_USER:
-		return {
-			...state,
-			...action.user
-		}
+		case SET_CURRENT_USER:
+			return {
+				...state,
+				...action.user,
+			}
 
-	default:
-		return state
+		case SET_FONT_SIZE:
+			return {
+				...state,
+				fontSize: action.payload
+			}
+
+		default:
+			return state
 	}
 }
+
+
+export const getFontSize = state => state.user.fontSize
