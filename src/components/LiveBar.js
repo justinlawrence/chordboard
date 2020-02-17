@@ -5,6 +5,7 @@ import { Link, matchPath, withRouter } from 'react-router-dom'
 import map from 'lodash/fp/map'
 
 import { withStyles } from '@material-ui/styles'
+import AppBar from '@material-ui/core/AppBar';
 import ButtonBase from '@material-ui/core/ButtonBase'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
@@ -12,6 +13,7 @@ import Hidden from '@material-ui/core/Hidden'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import Tooltip from '@material-ui/core/Tooltip'
+import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import {
 	ArrowUpDown as ArrowUpDownIcon,
@@ -25,15 +27,10 @@ import getSongSections from '../utils/getSongSections'
 
 const styles = theme => ({
 	root: {
-		alignItems: 'stretch',
 		backgroundColor: theme.palette.background.hero,
-		borderTopColor: 'rgb(206, 206, 206)',
-		borderTopWidth: '1px',
-		display: 'flex',
 
 		// Live bar has a fixed position so that the scroll can be natural
 		// and not break the print view.
-		bottom: 0,
 		left: 0,
 		position: 'fixed',
 		right: 0,
@@ -42,10 +39,14 @@ const styles = theme => ({
 		'@media print': {
 			display: 'none !important',
 		},
+		justifyContent: 'space-between'
+	},
+	appBar: {
+		top: 'auto',
+		bottom: 0,
 	},
 	container: {
-		display: 'flex',
-		flexWrap: 'wrap',
+
 	},
 	form: theme.mixins.gutters({
 		paddingBottom: theme.spacing(2),
@@ -235,42 +236,13 @@ class LiveBar extends Component {
 		})*/
 
 		return show ? (
-			<nav className={classes.root}>
-				<Grid container className={classes.root}>
-					<Grid item xs>
-						<div className={classes.sections}>
-							{map(section => (
-								<ButtonBase
-									component="a"
-									key={`section-${section.index}`}
-									href={`#section-${section.index}`}
-									className={classes.section}
-									title={`Jump to ${section.title}`}
-									style={{ backgroundColor: section.color }}
-								>
-									<Typography
-										className={classes.sectionText}
-										color="inherit"
-									>
-										{section.abbreviation}
-									</Typography>
-								</ButtonBase>
-							))(sections)}
-						</div>
-					</Grid>
+			<AppBar position="fixed" color="primary" className={classes.appBar}>
+				{/* <nav className={classes.root}> */}
+				<Toolbar variant="dense">
+					<Grid container className={classes.root}>
 
-					<Grid item xs={3}>
-						<div className="live-bar__navigation-actions">
-							<Tooltip title="Set font size">
-								<IconButton
-									className={classes.button}
-									onClick={this.handleFontSizeChange}
-								>
-									<ArrowUpDownIcon />
-								</IconButton>
-							</Tooltip>
-
-							<Hidden xsDown>
+						<Grid item>
+							<div className={classes.sections}>
 								<Tooltip title="Back to setlist">
 									<IconButton
 										className={classes.button}
@@ -280,44 +252,78 @@ class LiveBar extends Component {
 										<SetListIcon />
 									</IconButton>
 								</Tooltip>
-							</Hidden>
 
-							<Tooltip title="Jump to previous song">
+								{map(section => (
+									<ButtonBase
+										component="a"
+										key={`section-${section.index}`}
+										href={`#section-${section.index}`}
+										className={classes.section}
+										title={`Jump to ${section.title}`}
+										style={{ backgroundColor: section.color }}
+									>
+										<Typography
+											className={classes.sectionText}
+											color="inherit"
+										>
+											{section.abbreviation}
+										</Typography>
+									</ButtonBase>
+								))(sections)}
+							</div>
+						</Grid>
+
+						<Grid item>
+							<div className="live-bar__navigation-actions">
+								{/* 							
+							<Tooltip title="Set font size">
 								<IconButton
 									className={classes.button}
-									onClick={this.handleGoToPreviousSong}
+									onClick={this.handleFontSizeChange}
 								>
-									<ChevronLeftIcon />
+									<ArrowUpDownIcon />
 								</IconButton>
 							</Tooltip>
+ */}
 
-							<Tooltip title="Jump to next song">
-								<IconButton
-									className={classes.button}
-									onClick={this.handleGoToNextSong}
+								<Tooltip title="Jump to previous song">
+									<IconButton
+										className={classes.button}
+										onClick={this.handleGoToPreviousSong}
+									>
+										<ChevronLeftIcon />
+									</IconButton>
+								</Tooltip>
+
+								<Tooltip title="Jump to next song">
+									<IconButton
+										className={classes.button}
+										onClick={this.handleGoToNextSong}
+									>
+										<ChevronRightIcon />
+									</IconButton>
+								</Tooltip>
+							</div>
+						</Grid>
+
+						<Menu
+							anchorEl={anchorEl}
+							onClose={this.handleMenuClose}
+							open={Boolean(anchorEl)}
+						>
+							{map(fontSize => (
+								<MenuItem
+									key={fontSize.size}
+									onClick={this.handleFontSizeClick(fontSize.size)}
 								>
-									<ChevronRightIcon />
-								</IconButton>
-							</Tooltip>
-						</div>
+									{fontSize.label}
+								</MenuItem>
+							))(fontSizes)}
+						</Menu>
 					</Grid>
-
-					<Menu
-						anchorEl={anchorEl}
-						onClose={this.handleMenuClose}
-						open={Boolean(anchorEl)}
-					>
-						{map(fontSize => (
-							<MenuItem
-								key={fontSize.size}
-								onClick={this.handleFontSizeClick(fontSize.size)}
-							>
-								{fontSize.label}
-							</MenuItem>
-						))(fontSizes)}
-					</Menu>
-				</Grid>
-			</nav>
+					{/* </nav> */}
+				</Toolbar>
+			</AppBar>
 		) : null
 	}
 }
