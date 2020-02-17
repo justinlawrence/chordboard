@@ -99,7 +99,7 @@ class LiveBar extends Component {
 		this.handleProps(this.props)
 	}
 
-	componentWillReceiveProps(nextProps) {
+	UNSAFE_componentWillReceiveProps(nextProps) {
 		this.handleProps(nextProps)
 	}
 
