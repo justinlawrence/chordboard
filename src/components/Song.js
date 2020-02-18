@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { clamp, forEach } from 'lodash'
 
-import { withStyles } from '@material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 
 import * as actions from '../redux/actions'
 import { getFontSize } from '../redux/reducers/user'

@@ -6,7 +6,7 @@ import uniqBy from 'lodash/fp/uniqBy'
 
 import { parseISO } from 'date-fns'
 
-import { withStyles } from '@material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
@@ -144,16 +144,16 @@ class SetViewer extends Component {
 						</Draggable>
 					))
 				) : (
-					<TableRow key="id-none">
-						<TableCell />
+						<TableRow key="id-none">
+							<TableCell />
 
-						<TableCell>
-							<Typography variant="h6">
-								This set has no songs
+							<TableCell>
+								<Typography variant="h6">
+									This set has no songs
 							</Typography>
-						</TableCell>
-					</TableRow>
-				)}
+							</TableCell>
+						</TableRow>
+					)}
 				{provided.placeholder}
 			</TableBody>
 		)
@@ -188,34 +188,34 @@ class SetViewer extends Component {
 									isEdit
 								/>
 							) : (
-								<Grid container spacing={3}>
-									<Hidden smDown>
+									<Grid container spacing={3}>
+										<Hidden smDown>
+											<Grid item>
+												<Grow
+													in={Boolean(set.setDate)}
+													mountOnEnter
+												>
+													<div>
+														{set.setDate && (
+															<DateSignifier
+																date={set.setDate}
+															/>
+														)}
+													</div>
+												</Grow>
+											</Grid>
+										</Hidden>
 										<Grid item>
-											<Grow
-												in={Boolean(set.setDate)}
-												mountOnEnter
-											>
-												<div>
-													{set.setDate && (
-														<DateSignifier
-															date={set.setDate}
-														/>
-													)}
-												</div>
-											</Grow>
+											<Typography variant="h4">
+												{set.title}
+											</Typography>
+											<Typography variant="caption">
+												{set.author}
+												{set.venue ? ' @ ' + set.venue : ''}
+											</Typography>
 										</Grid>
-									</Hidden>
-									<Grid item>
-										<Typography variant="h4">
-											{set.title}
-										</Typography>
-										<Typography variant="caption">
-											{set.author}
-											{set.venue ? ' @ ' + set.venue : ''}
-										</Typography>
 									</Grid>
-								</Grid>
-							)}
+								)}
 						</Grid>
 
 						{mode !== 'edit' && (

@@ -17,7 +17,7 @@ import sortBy from 'lodash/fp/sortBy'
 import startsWith from 'lodash/fp/startsWith'
 import upperCase from 'lodash/fp/upperCase'
 
-import { withStyles } from '@material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth'
 import Button from '@material-ui/core/Button'
 import ButtonBase from '@material-ui/core/ButtonBase'
@@ -117,18 +117,18 @@ class SongSelectorDialog extends PureComponent {
 		const searchFilter = filter(song =>
 			includes(toLower(this.state.searchValue))(
 				toLower(song.title) +
-					' ' +
-					toLower(song.author) +
-					' ' +
-					toLower(song.content)
+				' ' +
+				toLower(song.author) +
+				' ' +
+				toLower(song.content)
 			)
 		)
 
 		const sectionFilter = filter(song =>
 			this.state.sectionFilter
 				? startsWith(toLower(this.state.sectionFilter))(
-						toLower(song.title)
-				  )
+					toLower(song.title)
+				)
 				: true
 		)
 

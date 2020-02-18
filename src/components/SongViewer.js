@@ -5,7 +5,7 @@ import { isAfter } from 'date-fns'
 import filter from 'lodash/fp/filter'
 import reduce from 'lodash/fp/reduce'
 
-import { withStyles } from '@material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
 import Dialog from '@material-ui/core/Dialog'
@@ -282,7 +282,7 @@ class SongViewer extends Component {
 
 		const capo = getKeyDiff(displayKey, setKey || song.key) //this is only for display purposes, telling the user where to put the capo
 		const transposeAmount = getKeyDiff(song.key, displayKey) //this is how much to transpose by
-		
+
 		let lines = transposeLines(linesState, transposeAmount)
 		if (isNashville) {
 			lines = linesToNashville(displayKey, lines)
@@ -357,7 +357,7 @@ class SongViewer extends Component {
 													className={classes.button}
 													href={`/songs/${
 														song.id
-													}/edit`}
+														}/edit`}
 												>
 													<PencilIcon />
 												</IconButton>
@@ -437,7 +437,7 @@ class SongViewer extends Component {
 												</List>
 											</Dialog>
 
-											
+
 										</form>
 									</Grid>
 								)}
@@ -536,7 +536,7 @@ class SongViewer extends Component {
 										</Grid>
 									</Grid>
 
-{/* JL currently chord size doesn't do anything.
+									{/* JL currently chord size doesn't do anything.
 									<Grid item xs={12}>
 										<Grid container spacing={2}>
 											<Grid item xs={6}>
@@ -614,48 +614,48 @@ export function parseSong(lines, sections, chordSize) {
 		let line = lines[i]
 
 		switch (lines[i].type) {
-		case 'chord-line':
-			children.push(<ChordLine key={i} chords={line.chords} />)
-			break
+			case 'chord-line':
+				children.push(<ChordLine key={i} chords={line.chords} />)
+				break
 
-		case 'chord-pair':
-			children.push(
-				<ChordPair key={i} chords={line.chords} text={line.text} />
-			)
-			break
-
-		case 'empty':
-			children.push(<div key={i} className="empty-line" />)
-			break
-
-		case 'line':
-			children.push(<Line key={i} text={line.text} />)
-			break
-
-		case 'section':
-			if (section) {
-				// Finish off last section
-				result.push(
-					<section
-						id={`section-${sectionIndex}`}
-						key={`section-${sectionIndex}`}
-						className="song-viewer__section"
-						data-section={section}
-					>
-						{children}
-					</section>
+			case 'chord-pair':
+				children.push(
+					<ChordPair key={i} chords={line.chords} text={line.text} />
 				)
-				children = []
-			} else {
-				result = result.concat(children)
-			}
+				break
 
-			section = line.text
-			sections.push({ title: line.text, index: sectionIndex })
+			case 'empty':
+				children.push(<div key={i} className="empty-line" />)
+				break
 
-			sectionIndex++
+			case 'line':
+				children.push(<Line key={i} text={line.text} />)
+				break
 
-			break
+			case 'section':
+				if (section) {
+					// Finish off last section
+					result.push(
+						<section
+							id={`section-${sectionIndex}`}
+							key={`section-${sectionIndex}`}
+							className="song-viewer__section"
+							data-section={section}
+						>
+							{children}
+						</section>
+					)
+					children = []
+				} else {
+					result = result.concat(children)
+				}
+
+				section = line.text
+				sections.push({ title: line.text, index: sectionIndex })
+
+				sectionIndex++
+
+				break
 		}
 	} //end of loop through lines
 

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { find, toLower } from 'lodash'
 
-import { withStyles } from '@material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
 

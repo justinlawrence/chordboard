@@ -6,7 +6,7 @@ import includes from 'lodash/fp/includes'
 import sortBy from 'lodash/fp/sortBy'
 import toLower from 'lodash/fp/toLower'
 
-import { withStyles } from '@material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import { lighten } from '@material-ui/core/styles/colorManipulator'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
@@ -32,11 +32,11 @@ const styles = theme => ({
 					theme.palette.secondary.light,
 					0.85
 				),
-			  }
+			}
 			: {
 				color: theme.palette.text.primary,
 				backgroundColor: theme.palette.secondary.dark,
-			  },
+			},
 	tableRow: {
 		cursor: 'pointer',
 	},

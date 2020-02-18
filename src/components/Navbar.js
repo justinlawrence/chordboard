@@ -4,7 +4,7 @@ import { Link, matchPath, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import map from 'lodash/map'
 
-import { withStyles } from '@material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
@@ -177,8 +177,8 @@ class Navbar extends React.Component {
 										{themeId === 'dark' ? (
 											<LightModeIcon />
 										) : (
-											<DarkModeIcon />
-										)}
+												<DarkModeIcon />
+											)}
 									</IconButton>
 								</Tooltip>
 							</Grid>

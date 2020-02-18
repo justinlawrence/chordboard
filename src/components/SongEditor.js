@@ -4,7 +4,7 @@ import { isNil } from 'lodash'
 import { connect } from 'react-redux'
 import Textarea from 'react-textarea-autosize'
 
-import { withStyles } from '@material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Hidden from '@material-ui/core/Hidden'
