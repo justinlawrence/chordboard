@@ -27,7 +27,7 @@ import {
 	PlaylistPlus as PlaylistPlusIcon,
 	Plus as PlusIcon,
 	Pencil as PencilIcon,
-	Settings as SettingsIcon,
+	Cog as SettingsIcon,
 } from 'mdi-material-ui'
 
 import * as actions from '../redux/actions'
@@ -321,7 +321,8 @@ class SongViewer extends Component {
 								{!isPreview && (
 									<Grid
 										item
-										xs={12} sm={5}
+										xs={12}
+										sm={5}
 										className={classes.noPrint}
 									>
 										<form autoComplete="off">
@@ -355,9 +356,7 @@ class SongViewer extends Component {
 											<Tooltip title="Edit song">
 												<IconButton
 													className={classes.button}
-													href={`/songs/${
-														song.id
-														}/edit`}
+													href={`/songs/${song.id}/edit`}
 												>
 													<PencilIcon />
 												</IconButton>
@@ -436,8 +435,6 @@ class SongViewer extends Component {
 													))}
 												</List>
 											</Dialog>
-
-
 										</form>
 									</Grid>
 								)}
@@ -599,10 +596,7 @@ const mapStateToProps = state => ({
 	})([])(state.sets.byId),
 })
 
-export default connect(
-	mapStateToProps,
-	actions
-)(withStyles(styles)(SongViewer))
+export default connect(mapStateToProps, actions)(withStyles(styles)(SongViewer))
 
 export function parseSong(lines, sections, chordSize) {
 	let children = []
