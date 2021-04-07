@@ -302,176 +302,200 @@ class SongViewer extends Component {
 
 		return (
 			<Fade in={Boolean(song)} appear mountOnEnter unmountOnExit>
-				<Container className="song-viewer">
+				<div>
 					<Hero>
-						<ContentLimiter>
-							<Grid
-								container
-								className={classes.root}
-								justify="space-between"
-							>
-								<Grid item xs={12} sm={7}>
-									<Typography variant="h4">
-										{song.title}
-									</Typography>
-									<Typography variant="subtitle1">
-										{song.author}
-									</Typography>
-								</Grid>
-								{!isPreview && (
-									<Grid
-										item
-										xs={12}
-										sm={5}
-										className={classes.noPrint}
-									>
-										<form autoComplete="off">
-											{setKey && (
-												<Tooltip title="The key everyone will be playing in">
+						<Container>
+							<ContentLimiter>
+								<Grid
+									container
+									className={classes.root}
+									justify={'space-between'}
+								>
+									<Grid item xs={12} sm={7}>
+										<Typography variant={'h4'}>
+											{song.title}
+										</Typography>
+										<Typography variant={'subtitle1'}>
+											{song.author}
+										</Typography>
+									</Grid>
+									{!isPreview && (
+										<Grid
+											item
+											xs={12}
+											sm={5}
+											className={classes.noPrint}
+										>
+											<form autoComplete={'off'}>
+												{setKey && (
+													<Tooltip
+														title={
+															'The key everyone will be playing in'
+														}
+													>
+														<KeySelector
+															label={'Set key'}
+															onSelect={
+																this
+																	.handleSelectSetKey
+															}
+															songKey={setKey}
+														/>
+													</Tooltip>
+												)}
+
+												<Tooltip
+													title={
+														'The key you will be playing in'
+													}
+												>
 													<KeySelector
-														label="Set key"
+														label={capoKeyDescr}
 														onSelect={
 															this
-																.handleSelectSetKey
+																.handleSelectDisplayKey
 														}
-														songKey={setKey}
+														songKey={
+															displayKey || setKey
+														}
+														className={
+															classes.select
+														}
 													/>
 												</Tooltip>
-											)}
 
-											<Tooltip title="The key you will be playing in">
-												<KeySelector
-													label={capoKeyDescr}
-													onSelect={
-														this
-															.handleSelectDisplayKey
-													}
-													songKey={
-														displayKey || setKey
-													}
-													className={classes.select}
-												/>
-											</Tooltip>
-
-											<Tooltip title="Edit song">
-												<IconButton
-													className={classes.button}
-													href={`/songs/${song.id}/edit`}
-												>
-													<PencilIcon />
-												</IconButton>
-											</Tooltip>
-
-											<Tooltip title="Add to set">
-												<IconButton
-													className={classes.button}
-													onClick={
-														this.openSetListDialog
-													}
-												>
-													<PlaylistPlusIcon />
-												</IconButton>
-											</Tooltip>
-											<Tooltip title="Song settings">
-												<IconButton
-													className={classes.button}
-													onClick={
-														this
-															.handleSongKeyDialogOpen
-													}
-												>
-													<SettingsIcon />
-												</IconButton>
-											</Tooltip>
-
-											<Dialog
-												onClose={
-													this.closeSetListDialog
-												}
-												open={Boolean(
-													isSetListDialogVisible
-												)}
-											>
-												<DialogTitle id="add-to-set-title">
-													Add to Set
+												<Tooltip title={'Edit song'}>
 													<IconButton
-														aria-label="Close"
 														className={
-															classes.closeButton
+															classes.button
+														}
+														href={`/songs/${song.id}/edit`}
+													>
+														<PencilIcon />
+													</IconButton>
+												</Tooltip>
+
+												<Tooltip title={'Add to set'}>
+													<IconButton
+														className={
+															classes.button
 														}
 														onClick={
 															this
-																.closeSetListDialog
+																.openSetListDialog
 														}
 													>
-														<CloseIcon />
+														<PlaylistPlusIcon />
 													</IconButton>
-												</DialogTitle>
-												<List component="nav">
-													{setListActive.map(set => (
-														<ListItem
-															button
-															key={set.id}
-															onClick={this.createAddToSetHandler(
-																set
-															)}
-															value={set.id}
+												</Tooltip>
+												<Tooltip
+													title={'Song settings'}
+												>
+													<IconButton
+														className={
+															classes.button
+														}
+														onClick={
+															this
+																.handleSongKeyDialogOpen
+														}
+													>
+														<SettingsIcon />
+													</IconButton>
+												</Tooltip>
+
+												<Dialog
+													onClose={
+														this.closeSetListDialog
+													}
+													open={Boolean(
+														isSetListDialogVisible
+													)}
+												>
+													<DialogTitle
+														id={'add-to-set-title'}
+													>
+														Add to Set
+														<IconButton
+															aria-label={'Close'}
+															className={
+																classes.closeButton
+															}
+															onClick={
+																this
+																	.closeSetListDialog
+															}
 														>
-															<Avatar>
-																<ImageIcon />
-															</Avatar>
+															<CloseIcon />
+														</IconButton>
+													</DialogTitle>
+													<List component={'nav'}>
+														{setListActive.map(
+															set => (
+																<ListItem
+																	button
+																	key={set.id}
+																	onClick={this.createAddToSetHandler(
+																		set
+																	)}
+																	value={
+																		set.id
+																	}
+																>
+																	<Avatar>
+																		<ImageIcon />
+																	</Avatar>
 
-															<ListItemText
-																primary={
-																	set.author +
-																	' • ' +
-																	set.title
-																}
-																secondary={
-																	set.setDate
-																}
-															/>
-														</ListItem>
-													))}
-												</List>
-											</Dialog>
-										</form>
-									</Grid>
-								)}
-							</Grid>
-						</ContentLimiter>
+																	<ListItemText
+																		primary={
+																			set.author +
+																			' • ' +
+																			set.title
+																		}
+																		secondary={
+																			set.setDate
+																		}
+																	/>
+																</ListItem>
+															)
+														)}
+													</List>
+												</Dialog>
+											</form>
+										</Grid>
+									)}
+								</Grid>
+							</ContentLimiter>
+						</Container>
 					</Hero>
+					<Container className={'song-viewer'}>
+						<ContentLimiter>
+							<section className={'section'}>
+								<Container maxWidth={'xl'}>
+									<Typography component={'div'}>
+										<Song
+											chordSize={chordSize}
+											lines={lines}
+											wordSize={wordSize}
+										/>
+									</Typography>
+								</Container>
+							</section>
+						</ContentLimiter>
 
-					<ContentLimiter>
-						<section className="section">
-							<Container maxWidth={'xl'}>
-								<Typography component="div">
-									<Song
-										chordSize={chordSize}
-										lines={lines}
-										wordSize={wordSize}
-									/>
-									{/*<div className="song-viewer__song">
-									{parseSong( lines, sections, chordSize )}
-								</div>*/}
-								</Typography>
-							</Container>
-						</section>
-					</ContentLimiter>
+						{!isPreview && (
+							<Dialog
+								aria-labelledby={'songkey-dialog-title'}
+								onClose={this.handleSongKeyDialogClose}
+								open={isSongKeyDialogOpen}
+							>
+								<DialogTitle id={'songkey-dialog-title'}>
+									Song Settings
+								</DialogTitle>
 
-					{!isPreview && (
-						<Dialog
-							aria-labelledby="songkey-dialog-title"
-							onClose={this.handleSongKeyDialogClose}
-							open={isSongKeyDialogOpen}
-						>
-							<DialogTitle id="songkey-dialog-title">
-								Song Settings
-							</DialogTitle>
-
-							<Paper className={classes.control}>
-								<Grid container className={classes.root}>
-									{/* Capo key is already editable via the song header
+								<Paper className={classes.control}>
+									<Grid container className={classes.root}>
+										{/* Capo key is already editable via the song header
 									<Grid item xs={12}>
 										<Grid container spacing={2}>
 											<Grid item xs={6}>
@@ -507,33 +531,41 @@ class SongViewer extends Component {
 										</Grid>
 									</Grid> */}
 
-									<Grid item xs={12}>
-										<Grid container spacing={2}>
-											<Grid item xs={6}>
-												<Typography>
-													Word and Chord Size
-												</Typography>
-											</Grid>
+										<Grid item xs={12}>
+											<Grid container spacing={2}>
+												<Grid item xs={6}>
+													<Typography>
+														Word and Chord Size
+													</Typography>
+												</Grid>
 
-											<Grid item xs={6}>
-												<IconButton
-													aria-label="Word size down"
-													onClick={this.wordSizeDown}
-												>
-													<MinusIcon />
-												</IconButton>
+												<Grid item xs={6}>
+													<IconButton
+														aria-label={
+															'Word size down'
+														}
+														onClick={
+															this.wordSizeDown
+														}
+													>
+														<MinusIcon />
+													</IconButton>
 
-												<IconButton
-													aria-label="Word size up"
-													onClick={this.wordSizeUp}
-												>
-													<PlusIcon />
-												</IconButton>
+													<IconButton
+														aria-label={
+															'Word size up'
+														}
+														onClick={
+															this.wordSizeUp
+														}
+													>
+														<PlusIcon />
+													</IconButton>
+												</Grid>
 											</Grid>
 										</Grid>
-									</Grid>
 
-									{/* JL currently chord size doesn't do anything.
+										{/* JL currently chord size doesn't do anything.
 									<Grid item xs={12}>
 										<Grid container spacing={2}>
 											<Grid item xs={6}>
@@ -560,30 +592,33 @@ class SongViewer extends Component {
 										</Grid>
 									</Grid>
  */}
-									<Grid item xs={12}>
-										<Grid container spacing={2}>
-											<Grid item xs={6}>
-												<Typography>
-													Nashville Numbering
-												</Typography>
-											</Grid>
+										<Grid item xs={12}>
+											<Grid container spacing={2}>
+												<Grid item xs={6}>
+													<Typography>
+														Nashville Numbering
+													</Typography>
+												</Grid>
 
-											<Grid item xs={6}>
-												<Button
-													variant="contained"
-													aria-label="Toggle Nashville Numbering"
-													onClick={this.toggleNashville()}
-												>
-													Toggle
-												</Button>
+												<Grid item xs={6}>
+													<Button
+														variant={'contained'}
+														aria-label={
+															'Toggle Nashville Numbering'
+														}
+														onClick={this.toggleNashville()}
+													>
+														Toggle
+													</Button>
+												</Grid>
 											</Grid>
 										</Grid>
 									</Grid>
-								</Grid>
-							</Paper>
-						</Dialog>
-					)}
-				</Container>
+								</Paper>
+							</Dialog>
+						)}
+					</Container>
+				</div>
 			</Fade>
 		)
 	}
@@ -597,78 +632,3 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, actions)(withStyles(styles)(SongViewer))
-
-export function parseSong(lines, sections, chordSize) {
-	let children = []
-	let result = []
-	let section = ''
-	let sectionIndex = 0
-
-	for (let i = 0; i < lines.length; i++) {
-		let line = lines[i]
-
-		switch (lines[i].type) {
-			case 'chord-line':
-				children.push(<ChordLine key={i} chords={line.chords} />)
-				break
-
-			case 'chord-pair':
-				children.push(
-					<ChordPair key={i} chords={line.chords} text={line.text} />
-				)
-				break
-
-			case 'empty':
-				children.push(<div key={i} className="empty-line" />)
-				break
-
-			case 'line':
-				children.push(<Line key={i} text={line.text} />)
-				break
-
-			case 'section':
-				if (section) {
-					// Finish off last section
-					result.push(
-						<section
-							id={`section-${sectionIndex}`}
-							key={`section-${sectionIndex}`}
-							className="song-viewer__section"
-							data-section={section}
-						>
-							{children}
-						</section>
-					)
-					children = []
-				} else {
-					result = result.concat(children)
-				}
-
-				section = line.text
-				sections.push({ title: line.text, index: sectionIndex })
-
-				sectionIndex++
-
-				break
-		}
-	} //end of loop through lines
-
-	if (section) {
-		result.push(
-			<section
-				id={`section-${sectionIndex}`}
-				key={`section-${sectionIndex}`}
-				className="song-viewer__section"
-				data-section={section}
-			>
-				{children}
-			</section>
-		)
-	}
-
-	if (children.length && !section) {
-		result = result.concat(children)
-	}
-
-	return result
-}

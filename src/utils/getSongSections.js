@@ -1,6 +1,7 @@
 import Parser from '../parsers/song-parser'
 import find from 'lodash/fp/find'
 import forEach from 'lodash/fp/forEach'
+import toLower from 'lodash/toLower'
 
 export const sectionData = [
 	{ abbreviation: 'BR', color: '#03a9f4', title: 'Bridge' },
@@ -41,7 +42,9 @@ export const sectionData = [
 	{ abbreviation: '10', color: '#444', title: 'Verse 11' },
 ]
 
-const getSectionFromTitle = title => find({ title })(sectionData) || {}
+export const getSectionFromTitle = title =>
+	find(section => toLower(section.title) === toLower(title))(sectionData) ||
+	{}
 
 const getSections = lines => {
 	const sections = []
@@ -53,7 +56,7 @@ const getSections = lines => {
 			sections.push({
 				abbreviation: section.abbreviation,
 				color: section.color,
-				title: line.text,
+				title: section.title,
 				index: sectionIndex,
 			})
 			sectionIndex++

@@ -56,7 +56,23 @@
 		"deploy:beta": "npm run build && rsync -azP --delete ./build/ irjweb:/var/www/chordboard-beta"
 	},
 	"eslintConfig": {
-		"extends": "react-app"
+		"extends": [
+			"react-app",
+			"prettier"
+		],
+		"plugins": [
+			"eslint-plugin-react",
+			"prettier"
+		],
+		"rules": {
+			"react/jsx-curly-brace-presence": [
+				"error",
+				{
+					"props": "always",
+					"children": "never"
+				}
+			]
+		}
 	},
 	"browserslist": [
 		">0.2%",

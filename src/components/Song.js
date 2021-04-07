@@ -1,24 +1,24 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { clamp, forEach } from 'lodash'
+import { forEach } from 'lodash'
 
 import { withStyles } from '@material-ui/core/styles'
 
 import * as actions from '../redux/actions'
 import { getFontSize } from '../redux/reducers/user'
-import { sectionData } from '../utils/getSongSections'
+import { getSectionFromTitle, sectionData } from '../utils/getSongSections'
 import ChordLine from './ChordLine'
 import ChordPair from './ChordPair'
 import Line from './Line'
 
 const sectionStyles = {}
-forEach(sectionData, item => {
-	sectionStyles[`&[data-section="${item.title}"]`] = {
-		borderLeft: `4px solid ${item.color}`,
+forEach(sectionData, section => {
+	sectionStyles[`&[data-section="${section.title}"]`] = {
+		borderLeft: `4px solid ${section.color}`,
 		'&:before': {
-			content: `"${item.abbreviation}"`,
-			backgroundColor: item.color,
+			content: `"${section.abbreviation}"`,
+			backgroundColor: section.color,
 		},
 	}
 })
@@ -104,7 +104,7 @@ class Song extends PureComponent {
 
 		let children = []
 		let result = []
-		let section = ''
+		let sectionTitle = ''
 		let sectionIndex = 0
 
 		forEach(lines, (line, i) => {
@@ -133,7 +133,7 @@ class Song extends PureComponent {
 					break
 
 				case 'empty':
-					children.push(<div key={i} className="empty-line" />)
+					children.push(<div key={i} className={'empty-line'} />)
 					break
 
 				case 'line':
@@ -143,14 +143,14 @@ class Song extends PureComponent {
 					break
 
 				case 'section':
-					if (section) {
+					if (sectionTitle) {
 						// Finish off last section
 						result.push(
 							<section
 								id={`section-${sectionIndex}`}
 								key={`section-${sectionIndex}`}
 								className={classes.section}
-								data-section={section}
+								data-section={sectionTitle}
 							>
 								{children}
 							</section>
@@ -160,29 +160,33 @@ class Song extends PureComponent {
 						result = result.concat(children)
 					}
 
-					section = line.text
+					const section = getSectionFromTitle(line.text)
+					sectionTitle = section.title
 					//sections.push( { title: line.text, index: sectionIndex } );
 
 					sectionIndex++
 
 					break
+
+				default:
+					break
 			}
 		})
 
-		if (section) {
+		if (sectionTitle) {
 			result.push(
 				<section
 					id={`section-${sectionIndex}`}
 					key={`section-${sectionIndex}`}
 					className={classes.section}
-					data-section={section}
+					data-section={sectionTitle}
 				>
 					{children}
 				</section>
 			)
 		}
 
-		if (children.length && !section) {
+		if (children.length && !sectionTitle) {
 			result = result.concat(children)
 		}
 
@@ -194,7 +198,4 @@ const mapStateToProps = state => ({
 	fontSize: getFontSize(state),
 })
 
-export default connect(
-	mapStateToProps,
-	actions
-)(withStyles(styles)(Song))
+export default connect(mapStateToProps, actions)(withStyles(styles)(Song))

@@ -6,9 +6,8 @@ import map from 'lodash/fp/map'
 import cx from 'classnames'
 
 import { withStyles } from '@material-ui/core/styles'
-import AppBar from '@material-ui/core/AppBar';
+import AppBar from '@material-ui/core/AppBar'
 import ButtonBase from '@material-ui/core/ButtonBase'
-import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -39,7 +38,7 @@ const styles = theme => ({
 		'@media print': {
 			display: 'none !important',
 		},
-		justifyContent: 'space-between'
+		justifyContent: 'space-between',
 	},
 	appBar: {
 		top: 'auto',
@@ -47,7 +46,6 @@ const styles = theme => ({
 	},
 	toolbar: {
 		flexWrap: 'nowrap',
-
 	},
 	form: theme.mixins.gutters({
 		paddingBottom: theme.spacing(2),
@@ -207,7 +205,7 @@ class LiveBar extends Component {
 		]
 
 		const sections = getSongSections(currentSong)
-		let sectionIndex = 0
+		console.log(sections)
 
 		// if (currentSong && currentSong.lines) {
 		// 	currentSong.lines.forEach(line => {
@@ -230,6 +228,8 @@ class LiveBar extends Component {
 		routes.forEach(path => {
 			const match = matchPath(location.pathname, { path })
 
+			console.log({ path })
+
 			if (match) {
 				show = true
 			}
@@ -240,11 +240,14 @@ class LiveBar extends Component {
 		})*/
 
 		return show ? (
-			<AppBar position="fixed" color="primary" className={cx(classes.appBar, classes.root)}>
-				<Toolbar variant="dense" className={classes.toolbar}>
-
+			<AppBar
+				position={'fixed'}
+				color={'primary'}
+				className={cx(classes.appBar, classes.root)}
+			>
+				<Toolbar variant={'dense'} className={classes.toolbar}>
 					<div className={classes.toolbarSections}>
-						<Tooltip title="Back to setlist">
+						<Tooltip title={'Back to setlist'}>
 							<IconButton
 								className={classes.button}
 								component={Link}
@@ -256,7 +259,7 @@ class LiveBar extends Component {
 
 						{map(section => (
 							<ButtonBase
-								component="a"
+								component={'a'}
 								key={`section-${section.index}`}
 								href={`#section-${section.index}`}
 								className={classes.section}
@@ -265,7 +268,7 @@ class LiveBar extends Component {
 							>
 								<Typography
 									className={classes.sectionText}
-									color="inherit"
+									color={'inherit'}
 								>
 									{section.abbreviation}
 								</Typography>
@@ -274,18 +277,16 @@ class LiveBar extends Component {
 					</div>
 
 					<div className={classes.toolbarActions}>
-						{/* 							
-							<Tooltip title="Set font size">
-								<IconButton
-									className={classes.button}
-									onClick={this.handleFontSizeChange}
-								>
-									<ArrowUpDownIcon />
-								</IconButton>
-							</Tooltip>
- */}
+						<Tooltip title={'Set font size'}>
+							<IconButton
+								className={classes.button}
+								onClick={this.handleFontSizeChange}
+							>
+								<ArrowUpDownIcon />
+							</IconButton>
+						</Tooltip>
 
-						<Tooltip title="Jump to previous song">
+						<Tooltip title={'Jump to previous song'}>
 							<IconButton
 								className={classes.button}
 								onClick={this.handleGoToPreviousSong}
@@ -294,7 +295,7 @@ class LiveBar extends Component {
 							</IconButton>
 						</Tooltip>
 
-						<Tooltip title="Jump to next song">
+						<Tooltip title={'Jump to next song'}>
 							<IconButton
 								className={classes.button}
 								onClick={this.handleGoToNextSong}
@@ -312,7 +313,9 @@ class LiveBar extends Component {
 						{map(fontSize => (
 							<MenuItem
 								key={fontSize.size}
-								onClick={this.handleFontSizeClick(fontSize.size)}
+								onClick={this.handleFontSizeClick(
+									fontSize.size
+								)}
 							>
 								{fontSize.label}
 							</MenuItem>
@@ -330,8 +333,5 @@ const mapStateToProps = state => ({
 })
 
 export default withRouter(
-	connect(
-		mapStateToProps,
-		actions
-	)(withStyles(styles)(LiveBar))
+	connect(mapStateToProps, actions)(withStyles(styles)(LiveBar))
 )
