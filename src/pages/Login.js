@@ -10,7 +10,6 @@ import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
 import { Google as GoogleIcon, Facebook as FacebookIcon } from 'mdi-material-ui'
 
 import { setCurrentUser } from '../redux/actions'

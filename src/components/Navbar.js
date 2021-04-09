@@ -76,6 +76,7 @@ class Navbar extends React.Component {
 	}
 
 	handleBackButton = () => {
+		this.props.setCurrentSetId(null)
 		this.props.history.push('/sets')
 	}
 
@@ -134,7 +135,54 @@ class Navbar extends React.Component {
 				color={'secondary'}
 				position={'sticky'}
 			>
-				{!currentSet && (
+				{currentSet ? (
+					<Toolbar className={classes.noPrint} variant={'dense'}>
+						<IconButton
+							color={'inherit'}
+							onClick={this.handleBackButton}
+							className={classes.miniButton}
+						>
+							<CloseIcon />
+						</IconButton>
+						<Tabs
+							className={classes.tabs}
+							indicatorColor={'primary'}
+							scrollButtons={'auto'}
+							value={songId || 0}
+							variant={'scrollable'}
+						>
+							<Tab
+								key={'tabs-setlist'}
+								component={Link}
+								to={`/sets/${currentSet.id}`}
+								label={
+									<Typography variant={'button'} noWrap>
+										Setlist
+									</Typography>
+								}
+								className={classes.tab}
+								color={'inherit'}
+								value={0}
+							/>
+
+							{map(songs, song => (
+								<Tab
+									key={`tabs-${song.id}`}
+									component={Link}
+									to={`/sets/${currentSet.id}/songs/${song.id}`}
+									label={
+										<Typography variant={'button'} noWrap>
+											{song.title}
+										</Typography>
+									}
+									className={classes.tab}
+									color={'inherit'}
+									value={song.id}
+								/>
+							))}
+						</Tabs>
+					</Toolbar>
+				) : (
 					<Toolbar variant={'dense'}>
 						<Grid container alignItems={'center'}>
 							<Grid item xs>
@@ -183,55 +231,6 @@ class Navbar extends React.Component {
 								</Tooltip>
 							</Grid>
 						</Grid>
-					</Toolbar>
-				)}
-
-				{currentSet && (
-					<Toolbar className={classes.noPrint} variant={'dense'}>
-						<IconButton
-							color={'inherit'}
-							onClick={this.handleBackButton}
-							className={classes.miniButton}
-						>
-							<CloseIcon />
-						</IconButton>
-						<Tabs
-							className={classes.tabs}
-							indicatorColor={'primary'}
-							scrollButtons={'auto'}
-							value={songId || 0}
-							variant={'scrollable'}
-						>
-							<Tab
-								key={'tabs-setlist'}
-								component={Link}
-								to={`/sets/${currentSet.id}`}
-								label={
-									<Typography variant={'button'} noWrap>
-										Setlist
-									</Typography>
-								}
-								className={classes.tab}
-								color={'inherit'}
-								value={0}
-							/>
-
-							{map(songs, song => (
-								<Tab
-									key={`tabs-${song.id}`}
-									component={Link}
-									to={`/sets/${currentSet.id}/songs/${song.id}`}
-									label={
-										<Typography variant={'button'} noWrap>
-											{song.title}
-										</Typography>
-									}
-									className={classes.tab}
-									color={'inherit'}
-									value={song.id}
-								/>
-							))}
-						</Tabs>
 					</Toolbar>
 				)}
 			</AppBar>

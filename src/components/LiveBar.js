@@ -49,6 +49,44 @@ const getSong = (currentSet, currentSong, direction = 'next') => {
 	}
 }
 
+const useLiveBar = () => {
+	const getSet = makeGetSet()
+	const dispatch = useDispatch()
+	const currentSetId = useSelector(state => state.currentSet.id)
+	const currentSong = useSelector(
+		state => state.songs.byId[state.currentSong.id]
+	)
+	const currentSet = useSelector(state =>
+		getSet(state, { setId: currentSetId })
+	)
+	const history = useHistory()
+
+	const handleFontSizeChange = fontSize => dispatch(setFontSize(fontSize))
+
+	const handleGoToNextSong = () => {
+		const nextSong = getSong(currentSet, currentSong, 'next')
+		dispatch(setCurrentSongId(nextSong.id))
+		history.push({
+			pathname: `/sets/${currentSetId}/songs/${nextSong.id}`,
+		})
+	}
+	const handleGoToPreviousSong = () => {
+		const prevSong = getSong(currentSet, currentSong, 'prev')
+		dispatch(setCurrentSongId(prevSong.id))
+		history.push({
+			pathname: `/sets/${currentSetId}/songs/${prevSong.id}`,
+		})
+	}
+
+	return {
+		currentSetId,
+		currentSong,
+		goToNextSong: handleGoToNextSong,
+		goToPrevSong: handleGoToPreviousSong,
+		setFontSize: handleFontSizeChange,
+	}
+}
+
 const useStyles = makeStyles(
 	theme => ({
 		root: {
@@ -108,46 +146,6 @@ const useStyles = makeStyles(
 	{ name: 'LiveBar' }
 )
 
-const useLiveBar = () => {
-	const getSet = makeGetSet()
-	const dispatch = useDispatch()
-	const currentSetId = useSelector(state => state.currentSet.id)
-	const currentSong = useSelector(
-		state => state.songs.byId[state.currentSong.id]
-	)
-	const currentSet = useSelector(state =>
-		getSet(state, { setId: currentSetId })
-	)
-	const history = useHistory()
-
-	const handleFontSizeChange = fontSize => dispatch(setFontSize(fontSize))
-
-	const handleGoToNextSong = () => {
-		const nextSong = getSong(currentSet, currentSong, 'next')
-		dispatch(setCurrentSongId(nextSong.id))
-		history.push({
-			pathname: `/sets/${currentSetId}/songs/${nextSong.id}`,
-		})
-	}
-	const handleGoToPreviousSong = () => {
-		const prevSong = getSong(currentSet, currentSong, 'prev')
-
-		console.log(prevSong, currentSet.songs)
-		dispatch(setCurrentSongId(prevSong.id))
-		history.push({
-			pathname: `/sets/${currentSetId}/songs/${prevSong.id}`,
-		})
-	}
-
-	return {
-		currentSetId,
-		currentSong,
-		goToNextSong: handleGoToNextSong,
-		goToPrevSong: handleGoToPreviousSong,
-		setFontSize: handleFontSizeChange,
-	}
-}
-
 const LiveBar = () => {
 	const {
 		currentSetId,
@@ -176,7 +174,7 @@ const LiveBar = () => {
 		handleMenuClose()
 	}
 
-	const handleMenuClose = () => this.setState({ anchorEl: null })
+	const handleMenuClose = () => setAnchorEl(null)
 
 	const fontSizes = [
 		{ size: 'small', label: 'Small' },

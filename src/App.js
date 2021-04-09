@@ -42,10 +42,6 @@ class App extends Component {
 		this.props.fetchThemeRequest()
 	}
 
-	exitLiveMode = () => {
-		this.props.history.push('/sets')
-	}
-
 	goToSongIndex = index => {
 		this._getSet().then(set => {
 			const len = set.songs.length
@@ -175,7 +171,7 @@ class App extends Component {
 							</Switch>
 						</Grid>
 
-						<LiveBar onExitLiveMode={this.exitLiveMode} />
+						<LiveBar />
 					</Grid>
 				</MuiPickersUtilsProvider>
 			</ThemeProvider>

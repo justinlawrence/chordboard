@@ -31,13 +31,10 @@ import {
 } from 'mdi-material-ui'
 
 import * as actions from '../redux/actions'
-import ChordLine from './ChordLine'
-import ChordPair from './ChordPair'
 import ContentLimiter from './ContentLimiter'
 import getKeyDiff from '../utils/getKeyDiff'
 import Hero from './Hero'
 import KeySelector from './KeySelector'
-import Line from './Line'
 import Parser from '../parsers/song-parser'
 import Song from './Song'
 import transposeChord from '../utils/transpose-chord'
@@ -111,8 +108,6 @@ class SongViewer extends Component {
 	}
 
 	addToSet = set => {
-		const { song } = this.props
-
 		// db.get(set.id)
 		// 	.then(doc => {
 		// 		const data = {

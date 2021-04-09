@@ -37,7 +37,6 @@ import Typography from '@material-ui/core/Typography'
 import {
 	Alphabetical as AlphabeticalIcon,
 	ArrowLeft as BackIcon,
-	Magnify as SearchIcon,
 } from 'mdi-material-ui'
 
 const mapWithKey = map.convert({ cap: false })

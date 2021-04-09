@@ -8,7 +8,6 @@ import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
 import {
-	Calendar as CalendarIcon,
 	ChevronLeft as ChevronLeftIcon,
 	ChevronRight as ChevronRightIcon,
 } from 'mdi-material-ui'
@@ -106,7 +105,7 @@ class SetFormContainer extends Component {
 
 	render() {
 		const { classes } = this.props
-		const { mode, newSet } = this.state
+		const { newSet } = this.state
 		const currentDate = format(new Date(), 'd MMM yyyy')
 
 		return (
