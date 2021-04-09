@@ -15,14 +15,17 @@ if (process.env.NODE_ENV === 'production') {
 	window.Sentry = Sentry
 	const state = store.getState()
 	Sentry.init({
-		dsn: 'https://2c14c1a4ae774cdd9c80545e7a34c2e7@sentry.io/1246393',
+		dsn:
+			'https://2c14c1a4ae774cdd9c80545e7a34c2e7@o55905.ingest.sentry.io/1246393',
 	})
+
 	Sentry.configureScope(scope => {
 		scope.setUser({
 			id: state.user.id,
 			username: state.user.name,
 		})
 	})
+
 }
 
 ReactDOM.render(
