@@ -5,12 +5,11 @@ import cx from 'classnames'
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import GoogleLogin from 'react-google-login'
 
-import { withStyles } from '@material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
 import { Google as GoogleIcon, Facebook as FacebookIcon } from 'mdi-material-ui'
 
 import { setCurrentUser } from '../redux/actions'
@@ -23,48 +22,48 @@ const styles = theme => ({
 		display: 'flex',
 		flexGrow: 1,
 		height: '90vh',
-		paddingTop: '5vh'
+		paddingTop: '5vh',
 	},
 	container: {
-		flexGrow: 1
+		flexGrow: 1,
 	},
 	form: theme.mixins.gutters({
 		paddingBottom: theme.spacing(8),
 		paddingTop: theme.spacing(2),
-		width: theme.spacing(40)
+		width: theme.spacing(40),
 	}),
 	formFooter: {
-		marginTop: theme.spacing(2)
+		marginTop: theme.spacing(2),
 	},
 	control: {
-		padding: theme.spacing(2)
+		padding: theme.spacing(2),
 	},
 	leftIcon: {
-		marginRight: theme.spacing()
+		marginRight: theme.spacing(),
 	},
 	rightIcon: {
-		marginLeft: theme.spacing()
+		marginLeft: theme.spacing(),
 	},
 	facebookButton: {
 		backgroundColor: '#4c69ba',
-		margin: theme.spacing()
+		margin: theme.spacing(),
 	},
 	googleButton: {
 		backgroundColor: 'rgb(209, 72, 54)',
-		margin: theme.spacing()
+		margin: theme.spacing(),
 	},
 	addPaddingBottom: {
-		paddingBottom: theme.spacing(4)
+		paddingBottom: theme.spacing(4),
 	},
 	addPaddingTop: {
-		paddingTop: theme.spacing(4)
-	}
+		paddingTop: theme.spacing(4),
+	},
 })
 
 class Login extends Component {
 	state = {
 		email: '',
-		name: ''
+		name: '',
 	}
 
 	handleEmailChange = event => this.setState({ email: event.target.value })
@@ -75,7 +74,7 @@ class Login extends Component {
 
 		const user = {
 			id: this.state.email,
-			name: this.state.name
+			name: this.state.name,
 		}
 
 		localStorage.setItem('user', JSON.stringify(user))
@@ -90,7 +89,7 @@ class Login extends Component {
 		if (response && response.userID) {
 			const user = {
 				id: response.userID,
-				name: response.name
+				name: response.name,
 			}
 
 			this.props.setCurrentUser(user)
@@ -113,7 +112,7 @@ class Login extends Component {
 		if (response && response.userID) {
 			const user = {
 				id: response.userID,
-				name: response.name
+				name: response.name,
 			}
 
 			this.props.setCurrentUser(user)
@@ -138,16 +137,24 @@ class Login extends Component {
 
 		return (
 			<div className={classes.root}>
-				<Grid container className={classes.container} justify="center">
+				<Grid
+					container
+					className={classes.container}
+					justify={'center'}
+				>
 					<form onSubmit={this.handleLogin}>
 						<Paper className={classes.form} elevation={10}>
-							<Grid container alignItems="center" direction="column">
+							<Grid
+								container
+								alignItems={'center'}
+								direction={'column'}
+							>
 								{/* de-styled according to "facebook button without styling" https://www.npmjs.com/package/react-facebook-login */}
 
 								<img
 									src={chordboardLogo}
-									alt="chordboard logo"
-									height="112px"
+									alt={'chordboard logo'}
+									height={'112px'}
 									className={cx(
 										classes.addPaddingTop,
 										classes.addPaddingBottom
@@ -155,29 +162,32 @@ class Login extends Component {
 								/>
 
 								<TextField
-									id="email"
-									label="Your E-mail Address"
+									id={'email'}
+									label={'Your E-mail Address'}
 									className={classes.textField}
 									fullWidth
 									value={email}
 									onChange={this.handleEmailChange}
-									margin="normal"
+									margin={'normal'}
 								/>
 
 								<TextField
-									id="name"
-									label="Your Name"
-									className={cx(classes.textField, classes.addPaddingBottom)}
+									id={'name'}
+									label={'Your Name'}
+									className={cx(
+										classes.textField,
+										classes.addPaddingBottom
+									)}
 									fullWidth
 									value={name}
 									onChange={this.handleNameChange}
-									margin="normal"
+									margin={'normal'}
 								/>
 
 								<Button
-									variant="outlined"
+									variant={'outlined'}
 									className={classes.button}
-									type="submit"
+									type={'submit'}
 									fullWidth
 								>
 									Login
@@ -186,37 +196,43 @@ class Login extends Component {
 								<div className={classes.addPaddingBottom} />
 
 								<FacebookLogin
-									appId="2075514469393369"
+									appId={'2075514469393369'}
 									autoLoad={false}
 									callback={this.responseFacebook}
 									render={renderProps => (
 										<Button
-											variant="contained"
-											color="primary"
+											variant={'contained'}
+											color={'primary'}
 											fullWidth
 											className={classes.facebookButton}
 											onClick={renderProps.onClick}
 										>
-											<FacebookIcon className={classes.leftIcon} />
+											<FacebookIcon
+												className={classes.leftIcon}
+											/>
 											Continue with Facebook
 										</Button>
 									)}
 								/>
 
 								<GoogleLogin
-									clientId="839278764423-adpuvad4c202aqtsmkd39m9prca3vs8t.apps.googleusercontent.com"
-									buttonText="LOGIN WITH GOOGLE"
+									clientId={
+										'839278764423-adpuvad4c202aqtsmkd39m9prca3vs8t.apps.googleusercontent.com'
+									}
+									buttonText={'LOGIN WITH GOOGLE'}
 									onSuccess={this.responseGoogle}
 									onFailure={this.responseGoogle}
 									render={renderProps => (
 										<Button
-											variant="contained"
-											color="primary"
+											variant={'contained'}
+											color={'primary'}
 											fullWidth
 											className={classes.googleButton}
 											onClick={renderProps.onClick}
 										>
-											<GoogleIcon className={classes.leftIcon} />
+											<GoogleIcon
+												className={classes.leftIcon}
+											/>
 											Sign in with Google
 										</Button>
 									)}
@@ -231,13 +247,10 @@ class Login extends Component {
 }
 
 const mapDispatchToProps = {
-	setCurrentUser
+	setCurrentUser,
 }
 //export default withRouter( connect( mapStateToProps, actions )( withStyles( styles )( Navbar ) ) );
 
 export default withRouter(
-	connect(
-		null,
-		mapDispatchToProps
-	)(withStyles(styles)(Login))
+	connect(null, mapDispatchToProps)(withStyles(styles)(Login))
 )

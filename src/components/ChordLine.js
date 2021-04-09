@@ -1,9 +1,9 @@
 import React from 'react';
 import { range } from "lodash";
 
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 
-const styles = theme => ( {
+const styles = theme => ({
 	text: {
 		display: 'inline-block',
 		height: 0,
@@ -25,26 +25,26 @@ const styles = theme => ( {
 			visibility: 'visible'
 		}
 	}
-} );
+});
 
-const ChordLine = ( { chords, chordSize, classes, wordSize } ) => {
+const ChordLine = ({ chords, chordSize, classes, wordSize }) => {
 
 	const children = [];
 
-	chords._sort.forEach( ( index, i ) => {
+	chords._sort.forEach((index, i) => {
 
-		const nextIndex = chords._sort[ i + 1 ] || Infinity;
+		const nextIndex = chords._sort[i + 1] || Infinity;
 		let slice = "";
 
 		// Pad the sliced text with spaces so overhanging chords will be
 		// positioned correctly.
-		if ( slice.length < nextIndex - index && nextIndex - index !== Infinity ) {
+		if (slice.length < nextIndex - index && nextIndex - index !== Infinity) {
 
-			range( ( nextIndex - index ) - slice.length ).forEach( () => {
+			range((nextIndex - index) - slice.length).forEach(() => {
 
 				slice += " ";
 
-			} );
+			});
 
 		}
 
@@ -52,13 +52,13 @@ const ChordLine = ( { chords, chordSize, classes, wordSize } ) => {
 			<span
 				className={classes.text}
 				key={`chord-${i}`}
-				data-content={chords[ index ]}
+				data-content={chords[index]}
 			>
-				{chords[ index ]}
+				{chords[index]}
 			</span>
 		);
 
-	} );
+	});
 
 
 	return (
@@ -69,4 +69,4 @@ const ChordLine = ( { chords, chordSize, classes, wordSize } ) => {
 
 };
 
-export default withStyles( styles )( ChordLine );
+export default withStyles(styles)(ChordLine);

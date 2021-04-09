@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { isNil } from 'lodash'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import Textarea from 'react-textarea-autosize'
 
-import { withStyles } from '@material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Hidden from '@material-ui/core/Hidden'
@@ -71,7 +72,6 @@ class SongEditor extends Component {
 		history: PropTypes.object,
 		// Redux props
 		addSong: PropTypes.func.isRequired,
-		changeRoute: PropTypes.func.isRequired,
 		deleteSong: PropTypes.func.isRequired,
 		song: PropTypes.object,
 		updateSong: PropTypes.func.isRequired,
@@ -121,7 +121,7 @@ class SongEditor extends Component {
 	onDeleteSong = () => {
 		if (window.confirm('Are you very sure you want to delete this song?')) {
 			this.props.deleteSong(this.props.song.id)
-			this.props.changeRoute('/songs')
+			this.props.history.push('/songs')
 		}
 	}
 
@@ -155,9 +155,9 @@ class SongEditor extends Component {
 		}
 
 		if (song && song.id) {
-			this.props.changeRoute(`/songs/${song.id}`)
+			this.props.history.push(`/songs/${song.id}`)
 		} else {
-			this.props.changeRoute('/songs')
+			this.props.history.push('/songs')
 		}
 	}
 
@@ -184,7 +184,6 @@ class SongEditor extends Component {
 			parsedContent = chordproParser(content)
 		}
 		const parser = new Parser()
-		//const previewSong = parseSong(parser.parse(parsedContent), [])
 		const previewSong = {
 			author,
 			content: parsedContent,
@@ -201,45 +200,50 @@ class SongEditor extends Component {
 							<Grid item>
 								<Paper
 									className={classes.form}
-									component="form"
+									component={'form'}
 								>
 									<Grid container spacing={1}>
 										<Grid item xs={12}>
 											<TextField
-												id="title"
-												label="Song title"
+												id={'title'}
+												label={'Song title'}
 												className={classes.textField}
 												fullWidth
 												onChange={this.onTitleInput}
-												margin="normal"
+												margin={'normal'}
 												value={title}
 											/>
 										</Grid>
 										<Grid item xs={12} sm={6}>
 											<TextField
-												id="author"
-												label="Authors (comma separated)"
+												id={'author'}
+												label={
+													'Authors (comma separated)'
+												}
 												className={classes.textField}
 												fullWidth
 												onChange={this.onAuthorInput}
-												margin="normal"
+												margin={'normal'}
 												value={author}
 											/>
 										</Grid>
 										<Grid item xs={12} sm={6}>
 											<TextField
-												id="key"
-												label="Key"
+												id={'key'}
+												label={'Key'}
 												className={classes.textField}
 												fullWidth
 												onChange={this.onKeyInput}
-												margin="normal"
+												margin={'normal'}
 												value={key}
 											/>
 										</Grid>
 
 										<Grid item xs={12}>
-											<Grid container justify="flex-end">
+											<Grid
+												container
+												justify={'flex-end'}
+											>
 												<Grid item>
 													{!isNew && (
 														<Button
@@ -247,7 +251,7 @@ class SongEditor extends Component {
 																this
 																	.onDeleteSong
 															}
-															color="primary"
+															color={'primary'}
 														>
 															Delete
 														</Button>
@@ -265,8 +269,8 @@ class SongEditor extends Component {
 														onClick={
 															this.onSaveSong
 														}
-														color="primary"
-														variant="contained"
+														color={'primary'}
+														variant={'contained'}
 													>
 														Save
 													</Button>
@@ -284,10 +288,12 @@ class SongEditor extends Component {
 											onChange={this.handleParserChange}
 											value={parserType}
 										>
-											<option value="chords-above-words">
+											<option
+												value={'chords-above-words'}
+											>
 												Chords above words
 											</option>
-											<option value="chordpro">
+											<option value={'chordpro'}>
 												Onsong
 											</option>
 										</select>
@@ -298,14 +304,16 @@ class SongEditor extends Component {
 									<Textarea
 										className={classes.textEditor}
 										onChange={this.onContentInput}
-										placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:"
+										placeholder={
+											'Type words and chords here. Add colons after section headings eg. Verse 1:'
+										}
 										value={parsedContent}
 									/>
 								</Paper>
 							</Grid>
 						</Grid>
 						<Hidden smDown>
-							<Grid item>
+							<Grid item xs={12} sm={4}>
 								<Paper className={classes.songPreview}>
 									<Typography
 										className={classes.addPaddingBottom}
@@ -331,4 +339,4 @@ const mapStateToProps = (state, ownProps) => ({
 export default connect(
 	mapStateToProps,
 	actions
-)(withStyles(styles)(SongEditor))
+)(withRouter(withStyles(styles)(SongEditor)))

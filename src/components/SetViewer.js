@@ -6,8 +6,9 @@ import uniqBy from 'lodash/fp/uniqBy'
 
 import { parseISO } from 'date-fns'
 
-import { withStyles } from '@material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
+import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import Grow from '@material-ui/core/Grow'
 import Hidden from '@material-ui/core/Hidden'
@@ -29,10 +30,6 @@ import SongSelectorDialog from '../containers/SongSelectorDialog'
 import { Pencil as PencilIcon } from 'mdi-material-ui'
 
 const styles = theme => ({
-	container: {
-		display: 'flex',
-		flexWrap: 'wrap',
-	},
 	form: theme.mixins.gutters({
 		paddingBottom: theme.spacing(2),
 		paddingTop: theme.spacing(2),
@@ -147,11 +144,11 @@ class SetViewer extends Component {
 						</Draggable>
 					))
 				) : (
-					<TableRow key="id-none">
+					<TableRow key={'id-none'}>
 						<TableCell />
 
 						<TableCell>
-							<Typography variant="h6">
+							<Typography variant={'h6'}>
 								This set has no songs
 							</Typography>
 						</TableCell>
@@ -173,7 +170,7 @@ class SetViewer extends Component {
 		}
 
 		return set ? (
-			<div className="set-viewer">
+			<div className={'set-viewer'}>
 				<Hero>
 					<Grid container spacing={1}>
 						<Grid item xs>
@@ -209,10 +206,10 @@ class SetViewer extends Component {
 										</Grid>
 									</Hidden>
 									<Grid item>
-										<Typography variant="h4">
+										<Typography variant={'h4'}>
 											{set.title}
 										</Typography>
-										<Typography variant="caption">
+										<Typography variant={'caption'}>
 											{set.author}
 											{set.venue ? ' @ ' + set.venue : ''}
 										</Typography>
@@ -225,9 +222,9 @@ class SetViewer extends Component {
 							<Grid item>
 								<Hidden smUp>
 									<IconButton
-										size="small"
-										variant="contained"
-										aria-label="Edit"
+										size={'small'}
+										variant={'contained'}
+										aria-label={'Edit'}
 										onClick={this.toggleEditMode(
 											mode !== 'edit'
 										)}
@@ -235,22 +232,22 @@ class SetViewer extends Component {
 										<PencilIcon />
 									</IconButton>
 								</Hidden>
-								<Hidden only="xs">
+								<Hidden only={'xs'}>
 									<Button
 										onClick={this.toggleEditMode(
 											mode !== 'edit'
 										)}
-										variant="contained"
+										variant={'contained'}
 									>
 										Edit set
 									</Button>
 								</Hidden>
 								<Button
-									color="primary"
+									color={'primary'}
 									onClick={this.handleAddASong}
-									variant="contained"
+									variant={'contained'}
 								>
-									<Hidden only="xs">Add a song</Hidden>
+									<Hidden only={'xs'}>Add a song</Hidden>
 									<Hidden smUp>Add</Hidden>
 								</Button>
 							</Grid>
@@ -265,38 +262,38 @@ class SetViewer extends Component {
 					</Grid>
 				</Hero>
 
-				<section className="section">
-					<div className="container">
+				<section className={'section'}>
+					<Container maxWidth={'xl'}>
 						<Table
 							className={classes.table}
-							aria-labelledby="tableTitle"
+							aria-labelledby={'tableTitle'}
 						>
 							<TableHead>
 								<TableRow>
 									{mode === 'edit' && (
 										<TableCell
-											padding="checkbox"
+											padding={'checkbox'}
 											style={{ width: 0 }}
 										>
 											Move
 										</TableCell>
 									)}
 									<TableCell
-										padding="checkbox"
+										padding={'checkbox'}
 										style={{ width: 0 }}
 									>
 										#
 									</TableCell>
 									<TableCell>Song</TableCell>
 									<TableCell
-										padding="checkbox"
+										padding={'checkbox'}
 										style={{ width: 0 }}
 									>
 										Key
 									</TableCell>
 									{mode === 'edit' && (
 										<TableCell
-											padding="checkbox"
+											padding={'checkbox'}
 											style={{ width: 0 }}
 										>
 											Delete
@@ -306,7 +303,7 @@ class SetViewer extends Component {
 							</TableHead>
 
 							<DragDropContext onDragEnd={this.handleDragEnd}>
-								<Droppable droppableId="droppable">
+								<Droppable droppableId={'droppable'}>
 									{provided => (
 										<RootRef rootRef={provided.innerRef}>
 											{this.renderTableContent(provided)}
@@ -315,7 +312,7 @@ class SetViewer extends Component {
 								</Droppable>
 							</DragDropContext>
 						</Table>
-					</div>
+					</Container>
 				</section>
 			</div>
 		) : null
@@ -326,7 +323,4 @@ const mapStateToProps = (state, ownProps) => ({
 	set: state.sets.byId[ownProps.setId],
 })
 
-export default connect(
-	mapStateToProps,
-	actions
-)(withStyles(styles)(SetViewer))
+export default connect(mapStateToProps, actions)(withStyles(styles)(SetViewer))

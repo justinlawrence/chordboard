@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { format } from 'date-fns'
-import { DatePicker  } from '@material-ui/pickers'
+import { DatePicker } from '@material-ui/pickers'
 
-import { withStyles } from '@material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
 import {
-	Calendar as CalendarIcon,
 	ChevronLeft as ChevronLeftIcon,
 	ChevronRight as ChevronRightIcon,
 } from 'mdi-material-ui'
@@ -106,20 +105,18 @@ class SetFormContainer extends Component {
 
 	render() {
 		const { classes } = this.props
-		const { mode, newSet } = this.state
+		const { newSet } = this.state
 		const currentDate = format(new Date(), 'd MMM yyyy')
-
-		console.log(this.props.initialValues.setDate)
 
 		return (
 			<form onSubmit={this.handleFormSubmit}>
 				<Grid container spacing={1}>
 					<Grid item xs={12} lg={6}>
 						<TextField
-							name="title"
-							label="Set title"
+							name={'title'}
+							label={'Set title'}
 							fullWidth
-							margin="normal"
+							margin={'normal'}
 							onChange={this.handleChange}
 							value={newSet.title}
 						/>
@@ -127,24 +124,24 @@ class SetFormContainer extends Component {
 
 					<Grid item xs={12} lg={6}>
 						<DatePicker
-							label="Set date"
-							format="d MMM yyyy"
+							label={'Set date'}
+							format={'d MMM yyyy'}
 							fullWidth
 							invalidDateMessage={`Invalid Date Format (eg. ${currentDate})`}
-							margin="normal"
+							margin={'normal'}
 							value={newSet.setDate}
 							onChange={this.handleDateChange}
-							variant="inline"
+							variant={'inline'}
 							{...datePickerIcons}
 						/>
 					</Grid>
 
 					<Grid item xs={12} lg={6}>
 						<TextField
-							name="author"
-							label="Set author"
+							name={'author'}
+							label={'Set author'}
 							fullWidth
-							margin="normal"
+							margin={'normal'}
 							onChange={this.handleChange}
 							value={newSet.author}
 						/>
@@ -152,10 +149,10 @@ class SetFormContainer extends Component {
 
 					<Grid item xs={12} lg={6}>
 						<TextField
-							name="venue"
-							label="Venue"
+							name={'venue'}
+							label={'Venue'}
 							fullWidth
-							margin="normal"
+							margin={'normal'}
 							onChange={this.handleChange}
 							value={newSet.venue}
 						/>
@@ -175,9 +172,9 @@ class SetFormContainer extends Component {
 						<Button onClick={this.handleFormCancel}>Cancel</Button>
 
 						<Button
-							color="primary"
-							type="submit"
-							variant="contained"
+							color={'primary'}
+							type={'submit'}
+							variant={'contained'}
 						>
 							Save
 						</Button>

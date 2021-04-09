@@ -23,9 +23,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { format } from 'date-fns'
 
-import { withStyles } from '@material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 
 import * as actions from '../redux/actions'
@@ -79,7 +78,7 @@ class SetEditor extends Component {
 		const { classes } = this.props
 
 		return (
-			<div className="set-editor">
+			<div className={'set-editor'}>
 				<Hero>
 					<ContentLimiter>
 						<Paper className={classes.form}>
@@ -99,7 +98,4 @@ const mapStateToProps = state => ({
 	user: state.user,
 })
 
-export default connect(
-	mapStateToProps,
-	actions
-)(withStyles(styles)(SetEditor))
+export default connect(mapStateToProps, actions)(withStyles(styles)(SetEditor))

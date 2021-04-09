@@ -2,9 +2,9 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { lowerCase, reverse, sortBy } from 'lodash'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
-import { withStyles } from '@material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import InputAdornment from '@material-ui/core/InputAdornment'
@@ -35,8 +35,7 @@ const styles = theme => ({
 class Sets extends PureComponent {
 	static propTypes = {
 		classes: PropTypes.object,
-		// Redux props
-		changeRoute: PropTypes.func.isRequired,
+		history: PropTypes.object,
 	}
 
 	state = {
@@ -63,10 +62,10 @@ class Sets extends PureComponent {
 	}
 
 	handleTableRowClick = setId => () =>
-		this.props.changeRoute(`/sets/${setId}`)
+		this.props.history.push(`/sets/${setId}`)
 
 	render() {
-		const { classes, setCurrentSetId, sets = [] } = this.props
+		const { classes, sets = [] } = this.props
 		const { searchText } = this.state
 
 		return (
@@ -75,22 +74,30 @@ class Sets extends PureComponent {
 					<ContentLimiter>
 						<Grid
 							container
-							alignItems="center"
-							justify="space-between"
+							alignItems={'center'}
+							justify={'space-between'}
 						>
 							<Grid item>
-								<Typography variant="h4">Sets</Typography>
+								<Typography variant={'h4'}>Sets</Typography>
 							</Grid>
 							<Grid item>
-								<Grid container alignItems="center" spacing={2}>
+								<Grid
+									container
+									alignItems={'center'}
+									spacing={2}
+								>
 									<Grid item>
 										<TextField
 											onChange={this.handleSearchChange}
-											placeholder="Titles, authors, venues"
+											placeholder={
+												'Titles, authors, venues'
+											}
 											value={searchText}
 											InputProps={{
 												endAdornment: (
-													<InputAdornment position="end">
+													<InputAdornment
+														position={'end'}
+													>
 														<MagnifyIcon />
 													</InputAdornment>
 												),
@@ -99,10 +106,10 @@ class Sets extends PureComponent {
 									</Grid>
 									<Grid item>
 										<Button
-											to="/sets/new"
+											to={'/sets/new'}
 											component={Link}
-											color="primary"
-											variant="contained"
+											color={'primary'}
+											variant={'contained'}
 										>
 											New set
 										</Button>
@@ -138,7 +145,7 @@ class Sets extends PureComponent {
 									</TableCell>
 
 									<TableCell>
-										<Typography variant="h6">
+										<Typography variant={'h6'}>
 											{set.title}
 										</Typography>
 										<Typography>
@@ -156,7 +163,4 @@ class Sets extends PureComponent {
 	}
 }
 
-export default connect(
-	null,
-	actions
-)(withStyles(styles)(Sets))
+export default connect(null, actions)(withRouter(withStyles(styles)(Sets)))
