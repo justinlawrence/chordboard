@@ -26,6 +26,8 @@ import {
 	Close as CloseIcon,
 } from 'mdi-material-ui'
 
+const version = require('../../package.json').version
+
 const styles = theme => ({
 	root: {
 		'@media print': {
@@ -214,6 +216,9 @@ class Navbar extends React.Component {
 							</Grid>
 
 							<Grid item>
+								<Typography variant={'caption'}>
+									v{version}
+								</Typography>
 								<Tooltip
 									title={
 										themeId === 'dark'
