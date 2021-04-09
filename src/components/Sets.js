@@ -75,22 +75,30 @@ class Sets extends PureComponent {
 					<ContentLimiter>
 						<Grid
 							container
-							alignItems="center"
-							justify="space-between"
+							alignItems={'center'}
+							justify={'space-between'}
 						>
 							<Grid item>
-								<Typography variant="h4">Sets</Typography>
+								<Typography variant={'h4'}>Sets</Typography>
 							</Grid>
 							<Grid item>
-								<Grid container alignItems="center" spacing={2}>
+								<Grid
+									container
+									alignItems={'center'}
+									spacing={2}
+								>
 									<Grid item>
 										<TextField
 											onChange={this.handleSearchChange}
-											placeholder="Titles, authors, venues"
+											placeholder={
+												'Titles, authors, venues'
+											}
 											value={searchText}
 											InputProps={{
 												endAdornment: (
-													<InputAdornment position="end">
+													<InputAdornment
+														position={'end'}
+													>
 														<MagnifyIcon />
 													</InputAdornment>
 												),
@@ -99,10 +107,10 @@ class Sets extends PureComponent {
 									</Grid>
 									<Grid item>
 										<Button
-											to="/sets/new"
+											to={'/sets/new'}
 											component={Link}
-											color="primary"
-											variant="contained"
+											color={'primary'}
+											variant={'contained'}
 										>
 											New set
 										</Button>
@@ -138,7 +146,7 @@ class Sets extends PureComponent {
 									</TableCell>
 
 									<TableCell>
-										<Typography variant="h6">
+										<Typography variant={'h6'}>
 											{set.title}
 										</Typography>
 										<Typography>
@@ -156,7 +164,4 @@ class Sets extends PureComponent {
 	}
 }
 
-export default connect(
-	null,
-	actions
-)(withStyles(styles)(Sets))
+export default connect(null, actions)(withStyles(styles)(Sets))

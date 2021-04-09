@@ -114,10 +114,10 @@ class SetFormContainer extends Component {
 				<Grid container spacing={1}>
 					<Grid item xs={12} lg={6}>
 						<TextField
-							name="title"
-							label="Set title"
+							name={'title'}
+							label={'Set title'}
 							fullWidth
-							margin="normal"
+							margin={'normal'}
 							onChange={this.handleChange}
 							value={newSet.title}
 						/>
@@ -125,24 +125,24 @@ class SetFormContainer extends Component {
 
 					<Grid item xs={12} lg={6}>
 						<DatePicker
-							label="Set date"
-							format="d MMM yyyy"
+							label={'Set date'}
+							format={'d MMM yyyy'}
 							fullWidth
 							invalidDateMessage={`Invalid Date Format (eg. ${currentDate})`}
-							margin="normal"
+							margin={'normal'}
 							value={newSet.setDate}
 							onChange={this.handleDateChange}
-							variant="inline"
+							variant={'inline'}
 							{...datePickerIcons}
 						/>
 					</Grid>
 
 					<Grid item xs={12} lg={6}>
 						<TextField
-							name="author"
-							label="Set author"
+							name={'author'}
+							label={'Set author'}
 							fullWidth
-							margin="normal"
+							margin={'normal'}
 							onChange={this.handleChange}
 							value={newSet.author}
 						/>
@@ -150,10 +150,10 @@ class SetFormContainer extends Component {
 
 					<Grid item xs={12} lg={6}>
 						<TextField
-							name="venue"
-							label="Venue"
+							name={'venue'}
+							label={'Venue'}
 							fullWidth
-							margin="normal"
+							margin={'normal'}
 							onChange={this.handleChange}
 							value={newSet.venue}
 						/>
@@ -173,9 +173,9 @@ class SetFormContainer extends Component {
 						<Button onClick={this.handleFormCancel}>Cancel</Button>
 
 						<Button
-							color="primary"
-							type="submit"
-							variant="contained"
+							color={'primary'}
+							type={'submit'}
+							variant={'contained'}
 						>
 							Save
 						</Button>

@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/browser'
+import * as Sentry from '@sentry/react'
 import { put, takeLatest } from 'redux-saga/effects'
 
 import {

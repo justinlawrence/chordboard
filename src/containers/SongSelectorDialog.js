@@ -117,18 +117,18 @@ class SongSelectorDialog extends PureComponent {
 		const searchFilter = filter(song =>
 			includes(toLower(this.state.searchValue))(
 				toLower(song.title) +
-				' ' +
-				toLower(song.author) +
-				' ' +
-				toLower(song.content)
+					' ' +
+					toLower(song.author) +
+					' ' +
+					toLower(song.content)
 			)
 		)
 
 		const sectionFilter = filter(song =>
 			this.state.sectionFilter
 				? startsWith(toLower(this.state.sectionFilter))(
-					toLower(song.title)
-				)
+						toLower(song.title)
+				  )
 				: true
 		)
 
@@ -186,7 +186,7 @@ class SongSelectorDialog extends PureComponent {
 				key={song.id}
 				style={style}
 			>
-				<Grid container spacing={1} wrap="nowrap">
+				<Grid container spacing={1} wrap={'nowrap'}>
 					<Grid item>
 						<Checkbox
 							className={classes.checkbox}
@@ -195,9 +195,12 @@ class SongSelectorDialog extends PureComponent {
 						/>
 					</Grid>
 					<Grid item xs>
-						<Grid container direction="column">
+						<Grid container direction={'column'}>
 							<Typography>{song.title}</Typography>
-							<Typography color="textSecondary" variant="caption">
+							<Typography
+								color={'textSecondary'}
+								variant={'caption'}
+							>
 								{song.author}
 							</Typography>
 						</Grid>
@@ -223,7 +226,7 @@ class SongSelectorDialog extends PureComponent {
 
 		return (
 			<Dialog
-				aria-labelledby="song-selector-dialog"
+				aria-labelledby={'song-selector-dialog'}
 				classes={{
 					scrollPaper: classes.scrollPaper,
 				}}
@@ -232,18 +235,18 @@ class SongSelectorDialog extends PureComponent {
 				fullWidth
 				open={open}
 			>
-				<DialogTitle id="song-selector-dialog">
+				<DialogTitle id={'song-selector-dialog'}>
 					<Paper className={classes.searchBar} elevation={1}>
 						<IconButton
 							className={classes.iconButton}
-							aria-label="Back"
+							aria-label={'Back'}
 						>
 							<BackIcon />
 						</IconButton>
 						<InputBase
 							className={classes.input}
 							onChange={this.handleSearchChange}
-							placeholder="Search titles, authors & words"
+							placeholder={'Search titles, authors & words'}
 							value={searchValue}
 						/>
 						{/*<IconButton
@@ -277,7 +280,7 @@ class SongSelectorDialog extends PureComponent {
 												section.key
 											)}
 										>
-											<Typography variant="subtitle1">
+											<Typography variant={'subtitle1'}>
 												{section.key}
 											</Typography>
 										</ButtonBase>
@@ -304,7 +307,7 @@ class SongSelectorDialog extends PureComponent {
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={this.handleClose}>Close</Button>
-					<Button onClick={this.handleSave} color="primary">
+					<Button onClick={this.handleSave} color={'primary'}>
 						Save
 					</Button>
 				</DialogActions>

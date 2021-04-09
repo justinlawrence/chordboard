@@ -114,8 +114,8 @@ class App extends Component {
 					<Grid
 						container
 						className={classes.root}
-						direction="column"
-						wrap="nowrap"
+						direction={'column'}
+						wrap={'nowrap'}
 					>
 						<CssBaseline />
 						<SetCurrentSong />
@@ -123,21 +123,32 @@ class App extends Component {
 
 						<Grid className={classes.content} item xs>
 							<Switch>
-								<Route exact path="/privacy" component={Privacy} />
-								<Route exact path="/login" component={Login} />
-								<Route path="/sets" component={SetListContainer} />
+								<Route
+									exact
+									path={'/privacy'}
+									component={Privacy}
+								/>
+								<Route
+									exact
+									path={'/login'}
+									component={Login}
+								/>
+								<Route
+									path={'/sets'}
+									component={SetListContainer}
+								/>
 
-								{!user.name && <Redirect to="/login" />}
+								{!user.name && <Redirect to={'/login'} />}
 
 								<Route
 									exact
-									path="/songs"
+									path={'/songs'}
 									component={SongListContainer}
 								/>
 
 								<Route
 									exact
-									path="/songs/add-to-set/:setId"
+									path={'/songs/add-to-set/:setId'}
 									render={props => (
 										<SongListContainer
 											setId={props.match.params.setId}
@@ -146,11 +157,15 @@ class App extends Component {
 									)}
 								/>
 
-								<Route exact path="/songs/new" component={SongEditor} />
+								<Route
+									exact
+									path={'/songs/new'}
+									component={SongEditor}
+								/>
 
 								<Route
 									exact
-									path="/songs/:id/edit"
+									path={'/songs/:id/edit'}
 									render={props => (
 										<SongEditor
 											id={props.match.params.id}
@@ -161,13 +176,13 @@ class App extends Component {
 
 								<Route
 									exact
-									path="/songs/:id"
+									path={'/songs/:id'}
 									render={({ match }) => (
 										<SongContainer id={match.params.id} />
 									)}
 								/>
 
-								<Redirect to="/sets" />
+								<Redirect to={'/sets'} />
 							</Switch>
 						</Grid>
 
@@ -189,8 +204,5 @@ const mapStateToProps = state => ({
 })
 
 export default withRouter(
-	connect(
-		mapStateToProps,
-		actions,
-	)(withStyles(styles)(App)),
+	connect(mapStateToProps, actions)(withStyles(styles)(App))
 )

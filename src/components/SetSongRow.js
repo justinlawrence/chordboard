@@ -23,8 +23,8 @@ class SetSong extends PureComponent {
 	static defaultProps = {
 		song: {
 			needsFetching: true,
-			title: 'Loading...'
-		}
+			title: 'Loading...',
+		},
 	}
 
 	static propTypes = {
@@ -39,7 +39,6 @@ class SetSong extends PureComponent {
 		// Redux props
 		fetchSong: PropTypes.func.isRequired,
 	}
-
 
 	componentDidMount() {
 		if (this.props.song.needsFetching) {
@@ -78,18 +77,18 @@ class SetSong extends PureComponent {
 				>
 					{mode === 'edit' && (
 						<TableCell style={{ width: 0 }}>
-							<Tooltip title="Drag to reorder song">
+							<Tooltip title={'Drag to reorder song'}>
 								<DragIcon />
 							</Tooltip>
 						</TableCell>
 					)}
 
 					<TableCell padding={'checkbox'} style={{ width: 0 }}>
-						<Typography variant="h6">{songIndex + 1}</Typography>
+						<Typography variant={'h6'}>{songIndex + 1}</Typography>
 					</TableCell>
 
 					<TableCell>
-						<Typography variant="h6">{song.title}</Typography>
+						<Typography variant={'h6'}>{song.title}</Typography>
 					</TableCell>
 
 					<TableCell padding={'none'}>
@@ -123,9 +122,9 @@ class SetSong extends PureComponent {
 
 					{mode === 'edit' && (
 						<TableCell style={{ width: 0 }}>
-							<Tooltip title="Remove song from set">
+							<Tooltip title={'Remove song from set'}>
 								<IconButton
-									aria-label="Remove song"
+									aria-label={'Remove song'}
 									onClick={this.removeSong}
 								>
 									<DeleteIcon />
@@ -143,7 +142,4 @@ const mapStateToProps = (state, ownProps) => ({
 	song: state.songs.byId[ownProps.songId],
 })
 
-export default connect(
-	mapStateToProps,
-	actions
-)(SetSong)
+export default connect(mapStateToProps, actions)(SetSong)

@@ -39,15 +39,15 @@ const styles = theme => ({
 const DateSignifier = ({ classes, date }) =>
 	isValid(date) ? (
 		<Paper className={classes.root}>
-			<Grid container direction="column">
+			<Grid container direction={'column'}>
 				<Grid item>
 					<Typography
 						className={cx(classes.month, {
 							[classes.monthPast]: isBefore(date, new Date()),
 						})}
-						align="center"
-						display="block"
-						variant="caption"
+						align={'center'}
+						display={'block'}
+						variant={'caption'}
 					>
 						{format(date, 'MMM')}
 					</Typography>
@@ -55,9 +55,9 @@ const DateSignifier = ({ classes, date }) =>
 				<Grid item>
 					<Typography
 						className={classes.date}
-						align="center"
-						display="block"
-						variant="h5"
+						align={'center'}
+						display={'block'}
+						variant={'h5'}
 					>
 						{format(date, 'd')}
 					</Typography>
@@ -66,9 +66,9 @@ const DateSignifier = ({ classes, date }) =>
 				<Grid item>
 					<Typography
 						className={classes.day}
-						align="center"
-						display="block"
-						variant="caption"
+						align={'center'}
+						display={'block'}
+						variant={'caption'}
 					>
 						{format(date, 'EEE')}
 					</Typography>

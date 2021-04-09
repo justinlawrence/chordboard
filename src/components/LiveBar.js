@@ -182,21 +182,9 @@ class LiveBar extends Component {
 	}
 
 	render() {
-		const {
-			currentSetId,
-			currentSong,
-			onGoToNextSong,
-			onGoToPreviousSong,
-			classes,
-		} = this.props
+		const { currentSetId, currentSong, classes } = this.props
 
-		const {
-			anchorEl,
-			nextSongKey,
-			nextSongTitle,
-			previousSongKey,
-			previousSongTitle,
-		} = this.state
+		const { anchorEl } = this.state
 
 		const fontSizes = [
 			{ size: 'small', label: 'Small' },
@@ -205,7 +193,6 @@ class LiveBar extends Component {
 		]
 
 		const sections = getSongSections(currentSong)
-		console.log(sections)
 
 		// if (currentSong && currentSong.lines) {
 		// 	currentSong.lines.forEach(line => {
@@ -227,8 +214,6 @@ class LiveBar extends Component {
 
 		routes.forEach(path => {
 			const match = matchPath(location.pathname, { path })
-
-			console.log({ path })
 
 			if (match) {
 				show = true

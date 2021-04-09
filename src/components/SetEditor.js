@@ -79,7 +79,7 @@ class SetEditor extends Component {
 		const { classes } = this.props
 
 		return (
-			<div className="set-editor">
+			<div className={'set-editor'}>
 				<Hero>
 					<ContentLimiter>
 						<Paper className={classes.form}>
@@ -99,7 +99,4 @@ const mapStateToProps = state => ({
 	user: state.user,
 })
 
-export default connect(
-	mapStateToProps,
-	actions
-)(withStyles(styles)(SetEditor))
+export default connect(mapStateToProps, actions)(withStyles(styles)(SetEditor))
