@@ -2,7 +2,7 @@ const SentryCli = require('@sentry/cli')
 const simpleGit = require('simple-git')
 const { exec } = require('child_process')
 
-require('dotenv').config()
+require('dotenv-flow').config()
 
 if (!process.env.SENTRY_AUTH_TOKEN) {
 	console.log(
