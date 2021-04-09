@@ -23,7 +23,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { format } from 'date-fns'
 
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
@@ -38,14 +37,14 @@ const styles = theme => ({
 		flexGrow: 1,
 	},
 	form: theme.mixins.gutters({
-		paddingBottom: theme.spacing.unit * 2,
-		paddingTop: theme.spacing.unit * 2,
+		paddingBottom: theme.spacing(2),
+		paddingTop: theme.spacing(2),
 	}),
 	formFooter: {
-		marginTop: theme.spacing.unit * 2,
+		marginTop: theme.spacing(2),
 	},
 	control: {
-		padding: theme.spacing.unit * 2,
+		padding: theme.spacing(2),
 	},
 })
 
@@ -64,12 +63,7 @@ class SetEditor extends Component {
 	}
 
 	handleFormSubmit = setData => {
-		this.props.addSet({
-			title: setData.title,
-			setDate: format(setData.date, 'yyyy-MM-dd'),
-		})
-
-		console.log('here we go')
+		this.props.addSet(setData)
 		this.props.history.goBack()
 
 		/*
@@ -84,7 +78,7 @@ class SetEditor extends Component {
 		const { classes } = this.props
 
 		return (
-			<div className="set-editor">
+			<div className={'set-editor'}>
 				<Hero>
 					<ContentLimiter>
 						<Paper className={classes.form}>
@@ -104,7 +98,4 @@ const mapStateToProps = state => ({
 	user: state.user,
 })
 
-export default connect(
-	mapStateToProps,
-	actions
-)(withStyles(styles)(SetEditor))
+export default connect(mapStateToProps, actions)(withStyles(styles)(SetEditor))

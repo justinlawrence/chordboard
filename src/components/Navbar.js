@@ -17,6 +17,7 @@ import Typography from '@material-ui/core/Typography'
 
 import * as actions from '../redux/actions'
 import { getThemeId } from '../redux/reducers/theme'
+import { getSongsForCurrentSet } from '../redux/reducers/current-set'
 import chordboardLogoDark from '../chordboard-logo-light.png'
 import chordboardLogoLight from '../chordboard-logo-dark.png'
 import {
@@ -24,6 +25,8 @@ import {
 	Brightness5 as DarkModeIcon,
 	Close as CloseIcon,
 } from 'mdi-material-ui'
+
+const version = require('../../package.json').version
 
 const styles = theme => ({
 	root: {
@@ -39,12 +42,12 @@ const styles = theme => ({
 		marginRight: 20,
 	},
 	logoBig: {
-		height: theme.spacing.unit * 2,
+		height: theme.spacing(2),
 		verticalAlign: 'middle',
 	},
 	logoWrapper: {
-		paddingRight: theme.spacing.unit,
-		paddingTop: theme.spacing.unit,
+		paddingRight: theme.spacing(),
+		paddingTop: theme.spacing(),
 	},
 	tabs: {
 		flexGrow: 1,
@@ -76,6 +79,7 @@ class Navbar extends React.Component {
 
 	handleBackButton = () => {
 		this.props.setCurrentSetId(null)
+		this.props.history.push('/sets')
 	}
 
 	logout = () => {
@@ -130,14 +134,61 @@ class Navbar extends React.Component {
 		return (
 			<AppBar
 				className={classes.root}
-				color="secondary"
-				position="sticky"
+				color={'secondary'}
+				position={'sticky'}
 			>
-				{!currentSet && (
-					<Toolbar variant="dense">
-						<Grid container alignItems="center">
+				{currentSet ? (
+					<Toolbar className={classes.noPrint} variant={'dense'}>
+						<IconButton
+							color={'inherit'}
+							onClick={this.handleBackButton}
+							className={classes.miniButton}
+						>
+							<CloseIcon />
+						</IconButton>
+						<Tabs
+							className={classes.tabs}
+							indicatorColor={'primary'}
+							scrollButtons={'auto'}
+							value={songId || 0}
+							variant={'scrollable'}
+						>
+							<Tab
+								key={'tabs-setlist'}
+								component={Link}
+								to={`/sets/${currentSet.id}`}
+								label={
+									<Typography variant={'button'} noWrap>
+										Setlist
+									</Typography>
+								}
+								className={classes.tab}
+								color={'inherit'}
+								value={0}
+							/>
+
+							{map(songs, song => (
+								<Tab
+									key={`tabs-${song.id}`}
+									component={Link}
+									to={`/sets/${currentSet.id}/songs/${song.id}`}
+									label={
+										<Typography variant={'button'} noWrap>
+											{song.title}
+										</Typography>
+									}
+									className={classes.tab}
+									color={'inherit'}
+									value={song.id}
+								/>
+							))}
+						</Tabs>
+					</Toolbar>
+				) : (
+					<Toolbar variant={'dense'}>
+						<Grid container alignItems={'center'}>
 							<Grid item xs>
-								<Link to="/" className={classes.logoWrapper}>
+								<Link to={'/'} className={classes.logoWrapper}>
 									<img
 										src={
 											themeId === 'dark'
@@ -145,26 +196,29 @@ class Navbar extends React.Component {
 												: chordboardLogoLight
 										}
 										className={classes.logoBig}
-										alt="chordboard logo"
+										alt={'chordboard logo'}
 									/>
 								</Link>
 								<Button
 									component={Link}
-									color="inherit"
-									to="/sets"
+									color={'inherit'}
+									to={'/sets'}
 								>
 									Sets
 								</Button>
 								<Button
 									component={Link}
-									color="inherit"
-									to="/songs"
+									color={'inherit'}
+									to={'/songs'}
 								>
 									Songs
 								</Button>
 							</Grid>
 
 							<Grid item>
+								<Typography variant={'caption'}>
+									v{version}
+								</Typography>
 								<Tooltip
 									title={
 										themeId === 'dark'
@@ -184,53 +238,6 @@ class Navbar extends React.Component {
 						</Grid>
 					</Toolbar>
 				)}
-
-				{currentSet && (
-					<Toolbar className={classes.noPrint} variant="dense">
-						<IconButton
-							color="inherit"
-							onClick={this.handleBackButton}
-							className={classes.miniButton}
-						>
-							<CloseIcon />
-						</IconButton>
-						<Tabs
-							indicatorColor="primary"
-							value={songId || false}
-							className={classes.tabs}
-							variant="scrollable"
-							scrollButtons="auto"
-						>
-							<Tab
-								key={'tabs-setlist'}
-								component={Link}
-								to={`/sets/${currentSet.id}`}
-								label={'Setlist'}
-								className={classes.tab}
-								color="inherit"
-								value={0}
-							/>
-
-							{map(songs, song => (
-								<Tab
-									key={`tabs-${song.id}`}
-									component={Link}
-									to={`/sets/${currentSet.id}/songs/${
-										song.id
-									}`}
-									label={
-										<Typography noWrap>
-											{song.title}
-										</Typography>
-									}
-									classes={{ root: classes.tab }}
-									color="inherit"
-									value={song.id}
-								/>
-							))}
-						</Tabs>
-					</Toolbar>
-				)}
 			</AppBar>
 		)
 	}
@@ -242,17 +249,9 @@ const mapStateToProps = state => ({
 		: null,
 	currentSong: state.songs.byId[state.currentSong.id],
 	themeId: getThemeId(state),
-	songs: state.currentSet.id
-		? map(
-			state.sets.byId[state.currentSet.id].songs,
-			song => state.songs.byId[song.id]
-		  )
-		: null,
+	songs: getSongsForCurrentSet(state),
 })
 
 export default withRouter(
-	connect(
-		mapStateToProps,
-		actions
-	)(withStyles(styles)(Navbar))
+	connect(mapStateToProps, actions)(withStyles(styles)(Navbar))
 )

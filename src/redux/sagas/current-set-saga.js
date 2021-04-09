@@ -1,20 +1,18 @@
+import { parseISO } from 'date-fns'
 import { put, select, takeLatest } from 'redux-saga/effects'
 
 import { db } from '../../firebase'
 import {
 	FETCH_CURRENT_SET,
-	SET_CURRENT_SET_ID,
 	SET_CURRENT_SET_SONG_KEY,
-	changeRoute,
 	setCurrentSetId,
-	updateSet
+	mergeSets,
 } from '../actions'
 
 const setsCollection = db.collection('sets')
 
 export function* currentSetSaga() {
 	yield takeLatest(FETCH_CURRENT_SET, handleFetchSet)
-	yield takeLatest(SET_CURRENT_SET_ID, updateCurrentSetId)
 	yield takeLatest(SET_CURRENT_SET_SONG_KEY, updateCurrentSetKey)
 }
 
@@ -23,7 +21,13 @@ function* handleFetchSet({ setId }) {
 		const setQuery = yield setsCollection.doc(setId).get()
 		const set = {
 			id: setQuery.id,
-			...setQuery.data()
+			...setQuery.data(),
+		}
+
+		if (typeof set.setDate === 'object' && set.setDate !== null) {
+			set.setDate = new Date(set.setDate.seconds * 1000)
+		} else {
+			set.setDate = parseISO(set.setDate)
 		}
 
 		for (let i = 0; i < set.songs.length; i++) {
@@ -34,23 +38,17 @@ function* handleFetchSet({ setId }) {
 					id: songQuery.id,
 					...songQuery.data(),
 					// Override song keys with values from the set.
-					key: set.songs[i].key
+					key: set.songs[i].key,
 				}
 			} catch (err) {
-				console.warn('Song doesn\'t have a ref', set.songs[i])
+				console.warn("Song doesn't have a ref", set.songs[i])
 			}
 		}
 
 		yield put(setCurrentSetId(set.id))
-		yield put(updateSet(set))
+		yield put(mergeSets([set]))
 	} catch (e) {
 		console.error('currentSetSaga', e)
-	}
-}
-
-function* updateCurrentSetId({ payload }) {
-	if (payload === null) {
-		yield put(changeRoute('/sets'))
 	}
 }
 
@@ -65,9 +63,9 @@ function* updateCurrentSetKey({ payload }) {
 
 	songs.splice(songs.indexOf(setSong), 1, {
 		...setSong,
-		key
+		key,
 	})
 
 	yield put(setCurrentSetId(currentSet.id))
-	yield put(updateSet({ ...currentSet, songs }))
+	yield put(mergeSets([{ ...currentSet, songs }]))
 }

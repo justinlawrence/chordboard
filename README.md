@@ -1,49 +1,60 @@
+# Chordboard
+
 [![song-viewer.png](https://i.postimg.cc/2SB25dnB/www-chordboard-co-songs-ae-E5-Wl4-Ehx-A8j-LC0c-GOj-1.png)](https://postimg.cc/LJ2zC1CH)
 
-### Installation
+Chordboard is a web app that allows musicians to share setlists and chords.
 
-=======
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Built using React, Firebase, Material-UI and friends.
 
-## Available Scripts
+## How it works
 
-In the project directory, you can run:
+Create setlists, add songs, transpose songs in real-time, for your band, school, 
 
-### `npm start`
+## Setting it up for yourself
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+This project is built using create-react-app and firebase. To get it running properly, you'll need to create your own firebase application and export your firebase configuration in a file at src/firebase-config.ts. The config should look something like this:
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+```js
+// src/firebase-config.ts
+const config = {
+  apiKey: "myapikey",
+  authDomain: "my-auth-domain.firebaseapp.com",
+  databaseURL: "my-db-url.com",
+  projectId: "my-pid",
+  storageBucket: "my-storage-bucket",
+  messagingSenderId: "my-sender-id",  
+};
 
-### `npm test`
+export default config;
+```
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+You'll also need to install the local dependencies using Yarn or NPM.
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+npm i
+```
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+You'll need to either deploy the code to a hosted server, or emulate them locally. Finally, you can run it:
 
-### `npm run eject`
+```
+npm start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Deploying
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Use firebase-cli to initalize a project in the root directory. Then build your project and deploy.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```
+npm run build
+firebase deploy
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## About
 
-## Learn More
+This project is maintained by [Justin Lawrence](https://github.com/justinlawrence) and [Brett Henderson](https://github.com/brettsvoid])
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## License
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+License: [CC-BY](https://creativecommons.org/licenses/by/3.0/)

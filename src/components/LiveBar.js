@@ -1,288 +1,272 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { Link, matchPath, withRouter } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useHistory, useRouteMatch } from 'react-router-dom'
+import clamp from 'lodash/clamp'
+import findIndex from 'lodash/findIndex'
+import first from 'lodash/first'
+import map from 'lodash/fp/map'
+import size from 'lodash/size'
+import cx from 'classnames'
 
-import { withStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
+import AppBar from '@material-ui/core/AppBar'
 import ButtonBase from '@material-ui/core/ButtonBase'
-import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
-import Hidden from '@material-ui/core/Hidden'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
 import Tooltip from '@material-ui/core/Tooltip'
+import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import {
+	ArrowUpDown as ArrowUpDownIcon,
 	ChevronLeft as ChevronLeftIcon,
 	ChevronRight as ChevronRightIcon,
 	FormatListBulleted as SetListIcon,
 } from 'mdi-material-ui'
 
-import * as actions from '../redux/actions'
+import { setCurrentSongId, setFontSize } from '../redux/actions'
 import getSongSections from '../utils/getSongSections'
+import { makeGetSet } from '../redux/reducers/sets-reducer'
 
-const styles = theme => ({
-	root: {
-		alignItems: 'stretch',
-		backgroundColor: theme.palette.background.hero,
-		borderTopColor: 'rgb(206, 206, 206)',
-		borderTopWidth: '1px',
-		display: 'flex',
+const getSong = (currentSet, currentSong, direction = 'next') => {
+	const currentSongId = currentSong
+		? currentSong.id
+		: first(currentSet.songs).id
 
-		// Live bar has a fixed position so that the scroll can be natural
-		// and not break the print view.
-		bottom: 0,
-		left: 0,
-		position: 'fixed',
-		right: 0,
-		zIndex: 1,
-
-		'@media print': {
-			display: 'none !important',
-		},
-	},
-	container: {
-		display: 'flex',
-		flexWrap: 'wrap',
-	},
-	form: theme.mixins.gutters({
-		paddingBottom: theme.spacing.unit * 2,
-		paddingTop: theme.spacing.unit * 2,
-		width: 500,
-	}),
-	formFooter: {
-		marginTop: theme.spacing.unit * 2,
-	},
-	deleteButton: {
-		color: theme.palette.error.main,
-	},
-	sections: {
-		alignItems: 'center',
-		display: 'flex',
-		flex: '1 1 0',
-		height: '100%',
-		overflowX: 'auto',
-	},
-	section: {
-		backgroundColor: '#eee',
-		border: 2,
-		color: theme.palette.common.white,
-		height: '100%',
-		minWidth: theme.spacing.unit * 3,
-		paddingLeft: theme.spacing.unit * 2,
-		paddingRight: theme.spacing.unit * 2,
-		position: 'relative',
-	},
-})
-
-class LiveBar extends Component {
-	static propTypes = {
-		classes: PropTypes.object,
-		location: PropTypes.object,
-		// Redux props
-		goToNextSong: PropTypes.func,
-		goToPreviousSong: PropTypes.func,
-	}
-
-	state = {
-		nextSongKey: '',
-		nextSongTitle: '',
-		previousSongKey: '',
-		previousSongTitle: '',
-	}
-
-	componentDidMount() {
-		this.handleProps(this.props)
-	}
-
-	componentWillReceiveProps(nextProps) {
-		this.handleProps(nextProps)
-	}
-
-	handleGoToNextSong = () => this.props.goToNextSong()
-	handleGoToPreviousSong = () => this.props.goToPreviousSong()
-
-	handleProps = props => {
-		const { location } = props
-
-		//see if we're currently on a song and therefore need to show the livebar
-
-		const match = matchPath(location.pathname, {
-			path: '/sets/:setId/songs/:songId',
-		})
-
-		if (match) {
-			// db.get(match.params.setId).then(set => {
-			// 	const setSongs = set.songs
-			// 	const index = findIndex(set.songs, { _id: match.params.songId })
-			// 	const keys = [null, null, null]
-			//
-			// 	const nextSetSong = setSongs && setSongs[index + 1]
-			// 	const prevSetSong = setSongs && setSongs[index - 1]
-			//
-			// 	if (match && match.params.songId) {
-			// 		keys[1] = match.params.songId
-			// 	}
-			//
-			// 	if (index > -1) {
-			// 		if (prevSetSong) {
-			// 			keys[0] = prevSetSong._id
-			// 		}
-			// 		if (nextSetSong) {
-			// 			keys[2] = nextSetSong._id
-			// 		}
-			// 	}
-			//
-			// 	db.allDocs({
-			// 		include_docs: true,
-			// 		keys: keys.filter(k => k)
-			// 	}).then(result => {
-			// 		const songs = result.rows.map(r => r.doc).filter(r => !!r)
-			//
-			// 		const currentSong = find(songs, { _id: keys[1] })
-			// 		const nextSong = find(songs, { _id: keys[2] })
-			// 		const previousSong = find(songs, { _id: keys[0] })
-			//
-			// 		if (nextSong && nextSetSong) {
-			// 			nextSong.key = nextSetSong.key
-			// 		}
-			// 		if (previousSong && prevSetSong) {
-			// 			previousSong.key = prevSetSong.key
-			// 		}
-			//
-			// 		this.setState({
-			// 			currentSong: currentSong ? new Song(currentSong) : null,
-			// 			nextSongKey: nextSong ? nextSong.key : '-',
-			// 			nextSongTitle: nextSong ? nextSong.title : '-- END --',
-			// 			previousSongKey: previousSong ? previousSong.key : '-',
-			// 			previousSongTitle: previousSong
-			// 				? previousSong.title
-			// 				: '-- BEGINNING --'
-			// 		})
-			// 	})
-			// })
+	if (currentSet) {
+		const index = findIndex(currentSet.songs, { id: currentSongId })
+		const clampedIndex = clamp(
+			direction === 'next' ? index + 1 : index - 1,
+			0,
+			size(currentSet.songs) - 1
+		)
+		const song = currentSet.songs[clampedIndex]
+		if (song) {
+			return song
+		} else {
+			console.log(`no ${direction} song`)
 		}
-	}
-
-	render() {
-		const {
-			currentSetId,
-			currentSong,
-			onGoToNextSong,
-			onGoToPreviousSong,
-			classes,
-		} = this.props
-
-		const {
-			nextSongKey,
-			nextSongTitle,
-			previousSongKey,
-			previousSongTitle,
-		} = this.state
-
-		const sections = getSongSections(currentSong)
-		let sectionIndex = 0
-
-		// if (currentSong && currentSong.lines) {
-		// 	currentSong.lines.forEach(line => {
-		// 		if (line.type === 'section') {
-		// 			sections.push({
-		// 				index: ++sectionIndex,
-		// 				text: line.text,
-		// 			})
-		// 		}
-		// 	})
-		// }
-
-		const routes = [
-			//'/songs/:id',
-			'/sets/:setId/songs/:songsId',
-		]
-		const { location } = this.props
-		let show = false
-
-		routes.forEach(path => {
-			const match = matchPath(location.pathname, { path })
-
-			if (match) {
-				show = true
-			}
-		})
-
-		/*const match = matchPath(location.pathname, {
-			path: '/sets/:setId/songs/:songsId'
-		})*/
-
-		return show ? (
-			<nav className={classes.root}>
-				<Grid container className={classes.root}>
-					<Grid item xs={9} sm={7}>
-						<div className={classes.sections}>
-							{sections.map(section => (
-								<ButtonBase
-									component="a"
-									key={`section-${section.index}`}
-									href={`#section-${section.index}`}
-									className={classes.section}
-									title={`Jump to ${section.title}`}
-									style={{ backgroundColor: section.color }}
-								>
-									<Typography
-										className={classes.sectionText}
-										color="inherit"
-									>
-										{section.abbreviation}
-									</Typography>
-								</ButtonBase>
-							))}
-						</div>
-					</Grid>
-
-					<Grid item xs={3} sm={5}>
-						<div className="live-bar__navigation-actions">
-							<Hidden xsDown>
-								<Tooltip title="Back to setlist">
-									<IconButton
-										className={classes.button}
-										component={Link}
-										to={`/sets/${currentSetId}`}
-									>
-										<SetListIcon />
-									</IconButton>
-								</Tooltip>
-							</Hidden>
-
-							<Tooltip title="Jump to previous song">
-								<IconButton
-									className={classes.button}
-									onClick={this.handleGoToPreviousSong}
-								>
-									<ChevronLeftIcon />
-								</IconButton>
-							</Tooltip>
-
-							<Tooltip title="Jump to next song">
-								<IconButton
-									className={classes.button}
-									onClick={this.handleGoToNextSong}
-								>
-									<ChevronRightIcon />
-								</IconButton>
-							</Tooltip>
-						</div>
-					</Grid>
-				</Grid>
-			</nav>
-		) : null
 	}
 }
 
-const mapStateToProps = state => ({
-	currentSetId: state.currentSet.id,
-	currentSong: state.songs.byId[state.currentSong.id],
-})
+const useLiveBar = () => {
+	const getSet = makeGetSet()
+	const dispatch = useDispatch()
+	const currentSetId = useSelector(state => state.currentSet.id)
+	const currentSong = useSelector(
+		state => state.songs.byId[state.currentSong.id]
+	)
+	const currentSet = useSelector(state =>
+		getSet(state, { setId: currentSetId })
+	)
+	const history = useHistory()
 
-export default withRouter(
-	connect(
-		mapStateToProps,
-		actions
-	)(withStyles(styles)(LiveBar))
+	const handleFontSizeChange = fontSize => dispatch(setFontSize(fontSize))
+
+	const handleGoToNextSong = () => {
+		const nextSong = getSong(currentSet, currentSong, 'next')
+		dispatch(setCurrentSongId(nextSong.id))
+		history.push({
+			pathname: `/sets/${currentSetId}/songs/${nextSong.id}`,
+		})
+	}
+	const handleGoToPreviousSong = () => {
+		const prevSong = getSong(currentSet, currentSong, 'prev')
+		dispatch(setCurrentSongId(prevSong.id))
+		history.push({
+			pathname: `/sets/${currentSetId}/songs/${prevSong.id}`,
+		})
+	}
+
+	return {
+		currentSetId,
+		currentSong,
+		goToNextSong: handleGoToNextSong,
+		goToPrevSong: handleGoToPreviousSong,
+		setFontSize: handleFontSizeChange,
+	}
+}
+
+const useStyles = makeStyles(
+	theme => ({
+		root: {
+			backgroundColor: theme.palette.background.hero,
+
+			// Live bar has a fixed position so that the scroll can be natural
+			// and not break the print view.
+			left: 0,
+			position: 'fixed',
+			right: 0,
+			zIndex: 1,
+
+			'@media print': {
+				display: 'none !important',
+			},
+			justifyContent: 'space-between',
+		},
+		appBar: {
+			top: 'auto',
+			bottom: 0,
+		},
+		toolbar: {
+			flexWrap: 'nowrap',
+		},
+		form: theme.mixins.gutters({
+			paddingBottom: theme.spacing(2),
+			paddingTop: theme.spacing(2),
+			width: 500,
+		}),
+		formFooter: {
+			marginTop: theme.spacing(2),
+		},
+		deleteButton: {
+			color: theme.palette.error.main,
+		},
+		toolbarActions: {
+			display: 'flex',
+			flexWrap: 'nowrap',
+		},
+		toolbarSections: {
+			// alignItems: 'center',
+			display: 'flex',
+			flexGrow: 1,
+			minWidth: 0,
+			overflow: 'hidden',
+		},
+		section: {
+			backgroundColor: '#eee',
+			border: 2,
+			color: theme.palette.common.white,
+			minWidth: theme.spacing(3),
+			paddingLeft: theme.spacing(2),
+			paddingRight: theme.spacing(2),
+			position: 'relative',
+		},
+	}),
+	{ name: 'LiveBar' }
 )
+
+const LiveBar = () => {
+	const {
+		currentSetId,
+		currentSong,
+		goToNextSong,
+		goToPrevSong,
+		setFontSize,
+	} = useLiveBar()
+	const [anchorEl, setAnchorEl] = useState(null)
+	const [isVisible, setIsVisible] = useState(false)
+	const match = useRouteMatch({
+		path: [
+			//'/songs/:id',
+			'/sets/:setId/songs/:songsId',
+		],
+	})
+	const classes = useStyles()
+
+	useEffect(() => {
+		setIsVisible(Boolean(match))
+	}, [match])
+
+	const handleFontSizeChange = event => setAnchorEl(event.currentTarget)
+	const handleFontSizeSelect = fontSize => () => {
+		setFontSize(fontSize)
+		handleMenuClose()
+	}
+
+	const handleMenuClose = () => setAnchorEl(null)
+
+	const fontSizes = [
+		{ size: 'small', label: 'Small' },
+		{ size: 'medium', label: 'Medium' },
+		{ size: 'large', label: 'Large' },
+	]
+
+	const sections = getSongSections(currentSong)
+
+	return isVisible ? (
+		<AppBar
+			position={'fixed'}
+			color={'primary'}
+			className={cx(classes.appBar, classes.root)}
+		>
+			<Toolbar variant={'dense'} className={classes.toolbar}>
+				<div className={classes.toolbarSections}>
+					<Tooltip title={'Back to setlist'}>
+						<IconButton
+							className={classes.button}
+							component={Link}
+							to={`/sets/${currentSetId}`}
+						>
+							<SetListIcon />
+						</IconButton>
+					</Tooltip>
+
+					{map(section => (
+						<ButtonBase
+							component={'a'}
+							key={`section-${section.index}`}
+							href={`#section-${section.index}`}
+							className={classes.section}
+							title={`Jump to ${section.title}`}
+							style={{ backgroundColor: section.color }}
+						>
+							<Typography
+								className={classes.sectionText}
+								color={'inherit'}
+							>
+								{section.abbreviation}
+							</Typography>
+						</ButtonBase>
+					))(sections)}
+				</div>
+
+				<div className={classes.toolbarActions}>
+					<Tooltip title={'Set font size'}>
+						<IconButton
+							className={classes.button}
+							onClick={handleFontSizeChange}
+						>
+							<ArrowUpDownIcon />
+						</IconButton>
+					</Tooltip>
+
+					<Tooltip title={'Jump to previous song'}>
+						<IconButton
+							className={classes.button}
+							onClick={goToPrevSong}
+						>
+							<ChevronLeftIcon />
+						</IconButton>
+					</Tooltip>
+
+					<Tooltip title={'Jump to next song'}>
+						<IconButton
+							className={classes.button}
+							onClick={goToNextSong}
+						>
+							<ChevronRightIcon />
+						</IconButton>
+					</Tooltip>
+				</div>
+
+				<Menu
+					anchorEl={anchorEl}
+					onClose={handleMenuClose}
+					open={Boolean(anchorEl)}
+				>
+					{map(fontSize => (
+						<MenuItem
+							key={fontSize.size}
+							onClick={handleFontSizeSelect(fontSize.size)}
+						>
+							{fontSize.label}
+						</MenuItem>
+					))(fontSizes)}
+				</Menu>
+			</Toolbar>
+		</AppBar>
+	) : null
+}
+
+export default LiveBar

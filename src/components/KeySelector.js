@@ -24,7 +24,7 @@ const options = [
 
 const styles = theme => ({
 	root: {
-		minWidth: theme.spacing.unit * 9,
+		minWidth: theme.spacing(9),
 	},
 })
 
@@ -37,7 +37,7 @@ class KeySelector extends PureComponent {
 		this.handleProps(this.props)
 	}
 
-	componentWillReceiveProps(nextProps) {
+	UNSAFE_componentWillReceiveProps(nextProps) {
 		this.handleProps(nextProps)
 	}
 

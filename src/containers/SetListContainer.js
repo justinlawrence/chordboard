@@ -16,7 +16,7 @@ class SetListContainer extends Component {
 				<Switch>
 					<Route
 						exact
-						path="/sets"
+						path={'/sets'}
 						render={props => (
 							<Sets
 								setCurrentSetId={setCurrentSetId}
@@ -25,9 +25,9 @@ class SetListContainer extends Component {
 							/>
 						)}
 					/>
-					<Route exact path="/sets/new" component={SetEditor} />
+					<Route exact path={'/sets/new'} component={SetEditor} />
 					<Route
-						path="/sets/:setId"
+						path={'/sets/:setId'}
 						render={props => (
 							<SetContainer
 								setId={props.match.params.setId}
@@ -48,7 +48,4 @@ const mapStateToProps = state => ({
 	})([])(state.sets.byId),
 })
 
-export default connect(
-	mapStateToProps,
-	actions
-)(SetListContainer)
+export default connect(mapStateToProps, actions)(SetListContainer)

@@ -8,16 +8,16 @@ import { Magnify as MagnifyIcon } from 'mdi-material-ui'
 
 class SearchBox extends PureComponent {
 	static defaultProps = {
-		placeholder: ''
+		placeholder: '',
 	}
 
 	static propTypes = {
 		onSearch: PropTypes.func.isRequired,
-		placeholder: PropTypes.string
+		placeholder: PropTypes.string,
 	}
 
 	state = {
-		query: ''
+		query: '',
 	}
 
 	handleChange = event => {
@@ -37,10 +37,10 @@ class SearchBox extends PureComponent {
 				value={this.state.query}
 				InputProps={{
 					endAdornment: (
-						<InputAdornment position="end">
+						<InputAdornment position={'end'}>
 							<MagnifyIcon />
 						</InputAdornment>
-					)
+					),
 				}}
 			/>
 		)

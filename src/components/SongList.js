@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import includes from 'lodash/fp/includes'
 import sortBy from 'lodash/fp/sortBy'
 import toLower from 'lodash/fp/toLower'
 
 import { withStyles } from '@material-ui/core/styles'
+import { lighten } from '@material-ui/core/styles/colorManipulator'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Hidden from '@material-ui/core/Hidden'
-import { lighten } from '@material-ui/core/styles/colorManipulator'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -27,15 +27,15 @@ const styles = theme => ({
 	highlight:
 		theme.palette.type === 'light'
 			? {
-				color: theme.palette.secondary.main,
-				backgroundColor: lighten(
-					theme.palette.secondary.light,
-					0.85
-				),
+					color: theme.palette.secondary.main,
+					backgroundColor: lighten(
+						theme.palette.secondary.light,
+						0.85
+					),
 			  }
 			: {
-				color: theme.palette.text.primary,
-				backgroundColor: theme.palette.secondary.dark,
+					color: theme.palette.text.primary,
+					backgroundColor: theme.palette.secondary.dark,
 			  },
 	tableRow: {
 		cursor: 'pointer',
@@ -46,8 +46,6 @@ class SongList extends Component {
 	static propTypes = {
 		classes: PropTypes.object,
 		songs: PropTypes.array,
-		// Redux props
-		changeRoute: PropTypes.func.isRequired,
 	}
 	state = {
 		searchText: '',
@@ -101,7 +99,7 @@ class SongList extends Component {
 	handleSearch = searchText => this.setState({ searchText })
 
 	handleTableRowClick = songId => () =>
-		this.props.changeRoute(`/songs/${songId}`)
+		this.props.history.push(`/songs/${songId}`)
 
 	render() {
 		const { classes, songs } = this.props
@@ -117,32 +115,34 @@ class SongList extends Component {
 					<ContentLimiter>
 						<Grid
 							container
-							alignItems="center"
-							justify="space-between"
+							alignItems={'center'}
+							justify={'space-between'}
 						>
 							<Grid item>
-								<Typography variant="h4">Songs</Typography>
+								<Typography variant={'h4'}>Songs</Typography>
 							</Grid>
 
 							<Grid item>
 								<Grid
 									container
-									alignItems="center"
-									spacing={16}
+									alignItems={'center'}
+									spacing={2}
 								>
 									<Grid item>
 										<SearchBox
 											onSearch={this.handleSearch}
-											placeholder="Titles, words, authors"
+											placeholder={
+												'Titles, words, authors'
+											}
 										/>
 									</Grid>
 
 									<Grid item>
 										<Button
-											to="/songs/new"
+											to={'/songs/new'}
 											component={Link}
-											color="primary"
-											variant="contained"
+											color={'primary'}
+											variant={'contained'}
 										>
 											New song
 										</Button>
@@ -156,7 +156,7 @@ class SongList extends Component {
 					<TableHead>
 						<TableRow>
 							<TableCell>Song</TableCell>
-							<Hidden only="xs">
+							<Hidden only={'xs'}>
 								<TableCell>Author</TableCell>
 							</Hidden>
 							{isAddToSet && <TableCell>Action</TableCell>}
@@ -172,12 +172,12 @@ class SongList extends Component {
 								key={song.id}
 							>
 								<TableCell>
-									<Typography gutterBottom variant="h6">
+									<Typography gutterBottom variant={'h6'}>
 										{song.title}
 									</Typography>
 								</TableCell>
 
-								<Hidden only="xs">
+								<Hidden only={'xs'}>
 									<TableCell>{song.author}</TableCell>
 								</Hidden>
 
@@ -185,7 +185,7 @@ class SongList extends Component {
 									<TableCell>
 										<Button
 											onClick={() => this.addToSet(song)}
-											variant="outlined"
+											variant={'outlined'}
 										>
 											Add
 										</Button>
@@ -200,7 +200,4 @@ class SongList extends Component {
 	}
 }
 
-export default connect(
-	null,
-	actions
-)(withStyles(styles)(SongList))
+export default connect(null, actions)(withRouter(withStyles(styles)(SongList)))

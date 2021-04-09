@@ -34,9 +34,9 @@ export const db = firestore
 
 const unsupportedPersistence =
 	browserName === 'Mobile Safari' &&
-	semver.satisfies(semver.valid(semver.coerce(browserVersion)), '>=9.0.0')
+	semver.satisfies(semver.valid(semver.coerce(browserVersion)), '<=9.0.0')
 if (!unsupportedPersistence) {
-	firestore.enablePersistence().catch(err => {
+	firestore.enablePersistence({ synchronizeTabs: true }).catch(err => {
 		if (err.code === 'failed-precondition') {
 			console.error(
 				'Multiple tabs open, persistence can only be enabled in one tab at a a time.'

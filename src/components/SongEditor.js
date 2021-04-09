@@ -2,11 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { isNil } from 'lodash'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import Textarea from 'react-textarea-autosize'
 
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
+import Hidden from '@material-ui/core/Hidden'
 import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
@@ -24,21 +26,23 @@ const styles = theme => ({
 		flexGrow: 1,
 	},
 	form: theme.mixins.gutters({
-		paddingBottom: theme.spacing.unit * 2,
-		paddingTop: theme.spacing.unit * 2,
+		paddingBottom: theme.spacing(2),
+		paddingTop: theme.spacing(2),
 	}),
 	formFooter: {
-		marginTop: theme.spacing.unit * 2,
+		marginTop: theme.spacing(2),
 	},
 	control: {
-		padding: theme.spacing.unit * 2,
+		padding: theme.spacing(2),
 	},
 	addPaddingBottom: {
-		paddingBottom: theme.spacing.unit,
+		paddingBottom: theme.spacing(),
 	},
 	songPreview: {
 		overflow: 'hidden',
 		width: '100%',
+		padding: theme.spacing(2),
+		paddingRight: theme.spacing(4),
 		zoom: '0.6',
 	},
 	textEditor: {
@@ -49,11 +53,14 @@ const styles = theme => ({
 		padding: '24px',
 		resize: 'none',
 		width: '100%',
+		backgroundColor: theme.palette.backgroundColor, //TODO: JL: not sure why these don't work
+		color: theme.palette.color,
 	},
 	textEditorWrapper: {
 		display: 'flex',
 		overflow: 'hidden',
 		width: '100%',
+		marginBottom: theme.spacing(4),
 	},
 })
 
@@ -65,7 +72,6 @@ class SongEditor extends Component {
 		history: PropTypes.object,
 		// Redux props
 		addSong: PropTypes.func.isRequired,
-		changeRoute: PropTypes.func.isRequired,
 		deleteSong: PropTypes.func.isRequired,
 		song: PropTypes.object,
 		updateSong: PropTypes.func.isRequired,
@@ -115,7 +121,7 @@ class SongEditor extends Component {
 	onDeleteSong = () => {
 		if (window.confirm('Are you very sure you want to delete this song?')) {
 			this.props.deleteSong(this.props.song.id)
-			this.props.changeRoute('/songs')
+			this.props.history.push('/songs')
 		}
 	}
 
@@ -149,9 +155,9 @@ class SongEditor extends Component {
 		}
 
 		if (song && song.id) {
-			this.props.changeRoute(`/songs/${song.id}`)
+			this.props.history.push(`/songs/${song.id}`)
 		} else {
-			this.props.changeRoute('/songs')
+			this.props.history.push('/songs')
 		}
 	}
 
@@ -178,7 +184,6 @@ class SongEditor extends Component {
 			parsedContent = chordproParser(content)
 		}
 		const parser = new Parser()
-		//const previewSong = parseSong(parser.parse(parsedContent), [])
 		const previewSong = {
 			author,
 			content: parsedContent,
@@ -188,134 +193,65 @@ class SongEditor extends Component {
 		}
 
 		return (
-			<div className="song-editor">
-				<Hero>
-					<ContentLimiter>
-						<Grid
-							container
-							className={classes.root}
-							hide="xsDown"
-							spacing={24}
-						>
-							<Grid item xs={12} sm={8}>
-								<Grid container>
-									<Grid item>
-										<Typography
-											variant="caption"
-											className={classes.addPaddingBottom}
-										>
-											Song Editor
-										</Typography>
-									</Grid>
-									<Grid item>
-										<select
-											onChange={this.handleParserChange}
-											value={parserType}
-										>
-											<option value="chords-above-words">
-												Chords above words
-											</option>
-											<option value="chordpro">
-												Onsong
-											</option>
-										</select>
-									</Grid>
-								</Grid>
-
-								<Paper className={classes.textEditorWrapper}>
-									<Textarea
-										className={classes.textEditor}
-										onChange={this.onContentInput}
-										placeholder="Type words and chords here. Add colons after section headings eg. Verse 1:"
-										value={parsedContent}
-									/>
-								</Paper>
-							</Grid>
-
-							<Grid
-								container
-								item
-								direction="column"
-								justify="flex-start"
-								xs={12}
-								sm={4}
-								spacing={24}
-							>
-								<Grid
-									container
-									item
-									className={classes.root}
-									hide="xsDown"
+			<Hero>
+				<ContentLimiter>
+					<Grid container className={classes.root} spacing={3}>
+						<Grid item xs={12} sm={8}>
+							<Grid item>
+								<Paper
+									className={classes.form}
+									component={'form'}
 								>
-									<Typography
-										variant="caption"
-										className={classes.addPaddingBottom}
-									>
-										Song Editor
-									</Typography>
-									<Paper
-										className={classes.form}
-										component="form"
-									>
-										<Grid
-											container
-											className={classes.root}
-											justify="space-between"
-										>
-											<Grid item xs={12}>
-												<TextField
-													id="title"
-													label="Song title"
-													className={
-														classes.textField
-													}
-													fullWidth
-													onChange={this.onTitleInput}
-													margin="normal"
-													value={title}
-												/>
-											</Grid>
-											<Grid item xs={12}>
-												<TextField
-													id="author"
-													label="Authors (comma separated)"
-													className={
-														classes.textField
-													}
-													fullWidth
-													onChange={
-														this.onAuthorInput
-													}
-													margin="normal"
-													value={author}
-												/>
-											</Grid>
-											<Grid item xs={12}>
-												<TextField
-													id="key"
-													label="Key"
-													className={
-														classes.textField
-													}
-													fullWidth
-													onChange={this.onKeyInput}
-													margin="normal"
-													value={key}
-												/>
-											</Grid>
+									<Grid container spacing={1}>
+										<Grid item xs={12}>
+											<TextField
+												id={'title'}
+												label={'Song title'}
+												className={classes.textField}
+												fullWidth
+												onChange={this.onTitleInput}
+												margin={'normal'}
+												value={title}
+											/>
+										</Grid>
+										<Grid item xs={12} sm={6}>
+											<TextField
+												id={'author'}
+												label={
+													'Authors (comma separated)'
+												}
+												className={classes.textField}
+												fullWidth
+												onChange={this.onAuthorInput}
+												margin={'normal'}
+												value={author}
+											/>
+										</Grid>
+										<Grid item xs={12} sm={6}>
+											<TextField
+												id={'key'}
+												label={'Key'}
+												className={classes.textField}
+												fullWidth
+												onChange={this.onKeyInput}
+												margin={'normal'}
+												value={key}
+											/>
+										</Grid>
 
-											<Grid item xs={8}>
-												<Grid
-													container
-													justify="flex-end"
-												>
+										<Grid item xs={12}>
+											<Grid
+												container
+												justify={'flex-end'}
+											>
+												<Grid item>
 													{!isNew && (
 														<Button
 															onClick={
 																this
 																	.onDeleteSong
 															}
-															color="primary"
+															color={'primary'}
 														>
 															Delete
 														</Button>
@@ -333,37 +269,65 @@ class SongEditor extends Component {
 														onClick={
 															this.onSaveSong
 														}
-														color="primary"
-														variant="contained"
+														color={'primary'}
+														variant={'contained'}
 													>
 														Save
 													</Button>
 												</Grid>
 											</Grid>
 										</Grid>
-									</Paper>
+									</Grid>
+								</Paper>
+							</Grid>
+
+							<Grid item sm={12}>
+								<Grid container>
+									<Grid item>
+										<select
+											onChange={this.handleParserChange}
+											value={parserType}
+										>
+											<option
+												value={'chords-above-words'}
+											>
+												Chords above words
+											</option>
+											<option value={'chordpro'}>
+												Onsong
+											</option>
+										</select>
+									</Grid>
 								</Grid>
 
-								<Grid item>
+								<Paper className={classes.textEditorWrapper}>
+									<Textarea
+										className={classes.textEditor}
+										onChange={this.onContentInput}
+										placeholder={
+											'Type words and chords here. Add colons after section headings eg. Verse 1:'
+										}
+										value={parsedContent}
+									/>
+								</Paper>
+							</Grid>
+						</Grid>
+						<Hidden smDown>
+							<Grid item xs={12} sm={4}>
+								<Paper className={classes.songPreview}>
 									<Typography
-										variant="caption"
 										className={classes.addPaddingBottom}
 									>
 										Song Preview
 									</Typography>
 
-									<Paper className={classes.songPreview}>
-										<SongViewer
-											isPreview
-											song={previewSong}
-										/>
-									</Paper>
-								</Grid>
+									<SongViewer isPreview song={previewSong} />
+								</Paper>
 							</Grid>
-						</Grid>
-					</ContentLimiter>
-				</Hero>
-			</div>
+						</Hidden>
+					</Grid>
+				</ContentLimiter>
+			</Hero>
 		)
 	}
 }
@@ -375,4 +339,4 @@ const mapStateToProps = (state, ownProps) => ({
 export default connect(
 	mapStateToProps,
 	actions
-)(withStyles(styles)(SongEditor))
+)(withRouter(withStyles(styles)(SongEditor)))

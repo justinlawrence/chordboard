@@ -9,10 +9,10 @@ const styles = theme => ({
 	}
 });
 
-const ContentLimiter = ( { children, classes } ) => (
+const ContentLimiter = ({ children, classes }) => (
 	<Grid container className={classes.root}>
 		<Grid item xs={12}>{children}</Grid>
 	</Grid>
 );
 
-export default withStyles( styles )( ContentLimiter );
+export default withStyles(styles)(ContentLimiter);

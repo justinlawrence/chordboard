@@ -88,7 +88,7 @@ class SetContainer extends Component {
 			<div>
 				<Route
 					exact
-					path="/sets/:setId"
+					path={"/sets/:setId"}
 					render={props => (
 						<SetViewer
 							onChangeKey={this.handleChangeKey}
@@ -102,7 +102,7 @@ class SetContainer extends Component {
 				/>
 				<Route
 					exact
-					path="/sets/:setId/songs/:songId"
+					path={"/sets/:setId/songs/:songId"}
 					render={({ match }) => {
 						const songId = match.params.songId
 
