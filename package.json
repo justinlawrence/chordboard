@@ -52,8 +52,9 @@
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"deploy": "npm run build && rsync -azP --delete ./build/ irjweb:/var/www/chordboard",
-		"deploy:beta": "npm run build && rsync -azP --delete ./build/ irjweb:/var/www/chordboard-beta"
+		"deploy": "yarn deploy:live",
+		"deploy:live": "yarn build && rsync -azP --delete ./build/ irjweb:/var/www/chordboard",
+		"deploy:beta": "yarn build && rsync -azP --delete ./build/ irjweb:/var/www/chordboard-beta"
 	},
 	"eslintConfig": {
 		"extends": [
