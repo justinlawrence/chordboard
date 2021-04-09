@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { isNil } from 'lodash'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import Textarea from 'react-textarea-autosize'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -71,7 +72,6 @@ class SongEditor extends Component {
 		history: PropTypes.object,
 		// Redux props
 		addSong: PropTypes.func.isRequired,
-		changeRoute: PropTypes.func.isRequired,
 		deleteSong: PropTypes.func.isRequired,
 		song: PropTypes.object,
 		updateSong: PropTypes.func.isRequired,
@@ -121,7 +121,7 @@ class SongEditor extends Component {
 	onDeleteSong = () => {
 		if (window.confirm('Are you very sure you want to delete this song?')) {
 			this.props.deleteSong(this.props.song.id)
-			this.props.changeRoute('/songs')
+			this.props.history.push('/songs')
 		}
 	}
 
@@ -155,9 +155,9 @@ class SongEditor extends Component {
 		}
 
 		if (song && song.id) {
-			this.props.changeRoute(`/songs/${song.id}`)
+			this.props.history.push(`/songs/${song.id}`)
 		} else {
-			this.props.changeRoute('/songs')
+			this.props.history.push('/songs')
 		}
 	}
 
@@ -336,4 +336,7 @@ const mapStateToProps = (state, ownProps) => ({
 	song: state.songs.byId[ownProps.id],
 })
 
-export default connect(mapStateToProps, actions)(withStyles(styles)(SongEditor))
+export default connect(
+	mapStateToProps,
+	actions
+)(withRouter(withStyles(styles)(SongEditor)))

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import includes from 'lodash/fp/includes'
 import sortBy from 'lodash/fp/sortBy'
 import toLower from 'lodash/fp/toLower'
@@ -46,8 +46,6 @@ class SongList extends Component {
 	static propTypes = {
 		classes: PropTypes.object,
 		songs: PropTypes.array,
-		// Redux props
-		changeRoute: PropTypes.func.isRequired,
 	}
 	state = {
 		searchText: '',
@@ -101,7 +99,7 @@ class SongList extends Component {
 	handleSearch = searchText => this.setState({ searchText })
 
 	handleTableRowClick = songId => () =>
-		this.props.changeRoute(`/songs/${songId}`)
+		this.props.history.push(`/songs/${songId}`)
 
 	render() {
 		const { classes, songs } = this.props
@@ -202,4 +200,4 @@ class SongList extends Component {
 	}
 }
 
-export default connect(null, actions)(withStyles(styles)(SongList))
+export default connect(null, actions)(withRouter(withStyles(styles)(SongList)))

@@ -16,10 +16,7 @@ const mapStateToProps = state => ({
 	songs: reduce((acc, song) => {
 		acc.push(song)
 		return acc
-	})([])(state.songs.byId)
+	})([])(state.songs.byId),
 })
 
-export default connect(
-	mapStateToProps,
-	actions
-)(SongListContainer)
+export default connect(mapStateToProps, actions)(SongListContainer)

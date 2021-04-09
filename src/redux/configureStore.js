@@ -1,24 +1,22 @@
+import * as Sentry from '@sentry/react'
 import { applyMiddleware, createStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import createSagaMiddleware from 'redux-saga'
 
 import { initSagas } from './init-sagas'
 import rootReducer from './reducers'
-import history from '../history'
-import { CHANGE_ROUTE } from './actions'
 
 const configureStore = () => {
 	const sagaMiddleware = createSagaMiddleware()
-	const changeRouteMiddleware = () => next => action => {
-		if (action.type === CHANGE_ROUTE) {
-			history.push(action.payload)
-		}
-		return next(action)
-	}
-	const middlewareChain = [sagaMiddleware, changeRouteMiddleware]
+	const sentryReduxEnhancer = Sentry.createReduxEnhancer({})
+
+	const middlewareChain = [sagaMiddleware]
 	const store = createStore(
 		rootReducer,
-		composeWithDevTools(applyMiddleware(...middlewareChain))
+		composeWithDevTools(
+			applyMiddleware(...middlewareChain),
+			sentryReduxEnhancer
+		)
 	)
 	initSagas(sagaMiddleware)
 

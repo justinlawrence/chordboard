@@ -43,19 +43,7 @@ class App extends Component {
 	}
 
 	exitLiveMode = () => {
-		this.props.setCurrentSetId(null)
-	}
-
-	goToNextSong = () => {
-		this._getCurrentSongIndex().then(index => {
-			this.goToSongIndex(index + 1)
-		})
-	}
-
-	goToPreviousSong = () => {
-		this._getCurrentSongIndex().then(index => {
-			this.goToSongIndex(index - 1)
-		})
+		this.props.history.push('/sets')
 	}
 
 	goToSongIndex = index => {
@@ -108,6 +96,7 @@ class App extends Component {
 
 	render() {
 		const { classes, muiTheme, user } = this.props
+
 		return (
 			<ThemeProvider theme={muiTheme}>
 				<MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -186,11 +175,7 @@ class App extends Component {
 							</Switch>
 						</Grid>
 
-						<LiveBar
-							onExitLiveMode={this.exitLiveMode}
-							onGoToNextSong={this.goToNextSong}
-							onGoToPreviousSong={this.goToPreviousSong}
-						/>
+						<LiveBar onExitLiveMode={this.exitLiveMode} />
 					</Grid>
 				</MuiPickersUtilsProvider>
 			</ThemeProvider>

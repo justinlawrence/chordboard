@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { lowerCase, reverse, sortBy } from 'lodash'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -35,8 +35,7 @@ const styles = theme => ({
 class Sets extends PureComponent {
 	static propTypes = {
 		classes: PropTypes.object,
-		// Redux props
-		changeRoute: PropTypes.func.isRequired,
+		history: PropTypes.object,
 	}
 
 	state = {
@@ -63,10 +62,10 @@ class Sets extends PureComponent {
 	}
 
 	handleTableRowClick = setId => () =>
-		this.props.changeRoute(`/sets/${setId}`)
+		this.props.history.push(`/sets/${setId}`)
 
 	render() {
-		const { classes, setCurrentSetId, sets = [] } = this.props
+		const { classes, sets = [] } = this.props
 		const { searchText } = this.state
 
 		return (
@@ -164,4 +163,4 @@ class Sets extends PureComponent {
 	}
 }
 
-export default connect(null, actions)(withStyles(styles)(Sets))
+export default connect(null, actions)(withRouter(withStyles(styles)(Sets)))

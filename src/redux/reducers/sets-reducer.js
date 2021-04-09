@@ -1,42 +1,58 @@
 import { combineReducers } from 'redux'
 import { handleActions } from 'redux-actions'
-import isEqual from 'lodash/fp/isEqual'
-import merge from 'lodash/fp/merge'
-import omit from 'lodash/fp/omit'
-import reduce from 'lodash/fp/reduce'
+import { createSelector } from 'reselect'
+import isEqual from 'lodash/isEqual'
+import map from 'lodash/map'
+import merge from 'lodash/merge'
+import omit from 'lodash/omit'
+import reduce from 'lodash/reduce'
 
 const initialState = {
-	byId: {}
+	byId: {},
 }
 
 const byId = handleActions(
 	{
 		MERGE_SETS: (state, action) =>
-			reduce((acc, set) => {
-				if (acc[set.id]) {
-					if (!isEqual(acc[set.id])(set)) {
-						acc[set.id] = reduce(merge, {}, [acc[set.id], set])
+			reduce(
+				action.payload,
+				(acc, set) => {
+					if (acc[set.id]) {
+						if (!isEqual(set, acc[set.id])) {
+							acc[set.id] = reduce([acc[set.id], set], merge, {})
+						}
+					} else {
+						acc[set.id] = set
 					}
-				} else {
-					acc[set.id] = set
-				}
-				return acc
-			})({ ...state })(action.payload),
-		REMOVE_SET: (state, action) => omit(action.payload)({ ...state }),
+					return acc
+				},
+				{ ...state }
+			),
+		REMOVE_SET: (state, action) => omit({ ...state }, action.payload),
 		SET_SET_SONGS: (state, action) => {
 			const newState = {
 				...state,
 				[action.payload.setId]: {
 					...state[action.payload.setId],
-					songs: action.payload.songs
-				}
+					songs: action.payload.songs,
+				},
 			}
 			return newState
-		}
+		},
 	},
 	initialState.byId
 )
 
 export const sets = combineReducers({
-	byId
+	byId,
 })
+
+const getSetId = (state, props) => props.setId
+const setsById = state => state.sets.byId
+const setSelector = createSelector(
+	[getSetId, setsById],
+	(setId, byId) => byId[setId]
+)
+
+export const getSets = createSelector([setsById], byId => map(byId, set => set))
+export const makeGetSet = () => setSelector

@@ -76,7 +76,7 @@ class Navbar extends React.Component {
 	}
 
 	handleBackButton = () => {
-		this.props.setCurrentSetId(null)
+		this.props.history.push('/sets')
 	}
 
 	logout = () => {

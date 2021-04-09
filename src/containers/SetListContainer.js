@@ -10,6 +10,7 @@ import SetContainer from '../containers/SetContainer'
 
 class SetListContainer extends Component {
 	render() {
+		console.log('render SetListContainer')
 		const { setCurrentSetId, sets } = this.props
 		return (
 			<div>
