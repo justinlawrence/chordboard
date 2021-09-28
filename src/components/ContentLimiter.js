@@ -1,18 +1,29 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
+import { styled } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
+import Grid from '@mui/material/Grid';
 
-const styles = theme => ({
-	root: {
+const PREFIX = 'ContentLimiter';
+
+const classes = {
+    root: `${PREFIX}-root`
+};
+
+const StyledGrid = styled(Grid)((
+    {
+        theme
+    }
+) => ({
+    [`&.${classes.root}`]: {
 		margin: '0 auto',
 		maxWidth: theme.maxPageWidth
 	}
-});
+}));
 
-const ContentLimiter = ({ children, classes }) => (
-	<Grid container className={classes.root}>
+const ContentLimiter = ({ children, }) => (
+	<StyledGrid container className={classes.root}>
 		<Grid item xs={12}>{children}</Grid>
-	</Grid>
+	</StyledGrid>
 );
 
-export default withStyles(styles)(ContentLimiter);
+export default (ContentLimiter);

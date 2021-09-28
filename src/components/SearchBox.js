@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import debounce from 'lodash/fp/debounce'
 
-import InputAdornment from '@material-ui/core/InputAdornment'
-import TextField from '@material-ui/core/TextField'
+import InputAdornment from '@mui/material/InputAdornment'
+import TextField from '@mui/material/TextField'
 import { Magnify as MagnifyIcon } from 'mdi-material-ui'
 
 class SearchBox extends PureComponent {

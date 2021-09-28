@@ -1,20 +1,21 @@
 import React, { PureComponent } from 'react'
+import { styled } from '@material-ui/core/styles';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { lowerCase, reverse, sortBy } from 'lodash'
 import { Link, withRouter } from 'react-router-dom'
 
-import { withStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
+import withStyles from '@mui/styles/withStyles';
+import Button from '@mui/material/Button'
+import Grid from '@mui/material/Grid'
+import InputAdornment from '@mui/material/InputAdornment'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 
 import * as actions from '../redux/actions'
 import ContentLimiter from './ContentLimiter'
@@ -23,14 +24,26 @@ import Hero from './Hero'
 
 import { Magnify as MagnifyIcon } from 'mdi-material-ui'
 
-const styles = theme => ({
-	shrinkCell: {
+const PREFIX = 'Sets';
+
+const classes = {
+    shrinkCell: `${PREFIX}-shrinkCell`,
+    tableRow: `${PREFIX}-tableRow`
+};
+
+const Root = styled('div')((
+    {
+        theme
+    }
+) => ({
+    [`& .${classes.shrinkCell}`]: {
 		maxWidth: 0,
 	},
-	tableRow: {
+
+    [`& .${classes.tableRow}`]: {
 		cursor: 'pointer',
-	},
-})
+	}
+}));
 
 class Sets extends PureComponent {
 	static propTypes = {
@@ -65,17 +78,17 @@ class Sets extends PureComponent {
 		this.props.history.push(`/sets/${setId}`)
 
 	render() {
-		const { classes, sets = [] } = this.props
+		const {  sets = [] } = this.props
 		const { searchText } = this.state
 
 		return (
-			<div>
+            <Root>
 				<Hero>
 					<ContentLimiter>
 						<Grid
 							container
 							alignItems={'center'}
-							justify={'space-between'}
+							justifyContent={'space-between'}
 						>
 							<Grid item>
 								<Typography variant={'h4'}>Sets</Typography>
@@ -158,9 +171,9 @@ class Sets extends PureComponent {
 						</TableBody>
 					</Table>
 				</ContentLimiter>
-			</div>
-		)
+			</Root>
+        );
 	}
 }
 
-export default connect(null, actions)(withRouter(withStyles(styles)(Sets)))
+export default connect(null, actions)(withRouter((Sets)))

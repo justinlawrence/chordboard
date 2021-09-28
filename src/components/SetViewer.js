@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { styled } from '@material-ui/core/styles';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
@@ -6,20 +7,19 @@ import uniqBy from 'lodash/fp/uniqBy'
 
 import { parseISO } from 'date-fns'
 
-import { withStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
-import Container from '@material-ui/core/Container'
-import Grid from '@material-ui/core/Grid'
-import Grow from '@material-ui/core/Grow'
-import Hidden from '@material-ui/core/Hidden'
-import IconButton from '@material-ui/core/IconButton'
-import RootRef from '@material-ui/core/RootRef'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Typography from '@material-ui/core/Typography'
+import withStyles from '@mui/styles/withStyles';
+import Button from '@mui/material/Button'
+import Container from '@mui/material/Container'
+import Grid from '@mui/material/Grid'
+import Grow from '@mui/material/Grow'
+import Hidden from '@mui/material/Hidden'
+import IconButton from '@mui/material/IconButton'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import Typography from '@mui/material/Typography'
 
 import * as actions from '../redux/actions'
 import DateSignifier from './DateSignifier'
@@ -29,19 +29,33 @@ import SetFormContainer from '../containers/SetFormContainer'
 import SongSelectorDialog from '../containers/SongSelectorDialog'
 import { Pencil as PencilIcon } from 'mdi-material-ui'
 
-const styles = theme => ({
-	form: theme.mixins.gutters({
+const PREFIX = 'SetViewer';
+
+const classes = {
+    form: `${PREFIX}-form`,
+    formFooter: `${PREFIX}-formFooter`,
+    deleteButton: `${PREFIX}-deleteButton`
+};
+
+const Root = styled('div')((
+    {
+        theme
+    }
+) => ({
+    [`& .${classes.form}`]: theme.mixins.gutters({
 		paddingBottom: theme.spacing(2),
 		paddingTop: theme.spacing(2),
 		width: 500,
 	}),
-	formFooter: {
+
+    [`& .${classes.formFooter}`]: {
 		marginTop: theme.spacing(2),
 	},
-	deleteButton: {
+
+    [`& .${classes.deleteButton}`]: {
 		color: theme.palette.error.main,
-	},
-})
+	}
+}));
 
 class SetViewer extends Component {
 	static propTypes = {
@@ -160,7 +174,7 @@ class SetViewer extends Component {
 	}
 
 	render() {
-		const { set, classes } = this.props
+		const { set, } = this.props
 		const { mode, isSongSelectorVisible } = this.state
 		if (!(set.setDate instanceof Date) && !isNaN(set.setDate)) {
 			console.log(
@@ -170,7 +184,7 @@ class SetViewer extends Component {
 		}
 
 		return set ? (
-			<div className={'set-viewer'}>
+			<Root className={'set-viewer'}>
 				<Hero>
 					<Grid container spacing={1}>
 						<Grid item xs>
@@ -189,7 +203,7 @@ class SetViewer extends Component {
 								/>
 							) : (
 								<Grid container spacing={3}>
-									<Hidden smDown>
+									<Hidden mdDown>
 										<Grid item>
 											<Grow
 												in={Boolean(set.setDate)}
@@ -305,17 +319,17 @@ class SetViewer extends Component {
 							<DragDropContext onDragEnd={this.handleDragEnd}>
 								<Droppable droppableId={'droppable'}>
 									{provided => (
-										<RootRef rootRef={provided.innerRef}>
+										<>
 											{this.renderTableContent(provided)}
-										</RootRef>
+										</>
 									)}
 								</Droppable>
 							</DragDropContext>
 						</Table>
 					</Container>
 				</section>
-			</div>
-		) : null
+			</Root>
+		) : null;
 	}
 }
 
@@ -323,4 +337,4 @@ const mapStateToProps = (state, ownProps) => ({
 	set: state.sets.byId[ownProps.setId],
 })
 
-export default connect(mapStateToProps, actions)(withStyles(styles)(SetViewer))
+export default connect(mapStateToProps, actions)((SetViewer))

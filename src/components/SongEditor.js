@@ -1,17 +1,18 @@
 import React, { Component } from 'react'
+import { styled } from '@material-ui/core/styles';
 import PropTypes from 'prop-types'
 import { isNil } from 'lodash'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import Textarea from 'react-textarea-autosize'
 
-import { withStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import Hidden from '@material-ui/core/Hidden'
-import Paper from '@material-ui/core/Paper'
-import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
+import withStyles from '@mui/styles/withStyles';
+import Button from '@mui/material/Button'
+import Grid from '@mui/material/Grid'
+import Hidden from '@mui/material/Hidden'
+import Paper from '@mui/material/Paper'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 
 import SongViewer from './SongViewer'
 
@@ -21,31 +22,54 @@ import Hero from './Hero'
 import chordproParser from '../parsers/chordpro-parser'
 import Parser from '../parsers/song-parser'
 
-const styles = theme => ({
-	root: {
+const PREFIX = 'SongEditor';
+
+const classes = {
+    root: `${PREFIX}-root`,
+    form: `${PREFIX}-form`,
+    formFooter: `${PREFIX}-formFooter`,
+    control: `${PREFIX}-control`,
+    addPaddingBottom: `${PREFIX}-addPaddingBottom`,
+    songPreview: `${PREFIX}-songPreview`,
+    textEditor: `${PREFIX}-textEditor`,
+    textEditorWrapper: `${PREFIX}-textEditorWrapper`
+};
+
+const StyledHero = styled(Hero)((
+    {
+        theme
+    }
+) => ({
+    [`& .${classes.root}`]: {
 		flexGrow: 1,
 	},
-	form: theme.mixins.gutters({
+
+    [`& .${classes.form}`]: theme.mixins.gutters({
 		paddingBottom: theme.spacing(2),
 		paddingTop: theme.spacing(2),
 	}),
-	formFooter: {
+
+    [`& .${classes.formFooter}`]: {
 		marginTop: theme.spacing(2),
 	},
-	control: {
+
+    [`& .${classes.control}`]: {
 		padding: theme.spacing(2),
 	},
-	addPaddingBottom: {
+
+    [`& .${classes.addPaddingBottom}`]: {
 		paddingBottom: theme.spacing(),
 	},
-	songPreview: {
+
+    [`& .${classes.songPreview}`]: {
 		overflow: 'hidden',
 		width: '100%',
 		padding: theme.spacing(2),
 		paddingRight: theme.spacing(4),
 		zoom: '0.6',
 	},
-	textEditor: {
+
+    [`& .${classes.textEditor}`]: {
 		border: 'none',
 		fontFamily: 'monospace',
 		fontSize: theme.typography.h6.fontSize,
@@ -56,13 +80,14 @@ const styles = theme => ({
 		backgroundColor: theme.palette.backgroundColor, //TODO: JL: not sure why these don't work
 		color: theme.palette.color,
 	},
-	textEditorWrapper: {
+
+    [`& .${classes.textEditorWrapper}`]: {
 		display: 'flex',
 		overflow: 'hidden',
 		width: '100%',
 		marginBottom: theme.spacing(4),
-	},
-})
+	}
+}));
 
 class SongEditor extends Component {
 	static propTypes = {
@@ -174,7 +199,7 @@ class SongEditor extends Component {
 	}
 
 	render() {
-		const { classes, match } = this.props
+		const {  match } = this.props
 		const { author, content, key, title, parserType } = this.state
 
 		const isNew = match.path === '/songs/new'
@@ -193,7 +218,7 @@ class SongEditor extends Component {
 		}
 
 		return (
-			<Hero>
+            <StyledHero>
 				<ContentLimiter>
 					<Grid container className={classes.root} spacing={3}>
 						<Grid item xs={12} sm={8}>
@@ -242,7 +267,7 @@ class SongEditor extends Component {
 										<Grid item xs={12}>
 											<Grid
 												container
-												justify={'flex-end'}
+												justifyContent={'flex-end'}
 											>
 												<Grid item>
 													{!isNew && (
@@ -312,7 +337,7 @@ class SongEditor extends Component {
 								</Paper>
 							</Grid>
 						</Grid>
-						<Hidden smDown>
+						<Hidden mdDown>
 							<Grid item xs={12} sm={4}>
 								<Paper className={classes.songPreview}>
 									<Typography
@@ -327,8 +352,8 @@ class SongEditor extends Component {
 						</Hidden>
 					</Grid>
 				</ContentLimiter>
-			</Hero>
-		)
+			</StyledHero>
+        );
 	}
 }
 
@@ -339,4 +364,4 @@ const mapStateToProps = (state, ownProps) => ({
 export default connect(
 	mapStateToProps,
 	actions
-)(withRouter(withStyles(styles)(SongEditor)))
+)(withRouter((SongEditor)))

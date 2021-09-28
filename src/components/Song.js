@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react'
+import { styled } from '@material-ui/core/styles';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { forEach } from 'lodash'
 
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@mui/styles/withStyles';
 
 import * as actions from '../redux/actions'
 import { getFontSize } from '../redux/reducers/user'
@@ -12,22 +13,23 @@ import ChordLine from './ChordLine'
 import ChordPair from './ChordPair'
 import Line from './Line'
 
-const sectionStyles = {}
-forEach(sectionData, section => {
-	sectionStyles[`&[data-section="${section.title}"]`] = {
-		borderLeft: `4px solid ${section.color}`,
-		'&:before': {
-			content: `"${section.abbreviation}"`,
-			backgroundColor: section.color,
-		},
-	}
-})
+const PREFIX = 'Song';
 
-const styles = theme => ({
-	root: {
+const classes = {
+    root: `${PREFIX}-root`,
+    section: `${PREFIX}-section`
+};
+
+const Root = styled('div')((
+    {
+        theme
+    }
+) => ({
+    [`& .${classes.root}`]: {
 		paddingBottom: theme.spacing(14),
 	},
-	section: {
+
+    [`& .${classes.section}`]: {
 		borderLeft: '4px solid #444',
 		marginLeft: theme.spacing(8),
 		marginTop: theme.spacing(4),
@@ -52,14 +54,25 @@ const styles = theme => ({
 		},
 		...sectionStyles,
 
-		[theme.breakpoints.down('xs')]: {
+		[theme.breakpoints.down('sm')]: {
 			marginLeft: 0,
 		},
 
 		'@media print': {
 			marginLeft: theme.spacing(6),
 		},
-	},
+	}
+}));
+
+const sectionStyles = {}
+forEach(sectionData, section => {
+	sectionStyles[`&[data-section="${section.title}"]`] = {
+		borderLeft: `4px solid ${section.color}`,
+		'&:before': {
+			content: `"${section.abbreviation}"`,
+			backgroundColor: section.color,
+		},
+	}
 })
 
 class Song extends PureComponent {
@@ -133,7 +146,7 @@ class Song extends PureComponent {
 					break
 
 				case 'empty':
-					children.push(<div key={i} className={'empty-line'} />)
+					children.push(<Root key={i} className={'empty-line'} />)
 					break
 
 				case 'line':
@@ -198,4 +211,4 @@ const mapStateToProps = state => ({
 	fontSize: getFontSize(state),
 })
 
-export default connect(mapStateToProps, actions)(withStyles(styles)(Song))
+export default connect(mapStateToProps, actions)((Song))

@@ -1,25 +1,36 @@
 import React from 'react'
+import { styled } from '@material-ui/core/styles';
 import cx from 'classnames'
 
-import { withStyles } from '@material-ui/core/styles'
-import Grid from '@material-ui/core/Grid'
+import withStyles from '@mui/styles/withStyles';
+import Grid from '@mui/material/Grid'
 
-const styles = theme => ({
-	root: theme.mixins.gutters({
+const PREFIX = 'Hero';
+
+const classes = {
+    root: `${PREFIX}-root`
+};
+
+const Root = styled('div')((
+    {
+        theme
+    }
+) => ({
+    [`&.${classes.root}`]: theme.mixins.gutters({
 		backgroundColor: theme.palette.background.hero,
 		paddingBottom: theme.spacing(2),
 		paddingTop: theme.spacing(2),
-	}),
-})
+	})
+}));
 
-const Hero = ({ children, classes, className }) => (
-	<div className={cx(classes.root, className)}>
+const Hero = ({ children,  className }) => (
+	<Root className={cx(classes.root, className)}>
 		<Grid container className={classes.container}>
 			<Grid item xs={12}>
 				{children}
 			</Grid>
 		</Grid>
-	</div>
+	</Root>
 )
 
-export default withStyles(styles)(Hero)
+export default (Hero)

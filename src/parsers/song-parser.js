@@ -27,7 +27,7 @@ class Parser {
 		return line.replace(
 			/[^a-zA-Z0-9+-._,:<>/?’'"+=%@#!$%*&();\s\r\n\t{}\[\]\\]/g,
 			''
-		)
+		);
 	}
 
 	parseToObject(songText) {

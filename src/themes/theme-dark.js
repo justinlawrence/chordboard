@@ -1,9 +1,9 @@
-import { createMuiTheme } from '@material-ui/core/styles'
+import { createTheme, adaptV4Theme } from '@mui/material/styles';
 
-const baseDarkTheme = createMuiTheme({
-	palette: { type: 'dark' },
+const baseDarkTheme = createTheme(adaptV4Theme({
+	palette: { mode: 'dark' },
 	typography: { useNextVariants: true },
-})
+}))
 
 export const darkTheme = {
 	typography: {

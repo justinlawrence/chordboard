@@ -37,7 +37,7 @@ export default dataTypes
 function isChords(input) {
 	return /^(\s|[A-G](#|b)?(sus|maj|min|aug|dim|add|m)?|[0-9]|\/|-|\||[()]|}x\d)+$/g.test(
 		input
-	)
+	);
 }
 
 // Test chords.

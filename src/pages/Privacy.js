@@ -1,30 +1,44 @@
 import React, { Component } from 'react'
 
-import { withStyles } from '@material-ui/core/styles'
-import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
+import { styled } from '@material-ui/core/styles';
+
+import withStyles from '@mui/styles/withStyles';
+import Grid from '@mui/material/Grid'
+import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography'
 
 import ContentLimiter from '../components/ContentLimiter'
 import Hero from '../components/Hero'
 
-const styles = theme => ({
-	root: {
+const PREFIX = 'Privacy';
+
+const classes = {
+    root: `${PREFIX}-root`,
+    form: `${PREFIX}-form`
+};
+
+const StyledHero = styled(Hero)((
+    {
+        theme
+    }
+) => ({
+    [`& .${classes.root}`]: {
 		flexGrow: 1,
 	},
-	form: {
+
+    [`& .${classes.form}`]: {
 		padding: theme.spacing(5),
-	},
-})
+	}
+}));
 
 class Privacy extends Component {
 	render() {
-		const { classes } = this.props
+		const { } = this.props
 
 		return (
-			<Hero>
+            <StyledHero>
 				<ContentLimiter>
-					<Grid container justify={'space-between'}>
+					<Grid container justifyContent={'space-between'}>
 						<Grid item>
 							<Typography variant={'subheading'}>
 								Privacy
@@ -377,9 +391,9 @@ class Privacy extends Component {
 						</Paper>
 					</Grid>
 				</ContentLimiter>
-			</Hero>
-		)
+			</StyledHero>
+        );
 	}
 }
 
-export default withStyles(styles)(Privacy)
+export default (Privacy)

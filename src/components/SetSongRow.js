@@ -3,13 +3,12 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import IconButton from '@material-ui/core/IconButton'
-import Grid from '@material-ui/core/Grid'
-import RootRef from '@material-ui/core/RootRef'
-import TableCell from '@material-ui/core/TableCell'
-import TableRow from '@material-ui/core/TableRow'
-import Typography from '@material-ui/core/Typography'
-import Tooltip from '@material-ui/core/Tooltip'
+import IconButton from '@mui/material/IconButton'
+import Grid from '@mui/material/Grid'
+import TableCell from '@mui/material/TableCell'
+import TableRow from '@mui/material/TableRow'
+import Typography from '@mui/material/Typography'
+import Tooltip from '@mui/material/Tooltip'
 import { Delete as DeleteIcon, Drag as DragIcon } from 'mdi-material-ui'
 
 import * as actions from '../redux/actions'
@@ -64,7 +63,7 @@ class SetSong extends PureComponent {
 		//FYI the header for this table is in SetViewer.js
 
 		return (
-			<RootRef rootRef={provided.innerRef}>
+            <>
 				<TableRow
 					hover
 					onClick={this.handleTableRowClick}
@@ -119,18 +118,15 @@ class SetSong extends PureComponent {
 					{mode === 'edit' && (
 						<TableCell style={{ width: 0 }}>
 							<Tooltip title={'Remove song from set'}>
-								<IconButton
-									aria-label={'Remove song'}
-									onClick={this.removeSong}
-								>
+								<IconButton aria-label={'Remove song'} onClick={this.removeSong} size="large">
 									<DeleteIcon />
 								</IconButton>
 							</Tooltip>
 						</TableCell>
 					)}
 				</TableRow>
-			</RootRef>
-		)
+			</>
+        );
 	}
 }
 

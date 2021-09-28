@@ -1,64 +1,93 @@
 import React, { Component } from 'react'
+import { styled } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import cx from 'classnames'
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import GoogleLogin from 'react-google-login'
 
-import { withStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
-import TextField from '@material-ui/core/TextField'
+import withStyles from '@mui/styles/withStyles';
+import Button from '@mui/material/Button'
+import Grid from '@mui/material/Grid'
+import Paper from '@mui/material/Paper'
+import TextField from '@mui/material/TextField'
 import { Google as GoogleIcon, Facebook as FacebookIcon } from 'mdi-material-ui'
 
 import { setCurrentUser } from '../redux/actions'
 import chordboardLogo from '../chordboard-logo-inline.png'
-// import chordboardLogo from '../chordboard-logo-dark.png';
+const PREFIX = 'Login';
 
-const styles = theme => ({
-	root: {
+const classes = {
+    root: `${PREFIX}-root`,
+    container: `${PREFIX}-container`,
+    form: `${PREFIX}-form`,
+    formFooter: `${PREFIX}-formFooter`,
+    control: `${PREFIX}-control`,
+    leftIcon: `${PREFIX}-leftIcon`,
+    rightIcon: `${PREFIX}-rightIcon`,
+    facebookButton: `${PREFIX}-facebookButton`,
+    googleButton: `${PREFIX}-googleButton`,
+    addPaddingBottom: `${PREFIX}-addPaddingBottom`,
+    addPaddingTop: `${PREFIX}-addPaddingTop`
+};
+
+const Root = styled('div')((
+    {
+        theme
+    }
+) => ({
+    [`&.${classes.root}`]: {
 		backgroundColor: theme.palette.background.hero,
 		display: 'flex',
 		flexGrow: 1,
 		height: '90vh',
 		paddingTop: '5vh',
 	},
-	container: {
+
+    [`& .${classes.container}`]: {
 		flexGrow: 1,
 	},
-	form: theme.mixins.gutters({
+
+    [`& .${classes.form}`]: theme.mixins.gutters({
 		paddingBottom: theme.spacing(8),
 		paddingTop: theme.spacing(2),
 		width: theme.spacing(40),
 	}),
-	formFooter: {
+
+    [`& .${classes.formFooter}`]: {
 		marginTop: theme.spacing(2),
 	},
-	control: {
+
+    [`& .${classes.control}`]: {
 		padding: theme.spacing(2),
 	},
-	leftIcon: {
+
+    [`& .${classes.leftIcon}`]: {
 		marginRight: theme.spacing(),
 	},
-	rightIcon: {
+
+    [`& .${classes.rightIcon}`]: {
 		marginLeft: theme.spacing(),
 	},
-	facebookButton: {
+
+    [`& .${classes.facebookButton}`]: {
 		backgroundColor: '#4c69ba',
 		margin: theme.spacing(),
 	},
-	googleButton: {
+
+    [`& .${classes.googleButton}`]: {
 		backgroundColor: 'rgb(209, 72, 54)',
 		margin: theme.spacing(),
 	},
-	addPaddingBottom: {
+
+    [`& .${classes.addPaddingBottom}`]: {
 		paddingBottom: theme.spacing(4),
 	},
-	addPaddingTop: {
+
+    [`& .${classes.addPaddingTop}`]: {
 		paddingTop: theme.spacing(4),
-	},
-})
+	}
+}));
 
 class Login extends Component {
 	state = {
@@ -132,15 +161,15 @@ class Login extends Component {
 	}
 
 	render() {
-		const { classes } = this.props
+		const { } = this.props
 		const { email, name } = this.state
 
 		return (
-			<div className={classes.root}>
+            <Root className={classes.root}>
 				<Grid
 					container
 					className={classes.container}
-					justify={'center'}
+					justifyContent={'center'}
 				>
 					<form onSubmit={this.handleLogin}>
 						<Paper className={classes.form} elevation={10}>
@@ -241,16 +270,16 @@ class Login extends Component {
 						</Paper>
 					</form>
 				</Grid>
-			</div>
-		)
+			</Root>
+        );
 	}
 }
 
 const mapDispatchToProps = {
 	setCurrentUser,
 }
-//export default withRouter( connect( mapStateToProps, actions )( withStyles( styles )( Navbar ) ) );
+//export default withRouter( connect( mapStateToProps, actions )( ( Navbar ) ) );
 
 export default withRouter(
-	connect(null, mapDispatchToProps)(withStyles(styles)(Login))
+	connect(null, mapDispatchToProps)((Login))
 )

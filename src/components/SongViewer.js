@@ -1,25 +1,26 @@
 import React, { Component } from 'react'
+import { styled } from '@material-ui/core/styles';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { isAfter } from 'date-fns'
 import filter from 'lodash/fp/filter'
 import reduce from 'lodash/fp/reduce'
 
-import { withStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
-import Container from '@material-ui/core/Container'
-import Dialog from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import Fade from '@material-ui/core/Fade'
-import Grid from '@material-ui/core/Grid'
-import IconButton from '@material-ui/core/IconButton'
-import Avatar from '@material-ui/core/Avatar'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
-import Paper from '@material-ui/core/Paper'
-import Tooltip from '@material-ui/core/Tooltip'
-import Typography from '@material-ui/core/Typography'
+import withStyles from '@mui/styles/withStyles';
+import Button from '@mui/material/Button'
+import Container from '@mui/material/Container'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import Fade from '@mui/material/Fade'
+import Grid from '@mui/material/Grid'
+import IconButton from '@mui/material/IconButton'
+import Avatar from '@mui/material/Avatar'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemText from '@mui/material/ListItemText'
+import Paper from '@mui/material/Paper'
+import Tooltip from '@mui/material/Tooltip'
+import Typography from '@mui/material/Typography'
 import {
 	Close as CloseIcon,
 	Image as ImageIcon,
@@ -41,38 +42,59 @@ import transposeChord from '../utils/transpose-chord'
 import transposeLines from '../utils/transpose-lines'
 import { linesToNashville } from '../utils/convertToNashville'
 
-const styles = theme => ({
-	root: {
+const PREFIX = 'SongViewer';
+
+const classes = {
+    root: `${PREFIX}-root`,
+    capoButton: `${PREFIX}-capoButton`,
+    closeButton: `${PREFIX}-closeButton`,
+    paper: `${PREFIX}-paper`,
+    control: `${PREFIX}-control`,
+    select: `${PREFIX}-select`,
+    noPrint: `${PREFIX}-noPrint`
+};
+
+const StyledFade = styled(Fade)((
+    {
+        theme
+    }
+) => ({
+    [`& .${classes.root}`]: {
 		flexGrow: 1,
 	},
-	capoButton: {
+
+    [`& .${classes.capoButton}`]: {
 		borderRadius: 3,
 		flexDirection: 'column',
 		padding: theme.spacing(),
 	},
-	closeButton: {
+
+    [`& .${classes.closeButton}`]: {
 		position: 'absolute',
 		right: theme.spacing(),
 		top: theme.spacing(),
 	},
-	paper: {
+
+    [`& .${classes.paper}`]: {
 		padding: theme.spacing(2),
 		height: '100%',
 		color: theme.palette.text.secondary,
 	},
-	control: {
+
+    [`& .${classes.control}`]: {
 		padding: theme.spacing(2),
 	},
-	select: {
+
+    [`& .${classes.select}`]: {
 		width: theme.spacing(7),
 	},
 
-	noPrint: {
+    [`& .${classes.noPrint}`]: {
 		'@media print': {
 			display: 'none !important',
 		},
-	},
-})
+	}
+}));
 
 class SongViewer extends Component {
 	static defaultProps = {
@@ -264,7 +286,7 @@ class SongViewer extends Component {
 		}))
 
 	render() {
-		const { classes, isPreview, setKey, setList, song } = this.props
+		const {  isPreview, setKey, setList, song } = this.props
 		const {
 			chordSize,
 			isNashville,
@@ -296,7 +318,7 @@ class SongViewer extends Component {
 		)
 
 		return (
-			<Fade in={Boolean(song)} appear mountOnEnter unmountOnExit>
+            <StyledFade in={Boolean(song)} appear mountOnEnter unmountOnExit>
 				<div>
 					<Hero>
 						<Container>
@@ -304,7 +326,7 @@ class SongViewer extends Component {
 								<Grid
 									container
 									className={classes.root}
-									justify={'space-between'}
+									justifyContent={'space-between'}
 								>
 									<Grid item xs={12} sm={7}>
 										<Typography variant={'h4'}>
@@ -361,25 +383,25 @@ class SongViewer extends Component {
 
 												<Tooltip title={'Edit song'}>
 													<IconButton
-														className={
+                                                        className={
 															classes.button
 														}
-														href={`/songs/${song.id}/edit`}
-													>
+                                                        href={`/songs/${song.id}/edit`}
+                                                        size="large">
 														<PencilIcon />
 													</IconButton>
 												</Tooltip>
 
 												<Tooltip title={'Add to set'}>
 													<IconButton
-														className={
+                                                        className={
 															classes.button
 														}
-														onClick={
+                                                        onClick={
 															this
 																.openSetListDialog
 														}
-													>
+                                                        size="large">
 														<PlaylistPlusIcon />
 													</IconButton>
 												</Tooltip>
@@ -387,14 +409,14 @@ class SongViewer extends Component {
 													title={'Song settings'}
 												>
 													<IconButton
-														className={
+                                                        className={
 															classes.button
 														}
-														onClick={
+                                                        onClick={
 															this
 																.handleSongKeyDialogOpen
 														}
-													>
+                                                        size="large">
 														<SettingsIcon />
 													</IconButton>
 												</Tooltip>
@@ -412,15 +434,15 @@ class SongViewer extends Component {
 													>
 														Add to Set
 														<IconButton
-															aria-label={'Close'}
-															className={
+                                                            aria-label={'Close'}
+                                                            className={
 																classes.closeButton
 															}
-															onClick={
+                                                            onClick={
 																this
 																	.closeSetListDialog
 															}
-														>
+                                                            size="large">
 															<CloseIcon />
 														</IconButton>
 													</DialogTitle>
@@ -536,24 +558,24 @@ class SongViewer extends Component {
 
 												<Grid item xs={6}>
 													<IconButton
-														aria-label={
+                                                        aria-label={
 															'Word size down'
 														}
-														onClick={
+                                                        onClick={
 															this.wordSizeDown
 														}
-													>
+                                                        size="large">
 														<MinusIcon />
 													</IconButton>
 
 													<IconButton
-														aria-label={
+                                                        aria-label={
 															'Word size up'
 														}
-														onClick={
+                                                        onClick={
 															this.wordSizeUp
 														}
-													>
+                                                        size="large">
 														<PlusIcon />
 													</IconButton>
 												</Grid>
@@ -614,8 +636,8 @@ class SongViewer extends Component {
 						)}
 					</Container>
 				</div>
-			</Fade>
-		)
+			</StyledFade>
+        );
 	}
 }
 
@@ -626,4 +648,4 @@ const mapStateToProps = state => ({
 	})([])(state.sets.byId),
 })
 
-export default connect(mapStateToProps, actions)(withStyles(styles)(SongViewer))
+export default connect(mapStateToProps, actions)((SongViewer))

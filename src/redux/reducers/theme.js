@@ -1,10 +1,10 @@
-import { createMuiTheme } from '@material-ui/core/styles'
+import { createTheme, adaptV4Theme } from '@mui/material/styles';
 import isEqual from 'lodash/fp/isEqual'
 
 import { FETCH_THEME_SUCCESS, SET_THEME, UPDATE_THEME } from '../actions'
 import { darkTheme, lightTheme } from '../../themes'
 
-const defaultMuiTheme = createMuiTheme(lightTheme)
+const defaultMuiTheme = createTheme(adaptV4Theme(lightTheme))
 
 export const themesOrder = ['light', 'dark']
 
@@ -29,7 +29,7 @@ export const theme = (state = initialState, action) => {
 			: themes.light
 		const newTheme = {
 			id: theme ? action.payload : 'light',
-			muiTheme: createMuiTheme(theme.muiTheme),
+			muiTheme: createTheme(adaptV4Theme(theme.muiTheme)),
 			name: theme.name,
 		}
 		return isEqual(state, newTheme) ? state : newTheme

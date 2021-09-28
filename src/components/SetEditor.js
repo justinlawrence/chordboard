@@ -21,32 +21,49 @@
 */
 
 import React, { Component } from 'react'
+import { styled } from '@material-ui/core/styles';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { withStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
+import withStyles from '@mui/styles/withStyles';
+import Paper from '@mui/material/Paper'
 
 import * as actions from '../redux/actions'
 import ContentLimiter from './ContentLimiter'
 import Hero from './Hero'
 import SetFormContainer from '../containers/SetFormContainer'
 
-const styles = theme => ({
-	root: {
+const PREFIX = 'SetEditor';
+
+const classes = {
+    root: `${PREFIX}-root`,
+    form: `${PREFIX}-form`,
+    formFooter: `${PREFIX}-formFooter`,
+    control: `${PREFIX}-control`
+};
+
+const Root = styled('div')((
+    {
+        theme
+    }
+) => ({
+    [`& .${classes.root}`]: {
 		flexGrow: 1,
 	},
-	form: theme.mixins.gutters({
+
+    [`& .${classes.form}`]: theme.mixins.gutters({
 		paddingBottom: theme.spacing(2),
 		paddingTop: theme.spacing(2),
 	}),
-	formFooter: {
+
+    [`& .${classes.formFooter}`]: {
 		marginTop: theme.spacing(2),
 	},
-	control: {
+
+    [`& .${classes.control}`]: {
 		padding: theme.spacing(2),
-	},
-})
+	}
+}));
 
 class SetEditor extends Component {
 	static propTypes = {
@@ -75,10 +92,10 @@ class SetEditor extends Component {
 	}
 
 	render() {
-		const { classes } = this.props
+		const { } = this.props
 
 		return (
-			<div className={'set-editor'}>
+            <Root className={'set-editor'}>
 				<Hero>
 					<ContentLimiter>
 						<Paper className={classes.form}>
@@ -89,8 +106,8 @@ class SetEditor extends Component {
 						</Paper>
 					</ContentLimiter>
 				</Hero>
-			</div>
-		)
+			</Root>
+        );
 	}
 }
 
@@ -98,4 +115,4 @@ const mapStateToProps = state => ({
 	user: state.user,
 })
 
-export default connect(mapStateToProps, actions)(withStyles(styles)(SetEditor))
+export default connect(mapStateToProps, actions)((SetEditor))

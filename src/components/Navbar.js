@@ -1,19 +1,20 @@
 import React from 'react'
+import { styled } from '@material-ui/core/styles';
 import PropTypes from 'prop-types'
 import { Link, matchPath, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import map from 'lodash/map'
 
-import { withStyles } from '@material-ui/core/styles'
-import AppBar from '@material-ui/core/AppBar'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import IconButton from '@material-ui/core/IconButton'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
-import Toolbar from '@material-ui/core/Toolbar'
-import Tooltip from '@material-ui/core/Tooltip'
-import Typography from '@material-ui/core/Typography'
+import withStyles from '@mui/styles/withStyles';
+import AppBar from '@mui/material/AppBar'
+import Button from '@mui/material/Button'
+import Grid from '@mui/material/Grid'
+import IconButton from '@mui/material/IconButton'
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
+import Toolbar from '@mui/material/Toolbar'
+import Tooltip from '@mui/material/Tooltip'
+import Typography from '@mui/material/Typography'
 
 import * as actions from '../redux/actions'
 import { getThemeId } from '../redux/reducers/theme'
@@ -26,43 +27,69 @@ import {
 	Close as CloseIcon,
 } from 'mdi-material-ui'
 
-const version = require('../../package.json').version
+const PREFIX = 'Navbar';
 
-const styles = theme => ({
-	root: {
+const classes = {
+    root: `${PREFIX}-root`,
+    flex: `${PREFIX}-flex`,
+    menuButton: `${PREFIX}-menuButton`,
+    logoBig: `${PREFIX}-logoBig`,
+    logoWrapper: `${PREFIX}-logoWrapper`,
+    tabs: `${PREFIX}-tabs`,
+    tab: `${PREFIX}-tab`,
+    setToolbar: `${PREFIX}-setToolbar`,
+    miniButton: `${PREFIX}-miniButton`
+};
+
+const StyledAppBar = styled(AppBar)((
+    {
+        theme
+    }
+) => ({
+    [`&.${classes.root}`]: {
 		'@media print': {
 			display: 'none !important',
 		},
 	},
-	flex: {
+
+    [`& .${classes.flex}`]: {
 		flex: 1,
 	},
-	menuButton: {
+
+    [`& .${classes.menuButton}`]: {
 		marginLeft: -12,
 		marginRight: 20,
 	},
-	logoBig: {
+
+    [`& .${classes.logoBig}`]: {
 		height: theme.spacing(2),
 		verticalAlign: 'middle',
 	},
-	logoWrapper: {
+
+    [`& .${classes.logoWrapper}`]: {
 		paddingRight: theme.spacing(),
 		paddingTop: theme.spacing(),
 	},
-	tabs: {
+
+    [`& .${classes.tabs}`]: {
 		flexGrow: 1,
 		width: '100%',
 	},
-	tab: {
+
+    [`& .${classes.tab}`]: {
 		root: {
 			padding: 0,
 		},
 	},
-	setToolbar: {},
-	miniButton: {
+
+    [`& .${classes.setToolbar}`]: {},
+
+    [`& .${classes.miniButton}`]: {
 		zoom: 0.8,
-	},
-})
+	}
+}));
+
+const version = require('../../package.json').version
 
 class Navbar extends React.Component {
 	static propTypes = {
@@ -120,7 +147,7 @@ class Navbar extends React.Component {
 	}
 
 	render() {
-		const { classes, currentSet, location, songs, themeId } = this.props
+		const {  currentSet, location, songs, themeId } = this.props
 
 		let songId
 		const match = matchPath(location.pathname, {
@@ -132,7 +159,7 @@ class Navbar extends React.Component {
 		}
 
 		return (
-			<AppBar
+            <StyledAppBar
 				className={classes.root}
 				color={'secondary'}
 				position={'sticky'}
@@ -140,10 +167,10 @@ class Navbar extends React.Component {
 				{currentSet ? (
 					<Toolbar className={classes.noPrint} variant={'dense'}>
 						<IconButton
-							color={'inherit'}
-							onClick={this.handleBackButton}
-							className={classes.miniButton}
-						>
+                            color={'inherit'}
+                            onClick={this.handleBackButton}
+                            className={classes.miniButton}
+                            size="large">
 							<CloseIcon />
 						</IconButton>
 						<Tabs
@@ -226,7 +253,7 @@ class Navbar extends React.Component {
 											: 'dark mode'
 									}
 								>
-									<IconButton onClick={this.toggleTheme}>
+									<IconButton onClick={this.toggleTheme} size="large">
 										{themeId === 'dark' ? (
 											<LightModeIcon />
 										) : (
@@ -238,8 +265,8 @@ class Navbar extends React.Component {
 						</Grid>
 					</Toolbar>
 				)}
-			</AppBar>
-		)
+			</StyledAppBar>
+        );
 	}
 }
 
@@ -253,5 +280,5 @@ const mapStateToProps = state => ({
 })
 
 export default withRouter(
-	connect(mapStateToProps, actions)(withStyles(styles)(Navbar))
+	connect(mapStateToProps, actions)((Navbar))
 )

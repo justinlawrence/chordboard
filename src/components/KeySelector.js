@@ -1,11 +1,28 @@
 import React, { PureComponent } from 'react'
+import { styled } from '@material-ui/core/styles';
 import { find, toLower } from 'lodash'
 
-import { withStyles } from '@material-ui/core/styles'
-import MenuItem from '@material-ui/core/MenuItem'
-import TextField from '@material-ui/core/TextField'
+import withStyles from '@mui/styles/withStyles';
+import MenuItem from '@mui/material/MenuItem'
+import TextField from '@mui/material/TextField'
 
 import getKeyDiff from '../utils/getKeyDiff'
+
+const PREFIX = 'KeySelector';
+
+const classes = {
+    root: `${PREFIX}-root`
+};
+
+const StyledTextField = styled(TextField)((
+    {
+        theme
+    }
+) => ({
+    [`&.${classes.root}`]: {
+		minWidth: theme.spacing(9),
+	}
+}));
 
 const options = [
 	{ key: 'C', label: 'C', value: 'c' },
@@ -21,12 +38,6 @@ const options = [
 	{ key: 'Bb', label: 'Bb', value: 'bb' },
 	{ key: 'B', label: 'B', value: 'b' },
 ]
-
-const styles = theme => ({
-	root: {
-		minWidth: theme.spacing(9),
-	},
-})
 
 class KeySelector extends PureComponent {
 	state = {
@@ -63,11 +74,11 @@ class KeySelector extends PureComponent {
 	}
 
 	render() {
-		const { classes, label } = this.props
+		const {  label } = this.props
 		const { value } = this.state
 
 		return (
-			<TextField
+            <StyledTextField
 				className={classes.root}
 				select
 				label={label}
@@ -79,9 +90,9 @@ class KeySelector extends PureComponent {
 						{option.label}
 					</MenuItem>
 				))}
-			</TextField>
-		)
+			</StyledTextField>
+        );
 	}
 }
 
-export default withStyles(styles)(KeySelector)
+export default (KeySelector)

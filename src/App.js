@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { styled } from '@material-ui/core/styles';
 import { findIndex } from 'lodash'
 import { connect } from 'react-redux'
 import {
@@ -11,9 +12,10 @@ import {
 import DateFnsUtils from '@date-io/date-fns'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 
-import { ThemeProvider, withStyles } from '@material-ui/core/styles'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import Grid from '@material-ui/core/Grid'
+import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
+import withStyles from '@mui/styles/withStyles';
+import CssBaseline from '@mui/material/CssBaseline'
+import Grid from '@mui/material/Grid'
 
 import * as actions from './redux/actions'
 import { db } from './firebase'
@@ -28,14 +30,26 @@ import SongContainer from './containers/SongContainer'
 import SetListContainer from './containers/SetListContainer'
 import Privacy from './pages/Privacy'
 
-const styles = theme => ({
-	root: {
+const PREFIX = 'App';
+
+const classes = {
+    root: `${PREFIX}-root`,
+    content: `${PREFIX}-content`
+};
+
+const StyledStyledEngineProvider = styled(StyledEngineProvider)((
+    {
+        theme
+    }
+) => ({
+    [`& .${classes.root}`]: {
 		height: '100vh',
 	},
-	content: {
+
+    [`& .${classes.content}`]: {
 		minHeight: 0,
-	},
-})
+	}
+}));
 
 class App extends Component {
 	componentDidMount = () => {
@@ -91,91 +105,93 @@ class App extends Component {
 	}
 
 	render() {
-		const { classes, muiTheme, user } = this.props
+		const {  muiTheme, user } = this.props
 
 		return (
-			<ThemeProvider theme={muiTheme}>
-				<MuiPickersUtilsProvider utils={DateFnsUtils}>
-					<Grid
-						container
-						className={classes.root}
-						direction={'column'}
-						wrap={'nowrap'}
-					>
-						<CssBaseline />
-						<SetCurrentSong />
-						<Navbar />
+            <StyledStyledEngineProvider injectFirst>
+                <ThemeProvider theme={muiTheme}>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <Grid
+                            container
+                            className={classes.root}
+                            direction={'column'}
+                            wrap={'nowrap'}
+                        >
+                            <CssBaseline />
+                            <SetCurrentSong />
+                            <Navbar />
 
-						<Grid className={classes.content} item xs>
-							<Switch>
-								<Route
-									exact
-									path={'/privacy'}
-									component={Privacy}
-								/>
-								<Route
-									exact
-									path={'/login'}
-									component={Login}
-								/>
-								<Route
-									path={'/sets'}
-									component={SetListContainer}
-								/>
+                            <Grid className={classes.content} item xs>
+                                <Switch>
+                                    <Route
+                                        exact
+                                        path={'/privacy'}
+                                        component={Privacy}
+                                    />
+                                    <Route
+                                        exact
+                                        path={'/login'}
+                                        component={Login}
+                                    />
+                                    <Route
+                                        path={'/sets'}
+                                        component={SetListContainer}
+                                    />
 
-								{!user.name && <Redirect to={'/login'} />}
+                                    {!user.name && <Redirect to={'/login'} />}
 
-								<Route
-									exact
-									path={'/songs'}
-									component={SongListContainer}
-								/>
+                                    <Route
+                                        exact
+                                        path={'/songs'}
+                                        component={SongListContainer}
+                                    />
 
-								<Route
-									exact
-									path={'/songs/add-to-set/:setId'}
-									render={props => (
-										<SongListContainer
-											setId={props.match.params.setId}
-											{...props}
-										/>
-									)}
-								/>
+                                    <Route
+                                        exact
+                                        path={'/songs/add-to-set/:setId'}
+                                        render={props => (
+                                            <SongListContainer
+                                                setId={props.match.params.setId}
+                                                {...props}
+                                            />
+                                        )}
+                                    />
 
-								<Route
-									exact
-									path={'/songs/new'}
-									component={SongEditor}
-								/>
+                                    <Route
+                                        exact
+                                        path={'/songs/new'}
+                                        component={SongEditor}
+                                    />
 
-								<Route
-									exact
-									path={'/songs/:id/edit'}
-									render={props => (
-										<SongEditor
-											id={props.match.params.id}
-											{...props}
-										/>
-									)}
-								/>
+                                    <Route
+                                        exact
+                                        path={'/songs/:id/edit'}
+                                        render={props => (
+                                            <SongEditor
+                                                id={props.match.params.id}
+                                                {...props}
+                                            />
+                                        )}
+                                    />
 
-								<Route
-									exact
-									path={'/songs/:id'}
-									render={({ match }) => (
-										<SongContainer id={match.params.id} />
-									)}
-								/>
+                                    <Route
+                                        exact
+                                        path={'/songs/:id'}
+                                        render={({ match }) => (
+                                            <SongContainer id={match.params.id} />
+                                        )}
+                                    />
 
-								<Redirect to={'/sets'} />
-							</Switch>
-						</Grid>
+                                    <Redirect to={'/sets'} />
+                                </Switch>
+                            </Grid>
 
-						<LiveBar />
-					</Grid>
-				</MuiPickersUtilsProvider>
-			</ThemeProvider>
-		)
+                            <LiveBar />
+                        </Grid>
+                    </MuiPickersUtilsProvider>
+                </ThemeProvider>
+            </StyledStyledEngineProvider>
+        );
 	}
 }
 
@@ -185,5 +201,5 @@ const mapStateToProps = state => ({
 })
 
 export default withRouter(
-	connect(mapStateToProps, actions)(withStyles(styles)(App))
+	connect(mapStateToProps, actions)((App))
 )

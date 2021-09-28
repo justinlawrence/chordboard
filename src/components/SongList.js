@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { styled } from '@material-ui/core/styles';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
@@ -6,41 +7,52 @@ import includes from 'lodash/fp/includes'
 import sortBy from 'lodash/fp/sortBy'
 import toLower from 'lodash/fp/toLower'
 
-import { withStyles } from '@material-ui/core/styles'
-import { lighten } from '@material-ui/core/styles/colorManipulator'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import Hidden from '@material-ui/core/Hidden'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Typography from '@material-ui/core/Typography'
+import { lighten } from '@mui/material/styles';
+import withStyles from '@mui/styles/withStyles';
+import Button from '@mui/material/Button'
+import Grid from '@mui/material/Grid'
+import Hidden from '@mui/material/Hidden'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import Typography from '@mui/material/Typography'
 
 import * as actions from '../redux/actions'
 import ContentLimiter from './ContentLimiter'
 import Hero from './Hero'
 import SearchBox from './SearchBox'
 
-const styles = theme => ({
-	highlight:
-		theme.palette.type === 'light'
-			? {
-					color: theme.palette.secondary.main,
-					backgroundColor: lighten(
-						theme.palette.secondary.light,
-						0.85
-					),
-			  }
-			: {
-					color: theme.palette.text.primary,
-					backgroundColor: theme.palette.secondary.dark,
-			  },
-	tableRow: {
+const PREFIX = 'SongList';
+
+const classes = {
+    highlight: `${PREFIX}-highlight`,
+    tableRow: `${PREFIX}-tableRow`
+};
+
+const Root = styled('div')((
+    {
+        theme
+    }
+) => ({
+    [`& .${classes.highlight}`]: theme.palette.mode === 'light'
+        ? {
+                color: theme.palette.secondary.main,
+                backgroundColor: lighten(
+                    theme.palette.secondary.light,
+                    0.85
+                ),
+          }
+        : {
+                color: theme.palette.text.primary,
+                backgroundColor: theme.palette.secondary.dark,
+          },
+
+    [`& .${classes.tableRow}`]: {
 		cursor: 'pointer',
-	},
-})
+	}
+}));
 
 class SongList extends Component {
 	static propTypes = {
@@ -102,7 +114,7 @@ class SongList extends Component {
 		this.props.history.push(`/songs/${songId}`)
 
 	render() {
-		const { classes, songs } = this.props
+		const {  songs } = this.props
 
 		const filteredSongs = songs.filter(this.filterSongs)
 		const sortedSongs = sortBy('title')(filteredSongs)
@@ -110,13 +122,13 @@ class SongList extends Component {
 		const isAddToSet = /\/add-to-set\//.test(window.location.href)
 
 		return (
-			<div>
+            <Root>
 				<Hero>
 					<ContentLimiter>
 						<Grid
 							container
 							alignItems={'center'}
-							justify={'space-between'}
+							justifyContent={'space-between'}
 						>
 							<Grid item>
 								<Typography variant={'h4'}>Songs</Typography>
@@ -195,9 +207,9 @@ class SongList extends Component {
 						))}
 					</TableBody>
 				</Table>
-			</div>
-		)
+			</Root>
+        );
 	}
 }
 
-export default connect(null, actions)(withRouter(withStyles(styles)(SongList)))
+export default connect(null, actions)(withRouter((SongList)))

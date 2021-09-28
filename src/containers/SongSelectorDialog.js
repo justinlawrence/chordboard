@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import { styled } from '@material-ui/core/styles';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { compose } from 'recompose'
@@ -17,57 +18,80 @@ import sortBy from 'lodash/fp/sortBy'
 import startsWith from 'lodash/fp/startsWith'
 import upperCase from 'lodash/fp/upperCase'
 
-import { withStyles } from '@material-ui/core/styles'
-import withWidth, { isWidthUp } from '@material-ui/core/withWidth'
-import Button from '@material-ui/core/Button'
-import ButtonBase from '@material-ui/core/ButtonBase'
-import Checkbox from '@material-ui/core/Checkbox'
-import Collapse from '@material-ui/core/Collapse'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import Grid from '@material-ui/core/Grid'
-import IconButton from '@material-ui/core/IconButton'
-import InputBase from '@material-ui/core/InputBase'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
+import withStyles from '@mui/styles/withStyles';
+import Button from '@mui/material/Button'
+import ButtonBase from '@mui/material/ButtonBase'
+import Checkbox from '@mui/material/Checkbox'
+import Collapse from '@mui/material/Collapse'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogTitle from '@mui/material/DialogTitle'
+import Grid from '@mui/material/Grid'
+import IconButton from '@mui/material/IconButton'
+import InputBase from '@mui/material/InputBase'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography'
 import {
 	Alphabetical as AlphabeticalIcon,
 	ArrowLeft as BackIcon,
 } from 'mdi-material-ui'
 
-const mapWithKey = map.convert({ cap: false })
+const PREFIX = 'SongSelectorDialog';
 
-const styles = theme => ({
-	root: {},
-	checkbox: {
+const classes = {
+    root: `${PREFIX}-root`,
+    checkbox: `${PREFIX}-checkbox`,
+    scrollPaper: `${PREFIX}-scrollPaper`,
+    input: `${PREFIX}-input`,
+    iconButton: `${PREFIX}-iconButton`,
+    content: `${PREFIX}-content`,
+    searchBar: `${PREFIX}-searchBar`,
+    sectionButton: `${PREFIX}-sectionButton`,
+    sectionButtonSelected: `${PREFIX}-sectionButtonSelected`,
+    sectionLabels: `${PREFIX}-sectionLabels`
+};
+
+const StyledDialog = styled(Dialog)((
+    {
+        theme
+    }
+) => ({
+    [`& .${classes.root}`]: {},
+
+    [`& .${classes.checkbox}`]: {
 		padding: theme.spacing(),
 	},
-	scrollPaper: {
+
+    [`& .${classes.scrollPaper}`]: {
 		alignItems: 'flex-start',
 	},
-	input: {
+
+    [`& .${classes.input}`]: {
 		marginLeft: theme.spacing(),
 		flex: 1,
 	},
-	iconButton: {
+
+    [`& .${classes.iconButton}`]: {
 		padding: theme.spacing(),
 	},
-	content: {
+
+    [`& .${classes.content}`]: {
 		flexGrow: 1,
 		paddingLeft: 0,
 		paddingRight: 0,
 	},
-	searchBar: {
+
+    [`& .${classes.searchBar}`]: {
 		padding: '2px 4px',
 		display: 'flex',
 		alignItems: 'center',
 		width: '100%',
 	},
-	sectionButton: {
+
+    [`& .${classes.sectionButton}`]: {
 		alignItems: 'center',
 		borderRadius: theme.shape.borderRadius,
 		display: 'flex',
@@ -76,13 +100,20 @@ const styles = theme => ({
 		transition: theme.transitions.create(),
 		width: theme.spacing(4),
 	},
-	sectionButtonSelected: {
+
+    [`& .${classes.sectionButtonSelected}`]: {
 		backgroundColor: theme.palette.action.selected,
 	},
-	sectionLabels: {
+
+    [`& .${classes.sectionLabels}`]: {
 		marginTop: theme.spacing(),
-	},
-})
+	}
+}));
+
+// FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
+const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
+
+const mapWithKey = map.convert({ cap: false })
 
 class SongSelectorDialog extends PureComponent {
 	static defaultProps = {
@@ -175,7 +206,7 @@ class SongSelectorDialog extends PureComponent {
 	setListRef = node => (this.listRef = node)
 
 	renderItem = filteredSongs => ({ index, style }) => {
-		const { classes } = this.props
+		const { } = this.props
 		const { setSongs } = this.state
 		const song = filteredSongs[index]
 		return (
@@ -210,7 +241,7 @@ class SongSelectorDialog extends PureComponent {
 	}
 
 	render() {
-		const { classes, open, songs } = this.props
+		const {  open, songs } = this.props
 		const { searchValue, sectionFilter, showFilters } = this.state
 
 		const firstLetter = song => upperCase(first(song.title))
@@ -224,7 +255,7 @@ class SongSelectorDialog extends PureComponent {
 		)(songs)
 
 		return (
-			<Dialog
+            <StyledDialog
 				aria-labelledby={'song-selector-dialog'}
 				classes={{
 					scrollPaper: classes.scrollPaper,
@@ -236,10 +267,7 @@ class SongSelectorDialog extends PureComponent {
 			>
 				<DialogTitle id={'song-selector-dialog'}>
 					<Paper className={classes.searchBar} elevation={1}>
-						<IconButton
-							className={classes.iconButton}
-							aria-label={'Back'}
-						>
+						<IconButton className={classes.iconButton} aria-label={'Back'} size="large">
 							<BackIcon />
 						</IconButton>
 						<InputBase
@@ -255,9 +283,9 @@ class SongSelectorDialog extends PureComponent {
 							<SearchIcon />
 						</IconButton>*/}
 						<IconButton
-							className={classes.iconButton}
-							onClick={this.toggleSectionFilter}
-						>
+                            className={classes.iconButton}
+                            onClick={this.toggleSectionFilter}
+                            size="large">
 							<AlphabeticalIcon />
 						</IconButton>
 					</Paper>
@@ -310,8 +338,8 @@ class SongSelectorDialog extends PureComponent {
 						Save
 					</Button>
 				</DialogActions>
-			</Dialog>
-		)
+			</StyledDialog>
+        );
 	}
 }
 
@@ -324,6 +352,6 @@ const mapStateToProps = state => ({
 
 export default compose(
 	connect(mapStateToProps),
-	withStyles(styles),
+	
 	withWidth()
 )(SongSelectorDialog)

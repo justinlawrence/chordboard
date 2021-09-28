@@ -1,44 +1,65 @@
 import React from 'react'
+import { styled } from '@material-ui/core/styles';
 import PropTypes from 'prop-types'
 import { format, isBefore, isValid } from 'date-fns'
 import cx from 'classnames'
 
-import { withStyles } from '@material-ui/core/styles'
-import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
+import withStyles from '@mui/styles/withStyles';
+import Grid from '@mui/material/Grid'
+import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography'
 
-const styles = theme => ({
-	root: {
+const PREFIX = 'DateSignifier';
+
+const classes = {
+    root: `${PREFIX}-root`,
+    month: `${PREFIX}-month`,
+    monthPast: `${PREFIX}-monthPast`,
+    divider: `${PREFIX}-divider`,
+    date: `${PREFIX}-date`,
+    day: `${PREFIX}-day`
+};
+
+const StyledPaper = styled(Paper)((
+    {
+        theme
+    }
+) => ({
+    [`&.${classes.root}`]: {
 		borderRadius: 4,
 		overflow: 'hidden',
 		width: theme.spacing(8),
 	},
-	month: {
+
+    [`& .${classes.month}`]: {
 		backgroundColor: theme.palette.primary.main,
 		color: theme.palette.common.white,
 		fontWeight: 800,
 		height: theme.spacing(2.5),
-		lineHeight: `${theme.spacing(2.5)}px`,
+		lineHeight: theme.spacing(2.5),
 	},
-	monthPast: {
+
+    [`& .${classes.monthPast}`]: {
 		backgroundColor: theme.palette.grey[400],
 	},
-	divider: {
+
+    [`& .${classes.divider}`]: {
 		borderBottom: `1px dotted ${theme.palette.divider}`,
-		margin: `0 ${theme.spacing()}px`,
+		margin: `0 ${theme.spacing()}`,
 	},
-	date: {
+
+    [`& .${classes.date}`]: {
 		fontWeight: 800,
 	},
-	day: {
-		fontWeight: 600,
-	},
-})
 
-const DateSignifier = ({ classes, date }) =>
+    [`& .${classes.day}`]: {
+		fontWeight: 600,
+	}
+}));
+
+const DateSignifier = ({  date }) =>
 	isValid(date) ? (
-		<Paper className={classes.root}>
+		<StyledPaper className={classes.root}>
 			<Grid container direction={'column'}>
 				<Grid item>
 					<Typography
@@ -74,7 +95,7 @@ const DateSignifier = ({ classes, date }) =>
 					</Typography>
 				</Grid>
 			</Grid>
-		</Paper>
+		</StyledPaper>
 	) : null
 
 DateSignifier.propTypes = {
@@ -82,4 +103,4 @@ DateSignifier.propTypes = {
 	date: PropTypes.object,
 }
 
-export default withStyles(styles)(DateSignifier)
+export default (DateSignifier)

@@ -1,13 +1,24 @@
 import React from 'react';
+import { styled } from '@material-ui/core/styles';
 import { range } from "lodash";
 
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
-const styles = theme => ({
-	text: {
+const PREFIX = 'ChordLine';
+
+const classes = {
+    text: `${PREFIX}-text`
+};
+
+const Root = styled('div')((
+    {
+        theme
+    }
+) => ({
+    [`& .${classes.text}`]: {
 		display: 'inline-block',
 		height: 0,
-		lineHeight: `${theme.spacing(3)}px`,
+		lineHeight: theme.spacing(3),
 		marginRight: '.75em',
 		marginTop: theme.spacing(3),
 		position: 'relative',
@@ -25,9 +36,9 @@ const styles = theme => ({
 			visibility: 'visible'
 		}
 	}
-});
+}));
 
-const ChordLine = ({ chords, chordSize, classes, wordSize }) => {
+const ChordLine = ({ chords, chordSize,  wordSize }) => {
 
 	const children = [];
 
@@ -62,11 +73,11 @@ const ChordLine = ({ chords, chordSize, classes, wordSize }) => {
 
 
 	return (
-		<div style={{ fontSize: `${wordSize}px` }}>
+        <Root style={{ fontSize: `${wordSize}px` }}>
 			{children}
-		</div>
-	);
+		</Root>
+    );
 
 };
 
-export default withStyles(styles)(ChordLine);
+export default (ChordLine);

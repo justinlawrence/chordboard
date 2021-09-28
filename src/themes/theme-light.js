@@ -5,11 +5,11 @@ http://colorhunt.co/c/114174
 
 */
 
-import { createMuiTheme } from '@material-ui/core/styles'
+import { createTheme, adaptV4Theme } from '@mui/material/styles';
 
-const baseTheme = createMuiTheme( {
+const baseTheme = createTheme( adaptV4Theme({
 	typography: { useNextVariants: true },
-} )
+}) )
 
 export const lightTheme = {
 	typography: {
