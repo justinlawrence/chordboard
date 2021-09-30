@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { styled } from '@material-ui/core/styles';
+import { styled } from '@material-ui/core/styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useHistory, useRouteMatch } from 'react-router-dom'
 import clamp from 'lodash/clamp'
@@ -9,7 +9,7 @@ import map from 'lodash/fp/map'
 import size from 'lodash/size'
 import cx from 'classnames'
 
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from '@mui/styles/makeStyles'
 import AppBar from '@mui/material/AppBar'
 import ButtonBase from '@mui/material/ButtonBase'
 import IconButton from '@mui/material/IconButton'
@@ -29,87 +29,83 @@ import { setCurrentSongId, setFontSize } from '../redux/actions'
 import getSongSections from '../utils/getSongSections'
 import { makeGetSet } from '../redux/reducers/sets-reducer'
 
-const PREFIX = 'LiveBar';
+const PREFIX = 'LiveBar'
 
 const classes = {
-    root: `${PREFIX}-root`,
-    appBar: `${PREFIX}-appBar`,
-    toolbar: `${PREFIX}-toolbar`,
-    form: `${PREFIX}-form`,
-    formFooter: `${PREFIX}-formFooter`,
-    deleteButton: `${PREFIX}-deleteButton`,
-    toolbarActions: `${PREFIX}-toolbarActions`,
-    toolbarSections: `${PREFIX}-toolbarSections`,
-    section: `${PREFIX}-section`
-};
+	root: `${PREFIX}-root`,
+	appBar: `${PREFIX}-appBar`,
+	toolbar: `${PREFIX}-toolbar`,
+	form: `${PREFIX}-form`,
+	formFooter: `${PREFIX}-formFooter`,
+	deleteButton: `${PREFIX}-deleteButton`,
+	toolbarActions: `${PREFIX}-toolbarActions`,
+	toolbarSections: `${PREFIX}-toolbarSections`,
+	section: `${PREFIX}-section`,
+}
 
-const StyledAppBar = styled(AppBar)((
-    {
-        theme
-    }
-) => ({
-    [`&.${classes.root}`]: {
-        backgroundColor: theme.palette.background.hero,
+const StyledAppBar = styled(AppBar)(({ theme }) => ({
+	[`&.${classes.root}`]: {
+		backgroundColor: theme.palette.background.hero,
 
-        // Live bar has a fixed position so that the scroll can be natural
-        // and not break the print view.
-        left: 0,
-        position: 'fixed',
-        right: 0,
-        zIndex: 1,
+		// Live bar has a fixed position so that the scroll can be natural
+		// and not break the print view.
+		left: 0,
+		position: 'fixed',
+		right: 0,
+		zIndex: 1,
 
-        '@media print': {
-            display: 'none !important',
-        },
-        justifyContent: 'space-between',
-    },
+		'@media print': {
+			display: 'none !important',
+		},
+		justifyContent: 'space-between',
+	},
 
-    [`&.${classes.appBar}`]: {
-        top: 'auto',
-        bottom: 0,
-    },
+	[`&.${classes.appBar}`]: {
+		top: 'auto',
+		bottom: 0,
+	},
 
-    [`& .${classes.toolbar}`]: {
-        flexWrap: 'nowrap',
-    },
+	[`& .${classes.toolbar}`]: {
+		flexWrap: 'nowrap',
+	},
 
-    [`& .${classes.form}`]: theme.mixins.gutters({
-        paddingBottom: theme.spacing(2),
-        paddingTop: theme.spacing(2),
-        width: 500,
-    }),
+	[`& .${classes.form}`]: theme.mixins.gutters({
+		paddingBottom: theme.spacing(2),
+		paddingTop: theme.spacing(2),
+		width: 500,
+	}),
 
-    [`& .${classes.formFooter}`]: {
-        marginTop: theme.spacing(2),
-    },
+	[`& .${classes.formFooter}`]: {
+		marginTop: theme.spacing(2),
+	},
 
-    [`& .${classes.deleteButton}`]: {
-        color: theme.palette.error.main,
-    },
+	[`& .${classes.deleteButton}`]: {
+		color: theme.palette.error.main,
+	},
 
-    [`& .${classes.toolbarActions}`]: {
-        display: 'flex',
-        flexWrap: 'nowrap',
-    },
+	[`& .${classes.toolbarActions}`]: {
+		display: 'flex',
+		flexWrap: 'nowrap',
+	},
 
-    [`& .${classes.toolbarSections}`]: {
-        // alignItems: 'center',
-        display: 'flex',
-        flexGrow: 1,
-        minWidth: 0,
-        overflow: 'hidden',
-    },
+	[`& .${classes.toolbarSections}`]: {
+		// alignItems: 'center',
+		display: 'flex',
+		flexGrow: 1,
+		minWidth: 0,
+		overflow: 'hidden',
+	},
 
-    [`& .${classes.section}`]: {
-        backgroundColor: '#eee',
-        border: 2,
-        color: theme.palette.common.white,
-        minWidth: theme.spacing(3),
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(2),
-        position: 'relative',
-    }
-}));
+	[`& .${classes.section}`]: {
+		backgroundColor: '#eee',
+		border: 2,
+		color: theme.palette.common.white,
+		minWidth: theme.spacing(3),
+		paddingLeft: theme.spacing(2),
+		paddingRight: theme.spacing(2),
+		position: 'relative',
+	},
+}))
 
 const getSong = (currentSet, currentSong, direction = 'next') => {
 	const currentSongId = currentSong
@@ -187,7 +183,6 @@ const LiveBar = () => {
 		],
 	})
 
-
 	useEffect(() => {
 		setIsVisible(Boolean(match))
 	}, [match])
@@ -218,10 +213,11 @@ const LiveBar = () => {
 				<div className={classes.toolbarSections}>
 					<Tooltip title={'Back to setlist'}>
 						<IconButton
-                            className={classes.button}
-                            component={Link}
-                            to={`/sets/${currentSetId}`}
-                            size="large">
+							className={classes.button}
+							component={Link}
+							to={`/sets/${currentSetId}`}
+							size={'large'}
+						>
 							<SetListIcon />
 						</IconButton>
 					</Tooltip>
@@ -247,19 +243,31 @@ const LiveBar = () => {
 
 				<div className={classes.toolbarActions}>
 					<Tooltip title={'Set font size'}>
-						<IconButton className={classes.button} onClick={handleFontSizeChange} size="large">
+						<IconButton
+							className={classes.button}
+							onClick={handleFontSizeChange}
+							size={'large'}
+						>
 							<ArrowUpDownIcon />
 						</IconButton>
 					</Tooltip>
 
 					<Tooltip title={'Jump to previous song'}>
-						<IconButton className={classes.button} onClick={goToPrevSong} size="large">
+						<IconButton
+							className={classes.button}
+							onClick={goToPrevSong}
+							size={'large'}
+						>
 							<ChevronLeftIcon />
 						</IconButton>
 					</Tooltip>
 
 					<Tooltip title={'Jump to next song'}>
-						<IconButton className={classes.button} onClick={goToNextSong} size="large">
+						<IconButton
+							className={classes.button}
+							onClick={goToNextSong}
+							size={'large'}
+						>
 							<ChevronRightIcon />
 						</IconButton>
 					</Tooltip>
@@ -281,7 +289,7 @@ const LiveBar = () => {
 				</Menu>
 			</Toolbar>
 		</StyledAppBar>
-	) : null;
+	) : null
 }
 
 export default LiveBar

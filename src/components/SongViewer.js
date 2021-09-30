@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { styled } from '@material-ui/core/styles';
+import { styled } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { isAfter } from 'date-fns'
 import filter from 'lodash/fp/filter'
 import reduce from 'lodash/fp/reduce'
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from '@mui/styles/withStyles'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import Dialog from '@mui/material/Dialog'
@@ -42,59 +42,55 @@ import transposeChord from '../utils/transpose-chord'
 import transposeLines from '../utils/transpose-lines'
 import { linesToNashville } from '../utils/convertToNashville'
 
-const PREFIX = 'SongViewer';
+const PREFIX = 'SongViewer'
 
 const classes = {
-    root: `${PREFIX}-root`,
-    capoButton: `${PREFIX}-capoButton`,
-    closeButton: `${PREFIX}-closeButton`,
-    paper: `${PREFIX}-paper`,
-    control: `${PREFIX}-control`,
-    select: `${PREFIX}-select`,
-    noPrint: `${PREFIX}-noPrint`
-};
+	root: `${PREFIX}-root`,
+	capoButton: `${PREFIX}-capoButton`,
+	closeButton: `${PREFIX}-closeButton`,
+	paper: `${PREFIX}-paper`,
+	control: `${PREFIX}-control`,
+	select: `${PREFIX}-select`,
+	noPrint: `${PREFIX}-noPrint`,
+}
 
-const StyledFade = styled(Fade)((
-    {
-        theme
-    }
-) => ({
-    [`& .${classes.root}`]: {
+const StyledFade = styled(Fade)(({ theme }) => ({
+	[`& .${classes.root}`]: {
 		flexGrow: 1,
 	},
 
-    [`& .${classes.capoButton}`]: {
+	[`& .${classes.capoButton}`]: {
 		borderRadius: 3,
 		flexDirection: 'column',
 		padding: theme.spacing(),
 	},
 
-    [`& .${classes.closeButton}`]: {
+	[`& .${classes.closeButton}`]: {
 		position: 'absolute',
 		right: theme.spacing(),
 		top: theme.spacing(),
 	},
 
-    [`& .${classes.paper}`]: {
+	[`& .${classes.paper}`]: {
 		padding: theme.spacing(2),
 		height: '100%',
 		color: theme.palette.text.secondary,
 	},
 
-    [`& .${classes.control}`]: {
+	[`& .${classes.control}`]: {
 		padding: theme.spacing(2),
 	},
 
-    [`& .${classes.select}`]: {
+	[`& .${classes.select}`]: {
 		width: theme.spacing(7),
 	},
 
-    [`& .${classes.noPrint}`]: {
+	[`& .${classes.noPrint}`]: {
 		'@media print': {
 			display: 'none !important',
 		},
-	}
-}));
+	},
+}))
 
 class SongViewer extends Component {
 	static defaultProps = {
@@ -286,7 +282,7 @@ class SongViewer extends Component {
 		}))
 
 	render() {
-		const {  isPreview, setKey, setList, song } = this.props
+		const { isPreview, setKey, setList, song } = this.props
 		const {
 			chordSize,
 			isNashville,
@@ -318,7 +314,7 @@ class SongViewer extends Component {
 		)
 
 		return (
-            <StyledFade in={Boolean(song)} appear mountOnEnter unmountOnExit>
+			<StyledFade in={Boolean(song)} appear mountOnEnter unmountOnExit>
 				<div>
 					<Hero>
 						<Container>
@@ -383,25 +379,27 @@ class SongViewer extends Component {
 
 												<Tooltip title={'Edit song'}>
 													<IconButton
-                                                        className={
+														className={
 															classes.button
 														}
-                                                        href={`/songs/${song.id}/edit`}
-                                                        size="large">
+														href={`/songs/${song.id}/edit`}
+														size={'large'}
+													>
 														<PencilIcon />
 													</IconButton>
 												</Tooltip>
 
 												<Tooltip title={'Add to set'}>
 													<IconButton
-                                                        className={
+														className={
 															classes.button
 														}
-                                                        onClick={
+														onClick={
 															this
 																.openSetListDialog
 														}
-                                                        size="large">
+														size={'large'}
+													>
 														<PlaylistPlusIcon />
 													</IconButton>
 												</Tooltip>
@@ -409,14 +407,15 @@ class SongViewer extends Component {
 													title={'Song settings'}
 												>
 													<IconButton
-                                                        className={
+														className={
 															classes.button
 														}
-                                                        onClick={
+														onClick={
 															this
 																.handleSongKeyDialogOpen
 														}
-                                                        size="large">
+														size={'large'}
+													>
 														<SettingsIcon />
 													</IconButton>
 												</Tooltip>
@@ -434,15 +433,16 @@ class SongViewer extends Component {
 													>
 														Add to Set
 														<IconButton
-                                                            aria-label={'Close'}
-                                                            className={
+															aria-label={'Close'}
+															className={
 																classes.closeButton
 															}
-                                                            onClick={
+															onClick={
 																this
 																	.closeSetListDialog
 															}
-                                                            size="large">
+															size={'large'}
+														>
 															<CloseIcon />
 														</IconButton>
 													</DialogTitle>
@@ -558,24 +558,26 @@ class SongViewer extends Component {
 
 												<Grid item xs={6}>
 													<IconButton
-                                                        aria-label={
+														aria-label={
 															'Word size down'
 														}
-                                                        onClick={
+														onClick={
 															this.wordSizeDown
 														}
-                                                        size="large">
+														size={'large'}
+													>
 														<MinusIcon />
 													</IconButton>
 
 													<IconButton
-                                                        aria-label={
+														aria-label={
 															'Word size up'
 														}
-                                                        onClick={
+														onClick={
 															this.wordSizeUp
 														}
-                                                        size="large">
+														size={'large'}
+													>
 														<PlusIcon />
 													</IconButton>
 												</Grid>
@@ -637,7 +639,7 @@ class SongViewer extends Component {
 					</Container>
 				</div>
 			</StyledFade>
-        );
+		)
 	}
 }
 
@@ -648,4 +650,4 @@ const mapStateToProps = state => ({
 	})([])(state.sets.byId),
 })
 
-export default connect(mapStateToProps, actions)((SongViewer))
+export default connect(mapStateToProps, actions)(SongViewer)

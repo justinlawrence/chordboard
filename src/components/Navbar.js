@@ -1,11 +1,11 @@
 import React from 'react'
-import { styled } from '@material-ui/core/styles';
+import { styled } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { Link, matchPath, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import map from 'lodash/map'
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from '@mui/styles/withStyles'
 import AppBar from '@mui/material/AppBar'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
@@ -27,67 +27,63 @@ import {
 	Close as CloseIcon,
 } from 'mdi-material-ui'
 
-const PREFIX = 'Navbar';
+const PREFIX = 'Navbar'
 
 const classes = {
-    root: `${PREFIX}-root`,
-    flex: `${PREFIX}-flex`,
-    menuButton: `${PREFIX}-menuButton`,
-    logoBig: `${PREFIX}-logoBig`,
-    logoWrapper: `${PREFIX}-logoWrapper`,
-    tabs: `${PREFIX}-tabs`,
-    tab: `${PREFIX}-tab`,
-    setToolbar: `${PREFIX}-setToolbar`,
-    miniButton: `${PREFIX}-miniButton`
-};
+	root: `${PREFIX}-root`,
+	flex: `${PREFIX}-flex`,
+	menuButton: `${PREFIX}-menuButton`,
+	logoBig: `${PREFIX}-logoBig`,
+	logoWrapper: `${PREFIX}-logoWrapper`,
+	tabs: `${PREFIX}-tabs`,
+	tab: `${PREFIX}-tab`,
+	setToolbar: `${PREFIX}-setToolbar`,
+	miniButton: `${PREFIX}-miniButton`,
+}
 
-const StyledAppBar = styled(AppBar)((
-    {
-        theme
-    }
-) => ({
-    [`&.${classes.root}`]: {
+const StyledAppBar = styled(AppBar)(({ theme }) => ({
+	[`&.${classes.root}`]: {
 		'@media print': {
 			display: 'none !important',
 		},
 	},
 
-    [`& .${classes.flex}`]: {
+	[`& .${classes.flex}`]: {
 		flex: 1,
 	},
 
-    [`& .${classes.menuButton}`]: {
+	[`& .${classes.menuButton}`]: {
 		marginLeft: -12,
 		marginRight: 20,
 	},
 
-    [`& .${classes.logoBig}`]: {
+	[`& .${classes.logoBig}`]: {
 		height: theme.spacing(2),
 		verticalAlign: 'middle',
 	},
 
-    [`& .${classes.logoWrapper}`]: {
+	[`& .${classes.logoWrapper}`]: {
 		paddingRight: theme.spacing(),
 		paddingTop: theme.spacing(),
 	},
 
-    [`& .${classes.tabs}`]: {
+	[`& .${classes.tabs}`]: {
 		flexGrow: 1,
 		width: '100%',
 	},
 
-    [`& .${classes.tab}`]: {
+	[`& .${classes.tab}`]: {
 		root: {
 			padding: 0,
 		},
 	},
 
-    [`& .${classes.setToolbar}`]: {},
+	[`& .${classes.setToolbar}`]: {},
 
-    [`& .${classes.miniButton}`]: {
+	[`& .${classes.miniButton}`]: {
 		zoom: 0.8,
-	}
-}));
+	},
+}))
 
 const version = require('../../package.json').version
 
@@ -147,7 +143,7 @@ class Navbar extends React.Component {
 	}
 
 	render() {
-		const {  currentSet, location, songs, themeId } = this.props
+		const { currentSet, location, songs, themeId } = this.props
 
 		let songId
 		const match = matchPath(location.pathname, {
@@ -159,7 +155,7 @@ class Navbar extends React.Component {
 		}
 
 		return (
-            <StyledAppBar
+			<StyledAppBar
 				className={classes.root}
 				color={'secondary'}
 				position={'sticky'}
@@ -167,10 +163,11 @@ class Navbar extends React.Component {
 				{currentSet ? (
 					<Toolbar className={classes.noPrint} variant={'dense'}>
 						<IconButton
-                            color={'inherit'}
-                            onClick={this.handleBackButton}
-                            className={classes.miniButton}
-                            size="large">
+							color={'inherit'}
+							onClick={this.handleBackButton}
+							className={classes.miniButton}
+							size={'large'}
+						>
 							<CloseIcon />
 						</IconButton>
 						<Tabs
@@ -253,7 +250,10 @@ class Navbar extends React.Component {
 											: 'dark mode'
 									}
 								>
-									<IconButton onClick={this.toggleTheme} size="large">
+									<IconButton
+										onClick={this.toggleTheme}
+										size={'large'}
+									>
 										{themeId === 'dark' ? (
 											<LightModeIcon />
 										) : (
@@ -266,7 +266,7 @@ class Navbar extends React.Component {
 					</Toolbar>
 				)}
 			</StyledAppBar>
-        );
+		)
 	}
 }
 
@@ -279,6 +279,4 @@ const mapStateToProps = state => ({
 	songs: getSongsForCurrentSet(state),
 })
 
-export default withRouter(
-	connect(mapStateToProps, actions)((Navbar))
-)
+export default withRouter(connect(mapStateToProps, actions)(Navbar))

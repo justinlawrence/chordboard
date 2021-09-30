@@ -63,7 +63,7 @@ class SetSong extends PureComponent {
 		//FYI the header for this table is in SetViewer.js
 
 		return (
-            <>
+			<>
 				<TableRow
 					hover
 					onClick={this.handleTableRowClick}
@@ -118,7 +118,11 @@ class SetSong extends PureComponent {
 					{mode === 'edit' && (
 						<TableCell style={{ width: 0 }}>
 							<Tooltip title={'Remove song from set'}>
-								<IconButton aria-label={'Remove song'} onClick={this.removeSong} size="large">
+								<IconButton
+									aria-label={'Remove song'}
+									onClick={this.removeSong}
+									size={'large'}
+								>
 									<DeleteIcon />
 								</IconButton>
 							</Tooltip>
@@ -126,7 +130,7 @@ class SetSong extends PureComponent {
 					)}
 				</TableRow>
 			</>
-        );
+		)
 	}
 }
 
