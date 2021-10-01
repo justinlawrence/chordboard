@@ -3,12 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import IconButton from '@mui/material/IconButton'
-import Grid from '@mui/material/Grid'
-import TableCell from '@mui/material/TableCell'
-import TableRow from '@mui/material/TableRow'
-import Typography from '@mui/material/Typography'
-import Tooltip from '@mui/material/Tooltip'
+import { IconButton, Grid, ListItem, Typography, Tooltip } from '@mui/material'
 import { Delete as DeleteIcon, Drag as DragIcon } from 'mdi-material-ui'
 
 import * as actions from '../redux/actions'
@@ -58,44 +53,30 @@ class SetSong extends PureComponent {
 	stopPropagation = event => event.stopPropagation()
 
 	render() {
-		const { mode, provided, setKey, song, songIndex } = this.props
+		const { mode, setKey, song, songIndex } = this.props
 
 		//FYI the header for this table is in SetViewer.js
 
 		return (
-			<>
-				<TableRow
-					hover
-					onClick={this.handleTableRowClick}
-					{...provided.draggableProps}
-					{...provided.dragHandleProps}
-				>
-					{mode === 'edit' && (
-						<TableCell style={{ width: 0 }}>
-							<Tooltip title={'Drag to reorder song'}>
-								<DragIcon />
-							</Tooltip>
-						</TableCell>
-					)}
+			<ListItem button onClick={this.handleTableRowClick}>
+				{mode === 'edit' && (
+					<Tooltip title={'Drag to reorder song'}>
+						<DragIcon />
+					</Tooltip>
+				)}
 
-					<TableCell padding={'checkbox'} style={{ width: 0 }}>
-						<Typography variant={'h6'}>{songIndex + 1}</Typography>
-					</TableCell>
+				<Typography variant={'h6'}>{songIndex + 1}</Typography>
+				<Typography variant={'h6'}>{song.title}</Typography>
 
-					<TableCell>
-						<Typography variant={'h6'}>{song.title}</Typography>
-					</TableCell>
+				<Grid container>
+					<Grid item onClick={this.stopPropagation}>
+						<KeySelector
+							onSelect={this.handleKeySelect}
+							songKey={setKey}
+						/>
+					</Grid>
 
-					<TableCell padding={'none'}>
-						<Grid container>
-							<Grid item onClick={this.stopPropagation}>
-								<KeySelector
-									onSelect={this.handleKeySelect}
-									songKey={setKey}
-								/>
-							</Grid>
-
-							{/*mode === 'edit' && (
+					{/*mode === 'edit' && (
 								<Grid item>
 									<IconButton
 										aria-label="Transpose down"
@@ -112,24 +93,20 @@ class SetSong extends PureComponent {
 									</IconButton>
 								</Grid>
 							)*/}
-						</Grid>
-					</TableCell>
+				</Grid>
 
-					{mode === 'edit' && (
-						<TableCell style={{ width: 0 }}>
-							<Tooltip title={'Remove song from set'}>
-								<IconButton
-									aria-label={'Remove song'}
-									onClick={this.removeSong}
-									size={'large'}
-								>
-									<DeleteIcon />
-								</IconButton>
-							</Tooltip>
-						</TableCell>
-					)}
-				</TableRow>
-			</>
+				{mode === 'edit' && (
+					<Tooltip title={'Remove song from set'}>
+						<IconButton
+							aria-label={'Remove song'}
+							onClick={this.removeSong}
+							size={'large'}
+						>
+							<DeleteIcon />
+						</IconButton>
+					</Tooltip>
+				)}
+			</ListItem>
 		)
 	}
 }

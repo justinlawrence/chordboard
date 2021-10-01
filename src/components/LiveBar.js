@@ -9,15 +9,14 @@ import map from 'lodash/fp/map'
 import size from 'lodash/size'
 import cx from 'classnames'
 
-import makeStyles from '@mui/styles/makeStyles'
-import AppBar from '@mui/material/AppBar'
-import ButtonBase from '@mui/material/ButtonBase'
-import IconButton from '@mui/material/IconButton'
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
-import Tooltip from '@mui/material/Tooltip'
-import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
+import {
+	ButtonBase,
+	IconButton,
+	Menu,
+	MenuItem,
+	Tooltip,
+	Typography,
+} from '@mui/material'
 import {
 	ArrowUpDown as ArrowUpDownIcon,
 	ChevronLeft as ChevronLeftIcon,
@@ -43,30 +42,23 @@ const classes = {
 	section: `${PREFIX}-section`,
 }
 
-const StyledAppBar = styled(AppBar)(({ theme }) => ({
+const StyledAppBar = styled('div')(({ theme }) => ({
 	[`&.${classes.root}`]: {
 		backgroundColor: theme.palette.background.hero,
 
 		// Live bar has a fixed position so that the scroll can be natural
 		// and not break the print view.
-		left: 0,
+		//left: 0,
 		position: 'fixed',
 		right: 0,
+		top: '50%',
+		transform: 'translateY(-50%)',
 		zIndex: 1,
 
 		'@media print': {
 			display: 'none !important',
 		},
 		justifyContent: 'space-between',
-	},
-
-	[`&.${classes.appBar}`]: {
-		top: 'auto',
-		bottom: 0,
-	},
-
-	[`& .${classes.toolbar}`]: {
-		flexWrap: 'nowrap',
 	},
 
 	[`& .${classes.form}`]: theme.mixins.gutters({
@@ -85,12 +77,13 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 
 	[`& .${classes.toolbarActions}`]: {
 		display: 'flex',
+		flexDirection: 'column',
 		flexWrap: 'nowrap',
 	},
 
 	[`& .${classes.toolbarSections}`]: {
-		// alignItems: 'center',
 		display: 'flex',
+		flexDirection: 'column',
 		flexGrow: 1,
 		minWidth: 0,
 		overflow: 'hidden',
@@ -209,85 +202,83 @@ const LiveBar = () => {
 			color={'primary'}
 			className={cx(classes.appBar, classes.root)}
 		>
-			<Toolbar variant={'dense'} className={classes.toolbar}>
-				<div className={classes.toolbarSections}>
-					<Tooltip title={'Back to setlist'}>
-						<IconButton
-							className={classes.button}
-							component={Link}
-							to={`/sets/${currentSetId}`}
-							size={'large'}
-						>
-							<SetListIcon />
-						</IconButton>
-					</Tooltip>
+			<div className={classes.toolbarSections}>
+				<Tooltip title={'Back to setlist'}>
+					<IconButton
+						className={classes.button}
+						component={Link}
+						to={`/sets/${currentSetId}`}
+						size={'large'}
+					>
+						<SetListIcon />
+					</IconButton>
+				</Tooltip>
 
-					{map(section => (
-						<ButtonBase
-							component={'a'}
-							key={`section-${section.index}`}
-							href={`#section-${section.index}`}
-							className={classes.section}
-							title={`Jump to ${section.title}`}
-							style={{ backgroundColor: section.color }}
+				{map(section => (
+					<ButtonBase
+						component={'a'}
+						key={`section-${section.index}`}
+						href={`#section-${section.index}`}
+						className={classes.section}
+						title={`Jump to ${section.title}`}
+						style={{ backgroundColor: section.color }}
+					>
+						<Typography
+							className={classes.sectionText}
+							color={'inherit'}
 						>
-							<Typography
-								className={classes.sectionText}
-								color={'inherit'}
-							>
-								{section.abbreviation}
-							</Typography>
-						</ButtonBase>
-					))(sections)}
-				</div>
+							{section.abbreviation}
+						</Typography>
+					</ButtonBase>
+				))(sections)}
+			</div>
 
-				<div className={classes.toolbarActions}>
-					<Tooltip title={'Set font size'}>
-						<IconButton
-							className={classes.button}
-							onClick={handleFontSizeChange}
-							size={'large'}
-						>
-							<ArrowUpDownIcon />
-						</IconButton>
-					</Tooltip>
+			<div className={classes.toolbarActions}>
+				<Tooltip title={'Set font size'}>
+					<IconButton
+						className={classes.button}
+						onClick={handleFontSizeChange}
+						size={'large'}
+					>
+						<ArrowUpDownIcon />
+					</IconButton>
+				</Tooltip>
 
-					<Tooltip title={'Jump to previous song'}>
-						<IconButton
-							className={classes.button}
-							onClick={goToPrevSong}
-							size={'large'}
-						>
-							<ChevronLeftIcon />
-						</IconButton>
-					</Tooltip>
+				<Tooltip title={'Jump to previous song'}>
+					<IconButton
+						className={classes.button}
+						onClick={goToPrevSong}
+						size={'large'}
+					>
+						<ChevronLeftIcon />
+					</IconButton>
+				</Tooltip>
 
-					<Tooltip title={'Jump to next song'}>
-						<IconButton
-							className={classes.button}
-							onClick={goToNextSong}
-							size={'large'}
-						>
-							<ChevronRightIcon />
-						</IconButton>
-					</Tooltip>
-				</div>
+				<Tooltip title={'Jump to next song'}>
+					<IconButton
+						className={classes.button}
+						onClick={goToNextSong}
+						size={'large'}
+					>
+						<ChevronRightIcon />
+					</IconButton>
+				</Tooltip>
+			</div>
 
-				<Menu
-					anchorEl={anchorEl}
-					onClose={handleMenuClose}
-					open={Boolean(anchorEl)}
-				>
-					{map(fontSize => (
-						<MenuItem
-							key={fontSize.size}
-							onClick={handleFontSizeSelect(fontSize.size)}
-						>
-							{fontSize.label}
-						</MenuItem>
-					))(fontSizes)}
-				</Menu>
-			</Toolbar>
+			<Menu
+				anchorEl={anchorEl}
+				onClose={handleMenuClose}
+				open={Boolean(anchorEl)}
+			>
+				{map(fontSize => (
+					<MenuItem
+						key={fontSize.size}
+						onClick={handleFontSizeSelect(fontSize.size)}
+					>
+						{fontSize.label}
+					</MenuItem>
+				))(fontSizes)}
+			</Menu>
 		</StyledAppBar>
 	) : null
 }

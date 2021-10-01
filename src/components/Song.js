@@ -1,10 +1,7 @@
-import React, { PureComponent } from 'react'
-import { styled } from '@material-ui/core/styles';
-import PropTypes from 'prop-types'
+import React from 'react'
+import { styled } from '@material-ui/core/styles'
 import { connect } from 'react-redux'
 import { forEach } from 'lodash'
-
-import withStyles from '@mui/styles/withStyles';
 
 import * as actions from '../redux/actions'
 import { getFontSize } from '../redux/reducers/user'
@@ -13,23 +10,19 @@ import ChordLine from './ChordLine'
 import ChordPair from './ChordPair'
 import Line from './Line'
 
-const PREFIX = 'Song';
+const PREFIX = 'Song'
 
 const classes = {
-    root: `${PREFIX}-root`,
-    section: `${PREFIX}-section`
-};
+	root: `${PREFIX}-root`,
+	section: `${PREFIX}-section`,
+}
 
-const Root = styled('div')((
-    {
-        theme
-    }
-) => ({
-    [`& .${classes.root}`]: {
+const Root = styled('div')(({ theme }) => ({
+	[`& .${classes.root}`]: {
 		paddingBottom: theme.spacing(14),
 	},
 
-    [`& .${classes.section}`]: {
+	[`& .${classes.section}`]: {
 		borderLeft: '4px solid #444',
 		marginLeft: theme.spacing(8),
 		marginTop: theme.spacing(4),
@@ -61,8 +54,8 @@ const Root = styled('div')((
 		'@media print': {
 			marginLeft: theme.spacing(6),
 		},
-	}
-}));
+	},
+}))
 
 const sectionStyles = {}
 forEach(sectionData, section => {
@@ -75,140 +68,122 @@ forEach(sectionData, section => {
 	}
 })
 
-class Song extends PureComponent {
-	static defaultProps = {
-		chordSize: 16,
-		lines: [],
-		wordSize: 20,
+const Song = ({
+	chordSize: chordSizeProp = 16,
+	fontSize,
+	lines = [],
+	wordSize: wordSizeProp = 20,
+}) => {
+	let scale
+	switch (fontSize) {
+		case 'small':
+			scale = 0.8
+			break
+		case 'medium':
+		default:
+			scale = 1
+			break
+		case 'large':
+			scale = 1.5
+			break
 	}
 
-	static propTypes = {
-		chordSize: PropTypes.number,
-		classes: PropTypes.object,
-		lines: PropTypes.array,
-		wordSize: PropTypes.number,
-	}
+	const chordSize = chordSizeProp * scale
+	const wordSize = wordSizeProp * scale
 
-	render() {
-		const {
-			chordSize: chordSizeProp,
-			classes,
-			fontSize,
-			lines,
-			wordSize: wordSizeProp,
-		} = this.props
+	let children = []
+	let result = []
+	let sectionTitle = ''
+	let sectionIndex = 0
 
-		let scale
-		switch (fontSize) {
-			case 'small':
-				scale = 0.8
+	forEach(lines, (line, i) => {
+		switch (line.type) {
+			case 'chord-line':
+				children.push(
+					<ChordLine
+						key={i}
+						chords={line.chords}
+						chordSize={chordSize}
+						wordSize={wordSize}
+					/>
+				)
 				break
-			case 'medium':
+
+			case 'chord-pair':
+				children.push(
+					<ChordPair
+						key={i}
+						chords={line.chords}
+						chordSize={chordSize}
+						text={line.text}
+						wordSize={wordSize}
+					/>
+				)
+				break
+
+			case 'empty':
+				children.push(<Root key={i} className={'empty-line'} />)
+				break
+
+			case 'line':
+				children.push(
+					<Line key={i} text={line.text} wordSize={wordSize} />
+				)
+				break
+
+			case 'section':
+				if (sectionTitle) {
+					// Finish off last section
+					result.push(
+						<section
+							id={`section-${sectionIndex}`}
+							key={`section-${sectionIndex}`}
+							className={classes.section}
+							data-section={sectionTitle}
+						>
+							{children}
+						</section>
+					)
+					children = []
+				} else {
+					result = result.concat(children)
+				}
+
+				const section = getSectionFromTitle(line.text)
+				sectionTitle = section.title
+				//sections.push( { title: line.text, index: sectionIndex } );
+
+				sectionIndex++
+
+				break
+
 			default:
-				scale = 1
-				break
-			case 'large':
-				scale = 1.5
 				break
 		}
+	})
 
-		const chordSize = chordSizeProp * scale
-		const wordSize = wordSizeProp * scale
-
-		let children = []
-		let result = []
-		let sectionTitle = ''
-		let sectionIndex = 0
-
-		forEach(lines, (line, i) => {
-			switch (line.type) {
-				case 'chord-line':
-					children.push(
-						<ChordLine
-							key={i}
-							chords={line.chords}
-							chordSize={chordSize}
-							wordSize={wordSize}
-						/>
-					)
-					break
-
-				case 'chord-pair':
-					children.push(
-						<ChordPair
-							key={i}
-							chords={line.chords}
-							chordSize={chordSize}
-							text={line.text}
-							wordSize={wordSize}
-						/>
-					)
-					break
-
-				case 'empty':
-					children.push(<Root key={i} className={'empty-line'} />)
-					break
-
-				case 'line':
-					children.push(
-						<Line key={i} text={line.text} wordSize={wordSize} />
-					)
-					break
-
-				case 'section':
-					if (sectionTitle) {
-						// Finish off last section
-						result.push(
-							<section
-								id={`section-${sectionIndex}`}
-								key={`section-${sectionIndex}`}
-								className={classes.section}
-								data-section={sectionTitle}
-							>
-								{children}
-							</section>
-						)
-						children = []
-					} else {
-						result = result.concat(children)
-					}
-
-					const section = getSectionFromTitle(line.text)
-					sectionTitle = section.title
-					//sections.push( { title: line.text, index: sectionIndex } );
-
-					sectionIndex++
-
-					break
-
-				default:
-					break
-			}
-		})
-
-		if (sectionTitle) {
-			result.push(
-				<section
-					id={`section-${sectionIndex}`}
-					key={`section-${sectionIndex}`}
-					className={classes.section}
-					data-section={sectionTitle}
-				>
-					{children}
-				</section>
-			)
-		}
-
-		if (children.length && !sectionTitle) {
-			result = result.concat(children)
-		}
-
-		return <div className={classes.root}>{result}</div>
+	if (sectionTitle) {
+		result.push(
+			<section
+				id={`section-${sectionIndex}`}
+				key={`section-${sectionIndex}`}
+				className={classes.section}
+				data-section={sectionTitle}
+			>
+				{children}
+			</section>
+		)
 	}
+
+	if (children.length && !sectionTitle) {
+		result = result.concat(children)
+	}
+
+	return <Root className={classes.root}>{result}</Root>
 }
 
 const mapStateToProps = state => ({
 	fontSize: getFontSize(state),
 })
 
-export default connect(mapStateToProps, actions)((Song))
+export default connect(mapStateToProps, actions)(Song)

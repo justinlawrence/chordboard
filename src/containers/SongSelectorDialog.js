@@ -1,6 +1,4 @@
-import React, { PureComponent } from 'react'
-import { styled } from '@material-ui/core/styles'
-import PropTypes from 'prop-types'
+import React, { useMemo, useState } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'recompose'
 import { VariableSizeList } from 'react-window'
@@ -11,14 +9,17 @@ import flow from 'lodash/fp/flow'
 import groupBy from 'lodash/fp/groupBy'
 import includes from 'lodash/fp/includes'
 import map from 'lodash/fp/map'
+import noop from 'lodash/noop'
 import reduce from 'lodash/fp/reduce'
 import toLower from 'lodash/fp/toLower'
-import size from 'lodash/fp/size'
+import size from 'lodash/size'
 import sortBy from 'lodash/fp/sortBy'
 import startsWith from 'lodash/fp/startsWith'
 import upperCase from 'lodash/fp/upperCase'
 
-import withStyles from '@mui/styles/withStyles'
+import { styled } from '@material-ui/core/styles'
+import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import Button from '@mui/material/Button'
 import ButtonBase from '@mui/material/ButtonBase'
 import Checkbox from '@mui/material/Checkbox'
@@ -55,14 +56,14 @@ const classes = {
 }
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
-	[`& .${classes.root}`]: {},
+	[`& .${classes.root}`]: {
+		'& .MuiDialog-scrollPaper': {
+			alignItems: 'flex-start',
+		},
+	},
 
 	[`& .${classes.checkbox}`]: {
 		padding: theme.spacing(),
-	},
-
-	[`& .${classes.scrollPaper}`]: {
-		alignItems: 'flex-start',
 	},
 
 	[`& .${classes.input}`]: {
@@ -112,37 +113,19 @@ const withWidth = () => WrappedComponent => props =>
 
 const mapWithKey = map.convert({ cap: false })
 
-class SongSelectorDialog extends PureComponent {
-	static defaultProps = {
-		songs: [],
-	}
+const SongSelectorDialog = ({ onClose = noop, open, songs = [] }) => {
+	const theme = useTheme()
+	const isFullscreen = useMediaQuery(theme.breakpoints.down('xs'))
+	const [sectionFilter, setSectionFilter] = useState('')
+	const [setSongs, setSetSongs] = useState([])
+	const [searchValue, setSearchValue] = useState('')
+	const [showFilters, setShowFilters] = useState(false)
 
-	static propTypes = {
-		classes: PropTypes.object,
-		onClose: PropTypes.func.isRequired,
-		open: PropTypes.bool.isRequired,
-		width: PropTypes.string,
-		// Redux props
-		songs: PropTypes.array,
-	}
+	const listSize = { height: 500, width: 600 }
 
-	state = {
-		sectionFilter: '',
-		setSongs: [],
-		searchValue: '',
-		showFilters: false,
-	}
-
-	listRef = null
-
-	get listSize() {
-		// TODO: Figure out how to get the correct dimensions
-		return { height: 500, width: 600 }
-	}
-
-	get filteredSongs() {
+	const filteredSongs = useMemo(() => {
 		const searchFilter = filter(song =>
-			includes(toLower(this.state.searchValue))(
+			includes(toLower(searchValue))(
 				toLower(song.title) +
 					' ' +
 					toLower(song.author) +
@@ -152,66 +135,50 @@ class SongSelectorDialog extends PureComponent {
 		)
 
 		const sectionFilter = filter(song =>
-			this.state.sectionFilter
-				? startsWith(toLower(this.state.sectionFilter))(
-						toLower(song.title)
-				  )
+			sectionFilter
+				? startsWith(toLower(sectionFilter))(toLower(song.title))
 				: true
 		)
 
-		return flow(
-			searchFilter,
-			sectionFilter,
-			sortBy('title')
-		)(this.props.songs)
-	}
+		return flow(searchFilter, sectionFilter, sortBy('title'))(songs)
+	}, [searchValue, songs])
 
-	getItemSize = index => 50
+	const getItemSize = index => 50
 
-	handleClose = () => this.props.onClose([])
+	const handleClose = () => onClose([])
 
-	handleCheckboxClick = value => event => {
+	const handleCheckboxClick = value => event => {
 		event.stopPropagation()
-		this.setState(prevState => ({
-			setSongs: [...prevState.setSongs, value],
-		}))
+		setSetSongs(prevState => [...prevState.setSongs, value])
 	}
 
-	handleListItemClick = value => () => this.props.onClose([value])
+	const handleListItemClick = value => () => onClose([value])
 
-	handleSave = () => this.props.onClose(this.state.setSongs)
+	const handleSave = () => onClose(setSongs)
 
-	handleSearchChange = event =>
-		this.setState({ searchValue: event.target.value })
+	const handleSearchChange = event => setSearchValue(event.target.value)
 
-	handleSectionClick = key => event => {
-		if (this.state.sectionFilter === key) {
-			this.setState({ sectionFilter: '' })
+	const handleSectionClick = key => event => {
+		if (sectionFilter === key) {
+			setSectionFilter('')
 		} else {
-			this.setState({ sectionFilter: key })
+			setSectionFilter(key)
 		}
 	}
 
-	toggleSectionFilter = () =>
-		this.setState(prevState => ({
-			sectionFilter: !prevState.showFilters
-				? prevState.sectionFilter
-				: '',
-			showFilters: !prevState.showFilters,
-		}))
+	const toggleSectionFilter = () => {
+		setSectionFilter(prev => (!showFilters ? prev : ''))
+		setShowFilters(prev => !prev)
+	}
 
-	setListRef = node => (this.listRef = node)
-
-	renderItem =
+	const renderItem =
 		filteredSongs =>
 		({ index, style }) => {
-			const {} = this.props
-			const { setSongs } = this.state
 			const song = filteredSongs[index]
 			return (
 				<ListItem
 					button
-					onClick={this.handleListItemClick(song)}
+					onClick={handleListItemClick(song)}
 					key={song.id}
 					style={style}
 				>
@@ -220,7 +187,7 @@ class SongSelectorDialog extends PureComponent {
 							<Checkbox
 								className={classes.checkbox}
 								checked={includes(song)(setSongs)}
-								onClick={this.handleCheckboxClick(song)}
+								onClick={handleCheckboxClick(song)}
 							/>
 						</Grid>
 						<Grid item xs>
@@ -239,112 +206,102 @@ class SongSelectorDialog extends PureComponent {
 			)
 		}
 
-	render() {
-		const { open, songs } = this.props
-		const { searchValue, sectionFilter, showFilters } = this.state
+	const firstLetter = song => upperCase(first(song.title))
+	const sections = flow(
+		groupBy(firstLetter),
+		mapWithKey((songs, key) => ({
+			key,
+			isSelected: sectionFilter === key,
+		})),
+		sortBy('key')
+	)(songs)
 
-		const firstLetter = song => upperCase(first(song.title))
-		const sections = flow(
-			groupBy(firstLetter),
-			mapWithKey((songs, key) => ({
-				key,
-				isSelected: sectionFilter === key,
-			})),
-			sortBy('key')
-		)(songs)
-
-		return (
-			<StyledDialog
-				aria-labelledby={'song-selector-dialog'}
-				classes={{
-					scrollPaper: classes.scrollPaper,
-				}}
-				onClose={this.handleClose}
-				fullScreen={!isWidthUp('sm', this.props.width)}
-				fullWidth
-				open={open}
-			>
-				<DialogTitle id={'song-selector-dialog'}>
-					<Paper className={classes.searchBar} elevation={1}>
-						<IconButton
-							className={classes.iconButton}
-							aria-label={'Back'}
-							size={'large'}
-						>
-							<BackIcon />
-						</IconButton>
-						<InputBase
-							className={classes.input}
-							onChange={this.handleSearchChange}
-							placeholder={'Search titles, authors & words'}
-							value={searchValue}
-						/>
-						{/*<IconButton
+	return (
+		<StyledDialog
+			aria-labelledby={'song-selector-dialog'}
+			className={classes.scrollPaper}
+			onClose={handleClose}
+			fullScreen={isFullscreen}
+			fullWidth
+			open={open}
+		>
+			<DialogTitle id={'song-selector-dialog'}>
+				<Paper className={classes.searchBar} elevation={1}>
+					<IconButton
+						className={classes.iconButton}
+						aria-label={'Back'}
+						size={'large'}
+					>
+						<BackIcon />
+					</IconButton>
+					<InputBase
+						className={classes.input}
+						onChange={handleSearchChange}
+						placeholder={'Search titles, authors & words'}
+						value={searchValue}
+					/>
+					{/*<IconButton
 							className={classes.iconButton}
 							aria-label="Search"
 						>
 							<SearchIcon />
 						</IconButton>*/}
-						<IconButton
-							className={classes.iconButton}
-							onClick={this.toggleSectionFilter}
-							size={'large'}
-						>
-							<AlphabeticalIcon />
-						</IconButton>
-					</Paper>
+					<IconButton
+						className={classes.iconButton}
+						onClick={toggleSectionFilter}
+						size={'large'}
+					>
+						<AlphabeticalIcon />
+					</IconButton>
+				</Paper>
 
-					<Collapse in={showFilters}>
-						<div className={classes.sectionLabels}>
-							<Grid container spacing={1}>
-								{map(section => (
-									<Grid item key={section.key}>
-										<ButtonBase
-											className={cx(
-												classes.sectionButton,
-												{
-													[classes.sectionButtonSelected]:
-														section.isSelected,
-												}
-											)}
-											onClick={this.handleSectionClick(
-												section.key
-											)}
-										>
-											<Typography variant={'subtitle1'}>
-												{section.key}
-											</Typography>
-										</ButtonBase>
-									</Grid>
-								))(sections)}
-							</Grid>
-						</div>
-					</Collapse>
-				</DialogTitle>
-				<DialogContent className={classes.content}>
-					<List>
-						<div ref={this.setListRef}>
-							<VariableSizeList
-								estimatedItemSize={50}
-								height={this.listSize.height}
-								itemCount={size(this.filteredSongs)}
-								itemSize={this.getItemSize}
-								width={this.listSize.width}
-							>
-								{this.renderItem(this.filteredSongs)}
-							</VariableSizeList>
-						</div>
-					</List>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={this.handleClose}>Close</Button>
-					<Button onClick={this.handleSave} color={'primary'}>
-						Save
-					</Button>
-				</DialogActions>
-			</StyledDialog>
-		)
-	}
+				<Collapse in={showFilters}>
+					<div className={classes.sectionLabels}>
+						<Grid container spacing={1}>
+							{map(section => (
+								<Grid item key={section.key}>
+									<ButtonBase
+										className={cx(classes.sectionButton, {
+											[classes.sectionButtonSelected]:
+												section.isSelected,
+										})}
+										onClick={handleSectionClick(
+											section.key
+										)}
+									>
+										<Typography variant={'subtitle1'}>
+											{section.key}
+										</Typography>
+									</ButtonBase>
+								</Grid>
+							))(sections)}
+						</Grid>
+					</div>
+				</Collapse>
+			</DialogTitle>
+			<DialogContent className={classes.content}>
+				<List>
+					<div>
+						<VariableSizeList
+							estimatedItemSize={50}
+							height={listSize.height}
+							itemCount={size(filteredSongs)}
+							itemSize={getItemSize}
+							width={listSize.width}
+						>
+							{renderItem(filteredSongs)}
+						</VariableSizeList>
+					</div>
+				</List>
+			</DialogContent>
+			<DialogActions>
+				<Button onClick={handleClose}>Close</Button>
+				<Button onClick={handleSave} color={'primary'}>
+					Save
+				</Button>
+			</DialogActions>
+		</StyledDialog>
+	)
 }
 
 const mapStateToProps = state => ({

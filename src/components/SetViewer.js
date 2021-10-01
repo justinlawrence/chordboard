@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { styled } from '@material-ui/core/styles';
+import { styled } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
@@ -7,19 +7,17 @@ import uniqBy from 'lodash/fp/uniqBy'
 
 import { parseISO } from 'date-fns'
 
-import withStyles from '@mui/styles/withStyles';
-import Button from '@mui/material/Button'
-import Container from '@mui/material/Container'
-import Grid from '@mui/material/Grid'
-import Grow from '@mui/material/Grow'
-import Hidden from '@mui/material/Hidden'
-import IconButton from '@mui/material/IconButton'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
-import Typography from '@mui/material/Typography'
+import {
+	Button,
+	Container,
+	Grid,
+	Grow,
+	Hidden,
+	IconButton,
+	List,
+	ListItem,
+	Typography,
+} from '@mui/material'
 
 import * as actions from '../redux/actions'
 import DateSignifier from './DateSignifier'
@@ -29,33 +27,29 @@ import SetFormContainer from '../containers/SetFormContainer'
 import SongSelectorDialog from '../containers/SongSelectorDialog'
 import { Pencil as PencilIcon } from 'mdi-material-ui'
 
-const PREFIX = 'SetViewer';
+const PREFIX = 'SetViewer'
 
 const classes = {
-    form: `${PREFIX}-form`,
-    formFooter: `${PREFIX}-formFooter`,
-    deleteButton: `${PREFIX}-deleteButton`
-};
+	form: `${PREFIX}-form`,
+	formFooter: `${PREFIX}-formFooter`,
+	deleteButton: `${PREFIX}-deleteButton`,
+}
 
-const Root = styled('div')((
-    {
-        theme
-    }
-) => ({
-    [`& .${classes.form}`]: theme.mixins.gutters({
+const Root = styled('div')(({ theme }) => ({
+	[`& .${classes.form}`]: theme.mixins.gutters({
 		paddingBottom: theme.spacing(2),
 		paddingTop: theme.spacing(2),
 		width: 500,
 	}),
 
-    [`& .${classes.formFooter}`]: {
+	[`& .${classes.formFooter}`]: {
 		marginTop: theme.spacing(2),
 	},
 
-    [`& .${classes.deleteButton}`]: {
+	[`& .${classes.deleteButton}`]: {
 		color: theme.palette.error.main,
-	}
-}));
+	},
+}))
 
 class SetViewer extends Component {
 	static propTypes = {
@@ -131,11 +125,11 @@ class SetViewer extends Component {
 	transposeDown = song => this.changeKey(song.id, -1)
 	transposeUp = song => this.changeKey(song.id, 1)
 
-	renderTableContent = provided => {
+	renderTableContent = (dropProvided = {}) => {
 		const { set } = this.props
 		const { mode } = this.state
 		return (
-			<TableBody {...provided.droppableProps}>
+			<div ref={dropProvided.innerRef} {...dropProvided.droppableProps}>
 				{set.songs.length ? (
 					set.songs.map((song, index) => (
 						<Draggable
@@ -144,37 +138,38 @@ class SetViewer extends Component {
 							isDragDisabled={mode !== 'edit'}
 							key={song.id}
 						>
-							{provided => (
-								<SetSongRow
-									mode={mode}
-									onChangeKey={this.changeKey}
-									provided={provided}
-									setId={set.id}
-									setKey={song.key}
-									songIndex={index}
-									songId={song.id}
-								/>
+							{dragProvided => (
+								<div
+									ref={dragProvided.innerRef}
+									{...dragProvided.draggableProps}
+									{...dragProvided.dragHandleProps}
+								>
+									<SetSongRow
+										mode={mode}
+										onChangeKey={this.changeKey}
+										setId={set.id}
+										setKey={song.key}
+										songIndex={index}
+										songId={song.id}
+									/>
+								</div>
 							)}
 						</Draggable>
 					))
 				) : (
-					<TableRow key={'id-none'}>
-						<TableCell />
-
-						<TableCell>
-							<Typography variant={'h6'}>
-								This set has no songs
-							</Typography>
-						</TableCell>
-					</TableRow>
+					<ListItem key={'id-none'}>
+						<Typography variant={'h6'}>
+							This set has no songs
+						</Typography>
+					</ListItem>
 				)}
-				{provided.placeholder}
-			</TableBody>
+				{dropProvided.placeholder}
+			</div>
 		)
 	}
 
 	render() {
-		const { set, } = this.props
+		const { set } = this.props
 		const { mode, isSongSelectorVisible } = this.state
 		if (!(set.setDate instanceof Date) && !isNaN(set.setDate)) {
 			console.log(
@@ -278,58 +273,29 @@ class SetViewer extends Component {
 
 				<section className={'section'}>
 					<Container maxWidth={'xl'}>
-						<Table
-							className={classes.table}
-							aria-labelledby={'tableTitle'}
-						>
-							<TableHead>
-								<TableRow>
-									{mode === 'edit' && (
-										<TableCell
-											padding={'checkbox'}
-											style={{ width: 0 }}
-										>
-											Move
-										</TableCell>
-									)}
-									<TableCell
-										padding={'checkbox'}
-										style={{ width: 0 }}
-									>
-										#
-									</TableCell>
-									<TableCell>Song</TableCell>
-									<TableCell
-										padding={'checkbox'}
-										style={{ width: 0 }}
-									>
-										Key
-									</TableCell>
-									{mode === 'edit' && (
-										<TableCell
-											padding={'checkbox'}
-											style={{ width: 0 }}
-										>
-											Delete
-										</TableCell>
-									)}
-								</TableRow>
-							</TableHead>
+						<List className={classes.table}>
+							<ListItem>
+								{mode === 'edit' && (
+									<Typography>Move</Typography>
+								)}
+								<span>#</span>
+								<span>Song</span>
+								<span>Key</span>
+								{mode === 'edit' && <span>Delete</span>}
+							</ListItem>
 
 							<DragDropContext onDragEnd={this.handleDragEnd}>
 								<Droppable droppableId={'droppable'}>
 									{provided => (
-										<>
-											{this.renderTableContent(provided)}
-										</>
+										<>{this.renderTableContent(provided)}</>
 									)}
 								</Droppable>
 							</DragDropContext>
-						</Table>
+						</List>
 					</Container>
 				</section>
 			</Root>
-		) : null;
+		) : null
 	}
 }
 
@@ -337,4 +303,4 @@ const mapStateToProps = (state, ownProps) => ({
 	set: state.sets.byId[ownProps.setId],
 })
 
-export default connect(mapStateToProps, actions)((SetViewer))
+export default connect(mapStateToProps, actions)(SetViewer)

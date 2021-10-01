@@ -1,28 +1,23 @@
-import React, { PureComponent } from 'react'
-import { styled } from '@material-ui/core/styles';
-import { find, toLower } from 'lodash'
+import React, { useEffect, useState } from 'react'
+import { styled } from '@material-ui/core/styles'
+import { find, noop, toLower } from 'lodash'
 
-import withStyles from '@mui/styles/withStyles';
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 
 import getKeyDiff from '../utils/getKeyDiff'
 
-const PREFIX = 'KeySelector';
+const PREFIX = 'KeySelector'
 
 const classes = {
-    root: `${PREFIX}-root`
-};
+	root: `${PREFIX}-root`,
+}
 
-const StyledTextField = styled(TextField)((
-    {
-        theme
-    }
-) => ({
-    [`&.${classes.root}`]: {
+const StyledTextField = styled(TextField)(({ theme }) => ({
+	[`&.${classes.root}`]: {
 		minWidth: theme.spacing(9),
-	}
-}));
+	},
+}))
 
 const options = [
 	{ key: 'C', label: 'C', value: 'c' },
@@ -39,60 +34,42 @@ const options = [
 	{ key: 'B', label: 'B', value: 'b' },
 ]
 
-class KeySelector extends PureComponent {
-	state = {
-		value: 'c',
-	}
+const KeySelector = ({ label, onSelect = noop, songKey = 'c' }) => {
+	const [key, setKey] = useState(songKey)
 
-	componentDidMount() {
-		this.handleProps(this.props)
-	}
+	useEffect(() => {
+		const newKey = find(options, { value: toLower(songKey) })
+		if (!newKey) {
+			return
+		}
 
-	UNSAFE_componentWillReceiveProps(nextProps) {
-		this.handleProps(nextProps)
-	}
+		setKey(newKey.value)
+	}, [songKey])
 
-	handleChange = event => {
+	const handleChange = event => {
 		const value = event.target.value
 		const option = find(options, { value })
 
-		this.setState({ value })
+		setKey(value)
 
-		if (this.props.onSelect) {
-			this.props.onSelect(
-				option,
-				getKeyDiff(this.props.songKey, option.key)
-			)
-		}
+		onSelect(option, getKeyDiff(songKey, option.key))
 	}
 
-	handleProps = props => {
-		const value = toLower(props.songKey)
-		if (value !== this.state.value && find(options, { value })) {
-			this.setState({ value })
-		}
-	}
-
-	render() {
-		const {  label } = this.props
-		const { value } = this.state
-
-		return (
-            <StyledTextField
-				className={classes.root}
-				select
-				label={label}
-				value={value}
-				onChange={this.handleChange}
-			>
-				{options.map(option => (
-					<MenuItem key={option.value} value={option.value}>
-						{option.label}
-					</MenuItem>
-				))}
-			</StyledTextField>
-        );
-	}
+	return (
+		<StyledTextField
+			className={classes.root}
+			select
+			label={label}
+			value={key}
+			onChange={handleChange}
+		>
+			{options.map(option => (
+				<MenuItem key={option.value} value={option.value}>
+					{option.label}
+				</MenuItem>
+			))}
+		</StyledTextField>
+	)
 }
 
-export default (KeySelector)
+export default KeySelector
