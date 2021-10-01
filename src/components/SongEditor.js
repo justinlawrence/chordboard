@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { styled } from '@material-ui/core/styles';
+import { styled } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { isNil } from 'lodash'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import Textarea from 'react-textarea-autosize'
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from '@mui/styles/withStyles'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Hidden from '@mui/material/Hidden'
@@ -19,49 +19,46 @@ import SongViewer from './SongViewer'
 import * as actions from '../redux/actions'
 import ContentLimiter from './ContentLimiter'
 import Hero from './Hero'
+import KeySelector from './KeySelector'
 import chordproParser from '../parsers/chordpro-parser'
 import Parser from '../parsers/song-parser'
 
-const PREFIX = 'SongEditor';
+const PREFIX = 'SongEditor'
 
 const classes = {
-    root: `${PREFIX}-root`,
-    form: `${PREFIX}-form`,
-    formFooter: `${PREFIX}-formFooter`,
-    control: `${PREFIX}-control`,
-    addPaddingBottom: `${PREFIX}-addPaddingBottom`,
-    songPreview: `${PREFIX}-songPreview`,
-    textEditor: `${PREFIX}-textEditor`,
-    textEditorWrapper: `${PREFIX}-textEditorWrapper`
-};
+	root: `${PREFIX}-root`,
+	form: `${PREFIX}-form`,
+	formFooter: `${PREFIX}-formFooter`,
+	control: `${PREFIX}-control`,
+	addPaddingBottom: `${PREFIX}-addPaddingBottom`,
+	songPreview: `${PREFIX}-songPreview`,
+	textEditor: `${PREFIX}-textEditor`,
+	textEditorWrapper: `${PREFIX}-textEditorWrapper`,
+}
 
-const StyledHero = styled(Hero)((
-    {
-        theme
-    }
-) => ({
-    [`& .${classes.root}`]: {
+const StyledHero = styled(Hero)(({ theme }) => ({
+	[`& .${classes.root}`]: {
 		flexGrow: 1,
 	},
 
-    [`& .${classes.form}`]: theme.mixins.gutters({
+	[`& .${classes.form}`]: theme.mixins.gutters({
 		paddingBottom: theme.spacing(2),
 		paddingTop: theme.spacing(2),
 	}),
 
-    [`& .${classes.formFooter}`]: {
+	[`& .${classes.formFooter}`]: {
 		marginTop: theme.spacing(2),
 	},
 
-    [`& .${classes.control}`]: {
+	[`& .${classes.control}`]: {
 		padding: theme.spacing(2),
 	},
 
-    [`& .${classes.addPaddingBottom}`]: {
+	[`& .${classes.addPaddingBottom}`]: {
 		paddingBottom: theme.spacing(),
 	},
 
-    [`& .${classes.songPreview}`]: {
+	[`& .${classes.songPreview}`]: {
 		overflow: 'hidden',
 		width: '100%',
 		padding: theme.spacing(2),
@@ -69,7 +66,7 @@ const StyledHero = styled(Hero)((
 		zoom: '0.6',
 	},
 
-    [`& .${classes.textEditor}`]: {
+	[`& .${classes.textEditor}`]: {
 		border: 'none',
 		fontFamily: 'monospace',
 		fontSize: theme.typography.h6.fontSize,
@@ -81,13 +78,13 @@ const StyledHero = styled(Hero)((
 		color: theme.palette.color,
 	},
 
-    [`& .${classes.textEditorWrapper}`]: {
+	[`& .${classes.textEditorWrapper}`]: {
 		display: 'flex',
 		overflow: 'hidden',
 		width: '100%',
 		marginBottom: theme.spacing(4),
-	}
-}));
+	},
+}))
 
 class SongEditor extends Component {
 	static propTypes = {
@@ -141,6 +138,10 @@ class SongEditor extends Component {
 
 	onKeyInput = event => {
 		this.setState({ key: event.target.value })
+	}
+
+	handleSelectSongKey = option => {
+		this.setState({ key: option.key })
 	}
 
 	onDeleteSong = () => {
@@ -199,7 +200,7 @@ class SongEditor extends Component {
 	}
 
 	render() {
-		const {  match } = this.props
+		const { match } = this.props
 		const { author, content, key, title, parserType } = this.state
 
 		const isNew = match.path === '/songs/new'
@@ -218,7 +219,7 @@ class SongEditor extends Component {
 		}
 
 		return (
-            <StyledHero>
+			<StyledHero>
 				<ContentLimiter>
 					<Grid container className={classes.root} spacing={3}>
 						<Grid item xs={12} sm={8}>
@@ -253,7 +254,7 @@ class SongEditor extends Component {
 											/>
 										</Grid>
 										<Grid item xs={12} sm={6}>
-											<TextField
+											{/* <TextField
 												id={'key'}
 												label={'Key'}
 												className={classes.textField}
@@ -261,6 +262,13 @@ class SongEditor extends Component {
 												onChange={this.onKeyInput}
 												margin={'normal'}
 												value={key}
+											/> */}
+											<KeySelector
+												label={'Song Key'}
+												onSelect={
+													this.handleSelectSongKey
+												}
+												songKey={key}
 											/>
 										</Grid>
 
@@ -353,7 +361,7 @@ class SongEditor extends Component {
 					</Grid>
 				</ContentLimiter>
 			</StyledHero>
-        );
+		)
 	}
 }
 
@@ -361,7 +369,4 @@ const mapStateToProps = (state, ownProps) => ({
 	song: state.songs.byId[ownProps.id],
 })
 
-export default connect(
-	mapStateToProps,
-	actions
-)(withRouter((SongEditor)))
+export default connect(mapStateToProps, actions)(withRouter(SongEditor))
