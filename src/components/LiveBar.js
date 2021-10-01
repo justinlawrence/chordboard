@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { styled } from '@material-ui/core/styles'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useHistory, useRouteMatch } from 'react-router-dom'
+import { useHistory, useRouteMatch } from 'react-router-dom'
 import clamp from 'lodash/clamp'
 import findIndex from 'lodash/findIndex'
 import first from 'lodash/first'
@@ -21,7 +21,7 @@ import {
 	ArrowUpDown as ArrowUpDownIcon,
 	ChevronLeft as ChevronLeftIcon,
 	ChevronRight as ChevronRightIcon,
-	FormatListBulleted as SetListIcon,
+	FormatFontSizeIncrease as FormatFontSizeIncreaseIcon,
 } from 'mdi-material-ui'
 
 import { setCurrentSongId, setFontSize } from '../redux/actions'
@@ -82,6 +82,7 @@ const StyledAppBar = styled('div')(({ theme }) => ({
 	},
 
 	[`& .${classes.toolbarSections}`]: {
+		borderRadius: theme.spacing(1, 0, 0, 1),
 		display: 'flex',
 		flexDirection: 'column',
 		flexGrow: 1,
@@ -93,9 +94,9 @@ const StyledAppBar = styled('div')(({ theme }) => ({
 		backgroundColor: '#eee',
 		border: 2,
 		color: theme.palette.common.white,
-		minWidth: theme.spacing(3),
-		paddingLeft: theme.spacing(2),
-		paddingRight: theme.spacing(2),
+		height: theme.spacing(5),
+		paddingLeft: theme.spacing(),
+		paddingRight: theme.spacing(),
 		position: 'relative',
 	},
 }))
@@ -203,17 +204,6 @@ const LiveBar = () => {
 			className={cx(classes.appBar, classes.root)}
 		>
 			<div className={classes.toolbarSections}>
-				<Tooltip title={'Back to setlist'}>
-					<IconButton
-						className={classes.button}
-						component={Link}
-						to={`/sets/${currentSetId}`}
-						size={'large'}
-					>
-						<SetListIcon />
-					</IconButton>
-				</Tooltip>
-
 				{map(section => (
 					<ButtonBase
 						component={'a'}
@@ -223,16 +213,13 @@ const LiveBar = () => {
 						title={`Jump to ${section.title}`}
 						style={{ backgroundColor: section.color }}
 					>
-						<Typography
-							className={classes.sectionText}
-							color={'inherit'}
-						>
+						<Typography color={'inherit'} variant={'button'}>
 							{section.abbreviation}
 						</Typography>
 					</ButtonBase>
 				))(sections)}
 			</div>
-
+			{/* 
 			<div className={classes.toolbarActions}>
 				<Tooltip title={'Set font size'}>
 					<IconButton
@@ -240,10 +227,10 @@ const LiveBar = () => {
 						onClick={handleFontSizeChange}
 						size={'large'}
 					>
-						<ArrowUpDownIcon />
+						<FormatFontSizeIncreaseIcon />
 					</IconButton>
 				</Tooltip>
-
+				
 				<Tooltip title={'Jump to previous song'}>
 					<IconButton
 						className={classes.button}
@@ -263,7 +250,7 @@ const LiveBar = () => {
 						<ChevronRightIcon />
 					</IconButton>
 				</Tooltip>
-			</div>
+			</div> */}
 
 			<Menu
 				anchorEl={anchorEl}
