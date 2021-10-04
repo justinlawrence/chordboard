@@ -10,6 +10,7 @@ import withStyles from '@mui/styles/withStyles'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import Dialog from '@mui/material/Dialog'
+import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import Fade from '@mui/material/Fade'
 import Grid from '@mui/material/Grid'
@@ -75,10 +76,6 @@ const StyledFade = styled(Fade)(({ theme }) => ({
 		padding: theme.spacing(2),
 		height: '100%',
 		color: theme.palette.text.secondary,
-	},
-
-	[`& .${classes.control}`]: {
-		padding: theme.spacing(2),
 	},
 
 	[`& .${classes.select}`]: {
@@ -511,44 +508,8 @@ class SongViewer extends Component {
 									Song Settings
 								</DialogTitle>
 
-								<Paper className={classes.control}>
-									<Grid container className={classes.root}>
-										{/* Capo key is already editable via the song header
-									<Grid item xs={12}>
-										<Grid container spacing={2}>
-											<Grid item xs={6}>
-												<Typography>
-													Capo Key
-												</Typography>
-											</Grid>
-
-											<Grid item xs={6}>
-												<IconButton
-													aria-label="Transpose down"
-													onClick={this.transposeDown}
-												>
-													<MinusIcon />
-												</IconButton>
-
-												<IconButton
-													aria-label="Transpose up"
-													onClick={this.transposeUp}
-												>
-													<PlusIcon />
-												</IconButton>
-
-												<KeySelector
-													onSelect={
-														this
-															.handleSelectDisplayKey
-													}
-													songKey={displayKey}
-												/>
-
-											</Grid>
-										</Grid>
-									</Grid> */}
-
+								<DialogContent dividers>
+									<Grid container>
 										<Grid item xs={12}>
 											<Grid container spacing={2}>
 												<Grid item xs={6}>
@@ -557,7 +518,7 @@ class SongViewer extends Component {
 													</Typography>
 												</Grid>
 
-												<Grid item xs={6}>
+												<Grid item>
 													<IconButton
 														aria-label={
 															'Word size down'
@@ -585,34 +546,7 @@ class SongViewer extends Component {
 											</Grid>
 										</Grid>
 
-										{/* JL currently chord size doesn't do anything.
-									<Grid item xs={12}>
-										<Grid container spacing={2}>
-											<Grid item xs={6}>
-												<Typography variant="h5">
-													Chord Size
-												</Typography>
-											</Grid>
-
-											<Grid item xs={6}>
-												<IconButton
-													aria-label="Chord size down"
-													onClick={this.chordSizeDown}
-												>
-													<MinusIcon />
-												</IconButton>
-
-												<IconButton
-													aria-label="Chord size up"
-													onClick={this.chordSizeUp}
-												>
-													<PlusIcon />
-												</IconButton>
-											</Grid>
-										</Grid>
-									</Grid>
- */}
-										<Grid item xs={12}>
+										<Grid item xs={6}>
 											<Grid container spacing={2}>
 												<Grid item xs={6}>
 													<Typography>
@@ -634,7 +568,7 @@ class SongViewer extends Component {
 											</Grid>
 										</Grid>
 									</Grid>
-								</Paper>
+								</DialogContent>
 							</Dialog>
 						)}
 					</Container>
