@@ -5,11 +5,13 @@ http://colorhunt.co/c/114174
 
 */
 
-import { createTheme, adaptV4Theme } from '@mui/material/styles';
+import { createTheme, adaptV4Theme } from '@mui/material/styles'
 
-const baseTheme = createTheme( adaptV4Theme({
-	typography: { useNextVariants: true },
-}) )
+const baseTheme = createTheme(
+	adaptV4Theme({
+		typography: { useNextVariants: true },
+	})
+)
 
 export const lightTheme = {
 	typography: {
@@ -19,7 +21,7 @@ export const lightTheme = {
 		...baseTheme.palette,
 		background: {
 			...baseTheme.palette.background,
-			hero: '#f5f5f5'
+			hero: '#f5f5f5',
 		},
 		primary: {
 			main: '#F73859', //fab
@@ -29,7 +31,6 @@ export const lightTheme = {
 			main: '#fff', //nav was 283149 then fff then d283149
 			contrastText: '#000', //was fff then 000
 		},
-
 	},
 
 	// Custom values

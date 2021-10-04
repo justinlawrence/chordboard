@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import { IconButton, Grid, ListItem, Typography, Tooltip } from '@mui/material'
+import { Box, IconButton, ListItem, Typography, Tooltip } from '@mui/material'
 import { Delete as DeleteIcon, Drag as DragIcon } from 'mdi-material-ui'
 
 import * as actions from '../redux/actions'
@@ -58,25 +58,28 @@ class SetSong extends PureComponent {
 		//FYI the header for this table is in SetViewer.js
 
 		return (
-			<ListItem button onClick={this.handleTableRowClick}>
+			<ListItem button dense onClick={this.handleTableRowClick}>
 				{mode === 'edit' && (
 					<Tooltip title={'Drag to reorder song'}>
 						<DragIcon />
 					</Tooltip>
 				)}
 
-				<Typography variant={'h6'}>{songIndex + 1}</Typography>
-				<Typography variant={'h6'}>{song.title}</Typography>
+				<Typography variant={'h6'} sx={{ mr: 3 }}>
+					{songIndex + 1}
+				</Typography>
+				<Typography noWrap variant={'h6'} sx={{ flexGrow: 1 }}>
+					{song.title}
+				</Typography>
 
-				<Grid container>
-					<Grid item onClick={this.stopPropagation}>
-						<KeySelector
-							onSelect={this.handleKeySelect}
-							songKey={setKey}
-						/>
-					</Grid>
+				<Box onClick={this.stopPropagation}>
+					<KeySelector
+						onSelect={this.handleKeySelect}
+						songKey={setKey}
+					/>
+				</Box>
 
-					{/*mode === 'edit' && (
+				{/*mode === 'edit' && (
 								<Grid item>
 									<IconButton
 										aria-label="Transpose down"
@@ -93,7 +96,6 @@ class SetSong extends PureComponent {
 									</IconButton>
 								</Grid>
 							)*/}
-				</Grid>
 
 				{mode === 'edit' && (
 					<Tooltip title={'Remove song from set'}>

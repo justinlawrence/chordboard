@@ -1,42 +1,37 @@
-import { createTheme, adaptV4Theme } from '@mui/material/styles';
+import { createTheme, adaptV4Theme } from '@mui/material/styles'
 import isEqual from 'lodash/fp/isEqual'
 
 import { FETCH_THEME_SUCCESS, SET_THEME, UPDATE_THEME } from '../actions'
 import { darkTheme, lightTheme } from '../../themes'
 
-const defaultMuiTheme = createTheme(adaptV4Theme(lightTheme))
-
 export const themesOrder = ['light', 'dark']
 
 export const themes = {
-	dark: { muiTheme: darkTheme, name: 'Dark matter' },
-	light: { muiTheme: lightTheme, name: 'Flat white' },
+	dark: {
+		id: 'dark',
+		muiTheme: createTheme(adaptV4Theme(darkTheme)),
+		name: 'Dark matter',
+	},
+	light: {
+		id: 'light',
+		muiTheme: createTheme(adaptV4Theme(lightTheme)),
+		name: 'Flat white',
+	},
 }
 
-const initialState = {
-	id: 'light',
-	muiTheme: defaultMuiTheme,
-	name: themes.light.name,
-}
+const initialState = themes.dark
 
 export const theme = (state = initialState, action) => {
 	switch (action.type) {
-	case FETCH_THEME_SUCCESS:
-	case SET_THEME:
-	case UPDATE_THEME: {
-		const theme = themes[action.payload]
-			? themes[action.payload]
-			: themes.light
-		const newTheme = {
-			id: theme ? action.payload : 'light',
-			muiTheme: createTheme(adaptV4Theme(theme.muiTheme)),
-			name: theme.name,
+		case FETCH_THEME_SUCCESS:
+		case SET_THEME:
+		case UPDATE_THEME: {
+			const newTheme = theme ? themes[action.payload] : initialState
+			return isEqual(state, newTheme) ? state : newTheme
 		}
-		return isEqual(state, newTheme) ? state : newTheme
-	}
 
-	default:
-		return state
+		default:
+			return state
 	}
 }
 

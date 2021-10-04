@@ -274,16 +274,6 @@ class SetViewer extends Component {
 				<section className={'section'}>
 					<Container maxWidth={'xl'}>
 						<List className={classes.table}>
-							<ListItem>
-								{mode === 'edit' && (
-									<Typography>Move</Typography>
-								)}
-								<span>#</span>
-								<span>Song</span>
-								<span>Key</span>
-								{mode === 'edit' && <span>Delete</span>}
-							</ListItem>
-
 							<DragDropContext onDragEnd={this.handleDragEnd}>
 								<Droppable droppableId={'droppable'}>
 									{provided => (

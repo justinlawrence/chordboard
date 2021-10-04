@@ -1,24 +1,18 @@
-import React from 'react';
-import { styled } from '@material-ui/core/styles';
-import { range } from "lodash";
+import React from 'react'
+import { styled } from '@material-ui/core/styles'
+import { range } from 'lodash'
 
-import withStyles from '@mui/styles/withStyles';
-
-const PREFIX = 'ChordLine';
+const PREFIX = 'ChordLine'
 
 const classes = {
-    text: `${PREFIX}-text`
-};
+	text: `${PREFIX}-text`,
+}
 
-const Root = styled('div')((
-    {
-        theme
-    }
-) => ({
-    [`& .${classes.text}`]: {
+const Root = styled('div')(({ theme }) => ({
+	[`& .${classes.text}`]: {
 		display: 'inline-block',
 		height: 0,
-		lineHeight: theme.spacing(3),
+		lineHeight: `${theme.spacing(3)}px`,
 		marginRight: '.75em',
 		marginTop: theme.spacing(3),
 		position: 'relative',
@@ -33,30 +27,27 @@ const Root = styled('div')((
 			position: 'absolute',
 			fontWeight: '600',
 			top: '-18px',
-			visibility: 'visible'
-		}
-	}
-}));
+			visibility: 'visible',
+		},
+	},
+}))
 
-const ChordLine = ({ chords, chordSize,  wordSize }) => {
-
-	const children = [];
+const ChordLine = ({ chords, chordSize, wordSize }) => {
+	const children = []
 
 	chords._sort.forEach((index, i) => {
-
-		const nextIndex = chords._sort[i + 1] || Infinity;
-		let slice = "";
+		const nextIndex = chords._sort[i + 1] || Infinity
+		let slice = ''
 
 		// Pad the sliced text with spaces so overhanging chords will be
 		// positioned correctly.
-		if (slice.length < nextIndex - index && nextIndex - index !== Infinity) {
-
-			range((nextIndex - index) - slice.length).forEach(() => {
-
-				slice += " ";
-
-			});
-
+		if (
+			slice.length < nextIndex - index &&
+			nextIndex - index !== Infinity
+		) {
+			range(nextIndex - index - slice.length).forEach(() => {
+				slice += ' '
+			})
 		}
 
 		children.push(
@@ -67,17 +58,10 @@ const ChordLine = ({ chords, chordSize,  wordSize }) => {
 			>
 				{chords[index]}
 			</span>
-		);
+		)
+	})
 
-	});
+	return <Root style={{ fontSize: `${wordSize}px` }}>{children}</Root>
+}
 
-
-	return (
-        <Root style={{ fontSize: `${wordSize}px` }}>
-			{children}
-		</Root>
-    );
-
-};
-
-export default (ChordLine);
+export default ChordLine

@@ -1,26 +1,22 @@
 import React from 'react'
-import { styled } from '@material-ui/core/styles';
+import { styled } from '@material-ui/core/styles'
 import cx from 'classnames'
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from '@mui/styles/withStyles'
 
-const PREFIX = 'ChordPair';
+const PREFIX = 'ChordPair'
 
 const classes = {
-    text: `${PREFIX}-text`,
-    textEmpty: `${PREFIX}-textEmpty`
-};
+	text: `${PREFIX}-text`,
+	textEmpty: `${PREFIX}-textEmpty`,
+}
 
-const Root = styled('div')((
-    {
-        theme
-    }
-) => ({
-    [`& .${classes.text}`]: {
+const Root = styled('div')(({ theme }) => ({
+	[`& .${classes.text}`]: {
 		display: 'inline-block',
 		lineHeight: 1.5,
 		marginTop: '1em',
-		minHeight: theme.spacing(1),
+		minHeight: '1.5em',
 		position: 'relative',
 		verticalAlign: 'middle',
 		whiteSpace: 'pre-wrap',
@@ -35,13 +31,13 @@ const Root = styled('div')((
 		},
 	},
 
-    [`& .${classes.textEmpty}`]: {
+	[`& .${classes.textEmpty}`]: {
 		marginLeft: '.75em',
 		minWidth: '2em',
-	}
-}));
+	},
+}))
 
-const ChordPair = ({ chords, chordSize,  text, wordSize }) => {
+const ChordPair = ({ chords, chordSize, text, wordSize }) => {
 	const children = []
 
 	chords._sort.forEach((index, i) => {
@@ -61,7 +57,7 @@ const ChordPair = ({ chords, chordSize,  text, wordSize }) => {
 		)
 	})
 
-	return <Root style={{ fontSize: `${wordSize}px` }}>{children}</Root>;
+	return <Root style={{ fontSize: `${wordSize}px` }}>{children}</Root>
 }
 
-export default (ChordPair)
+export default ChordPair
