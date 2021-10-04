@@ -388,7 +388,7 @@ class SongViewer extends Component {
 														<PencilIcon />
 													</IconButton>
 												</Tooltip>
-
+												{/* 
 												<Tooltip title={'Add to set'}>
 													<IconButton
 														className={
@@ -402,7 +402,8 @@ class SongViewer extends Component {
 													>
 														<PlaylistPlusIcon />
 													</IconButton>
-												</Tooltip>
+												</Tooltip> */}
+
 												<Tooltip
 													title={'Song settings'}
 												>
