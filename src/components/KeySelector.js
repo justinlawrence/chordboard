@@ -59,6 +59,7 @@ const KeySelector = ({ label, onSelect = noop, songKey = 'c' }) => {
 		<StyledTextField
 			className={classes.root}
 			select
+			size={'small'}
 			label={label}
 			value={key}
 			onChange={handleChange}
