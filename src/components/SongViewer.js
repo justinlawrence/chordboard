@@ -6,27 +6,30 @@ import { isAfter } from 'date-fns'
 import filter from 'lodash/fp/filter'
 import reduce from 'lodash/fp/reduce'
 
-import withStyles from '@mui/styles/withStyles'
-import Button from '@mui/material/Button'
-import Container from '@mui/material/Container'
-import Dialog from '@mui/material/Dialog'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
-import Fade from '@mui/material/Fade'
-import Grid from '@mui/material/Grid'
-import IconButton from '@mui/material/IconButton'
-import Avatar from '@mui/material/Avatar'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemText from '@mui/material/ListItemText'
-import Paper from '@mui/material/Paper'
-import Tooltip from '@mui/material/Tooltip'
-import Typography from '@mui/material/Typography'
+import {
+	Box,
+	Button,
+	Container,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+	Fade,
+	Grid,
+	IconButton,
+	Avatar,
+	List,
+	ListItem,
+	ListItemText,
+	Switch,
+	Tooltip,
+	Typography,
+} from '@mui/material'
 import {
 	Close as CloseIcon,
 	Image as ImageIcon,
 	Minus as MinusIcon,
-	PlaylistPlus as PlaylistPlusIcon,
+	//PlaylistPlus as PlaylistPlusIcon,
 	Plus as PlusIcon,
 	Pencil as PencilIcon,
 	Cog as SettingsIcon,
@@ -312,7 +315,7 @@ class SongViewer extends Component {
 
 		return (
 			<StyledFade in={Boolean(song)} appear mountOnEnter unmountOnExit>
-				<div>
+				<Box>
 					<Hero>
 						<Container>
 							<ContentLimiter>
@@ -322,7 +325,14 @@ class SongViewer extends Component {
 									justifyContent={'space-between'}
 								>
 									<Grid item xs={12} sm={7}>
-										<Typography variant={'h4'}>
+										<Typography
+											variant={'h4'}
+											sx={{
+												fontWeight: theme =>
+													theme.typography
+														.fontWeightBold,
+											}}
+										>
 											{song.title}
 										</Typography>
 										<Typography variant={'subtitle1'}>
@@ -508,71 +518,88 @@ class SongViewer extends Component {
 									Song Settings
 								</DialogTitle>
 
-								<DialogContent dividers>
-									<Grid container>
-										<Grid item xs={12}>
-											<Grid container spacing={2}>
-												<Grid item xs={6}>
-													<Typography>
-														Word and Chord Size
-													</Typography>
-												</Grid>
+								<DialogContent
+									dividers
+									sx={{
+										width: theme => theme.spacing(8 * 7),
+									}}
+								>
+									<Box
+										sx={{
+											alignItems: 'center',
+											display: 'flex',
+											justifyContent: 'space-between',
+										}}
+									>
+										<Typography>
+											Word and Chord Size
+										</Typography>
 
-												<Grid item>
-													<IconButton
-														aria-label={
-															'Word size down'
-														}
-														onClick={
-															this.wordSizeDown
-														}
-														size={'large'}
-													>
-														<MinusIcon />
-													</IconButton>
+										<Box>
+											<IconButton
+												aria-label={'Word size down'}
+												onClick={this.wordSizeDown}
+												size={'large'}
+											>
+												<MinusIcon />
+											</IconButton>
 
-													<IconButton
-														aria-label={
-															'Word size up'
-														}
-														onClick={
-															this.wordSizeUp
-														}
-														size={'large'}
-													>
-														<PlusIcon />
-													</IconButton>
-												</Grid>
-											</Grid>
-										</Grid>
-
-										<Grid item xs={6}>
-											<Grid container spacing={2}>
-												<Grid item xs={6}>
-													<Typography>
-														Nashville Numbering
-													</Typography>
-												</Grid>
-
-												<Grid item xs={6}>
-													<Button
-														variant={'contained'}
-														aria-label={
-															'Toggle Nashville Numbering'
-														}
-														onClick={this.toggleNashville()}
-													>
-														Toggle
-													</Button>
-												</Grid>
-											</Grid>
-										</Grid>
-									</Grid>
+											<IconButton
+												aria-label={'Word size up'}
+												onClick={this.wordSizeUp}
+												size={'large'}
+											>
+												<PlusIcon />
+											</IconButton>
+										</Box>
+									</Box>
+									<Box
+										sx={{
+											alignItems: 'center',
+											display: 'flex',
+											justifyContent: 'space-between',
+											mt: 2,
+										}}
+									>
+										<Box>
+											<Typography>
+												Nashville Numbering
+											</Typography>
+											<Typography
+												color={'textSecondary'}
+												variant={'body2'}
+											>
+												Show numbers instead of chords
+											</Typography>
+										</Box>
+										<Switch
+											aria-label={
+												'Toggle Nashville Numbering'
+											}
+											checked={this.state.isNashville}
+											onClick={this.toggleNashville()}
+										>
+											Toggle
+										</Switch>
+									</Box>
 								</DialogContent>
+								<DialogActions>
+									<Button
+										onClick={this.handleSongKeyDialogClose}
+									>
+										Close
+									</Button>
+								</DialogActions>
 							</Dialog>
 						)}
 					</Container>
-				</div>
+					<Box
+						sx={{
+							displayPrint: 'none',
+							height: theme => theme.spacing(8),
+						}}
+					/>
+				</Box>
 			</StyledFade>
 		)
 	}
