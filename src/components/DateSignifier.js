@@ -28,7 +28,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 	},
 
 	[`& .${classes.month}`]: {
-		backgroundColor: theme.palette.primary.main,
+		backgroundColor: '#007FFF', //TODO: connect this to the theme primary (it wasn't visible from here)
 		color: theme.palette.common.white,
 		fontWeight: 800,
 		height: theme.spacing(1),

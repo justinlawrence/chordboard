@@ -16,6 +16,7 @@ import {
 	IconButton,
 	List,
 	ListItem,
+	Stack,
 	Typography,
 } from '@mui/material'
 
@@ -215,7 +216,7 @@ class SetViewer extends Component {
 										</Grid>
 									</Hidden>
 									<Grid item>
-										<Typography variant={'h4'}>
+										<Typography variant={'h4'} sx={{fontWeight: 700}}>
 											{set.title}
 										</Typography>
 										<Typography variant={'caption'}>
@@ -229,36 +230,38 @@ class SetViewer extends Component {
 
 						{mode !== 'edit' && (
 							<Grid item>
-								<Hidden smUp>
-									<IconButton
-										size={'small'}
-										variant={'contained'}
-										aria-label={'Edit'}
-										onClick={this.toggleEditMode(
-											mode !== 'edit'
-										)}
-									>
-										<PencilIcon />
-									</IconButton>
-								</Hidden>
-								<Hidden only={'xs'}>
+								<Stack direction={'row'} spacing={2}>
+									<Hidden smUp>
+										<IconButton
+											size={'small'}
+											variant={'contained'}
+											aria-label={'Edit'}
+											onClick={this.toggleEditMode(
+												mode !== 'edit'
+											)}
+										>
+											<PencilIcon />
+										</IconButton>
+									</Hidden>
+									<Hidden only={'xs'}>
+										<Button
+											onClick={this.toggleEditMode(
+												mode !== 'edit'
+											)}
+											variant={'outlined'}
+										>
+											Edit set
+										</Button>
+									</Hidden>
 									<Button
-										onClick={this.toggleEditMode(
-											mode !== 'edit'
-										)}
+										color={'primary'}
+										onClick={this.handleAddASong}
 										variant={'contained'}
 									>
-										Edit set
+										<Hidden only={'xs'}>Add a song</Hidden>
+										<Hidden smUp>Add</Hidden>
 									</Button>
-								</Hidden>
-								<Button
-									color={'primary'}
-									onClick={this.handleAddASong}
-									variant={'contained'}
-								>
-									<Hidden only={'xs'}>Add a song</Hidden>
-									<Hidden smUp>Add</Hidden>
-								</Button>
+								</Stack>
 							</Grid>
 						)}
 

@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react'
-import { styled } from '@material-ui/core/styles';
+import { styled } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { lowerCase, reverse, sortBy } from 'lodash'
 import { Link, withRouter } from 'react-router-dom'
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from '@mui/styles/withStyles'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -24,26 +24,22 @@ import Hero from './Hero'
 
 import { Magnify as MagnifyIcon } from 'mdi-material-ui'
 
-const PREFIX = 'Sets';
+const PREFIX = 'Sets'
 
 const classes = {
-    shrinkCell: `${PREFIX}-shrinkCell`,
-    tableRow: `${PREFIX}-tableRow`
-};
+	shrinkCell: `${PREFIX}-shrinkCell`,
+	tableRow: `${PREFIX}-tableRow`,
+}
 
-const Root = styled('div')((
-    {
-        theme
-    }
-) => ({
-    [`& .${classes.shrinkCell}`]: {
-		maxWidth: 0,
+const Root = styled('div')(({ theme }) => ({
+	[`& .${classes.shrinkCell}`]: {
+		width: theme.spacing(10),
 	},
 
-    [`& .${classes.tableRow}`]: {
+	[`& .${classes.tableRow}`]: {
 		cursor: 'pointer',
-	}
-}));
+	},
+}))
 
 class Sets extends PureComponent {
 	static propTypes = {
@@ -78,11 +74,11 @@ class Sets extends PureComponent {
 		this.props.history.push(`/sets/${setId}`)
 
 	render() {
-		const {  sets = [] } = this.props
+		const { sets = [] } = this.props
 		const { searchText } = this.state
 
 		return (
-            <Root>
+			<Root>
 				<Hero>
 					<ContentLimiter>
 						<Grid
@@ -91,7 +87,12 @@ class Sets extends PureComponent {
 							justifyContent={'space-between'}
 						>
 							<Grid item>
-								<Typography variant={'h4'}>Sets</Typography>
+								<Typography
+									variant={'h4'}
+									sx={{ fontWeight: 600 }} //TODO: move this into the global theme
+								>
+									Sets
+								</Typography>
 							</Grid>
 							<Grid item>
 								<Grid
@@ -158,7 +159,10 @@ class Sets extends PureComponent {
 									</TableCell>
 
 									<TableCell>
-										<Typography variant={'h6'}>
+										<Typography
+											variant={'h6'}
+											sx={{ fontWeight: 700 }}
+										>
 											{set.title}
 										</Typography>
 										<Typography>
@@ -172,8 +176,8 @@ class Sets extends PureComponent {
 					</Table>
 				</ContentLimiter>
 			</Root>
-        );
+		)
 	}
 }
 
-export default connect(null, actions)(withRouter((Sets)))
+export default connect(null, actions)(withRouter(Sets))

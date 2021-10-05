@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { styled } from '@material-ui/core/styles';
+import { styled } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
@@ -7,8 +7,8 @@ import includes from 'lodash/fp/includes'
 import sortBy from 'lodash/fp/sortBy'
 import toLower from 'lodash/fp/toLower'
 
-import { lighten } from '@mui/material/styles';
-import withStyles from '@mui/styles/withStyles';
+import { lighten } from '@mui/material/styles'
+import withStyles from '@mui/styles/withStyles'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Hidden from '@mui/material/Hidden'
@@ -24,35 +24,32 @@ import ContentLimiter from './ContentLimiter'
 import Hero from './Hero'
 import SearchBox from './SearchBox'
 
-const PREFIX = 'SongList';
+const PREFIX = 'SongList'
 
 const classes = {
-    highlight: `${PREFIX}-highlight`,
-    tableRow: `${PREFIX}-tableRow`
-};
+	highlight: `${PREFIX}-highlight`,
+	tableRow: `${PREFIX}-tableRow`,
+}
 
-const Root = styled('div')((
-    {
-        theme
-    }
-) => ({
-    [`& .${classes.highlight}`]: theme.palette.mode === 'light'
-        ? {
-                color: theme.palette.secondary.main,
-                backgroundColor: lighten(
-                    theme.palette.secondary.light,
-                    0.85
-                ),
-          }
-        : {
-                color: theme.palette.text.primary,
-                backgroundColor: theme.palette.secondary.dark,
-          },
+const Root = styled('div')(({ theme }) => ({
+	[`& .${classes.highlight}`]:
+		theme.palette.mode === 'light'
+			? {
+					color: theme.palette.secondary.main,
+					backgroundColor: lighten(
+						theme.palette.secondary.light,
+						0.85
+					),
+			  }
+			: {
+					color: theme.palette.text.primary,
+					backgroundColor: theme.palette.secondary.dark,
+			  },
 
-    [`& .${classes.tableRow}`]: {
+	[`& .${classes.tableRow}`]: {
 		cursor: 'pointer',
-	}
-}));
+	},
+}))
 
 class SongList extends Component {
 	static propTypes = {
@@ -114,7 +111,7 @@ class SongList extends Component {
 		this.props.history.push(`/songs/${songId}`)
 
 	render() {
-		const {  songs } = this.props
+		const { songs } = this.props
 
 		const filteredSongs = songs.filter(this.filterSongs)
 		const sortedSongs = sortBy('title')(filteredSongs)
@@ -122,7 +119,7 @@ class SongList extends Component {
 		const isAddToSet = /\/add-to-set\//.test(window.location.href)
 
 		return (
-            <Root>
+			<Root>
 				<Hero>
 					<ContentLimiter>
 						<Grid
@@ -131,7 +128,12 @@ class SongList extends Component {
 							justifyContent={'space-between'}
 						>
 							<Grid item>
-								<Typography variant={'h4'}>Songs</Typography>
+								<Typography
+									variant={'h4'}
+									sx={{ fontWeight: 600 }} //TODO: move this into the global theme
+								>
+									Songs
+								</Typography>
 							</Grid>
 
 							<Grid item>
@@ -208,8 +210,8 @@ class SongList extends Component {
 					</TableBody>
 				</Table>
 			</Root>
-        );
+		)
 	}
 }
 
-export default connect(null, actions)(withRouter((SongList)))
+export default connect(null, actions)(withRouter(SongList))

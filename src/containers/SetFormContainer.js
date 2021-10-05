@@ -1,33 +1,27 @@
 import React, { Component } from 'react'
-import { styled } from '@material-ui/core/styles';
+import { styled } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { format } from 'date-fns'
 import { DatePicker } from '@material-ui/pickers'
 
-import withStyles from '@mui/styles/withStyles';
-import Button from '@mui/material/Button'
-import Grid from '@mui/material/Grid'
-import TextField from '@mui/material/TextField'
+import { Button, Grid, TextField } from '@mui/material'
+
 import {
 	ChevronLeft as ChevronLeftIcon,
 	ChevronRight as ChevronRightIcon,
 } from 'mdi-material-ui'
 
-const PREFIX = 'SetFormContainer';
+const PREFIX = 'SetFormContainer'
 
 const classes = {
-    deleteButton: `${PREFIX}-deleteButton`
-};
+	deleteButton: `${PREFIX}-deleteButton`,
+}
 
-const Root = styled('form')((
-    {
-        theme
-    }
-) => ({
-    [`& .${classes.deleteButton}`]: {
+const Root = styled('form')(({ theme }) => ({
+	[`& .${classes.deleteButton}`]: {
 		color: theme.palette.error.main,
-	}
-}));
+	},
+}))
 
 const datePickerIcons = {
 	leftArrowIcon: <ChevronLeftIcon />,
@@ -115,12 +109,12 @@ class SetFormContainer extends Component {
 	}
 
 	render() {
-		const { } = this.props
+		const {} = this.props
 		const { newSet } = this.state
 		const currentDate = format(new Date(), 'd MMM yyyy')
 
 		return (
-            <Root onSubmit={this.handleFormSubmit}>
+			<Root onSubmit={this.handleFormSubmit}>
 				<Grid container spacing={1}>
 					<Grid item xs={12} lg={6}>
 						<TextField
@@ -192,8 +186,8 @@ class SetFormContainer extends Component {
 					</Grid>
 				</Grid>
 			</Root>
-        );
+		)
 	}
 }
 
-export default (SetFormContainer)
+export default SetFormContainer
