@@ -6,7 +6,6 @@ import { forEach } from 'lodash'
 import * as actions from '../redux/actions'
 import { getFontSize } from '../redux/reducers/user'
 import { getSectionFromTitle, sectionData } from '../utils/getSongSections'
-import ChordLine from './ChordLine'
 import ChordPair from './ChordPair'
 import Line from './Line'
 
@@ -95,16 +94,6 @@ const Song = ({
 	forEach(lines, (line, i) => {
 		switch (line.type) {
 			case 'chord-line':
-				children.push(
-					<ChordLine
-						key={i}
-						chords={line.chords}
-						chordSize={chordSize}
-						wordSize={wordSize}
-					/>
-				)
-				break
-
 			case 'chord-pair':
 				children.push(
 					<ChordPair
