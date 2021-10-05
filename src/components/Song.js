@@ -17,6 +17,10 @@ const classes = {
 }
 
 const Root = styled('div')(({ theme }) => ({
+	[`.${classes.root}`]: {
+		overflowWrap: 'break-word',
+		whiteSpace: 'pre-wrap',
+	},
 	[`& .${classes.section}`]: {
 		borderLeft: '4px solid #444',
 		marginLeft: theme.spacing(8),

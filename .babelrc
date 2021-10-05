@@ -1,0 +1,14 @@
+{
+	"presets": [["@babel/preset-env", { "modules": false }]],
+	"plugins": [
+		"@babel/plugin-proposal-function-bind",
+		"@babel/plugin-syntax-class-properties"
+	],
+	"env": {
+		"test": {
+			"presets": [
+				["@babel/preset-env", { "targets": { "node": "current" } }]
+			]
+		}
+	}
+}

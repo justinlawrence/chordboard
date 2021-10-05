@@ -1,6 +1,11 @@
 const ENDS_WITH_COLON = /:$/
 const SURROUNDED_BY_SQUARE_BRACKETS = /\]$/
 
+const isChords = input =>
+	/^(\s|([A-G]7?)(#|b)?(sus|maj|min|aug|dim|add|m)?|[0-9]|\/|-|\||[()]|}x\d)+$/g.test(
+		input
+	)
+
 const dataTypes = {
 	chordLine: {
 		type: 'chord-line',
@@ -32,42 +37,4 @@ const dataTypes = {
 	},
 }
 
-export default dataTypes
-
-function isChords(input) {
-	return /^(\s|[A-G](#|b)?(sus|maj|min|aug|dim|add|m)?|[0-9]|\/|-|\||[()]|}x\d)+$/g.test(
-		input
-	);
-}
-
-// Test chords.
-if (module.hot) {
-	const tests = [
-		['A', true],
-		['B', true],
-		['C', true],
-		['D', true],
-		['E', true],
-		['F', true],
-		['G', true],
-		['H', false],
-		['A#', true],
-		['Ab', true],
-		['Am', true],
-		['A#m', true],
-		['Abm', true],
-		['Gmaj7', true],
-		['Dmaj7', true],
-		['G2', true],
-		['Dsus', true],
-	]
-
-	tests.forEach((test, i) => {
-		console.assert(
-			isChords(test[0]) === test[1],
-			`isChords(${test[0]}) - expected: ${test[1]}, actual: ${isChords(
-				test[0]
-			)}`
-		)
-	})
-}
+export { dataTypes as default, isChords }
