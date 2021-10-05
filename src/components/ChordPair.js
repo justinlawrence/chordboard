@@ -6,7 +6,7 @@ import { styled } from '@mui/styles'
 const PREFIX = 'ChordPair'
 
 const classes = {
-	emptyLine: `${PREFIX}-emptyLine`,
+	justChords: `${PREFIX}-justChords`,
 	text: `${PREFIX}-text`,
 	trailingChord: `${PREFIX}-trailingChord`,
 }
@@ -14,6 +14,8 @@ const classes = {
 const StyledChordPair = styled('div')(({ theme }) => ({
 	[`& .${classes.text}`]: {
 		display: 'inline',
+		fontWeight: '500',
+
 		lineHeight: 2.25,
 		position: 'relative',
 		verticalAlign: 'middle',
@@ -36,7 +38,7 @@ const StyledChordPair = styled('div')(({ theme }) => ({
 		visibility: 'hidden',
 	},
 
-	[`& .${classes.emptyLine}`]: {
+	[`& .${classes.justChords}`]: {
 		height: 0,
 		lineHeight: theme.spacing(3),
 		marginRight: '.75em',
@@ -53,24 +55,24 @@ const StyledChordPair = styled('div')(({ theme }) => ({
 const ChordPair = ({ chords, chordSize, text, wordSize }) => {
 	const children = []
 
-	const isEmptyLine = !text
+	const isJustChords = !text
 
 	chords._sort.forEach((index, i) => {
 		const nextIndex = chords._sort[i + 1] || Infinity
 		const slice = text.slice(index, nextIndex)
 
-		const isTrailingChord = !isEmptyLine && !slice.trim()
+		const isTrailingChord = !isJustChords && !slice.trim()
 
 		children.push(
 			<span
 				key={i}
 				className={cx(classes.text, {
 					[classes.trailingChord]: isTrailingChord,
-					[classes.emptyLine]: isEmptyLine,
+					[classes.justChords]: isJustChords,
 				})}
 				data-content={chords[index]}
 			>
-				{isEmptyLine || isTrailingChord ? chords[index] : slice}
+				{isJustChords || isTrailingChord ? chords[index] : slice}
 			</span>
 		)
 	})
