@@ -21,12 +21,9 @@ import { getThemeId } from '../redux/reducers/theme'
 import { getSongsForCurrentSet } from '../redux/reducers/current-set'
 import chordboardLogoDark from '../chordboard-logo-light.png'
 import chordboardLogoLight from '../chordboard-logo-dark.png'
-import {
-	Brightness4 as LightModeIcon,
-	Brightness5 as DarkModeIcon,
-	Close as CloseIcon,
-} from 'mdi-material-ui'
 
+import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined'
+import Brightness2OutlinedIcon from '@mui/icons-material/Brightness2Outlined'
 const PREFIX = 'Navbar'
 
 const classes = {
@@ -255,9 +252,9 @@ class Navbar extends React.Component {
 										size={'large'}
 									>
 										{themeId === 'dark' ? (
-											<LightModeIcon />
+											<WbSunnyOutlinedIcon />
 										) : (
-											<DarkModeIcon />
+											<Brightness2OutlinedIcon />
 										)}
 									</IconButton>
 								</Tooltip>
