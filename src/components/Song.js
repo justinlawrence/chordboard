@@ -18,10 +18,6 @@ const classes = {
 }
 
 const Root = styled('div')(({ theme }) => ({
-	[`& .${classes.root}`]: {
-		paddingBottom: theme.spacing(14),
-	},
-
 	[`& .${classes.section}`]: {
 		borderLeft: '4px solid #444',
 		marginLeft: theme.spacing(8),
@@ -40,7 +36,7 @@ const Root = styled('div')(({ theme }) => ({
 			paddingRight: theme.spacing(),
 			paddingTop: theme.spacing(0.5),
 			position: 'absolute',
-			transform: 'translate(calc(-100% - 1em - 2px), 0)',
+			transform: 'translate(calc(-100% - 1em), 0)',
 			transformOrigin: '0 0',
 			textTransform: 'uppercase',
 			zIndex: 1,

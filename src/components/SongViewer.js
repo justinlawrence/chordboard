@@ -81,10 +81,6 @@ const StyledFade = styled(Fade)(({ theme }) => ({
 		color: theme.palette.text.secondary,
 	},
 
-	[`& .${classes.select}`]: {
-		width: theme.spacing(7),
-	},
-
 	[`& .${classes.noPrint}`]: {
 		'@media print': {
 			display: 'none !important',
@@ -596,7 +592,7 @@ class SongViewer extends Component {
 					<Box
 						sx={{
 							displayPrint: 'none',
-							height: theme => theme.spacing(8),
+							height: theme => theme.spacing(12),
 						}}
 					/>
 				</Box>
