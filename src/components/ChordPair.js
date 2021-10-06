@@ -15,7 +15,6 @@ const StyledChordPair = styled('div')(({ theme }) => ({
 	[`& .${classes.text}`]: {
 		display: 'inline',
 		fontWeight: '500',
-
 		lineHeight: 2.25,
 		position: 'relative',
 		verticalAlign: 'middle',
@@ -38,9 +37,9 @@ const StyledChordPair = styled('div')(({ theme }) => ({
 		visibility: 'hidden',
 	},
 
-	[`& .${classes.justChords}`]: {
+	[`& .${classes.text}.${classes.justChords}`]: {
 		height: 0,
-		lineHeight: theme.spacing(3),
+		lineHeight: 1.3,
 		marginRight: '.75em',
 		marginTop: '2.25em',
 		minHeight: 0,

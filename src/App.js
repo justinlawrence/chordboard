@@ -102,7 +102,6 @@ class App extends Component {
 						<CssBaseline />
 						<SetCurrentSong />
 						<Navbar />
-
 						<Grid className={classes.content} item xs>
 							<Switch>
 								<Route
@@ -120,7 +119,7 @@ class App extends Component {
 									component={SetListContainer}
 								/>
 
-								{!user.name && <Redirect to={'/login'} />}
+								{/* {!user.name && <Redirect to={'/login'} />} */}
 
 								<Route
 									exact
@@ -167,7 +166,6 @@ class App extends Component {
 								<Redirect to={'/sets'} />
 							</Switch>
 						</Grid>
-
 						<LiveBar />
 					</Grid>
 				</LocalizationProvider>

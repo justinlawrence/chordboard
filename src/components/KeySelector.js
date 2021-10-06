@@ -34,7 +34,13 @@ const options = [
 	{ key: 'B', label: 'B', value: 'b' },
 ]
 
-const KeySelector = ({ label, onSelect = noop, songKey = 'c' }) => {
+const KeySelector = ({
+	label,
+	onSelect = noop,
+	size = 'small',
+	songKey = 'c',
+	...other
+}) => {
 	const [key, setKey] = useState(songKey)
 
 	useEffect(() => {
@@ -59,10 +65,11 @@ const KeySelector = ({ label, onSelect = noop, songKey = 'c' }) => {
 		<StyledTextField
 			className={classes.root}
 			select
-			size={'small'}
+			size={size}
 			label={label}
 			value={key}
 			onChange={handleChange}
+			{...other}
 		>
 			{options.map(option => (
 				<MenuItem key={option.value} value={option.value}>

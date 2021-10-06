@@ -30,7 +30,10 @@ const SongViewerMenu = ({ isPreview, song }) => {
 		variant: 'popover',
 	})
 
-	const handleDialogClose = () => setIsDialogOpen(false)
+	const handleDialogClose = () => {
+		setIsDialogOpen(false)
+		popupState.close()
+	}
 
 	const handleDialogOpen = () => setIsDialogOpen(true)
 

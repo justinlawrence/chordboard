@@ -5,7 +5,15 @@ import { useDispatch } from 'react-redux'
 import find from 'lodash/find'
 
 import { styled } from '@mui/material/styles'
-import { Box, Container, Fade, Grid, Tooltip, Typography } from '@mui/material'
+import {
+	Box,
+	Container,
+	Fade,
+	GlobalStyles,
+	Grid,
+	Tooltip,
+	Typography,
+} from '@mui/material'
 
 import { setCurrentSetSongKey, setCurrentSongUserKey } from '../redux/actions'
 import SongViewerMenu from './SongViewerMenu'
@@ -21,6 +29,23 @@ import { linesToNashville } from '../utils/convertToNashville'
 export const chordSizeAtom = atom(16)
 export const isNashvilleAtom = atom(false)
 export const wordSizeAtom = atom(20)
+
+const printMediaStyles = (
+	<GlobalStyles
+		styles={{
+			body: {
+				'@media print': {
+					backgroundColor: 'white',
+				},
+			},
+			'.MuiTypography-root': {
+				'@media print': {
+					color: 'rgba(0, 0, 0, 0.87)',
+				},
+			},
+		}}
+	/>
+)
 
 const PREFIX = 'SongViewer'
 
@@ -168,6 +193,7 @@ const SongViewer = ({ isPreview, setKey, song = {}, user }) => {
 	return (
 		<StyledFade in={Boolean(song)} appear mountOnEnter unmountOnExit>
 			<Box>
+				{printMediaStyles}
 				<Helmet>
 					<title>{song.title}</title>
 				</Helmet>

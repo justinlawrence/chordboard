@@ -228,7 +228,11 @@ class SongEditor extends Component {
 									className={classes.form}
 									component={'form'}
 								>
-									<Grid container spacing={1}>
+									<Grid
+										container
+										//alignItems={'center'}
+										spacing={1}
+									>
 										<Grid item xs={12}>
 											<TextField
 												id={'title'}
@@ -268,6 +272,8 @@ class SongEditor extends Component {
 												onSelect={
 													this.handleSelectSongKey
 												}
+												margin={'normal'}
+												size={'large'}
 												songKey={key}
 											/>
 										</Grid>

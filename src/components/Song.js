@@ -16,6 +16,19 @@ const classes = {
 	section: `${PREFIX}-section`,
 }
 
+const sectionStyles = {}
+forEach(sectionData, section => {
+	sectionStyles[`&[data-section="${section.title}"]`] = {
+		borderLeft: `4px solid ${section.color}`,
+
+		'&::before': {
+			content: `"${section.abbreviation}"`,
+			backgroundColor: section.color,
+			'-webkit-print-color-adjust': 'exact',
+		},
+	}
+})
+
 const Root = styled('div')(({ theme }) => ({
 	[`.${classes.root}`]: {
 		overflowWrap: 'break-word',
@@ -55,17 +68,6 @@ const Root = styled('div')(({ theme }) => ({
 		},
 	},
 }))
-
-const sectionStyles = {}
-forEach(sectionData, section => {
-	sectionStyles[`&[data-section="${section.title}"]`] = {
-		borderLeft: `4px solid ${section.color}`,
-		'&:before': {
-			content: `"${section.abbreviation}"`,
-			backgroundColor: section.color,
-		},
-	}
-})
 
 const Song = ({
 	chordSize: chordSizeProp = 16,
