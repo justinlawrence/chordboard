@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { atom, useAtom } from 'jotai'
 import { Helmet } from 'react-helmet'
 import { useDispatch } from 'react-redux'
-import find from 'lodash/find'
 
 import { styled } from '@mui/material/styles'
 import {
@@ -11,7 +10,6 @@ import {
 	Fade,
 	GlobalStyles,
 	Grid,
-	Tooltip,
 	Typography,
 } from '@mui/material'
 
@@ -89,45 +87,36 @@ const StyledFade = styled(Fade)(({ theme }) => ({
 	},
 }))
 
-const SongViewer = ({ isPreview, setKey, song = {}, user }) => {
+const SongViewer = ({ isPreview, setKey, song = {} }) => {
 	const dispatch = useDispatch()
 	const [chordSize] = useAtom(chordSizeAtom)
 	const [isNashville, setIsNashville] = useAtom(isNashvilleAtom)
 	const [wordSize] = useAtom(wordSizeAtom)
-	const [displayKey, setDisplayKey] = useState('')
+	const [capoKey, setCapoKey] = useState(setKey)
 	const [lines, setLines] = useState([])
 
 	const songId = song?.id
-	const userId = user?.id
-	const capo = getKeyDiff(displayKey, setKey || song.key) //this is only for display purposes, telling the user where to put the capo
-	const capoKey = useMemo(
-		() => localStorage.getItem(`chordboard.${songId}.capoKey`),
-		[songId]
-	)
-	const capoKeyDescr = capo ? `Capo ${capo}` : 'Capo key'
-	const transposeAmount = getKeyDiff(song.key, displayKey) //this is how much to transpose by
+	const capoDiff = getKeyDiff(capoKey, setKey || song.key) //this is only for display purposes, telling the user where to put the capo
+	const capoKeyDescr = capoDiff ? `Capo ${capoDiff}` : 'Capo key'
+	const transposeAmount = getKeyDiff(song.key, capoKey) //this is how much to transpose by
 
 	useEffect(() => {
-		const songUser = find(song.users, { id: userId }) || {}
-		const displayKey = capoKey || songUser.key || setKey || song.key
+		const savedCapoKey = localStorage.getItem(
+			`chordboard.${songId}.capoKey`
+		)
+		if (savedCapoKey) {
+			setCapoKey(savedCapoKey)
+		}
+	}, [songId])
 
+	useEffect(() => {
 		const parser = new Parser()
 		const lines = transposeLines(
 			parser.parse(song.content),
 			transposeAmount
 		)
-		setDisplayKey(displayKey)
-		setLines(isNashville ? linesToNashville(displayKey, lines) : lines)
-	}, [
-		capoKey,
-		isNashville,
-		setKey,
-		song.content,
-		song.key,
-		song.users,
-		transposeAmount,
-		userId,
-	])
+		setLines(isNashville ? linesToNashville(capoKey, lines) : lines)
+	}, [capoKey, isNashville, song.content, transposeAmount])
 
 	const handleSelectSetKey = option => {
 		dispatch(
@@ -137,20 +126,18 @@ const SongViewer = ({ isPreview, setKey, song = {}, user }) => {
 			})
 		)
 
-		console.log(option.key, displayKey)
-
-		if (displayKey === option.key && song.id) {
+		if (capoKey === option.key && song.id) {
 			localStorage.removeItem(`chordboard.${song.id}.capoKey`)
 		}
 	}
 
-	const handleSelectDisplayKey = option => {
+	const handleSelectCapoKey = option => {
 		const key = option.key === setKey ? null : option.key
 
-		setDisplayKey(key)
+		setCapoKey(key)
 		setIsNashville(option.value === 'nashville')
 
-		if (song.id) {
+		if (songId) {
 			if (setKey === option.key) {
 				localStorage.removeItem(`chordboard.${song.id}.capoKey`)
 			} else {
@@ -239,10 +226,8 @@ const SongViewer = ({ isPreview, setKey, song = {}, user }) => {
 
 											<KeySelector
 												label={capoKeyDescr}
-												onSelect={
-													handleSelectDisplayKey
-												}
-												songKey={displayKey || setKey}
+												onSelect={handleSelectCapoKey}
+												songKey={capoKey}
 											/>
 
 											<SongViewerMenu

@@ -5,7 +5,7 @@ import { db } from '../../firebase'
 import {
 	SET_CURRENT_SONG_ID,
 	SET_CURRENT_SONG_USER_KEY,
-	setCurrentSong
+	setCurrentSong,
 	//setSong
 } from '../actions'
 
@@ -13,7 +13,7 @@ const songsCollection = db.collection('songs')
 
 export function* currentSongSaga() {
 	yield takeEvery(SET_CURRENT_SONG_ID, updateCurrentSongById)
-	yield takeEvery(SET_CURRENT_SONG_USER_KEY, updateCurrentSongUserKey)
+	yield takeEvery(SET_CURRENT_SONG_USER_KEY, updateUserKeyForCurrentSong)
 }
 
 function* updateCurrentSongById({ payload }) {
@@ -22,7 +22,7 @@ function* updateCurrentSongById({ payload }) {
 		yield put(
 			setCurrentSong({
 				id: doc.id,
-				...doc.data()
+				...doc.data(),
 			})
 		)
 	} else {
@@ -30,7 +30,7 @@ function* updateCurrentSongById({ payload }) {
 	}
 }
 
-function* updateCurrentSongUserKey({ key }) {
+function* updateUserKeyForCurrentSong({ key }) {
 	const { currentSong, user: currentUser } = yield select()
 	currentSong.users = currentSong.users || []
 
