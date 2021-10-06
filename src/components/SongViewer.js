@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import cx from 'classnames'
 import { styled } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -20,7 +21,10 @@ import {
 	Avatar,
 	List,
 	ListItem,
+	ListItemIcon,
 	ListItemText,
+	Menu,
+	MenuItem,
 	Switch,
 	Tooltip,
 	Typography,
@@ -30,6 +34,7 @@ import {
 	Image as ImageIcon,
 	Minus as MinusIcon,
 	//PlaylistPlus as PlaylistPlusIcon,
+	DotsVertical as DotsVerticalIcon,
 	Plus as PlusIcon,
 	Pencil as PencilIcon,
 	Cog as SettingsIcon,
@@ -53,6 +58,7 @@ const classes = {
 	capoButton: `${PREFIX}-capoButton`,
 	closeButton: `${PREFIX}-closeButton`,
 	paper: `${PREFIX}-paper`,
+	songMenu: `${PREFIX}-songMenu`,
 	control: `${PREFIX}-control`,
 	select: `${PREFIX}-select`,
 	noPrint: `${PREFIX}-noPrint`,
@@ -80,7 +86,7 @@ const StyledFade = styled(Fade)(({ theme }) => ({
 		height: '100%',
 		color: theme.palette.text.secondary,
 	},
-
+	[`& .${classes.songMenu}`]: {},
 	[`& .${classes.noPrint}`]: {
 		'@media print': {
 			display: 'none !important',
@@ -107,6 +113,7 @@ class SongViewer extends Component {
 		isNashville: false,
 		isSetListDialogVisible: false,
 		isSongKeyDialogOpen: false,
+		isSongMenuOpen: false,
 		displayKey: '',
 		lines: [],
 		setList: [],
@@ -199,6 +206,7 @@ class SongViewer extends Component {
 
 	handleSongKeyDialogClose = () =>
 		this.setState({ isSongKeyDialogOpen: false })
+
 	handleSongKeyDialogOpen = () => this.setState({ isSongKeyDialogOpen: true })
 
 	handleProps = props => {
@@ -247,8 +255,19 @@ class SongViewer extends Component {
 
 	chordSizeDown = () =>
 		this.setState(prevState => ({ chordSize: prevState.chordSize - 1 }))
+
 	chordSizeUp = () =>
 		this.setState(prevState => ({ chordSize: prevState.chordSize + 1 }))
+
+	closeSongMenu = () =>
+		this.setState({
+			isSongMenuOpen: false,
+		})
+
+	openSongMenu = () =>
+		this.setState({
+			isSongMenuOpen: true,
+		})
 
 	closeSetListDialog = () =>
 		this.setState({
@@ -269,6 +288,7 @@ class SongViewer extends Component {
 
 	wordSizeDown = () =>
 		this.setState(prevState => ({ wordSize: prevState.wordSize - 1 }))
+
 	wordSizeUp = () =>
 		this.setState(prevState => ({ wordSize: prevState.wordSize + 1 }))
 
@@ -284,6 +304,7 @@ class SongViewer extends Component {
 			isNashville,
 			isSetListDialogVisible,
 			isSongKeyDialogOpen,
+			isSongMenuOpen,
 			displayKey,
 			lines: linesState,
 			wordSize,
@@ -380,6 +401,68 @@ class SongViewer extends Component {
 													/>
 												</Tooltip>
 
+												<Tooltip title={'Song menu'}>
+													<IconButton
+														className={cx(
+															classes.button,
+															classes.songMenu
+														)}
+														onClick={
+															this.openSongMenu
+														}
+													>
+														<DotsVerticalIcon />
+													</IconButton>
+												</Tooltip>
+
+												<Menu
+													id={'song-menu'}
+													onClose={this.closeSongMenu}
+													open={Boolean(
+														isSongMenuOpen
+													)}
+												>
+													<MenuItem
+														href={`/songs/${song.id}/edit`}
+													>
+														<ListItemIcon>
+															<PencilIcon />
+														</ListItemIcon>
+														<ListItemText>
+															Edit song
+														</ListItemText>
+														<Typography
+															variant={'body2'}
+															color={
+																'text.secondary'
+															}
+														>
+															⌘X
+														</Typography>
+													</MenuItem>
+													<MenuItem
+														onClick={
+															this
+																.handleSongKeyDialogOpen
+														}
+													>
+														<ListItemIcon>
+															<SettingsIcon />
+														</ListItemIcon>
+														<ListItemText>
+															Song Settings
+														</ListItemText>
+														<Typography
+															variant={'body2'}
+															color={
+																'text.secondary'
+															}
+														>
+															⌘S
+														</Typography>
+													</MenuItem>
+												</Menu>
+												{/* 
 												<Tooltip title={'Edit song'}>
 													<IconButton
 														className={
@@ -390,7 +473,7 @@ class SongViewer extends Component {
 													>
 														<PencilIcon />
 													</IconButton>
-												</Tooltip>
+												</Tooltip> */}
 												{/* 
 												<Tooltip title={'Add to set'}>
 													<IconButton
@@ -406,7 +489,7 @@ class SongViewer extends Component {
 														<PlaylistPlusIcon />
 													</IconButton>
 												</Tooltip> */}
-
+												{/* 
 												<Tooltip
 													title={'Song settings'}
 												>
@@ -422,7 +505,7 @@ class SongViewer extends Component {
 													>
 														<SettingsIcon />
 													</IconButton>
-												</Tooltip>
+												</Tooltip> */}
 
 												<Dialog
 													onClose={
