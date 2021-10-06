@@ -8,7 +8,7 @@ Built using React, Firebase, Material-UI and friends.
 
 ## How it works
 
-Create setlists, add songs, transpose songs in real-time, for your band, school, 
+Create setlists, add songs, transpose songs in real-time, for your band, school,
 
 ## Setting it up for yourself
 
@@ -17,24 +17,22 @@ This project is built using create-react-app and firebase. To get it running pro
 ```js
 // src/firebase-config.ts
 const config = {
-  apiKey: "myapikey",
-  authDomain: "my-auth-domain.firebaseapp.com",
-  databaseURL: "my-db-url.com",
-  projectId: "my-pid",
-  storageBucket: "my-storage-bucket",
-  messagingSenderId: "my-sender-id",  
-};
+	apiKey: 'myapikey',
+	authDomain: 'my-auth-domain.firebaseapp.com',
+	databaseURL: 'my-db-url.com',
+	projectId: 'my-pid',
+	storageBucket: 'my-storage-bucket',
+	messagingSenderId: 'my-sender-id',
+}
 
-export default config;
+export default config
 ```
 
 You'll also need to install the local dependencies using Yarn or NPM.
 
-
 ```
 npm i
 ```
-
 
 You'll need to either deploy the code to a hosted server, or emulate them locally. Finally, you can run it:
 
@@ -46,9 +44,14 @@ npm start
 
 Use firebase-cli to initalize a project in the root directory. Then build your project and deploy.
 
+From the dev branch
+
 ```
-npm run build
-firebase deploy
+git checkout master
+git merge dev
+yarn version
+git push
+git checkout dev
 ```
 
 ## About
