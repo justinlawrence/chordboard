@@ -228,37 +228,22 @@ const SongViewer = ({ isPreview, setKey, song = {}, user }) => {
 									>
 										<form autoComplete={'off'}>
 											{setKey && (
-												<Tooltip
-													title={
-														'The key everyone will be playing in'
+												<KeySelector
+													label={'Set Key'}
+													onSelect={
+														handleSelectSetKey
 													}
-												>
-													<KeySelector
-														label={'Set key'}
-														onSelect={
-															handleSelectSetKey
-														}
-														songKey={setKey}
-													/>
-												</Tooltip>
+													songKey={setKey}
+												/>
 											)}
 
-											<Tooltip
-												title={
-													'The key you will be playing in'
+											<KeySelector
+												label={capoKeyDescr}
+												onSelect={
+													handleSelectDisplayKey
 												}
-											>
-												<KeySelector
-													label={capoKeyDescr}
-													onSelect={
-														handleSelectDisplayKey
-													}
-													songKey={
-														displayKey || setKey
-													}
-													className={classes.select}
-												/>
-											</Tooltip>
+												songKey={displayKey || setKey}
+											/>
 
 											<SongViewerMenu
 												isPreview={isPreview}
