@@ -21,11 +21,11 @@
 */
 
 import React, { Component } from 'react'
-import { styled } from '@material-ui/core/styles';
+import { styled } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from '@mui/styles/withStyles'
 import Paper from '@mui/material/Paper'
 
 import * as actions from '../redux/actions'
@@ -33,37 +33,33 @@ import ContentLimiter from './ContentLimiter'
 import Hero from './Hero'
 import SetFormContainer from '../containers/SetFormContainer'
 
-const PREFIX = 'SetEditor';
+const PREFIX = 'SetEditor'
 
 const classes = {
-    root: `${PREFIX}-root`,
-    form: `${PREFIX}-form`,
-    formFooter: `${PREFIX}-formFooter`,
-    control: `${PREFIX}-control`
-};
+	root: `${PREFIX}-root`,
+	form: `${PREFIX}-form`,
+	formFooter: `${PREFIX}-formFooter`,
+	control: `${PREFIX}-control`,
+}
 
-const Root = styled('div')((
-    {
-        theme
-    }
-) => ({
-    [`& .${classes.root}`]: {
+const Root = styled('div')(({ theme }) => ({
+	[`& .${classes.root}`]: {
 		flexGrow: 1,
 	},
 
-    [`& .${classes.form}`]: theme.mixins.gutters({
+	[`& .${classes.form}`]: theme.mixins.gutters({
 		paddingBottom: theme.spacing(2),
 		paddingTop: theme.spacing(2),
 	}),
 
-    [`& .${classes.formFooter}`]: {
+	[`& .${classes.formFooter}`]: {
 		marginTop: theme.spacing(2),
 	},
 
-    [`& .${classes.control}`]: {
+	[`& .${classes.control}`]: {
 		padding: theme.spacing(2),
-	}
-}));
+	},
+}))
 
 class SetEditor extends Component {
 	static propTypes = {
@@ -92,22 +88,18 @@ class SetEditor extends Component {
 	}
 
 	render() {
-		const { } = this.props
-
 		return (
-            <Root className={'set-editor'}>
-				<Hero>
-					<ContentLimiter>
-						<Paper className={classes.form}>
-							<SetFormContainer
-								onCancel={this.handleFormCancel}
-								onSubmit={this.handleFormSubmit}
-							/>
-						</Paper>
-					</ContentLimiter>
-				</Hero>
+			<Root className={'set-editor'}>
+				<ContentLimiter>
+					<Paper className={classes.form}>
+						<SetFormContainer
+							onCancel={this.handleFormCancel}
+							onSubmit={this.handleFormSubmit}
+						/>
+					</Paper>
+				</ContentLimiter>
 			</Root>
-        );
+		)
 	}
 }
 
@@ -115,4 +107,4 @@ const mapStateToProps = state => ({
 	user: state.user,
 })
 
-export default connect(mapStateToProps, actions)((SetEditor))
+export default connect(mapStateToProps, actions)(SetEditor)

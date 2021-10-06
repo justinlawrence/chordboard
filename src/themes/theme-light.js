@@ -1,15 +1,8 @@
-import { createTheme, adaptV4Theme } from '@mui/material/styles'
+import { createTheme } from '@mui/material/styles'
 
-const baseTheme = createTheme(
-	adaptV4Theme({
-		typography: { useNextVariants: true },
-	})
-)
+const baseTheme = createTheme()
 
 export const lightTheme = {
-	typography: {
-		useNextVariants: true,
-	},
 	palette: {
 		...baseTheme.palette,
 		background: {

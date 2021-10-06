@@ -1,10 +1,8 @@
-import { createTheme, adaptV4Theme } from '@mui/material/styles'
+import { createTheme } from '@mui/material/styles'
 
-const baseDarkTheme = createTheme(
-	adaptV4Theme({
-		palette: { mode: 'dark' },
-	})
-)
+const baseDarkTheme = createTheme({
+	palette: { mode: 'dark' },
+})
 
 export const darkTheme = {
 	palette: {

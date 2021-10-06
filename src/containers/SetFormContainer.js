@@ -2,14 +2,9 @@ import React, { Component } from 'react'
 import { styled } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { format } from 'date-fns'
-import { DatePicker } from '@material-ui/pickers'
 
 import { Button, Grid, TextField } from '@mui/material'
-
-import {
-	ChevronLeft as ChevronLeftIcon,
-	ChevronRight as ChevronRightIcon,
-} from 'mdi-material-ui'
+import { DatePicker } from '@mui/lab'
 
 const PREFIX = 'SetFormContainer'
 
@@ -22,11 +17,6 @@ const Root = styled('form')(({ theme }) => ({
 		color: theme.palette.error.main,
 	},
 }))
-
-const datePickerIcons = {
-	leftArrowIcon: <ChevronLeftIcon />,
-	rightArrowIcon: <ChevronRightIcon />,
-}
 
 const modes = {
 	NEW: 'new',
@@ -109,7 +99,6 @@ class SetFormContainer extends Component {
 	}
 
 	render() {
-		const {} = this.props
 		const { newSet } = this.state
 		const currentDate = format(new Date(), 'd MMM yyyy')
 
@@ -129,15 +118,18 @@ class SetFormContainer extends Component {
 
 					<Grid item xs={12} lg={6}>
 						<DatePicker
-							label={'Set date'}
-							format={'d MMM yyyy'}
-							fullWidth
-							invalidDateMessage={`Invalid Date Format (eg. ${currentDate})`}
-							margin={'normal'}
-							value={newSet.setDate}
+							inputFormat={'d MMM yyyy'}
+							// invalidDateMessage={`Invalid Date Format (eg. ${currentDate})`}
 							onChange={this.handleDateChange}
-							variant={'inline'}
-							{...datePickerIcons}
+							value={newSet.setDate}
+							renderInput={props => (
+								<TextField
+									fullWidth
+									label={'Set date'}
+									margin={'normal'}
+									{...props}
+								/>
+							)}
 						/>
 					</Grid>
 

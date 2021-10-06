@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { styled } from '@material-ui/core/styles'
 import { findIndex } from 'lodash'
 import { connect } from 'react-redux'
 import {
@@ -9,12 +8,11 @@ import {
 	matchPath,
 	withRouter,
 } from 'react-router-dom'
-import DateFnsUtils from '@date-io/date-fns'
-import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 
-import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
-import CssBaseline from '@mui/material/CssBaseline'
-import Grid from '@mui/material/Grid'
+import { ThemeProvider } from '@mui/material/styles'
+import { CssBaseline, Grid } from '@mui/material'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import LocalizationProvider from '@mui/lab/LocalizationProvider'
 
 import * as actions from './redux/actions'
 import { db } from './firebase'
@@ -35,18 +33,6 @@ const classes = {
 	root: `${PREFIX}-root`,
 	content: `${PREFIX}-content`,
 }
-
-const StyledStyledEngineProvider = styled(StyledEngineProvider)(
-	({ theme }) => ({
-		[`& .${classes.root}`]: {
-			height: '100vh',
-		},
-
-		[`& .${classes.content}`]: {
-			minHeight: 0,
-		},
-	})
-)
 
 class App extends Component {
 	componentDidMount = () => {
@@ -106,7 +92,7 @@ class App extends Component {
 
 		return (
 			<ThemeProvider theme={muiTheme}>
-				<MuiPickersUtilsProvider utils={DateFnsUtils}>
+				<LocalizationProvider dateAdapter={AdapterDateFns}>
 					<Grid
 						container
 						className={classes.root}
@@ -184,7 +170,7 @@ class App extends Component {
 
 						<LiveBar />
 					</Grid>
-				</MuiPickersUtilsProvider>
+				</LocalizationProvider>
 			</ThemeProvider>
 		)
 	}
