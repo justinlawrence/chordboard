@@ -1,55 +1,26 @@
-import React, { Component } from 'react'
-import cx from 'classnames'
-import { styled } from '@material-ui/core/styles'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { isAfter } from 'date-fns'
-import filter from 'lodash/fp/filter'
-import reduce from 'lodash/fp/reduce'
+import React, { useEffect, useMemo, useState } from 'react'
+import { atom, useAtom } from 'jotai'
+import { Helmet } from 'react-helmet'
+import { useDispatch } from 'react-redux'
+import find from 'lodash/find'
 
-import {
-	Box,
-	Button,
-	Container,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogTitle,
-	Fade,
-	Grid,
-	IconButton,
-	Avatar,
-	List,
-	ListItem,
-	ListItemIcon,
-	ListItemText,
-	Menu,
-	MenuItem,
-	Switch,
-	Tooltip,
-	Typography,
-} from '@mui/material'
-import {
-	Close as CloseIcon,
-	Image as ImageIcon,
-	Minus as MinusIcon,
-	//PlaylistPlus as PlaylistPlusIcon,
-	DotsVertical as DotsVerticalIcon,
-	Plus as PlusIcon,
-	Pencil as PencilIcon,
-	Cog as SettingsIcon,
-} from 'mdi-material-ui'
+import { styled } from '@mui/material/styles'
+import { Box, Container, Fade, Grid, Tooltip, Typography } from '@mui/material'
 
-import * as actions from '../redux/actions'
+import { setCurrentSetSongKey, setCurrentSongUserKey } from '../redux/actions'
+import SongViewerMenu from './SongViewerMenu'
 import ContentLimiter from './ContentLimiter'
 import getKeyDiff from '../utils/getKeyDiff'
 import Hero from './Hero'
 import KeySelector from './KeySelector'
 import Parser from '../parsers/song-parser'
 import Song from './Song'
-import transposeChord from '../utils/transpose-chord'
 import transposeLines from '../utils/transpose-lines'
 import { linesToNashville } from '../utils/convertToNashville'
+
+export const chordSizeAtom = atom(16)
+export const isNashvilleAtom = atom(false)
+export const wordSizeAtom = atom(20)
 
 const PREFIX = 'SongViewer'
 
@@ -86,7 +57,6 @@ const StyledFade = styled(Fade)(({ theme }) => ({
 		height: '100%',
 		color: theme.palette.text.secondary,
 	},
-	[`& .${classes.songMenu}`]: {},
 	[`& .${classes.noPrint}`]: {
 		'@media print': {
 			display: 'none !important',
@@ -94,143 +64,80 @@ const StyledFade = styled(Fade)(({ theme }) => ({
 	},
 }))
 
-class SongViewer extends Component {
-	static defaultProps = {
-		song: {},
-	}
+const SongViewer = ({ isPreview, setKey, song = {}, user }) => {
+	const dispatch = useDispatch()
+	const [chordSize] = useAtom(chordSizeAtom)
+	const [isNashville, setIsNashville] = useAtom(isNashvilleAtom)
+	const [wordSize] = useAtom(wordSizeAtom)
+	const [displayKey, setDisplayKey] = useState('')
+	const [lines, setLines] = useState([])
 
-	static propTypes = {
-		classes: PropTypes.object,
-		isPreview: PropTypes.bool,
-		setKey: PropTypes.string,
-		song: PropTypes.object,
-	}
+	const songId = song?.id
+	const userId = user?.id
+	const capo = getKeyDiff(displayKey, setKey || song.key) //this is only for display purposes, telling the user where to put the capo
+	const capoKey = useMemo(
+		() => localStorage.getItem(`chordboard.${songId}.capoKey`),
+		[songId]
+	)
+	const capoKeyDescr = capo ? `Capo ${capo}` : 'Capo key'
+	const transposeAmount = getKeyDiff(song.key, displayKey) //this is how much to transpose by
 
-	state = {
-		capoAmount: 0,
-		chordSize: 16,
-		capoKey: null,
-		isNashville: false,
-		isSetListDialogVisible: false,
-		isSongKeyDialogOpen: false,
-		isSongMenuOpen: false,
-		displayKey: '',
-		lines: [],
-		setList: [],
-		wordSize: 20,
-	}
-
-	componentDidMount() {
-		this.handleProps(this.props)
-	}
-
-	UNSAFE_componentWillReceiveProps(nextProps) {
-		this.handleProps(nextProps)
-	}
-
-	addToSet = set => {
-		// db.get(set.id)
-		// 	.then(doc => {
-		// 		const data = {
-		// 			...doc
-		// 		}
-		//
-		// 		data.songs = data.songs || []
-		// 		data.songs.push({ id: song.id, key: song.key })
-		// 		data.songs = uniqBy(data.songs, 'id')
-		//
-		// 		db.put(data)
-		// 			.then(() => {
-		// 				if (this.props.history) {
-		// 					const location = {
-		// 						pathname: `/sets/${doc.id}`
-		// 					}
-		//
-		// 					this.props.history.push(location)
-		// 				}
-		// 			})
-		// 			.catch(err => {
-		// 				if (err.name === 'conflict') {
-		// 					console.error('SongList.addToSet: conflict -', err)
-		// 				} else {
-		// 					console.error('SongList.addToSet -', err)
-		// 				}
-		// 			})
-		// 	})
-		// 	.catch(err => {
-		// 		console.error(err)
-		// 	})
-	}
-
-	createAddToSetHandler = set => () => {
-		this.closeSetListDialog()
-		this.addToSet(set)
-	}
-
-	handleSelectSetKey = option => {
-		const { song } = this.props
-		this.props.setCurrentSetSongKey({
-			key: option.key,
-			song,
-		})
-
-		console.log(option.key, this.state.displayKey)
-
-		if (this.state.displayKey === option.key && this.props.song.id) {
-			localStorage.removeItem(`chordboard.${this.props.song.id}.capoKey`)
-		}
-	}
-
-	handleSelectDisplayKey = option => {
-		const key = option.key === this.props.setKey ? null : option.key
-
-		this.setState({
-			displayKey: key,
-			isNashville: option.value === 'nashville',
-		})
-
-		if (this.props.song.id) {
-			if (this.props.setKey === option.key) {
-				localStorage.removeItem(
-					`chordboard.${this.props.song.id}.capoKey`
-				)
-			} else {
-				localStorage.setItem(
-					`chordboard.${this.props.song.id}.capoKey`,
-					key
-				)
-			}
-		}
-		this.props.setCurrentSongUserKey(key)
-	}
-
-	handleSongKeyDialogClose = () =>
-		this.setState({ isSongKeyDialogOpen: false })
-
-	handleSongKeyDialogOpen = () => this.setState({ isSongKeyDialogOpen: true })
-
-	handleProps = props => {
-		//Set the page title to the song title
-		document.title = props.song.title
-
-		const songUser =
-			(props.song.users &&
-				props.song.users.find(u => u.id === props.user.id)) ||
-			{}
-
-		const capoKey = localStorage.getItem(
-			`chordboard.${props.song.id}.capoKey`
-		)
-		const displayKey =
-			capoKey || songUser.key || props.setKey || props.song.key
+	useEffect(() => {
+		const songUser = find(song.users, { id: userId }) || {}
+		const displayKey = capoKey || songUser.key || setKey || song.key
 
 		const parser = new Parser()
-		const lines = parser.parse(props.song.content)
+		const lines = transposeLines(
+			parser.parse(song.content),
+			transposeAmount
+		)
+		setDisplayKey(displayKey)
+		setLines(isNashville ? linesToNashville(displayKey, lines) : lines)
+	}, [
+		capoKey,
+		isNashville,
+		setKey,
+		song.content,
+		song.key,
+		song.users,
+		transposeAmount,
+		userId,
+	])
 
-		this.setState({ displayKey, lines })
+	const handleSelectSetKey = option => {
+		dispatch(
+			setCurrentSetSongKey({
+				key: option.key,
+				song,
+			})
+		)
+
+		console.log(option.key, displayKey)
+
+		if (displayKey === option.key && song.id) {
+			localStorage.removeItem(`chordboard.${song.id}.capoKey`)
+		}
 	}
 
-	scrollToSection(section) {
+	const handleSelectDisplayKey = option => {
+		const key = option.key === setKey ? null : option.key
+
+		setDisplayKey(key)
+		setIsNashville(option.value === 'nashville')
+
+		if (song.id) {
+			if (setKey === option.key) {
+				localStorage.removeItem(`chordboard.${song.id}.capoKey`)
+			} else {
+				localStorage.setItem(`chordboard.${song.id}.capoKey`, key)
+			}
+		}
+		dispatch(setCurrentSongUserKey(key))
+	}
+
+	/* 
+	// TODO: use this functionality with the live bar
+	const scrollToSection = section => {
 		let totalVertPadding = 32
 		let headerHeight = 92
 
@@ -244,225 +151,95 @@ class SongViewer extends Component {
 			// Go back 92 pixels to offset the header.
 			window.scrollBy(0, -headerHeight)
 		}
-	}
+	} */
 
-	changeKey = key => {
+	/*	
+	const changeKey = key => {
 		if (key) {
-			this.setState({ displayKey: key })
-			this.props.setCurrentSongUserKey(key)
+			setDisplayKey(key)
+			dispatch(setCurrentSongUserKey(key))
 		}
 	}
 
-	chordSizeDown = () =>
-		this.setState(prevState => ({ chordSize: prevState.chordSize - 1 }))
+	const transposeDown = () => changeKey(transposeChord(displayKey, -1))
 
-	chordSizeUp = () =>
-		this.setState(prevState => ({ chordSize: prevState.chordSize + 1 }))
+	const transposeUp = () => changeKey(transposeChord(displayKey, 1)) */
 
-	closeSongMenu = () =>
-		this.setState({
-			isSongMenuOpen: false,
-		})
-
-	openSongMenu = () =>
-		this.setState({
-			isSongMenuOpen: true,
-		})
-
-	closeSetListDialog = () =>
-		this.setState({
-			isSetListDialogVisible: false,
-		})
-
-	openSetListDialog = () =>
-		this.setState({
-			isSetListDialogVisible: true,
-		})
-
-	transposeDown = () => {
-		this.changeKey(transposeChord(this.state.displayKey, -1))
-	}
-	transposeUp = () => {
-		this.changeKey(transposeChord(this.state.displayKey, 1))
-	}
-
-	wordSizeDown = () =>
-		this.setState(prevState => ({ wordSize: prevState.wordSize - 1 }))
-
-	wordSizeUp = () =>
-		this.setState(prevState => ({ wordSize: prevState.wordSize + 1 }))
-
-	toggleNashville = value => () =>
-		this.setState(prevState => ({
-			isNashville: value !== undefined ? value : !prevState.isNashville,
-		}))
-
-	render() {
-		const { isPreview, setKey, setList, song } = this.props
-		const {
-			chordSize,
-			isNashville,
-			isSetListDialogVisible,
-			isSongKeyDialogOpen,
-			isSongMenuOpen,
-			displayKey,
-			lines: linesState,
-			wordSize,
-		} = this.state
-
-		const capo = getKeyDiff(displayKey, setKey || song.key) //this is only for display purposes, telling the user where to put the capo
-		const transposeAmount = getKeyDiff(song.key, displayKey) //this is how much to transpose by
-
-		let lines = transposeLines(linesState, transposeAmount)
-		if (isNashville) {
-			lines = linesToNashville(displayKey, lines)
-		}
-
-		let capoKeyDescr = ''
-
-		if (capo) {
-			capoKeyDescr = 'Capo ' + capo
-		} else {
-			capoKeyDescr = 'Capo key'
-		}
-
-		const setListActive = filter(set => isAfter(set.setDate, new Date()))(
-			setList
-		)
-
-		return (
-			<StyledFade in={Boolean(song)} appear mountOnEnter unmountOnExit>
-				<Box>
-					<Hero>
-						<Container>
-							<ContentLimiter>
-								<Grid
-									container
-									className={classes.root}
-									justifyContent={'space-between'}
-								>
-									<Grid item xs={12} sm={7}>
-										<Typography
-											variant={'h4'}
-											sx={{
-												fontWeight: theme =>
-													theme.typography
-														.fontWeightBold,
-											}}
-										>
-											{song.title}
-										</Typography>
-										<Typography variant={'subtitle1'}>
-											{song.author}
-										</Typography>
-									</Grid>
-									{!isPreview && (
-										<Grid
-											item
-											xs={12}
-											sm={5}
-											className={classes.noPrint}
-										>
-											<form autoComplete={'off'}>
-												{setKey && (
-													<Tooltip
-														title={
-															'The key everyone will be playing in'
-														}
-													>
-														<KeySelector
-															label={'Set key'}
-															onSelect={
-																this
-																	.handleSelectSetKey
-															}
-															songKey={setKey}
-														/>
-													</Tooltip>
-												)}
-
+	return (
+		<StyledFade in={Boolean(song)} appear mountOnEnter unmountOnExit>
+			<Box>
+				<Helmet>
+					<title>{song.title}</title>
+				</Helmet>
+				<Hero>
+					<Container>
+						<ContentLimiter>
+							<Grid
+								container
+								className={classes.root}
+								justifyContent={'space-between'}
+							>
+								<Grid item xs={12} sm={7}>
+									<Typography
+										variant={'h4'}
+										sx={{
+											fontWeight: theme =>
+												theme.typography.fontWeightBold,
+										}}
+									>
+										{song.title}
+									</Typography>
+									<Typography variant={'subtitle1'}>
+										{song.author}
+									</Typography>
+								</Grid>
+								{!isPreview && (
+									<Grid
+										item
+										xs={12}
+										sm={5}
+										className={classes.noPrint}
+									>
+										<form autoComplete={'off'}>
+											{setKey && (
 												<Tooltip
 													title={
-														'The key you will be playing in'
+														'The key everyone will be playing in'
 													}
 												>
 													<KeySelector
-														label={capoKeyDescr}
+														label={'Set key'}
 														onSelect={
-															this
-																.handleSelectDisplayKey
+															handleSelectSetKey
 														}
-														songKey={
-															displayKey || setKey
-														}
-														className={
-															classes.select
-														}
+														songKey={setKey}
 													/>
 												</Tooltip>
+											)}
 
-												<Tooltip title={'Song menu'}>
-													<IconButton
-														className={cx(
-															classes.button,
-															classes.songMenu
-														)}
-														onClick={
-															this.openSongMenu
-														}
-													>
-														<DotsVerticalIcon />
-													</IconButton>
-												</Tooltip>
+											<Tooltip
+												title={
+													'The key you will be playing in'
+												}
+											>
+												<KeySelector
+													label={capoKeyDescr}
+													onSelect={
+														handleSelectDisplayKey
+													}
+													songKey={
+														displayKey || setKey
+													}
+													className={classes.select}
+												/>
+											</Tooltip>
 
-												<Menu
-													id={'song-menu'}
-													onClose={this.closeSongMenu}
-													open={Boolean(
-														isSongMenuOpen
-													)}
-												>
-													<MenuItem
-														href={`/songs/${song.id}/edit`}
-													>
-														<ListItemIcon>
-															<PencilIcon />
-														</ListItemIcon>
-														<ListItemText>
-															Edit song
-														</ListItemText>
-														<Typography
-															variant={'body2'}
-															color={
-																'text.secondary'
-															}
-														>
-															⌘X
-														</Typography>
-													</MenuItem>
-													<MenuItem
-														onClick={
-															this
-																.handleSongKeyDialogOpen
-														}
-													>
-														<ListItemIcon>
-															<SettingsIcon />
-														</ListItemIcon>
-														<ListItemText>
-															Song Settings
-														</ListItemText>
-														<Typography
-															variant={'body2'}
-															color={
-																'text.secondary'
-															}
-														>
-															⌘S
-														</Typography>
-													</MenuItem>
-												</Menu>
-												{/* 
+											<SongViewerMenu
+												isPreview={isPreview}
+												song={song}
+											/>
+
+											{/* 
 												<Tooltip title={'Edit song'}>
 													<IconButton
 														className={
@@ -474,22 +251,8 @@ class SongViewer extends Component {
 														<PencilIcon />
 													</IconButton>
 												</Tooltip> */}
-												{/* 
-												<Tooltip title={'Add to set'}>
-													<IconButton
-														className={
-															classes.button
-														}
-														onClick={
-															this
-																.openSetListDialog
-														}
-														size={'large'}
-													>
-														<PlaylistPlusIcon />
-													</IconButton>
-												</Tooltip> */}
-												{/* 
+
+											{/* 
 												<Tooltip
 													title={'Song settings'}
 												>
@@ -498,197 +261,44 @@ class SongViewer extends Component {
 															classes.button
 														}
 														onClick={
-															this
-																.handleSongKeyDialogOpen
+															handleSongKeyDialogOpen
 														}
 														size={'large'}
 													>
 														<SettingsIcon />
 													</IconButton>
 												</Tooltip> */}
-
-												<Dialog
-													onClose={
-														this.closeSetListDialog
-													}
-													open={Boolean(
-														isSetListDialogVisible
-													)}
-												>
-													<DialogTitle
-														id={'add-to-set-title'}
-													>
-														Add to Set
-														<IconButton
-															aria-label={'Close'}
-															className={
-																classes.closeButton
-															}
-															onClick={
-																this
-																	.closeSetListDialog
-															}
-															size={'large'}
-														>
-															<CloseIcon />
-														</IconButton>
-													</DialogTitle>
-													<List component={'nav'}>
-														{setListActive.map(
-															set => (
-																<ListItem
-																	button
-																	key={set.id}
-																	onClick={this.createAddToSetHandler(
-																		set
-																	)}
-																	value={
-																		set.id
-																	}
-																>
-																	<Avatar>
-																		<ImageIcon />
-																	</Avatar>
-
-																	<ListItemText
-																		primary={
-																			set.author +
-																			' • ' +
-																			set.title
-																		}
-																		secondary={
-																			set.setDate
-																		}
-																	/>
-																</ListItem>
-															)
-														)}
-													</List>
-												</Dialog>
-											</form>
-										</Grid>
-									)}
-								</Grid>
-							</ContentLimiter>
-						</Container>
-					</Hero>
-					<Container className={'song-viewer'}>
-						<ContentLimiter>
-							<section className={'section'}>
-								<Container maxWidth={'xl'}>
-									<Typography component={'div'}>
-										<Song
-											chordSize={chordSize}
-											lines={lines}
-											wordSize={wordSize}
-										/>
-									</Typography>
-								</Container>
-							</section>
+										</form>
+									</Grid>
+								)}
+							</Grid>
 						</ContentLimiter>
-
-						{!isPreview && (
-							<Dialog
-								aria-labelledby={'songkey-dialog-title'}
-								onClose={this.handleSongKeyDialogClose}
-								open={isSongKeyDialogOpen}
-							>
-								<DialogTitle id={'songkey-dialog-title'}>
-									Song Settings
-								</DialogTitle>
-
-								<DialogContent
-									dividers
-									sx={{
-										width: theme => theme.spacing(8 * 7),
-									}}
-								>
-									<Box
-										sx={{
-											alignItems: 'center',
-											display: 'flex',
-											justifyContent: 'space-between',
-										}}
-									>
-										<Typography>
-											Word and Chord Size
-										</Typography>
-
-										<Box>
-											<IconButton
-												aria-label={'Word size down'}
-												onClick={this.wordSizeDown}
-												size={'large'}
-											>
-												<MinusIcon />
-											</IconButton>
-
-											<IconButton
-												aria-label={'Word size up'}
-												onClick={this.wordSizeUp}
-												size={'large'}
-											>
-												<PlusIcon />
-											</IconButton>
-										</Box>
-									</Box>
-									<Box
-										sx={{
-											alignItems: 'center',
-											display: 'flex',
-											justifyContent: 'space-between',
-											mt: 2,
-										}}
-									>
-										<Box>
-											<Typography>
-												Nashville Numbering
-											</Typography>
-											<Typography
-												color={'textSecondary'}
-												variant={'body2'}
-											>
-												Show numbers instead of chords
-											</Typography>
-										</Box>
-										<Switch
-											aria-label={
-												'Toggle Nashville Numbering'
-											}
-											checked={this.state.isNashville}
-											onClick={this.toggleNashville()}
-										>
-											Toggle
-										</Switch>
-									</Box>
-								</DialogContent>
-								<DialogActions>
-									<Button
-										onClick={this.handleSongKeyDialogClose}
-									>
-										Close
-									</Button>
-								</DialogActions>
-							</Dialog>
-						)}
 					</Container>
-					<Box
-						sx={{
-							displayPrint: 'none',
-							height: theme => theme.spacing(12),
-						}}
-					/>
-				</Box>
-			</StyledFade>
-		)
-	}
+				</Hero>
+				<Container className={'song-viewer'}>
+					<ContentLimiter>
+						<section className={'section'}>
+							<Container maxWidth={'xl'}>
+								<Typography component={'div'}>
+									<Song
+										chordSize={chordSize}
+										lines={lines}
+										wordSize={wordSize}
+									/>
+								</Typography>
+							</Container>
+						</section>
+					</ContentLimiter>
+				</Container>
+				<Box
+					sx={{
+						displayPrint: 'none',
+						height: theme => theme.spacing(12),
+					}}
+				/>
+			</Box>
+		</StyledFade>
+	)
 }
 
-const mapStateToProps = state => ({
-	setList: reduce((acc, set) => {
-		acc.push(set)
-		return acc
-	})([])(state.sets.byId),
-})
-
-export default connect(mapStateToProps, actions)(SongViewer)
+export default SongViewer
