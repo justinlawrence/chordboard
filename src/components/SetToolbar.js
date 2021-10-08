@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory, useRouteMatch } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import map from 'lodash/map'
 
@@ -45,7 +45,7 @@ const SetToolbar = ({ currentSet, songId, songs }) => {
 	const currentSetId = currentSet?.id
 
 	useEffect(() => {
-		if (isSyncOn) {
+		if (isSyncOn && songId) {
 			syncCollection
 				.doc(currentSetId)
 				.set(
@@ -55,10 +55,16 @@ const SetToolbar = ({ currentSet, songId, songs }) => {
 			return syncCollection.doc(currentSetId).onSnapshot(doc => {
 				doc.data()
 					.song.get()
-					.then(doc => console.log(doc.data().title))
+					.then(doc => {
+						if (songId !== doc.id && doc.id != null) {
+							history.push(
+								`/sets/${currentSetId}/songs/${doc.id}`
+							)
+						}
+					})
 			})
 		}
-	}, [currentSetId, isSyncOn, songId])
+	}, [currentSetId, history, isSyncOn, songId])
 
 	const handleBackClick = () => {
 		dispatch(setCurrentSetId(null))
