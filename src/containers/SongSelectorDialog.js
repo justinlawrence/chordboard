@@ -124,7 +124,7 @@ const SongSelectorDialog = ({ onClose = noop, open, songs = [] }) => {
 	const listSize = { height: 500, width: 600 }
 
 	const filteredSongs = useMemo(() => {
-		const searchFilter = filter(song =>
+		const filterBySearch = filter(song =>
 			includes(toLower(searchValue))(
 				toLower(song.title) +
 					' ' +
@@ -134,14 +134,14 @@ const SongSelectorDialog = ({ onClose = noop, open, songs = [] }) => {
 			)
 		)
 
-		const sectionFilter = filter(song =>
+		const filterBySection = filter(song =>
 			sectionFilter
 				? startsWith(toLower(sectionFilter))(toLower(song.title))
 				: true
 		)
 
-		return flow(searchFilter, sectionFilter, sortBy('title'))(songs)
-	}, [searchValue, songs])
+		return flow(filterBySearch, filterBySection, sortBy('title'))(songs)
+	}, [searchValue, sectionFilter, songs])
 
 	const getItemSize = index => 50
 
