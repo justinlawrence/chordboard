@@ -16,6 +16,7 @@ import size from 'lodash/size'
 import sortBy from 'lodash/fp/sortBy'
 import startsWith from 'lodash/fp/startsWith'
 import upperCase from 'lodash/fp/upperCase'
+import without from 'lodash/without'
 
 import { styled } from '@material-ui/core/styles'
 import { useTheme } from '@mui/material/styles'
@@ -149,7 +150,11 @@ const SongSelectorDialog = ({ onClose = noop, open, songs = [] }) => {
 
 	const handleCheckboxClick = value => event => {
 		event.stopPropagation()
-		setSetSongs(prevState => [...prevState.setSongs, value])
+		setSetSongs(prevState =>
+			includes(value)(prevState)
+				? without(prevState, value)
+				: [...prevState, value]
+		)
 	}
 
 	const handleListItemClick = value => () => onClose([value])
