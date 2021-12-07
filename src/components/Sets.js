@@ -159,13 +159,10 @@ class Sets extends PureComponent {
 									</TableCell>
 
 									<TableCell>
-										<Typography
-											variant={'h6'}
-											sx={{ fontWeight: 700 }}
-										>
+										<Typography variant={'h6'}>
 											{set.title}
 										</Typography>
-										<Typography>
+										<Typography variant={'caption'}>
 											{set.author}
 											{set.venue ? ' @ ' + set.venue : ''}
 										</Typography>
