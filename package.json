@@ -1,7 +1,7 @@
 {
 	"name": "chordboard",
-	"version": "0.3.6",
-	"description": "Setlists In Real-Time!",
+	"version": "0.3.7",
+	"description": "Chordboard - Real-Time Chord Sheets!",
 	"private": true,
 	"license": "ISC",
 	"repository": {
