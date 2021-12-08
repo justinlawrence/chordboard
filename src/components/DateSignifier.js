@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import { format, isBefore, isValid } from 'date-fns'
 import cx from 'classnames'
 
-import withStyles from '@mui/styles/withStyles'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'

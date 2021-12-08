@@ -1,7 +1,7 @@
 import React from 'react'
 import cx from 'classnames'
 
-import { styled } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 
 const PREFIX = 'ChordPair'
 

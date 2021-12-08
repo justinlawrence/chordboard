@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { lowerCase, reverse, sortBy } from 'lodash'
 import { Link, withRouter } from 'react-router-dom'
 
-import withStyles from '@mui/styles/withStyles'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import InputAdornment from '@mui/material/InputAdornment'

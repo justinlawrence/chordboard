@@ -38,7 +38,7 @@ class SetSong extends PureComponent {
 
 	handleKeySelect = (key, amount) =>
 		this.props.onChangeKey &&
-		this.props.onChangeKey(this.props.songId, amount)
+		this.props.onChangeKey(this.props.songId, amount, this.props.song.key)
 
 	handleTableRowClick = () =>
 		this.props.history.push(
@@ -75,7 +75,7 @@ class SetSong extends PureComponent {
 				<Box onClick={this.stopPropagation}>
 					<KeySelector
 						onSelect={this.handleKeySelect}
-						songKey={setKey}
+						songKey={setKey || song?.key}
 					/>
 				</Box>
 
