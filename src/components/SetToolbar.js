@@ -12,12 +12,19 @@ import { CloseIcon, SyncOffIcon, SyncOnIcon } from '../icons'
 
 const syncCollection = firestore.collection('set-sync')
 
+const TabLink = ({ children, ...props }) => (
+	<Typography component={Link} noWrap {...props}>
+		<Typography noWrap sx={{ width: '100%' }}>
+			{children}
+		</Typography>
+	</Typography>
+)
+
 const PREFIX = 'SetToolbar'
 
 const classes = {
 	miniButton: `${PREFIX}-miniButton`,
 	tabs: `${PREFIX}-tabs`,
-	tab: `${PREFIX}-tab`,
 }
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
@@ -28,12 +35,6 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 	[`& .${classes.tabs}`]: {
 		flexGrow: 1,
 		width: '100%',
-	},
-
-	[`& .${classes.tab}`]: {
-		root: {
-			padding: 0,
-		},
 	},
 }))
 
@@ -77,6 +78,7 @@ const SetToolbar = ({ currentSet, songId, songs }) => {
 		<StyledToolbar variant={'dense'}>
 			<IconButton
 				color={'inherit'}
+				edge={'start'}
 				onClick={handleBackClick}
 				className={classes.miniButton}
 				size={'large'}
@@ -92,29 +94,20 @@ const SetToolbar = ({ currentSet, songId, songs }) => {
 			>
 				<Tab
 					key={'tabs-setlist'}
-					component={Link}
+					component={TabLink}
 					to={`/sets/${currentSet.id}`}
-					label={
-						<Typography variant={'button'} noWrap>
-							Setlist
-						</Typography>
-					}
-					className={classes.tab}
+					label={'Setlist'}
 					color={'inherit'}
 					value={0}
+					wrapped={false}
 				/>
 
 				{map(songs, song => (
 					<Tab
 						key={`tabs-${song.id}`}
-						component={Link}
+						component={TabLink}
 						to={`/sets/${currentSet.id}/songs/${song.id}`}
-						label={
-							<Typography variant={'button'} noWrap>
-								{song.title}
-							</Typography>
-						}
-						className={classes.tab}
+						label={song.title}
 						color={'inherit'}
 						value={song.id}
 					/>
@@ -122,6 +115,7 @@ const SetToolbar = ({ currentSet, songId, songs }) => {
 			</Tabs>
 			<IconButton
 				color={'inherit'}
+				edge={'end'}
 				onClick={handleSyncClick}
 				className={classes.miniButton}
 				size={'large'}

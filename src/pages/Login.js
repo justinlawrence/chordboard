@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
-import { styled } from '@material-ui/core/styles';
+import { styled } from '@material-ui/core/styles'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import cx from 'classnames'
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import GoogleLogin from 'react-google-login'
 
-import withStyles from '@mui/styles/withStyles';
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
@@ -15,28 +14,24 @@ import { Google as GoogleIcon, Facebook as FacebookIcon } from 'mdi-material-ui'
 
 import { setCurrentUser } from '../redux/actions'
 import chordboardLogo from '../chordboard-logo-inline.png'
-const PREFIX = 'Login';
+const PREFIX = 'Login'
 
 const classes = {
-    root: `${PREFIX}-root`,
-    container: `${PREFIX}-container`,
-    form: `${PREFIX}-form`,
-    formFooter: `${PREFIX}-formFooter`,
-    control: `${PREFIX}-control`,
-    leftIcon: `${PREFIX}-leftIcon`,
-    rightIcon: `${PREFIX}-rightIcon`,
-    facebookButton: `${PREFIX}-facebookButton`,
-    googleButton: `${PREFIX}-googleButton`,
-    addPaddingBottom: `${PREFIX}-addPaddingBottom`,
-    addPaddingTop: `${PREFIX}-addPaddingTop`
-};
+	root: `${PREFIX}-root`,
+	container: `${PREFIX}-container`,
+	form: `${PREFIX}-form`,
+	formFooter: `${PREFIX}-formFooter`,
+	control: `${PREFIX}-control`,
+	leftIcon: `${PREFIX}-leftIcon`,
+	rightIcon: `${PREFIX}-rightIcon`,
+	facebookButton: `${PREFIX}-facebookButton`,
+	googleButton: `${PREFIX}-googleButton`,
+	addPaddingBottom: `${PREFIX}-addPaddingBottom`,
+	addPaddingTop: `${PREFIX}-addPaddingTop`,
+}
 
-const Root = styled('div')((
-    {
-        theme
-    }
-) => ({
-    [`&.${classes.root}`]: {
+const Root = styled('div')(({ theme }) => ({
+	[`&.${classes.root}`]: {
 		backgroundColor: theme.palette.background.hero,
 		display: 'flex',
 		flexGrow: 1,
@@ -44,50 +39,50 @@ const Root = styled('div')((
 		paddingTop: '5vh',
 	},
 
-    [`& .${classes.container}`]: {
+	[`& .${classes.container}`]: {
 		flexGrow: 1,
 	},
 
-    [`& .${classes.form}`]: theme.mixins.gutters({
+	[`& .${classes.form}`]: theme.mixins.gutters({
 		paddingBottom: theme.spacing(8),
 		paddingTop: theme.spacing(2),
 		width: theme.spacing(40),
 	}),
 
-    [`& .${classes.formFooter}`]: {
+	[`& .${classes.formFooter}`]: {
 		marginTop: theme.spacing(2),
 	},
 
-    [`& .${classes.control}`]: {
+	[`& .${classes.control}`]: {
 		padding: theme.spacing(2),
 	},
 
-    [`& .${classes.leftIcon}`]: {
+	[`& .${classes.leftIcon}`]: {
 		marginRight: theme.spacing(),
 	},
 
-    [`& .${classes.rightIcon}`]: {
+	[`& .${classes.rightIcon}`]: {
 		marginLeft: theme.spacing(),
 	},
 
-    [`& .${classes.facebookButton}`]: {
+	[`& .${classes.facebookButton}`]: {
 		backgroundColor: '#4c69ba',
 		margin: theme.spacing(),
 	},
 
-    [`& .${classes.googleButton}`]: {
+	[`& .${classes.googleButton}`]: {
 		backgroundColor: 'rgb(209, 72, 54)',
 		margin: theme.spacing(),
 	},
 
-    [`& .${classes.addPaddingBottom}`]: {
+	[`& .${classes.addPaddingBottom}`]: {
 		paddingBottom: theme.spacing(4),
 	},
 
-    [`& .${classes.addPaddingTop}`]: {
+	[`& .${classes.addPaddingTop}`]: {
 		paddingTop: theme.spacing(4),
-	}
-}));
+	},
+}))
 
 class Login extends Component {
 	state = {
@@ -161,11 +156,11 @@ class Login extends Component {
 	}
 
 	render() {
-		const { } = this.props
+		const {} = this.props
 		const { email, name } = this.state
 
 		return (
-            <Root className={classes.root}>
+			<Root className={classes.root}>
 				<Grid
 					container
 					className={classes.container}
@@ -271,7 +266,7 @@ class Login extends Component {
 					</form>
 				</Grid>
 			</Root>
-        );
+		)
 	}
 }
 
@@ -280,6 +275,4 @@ const mapDispatchToProps = {
 }
 //export default withRouter( connect( mapStateToProps, actions )( ( Navbar ) ) );
 
-export default withRouter(
-	connect(null, mapDispatchToProps)((Login))
-)
+export default withRouter(connect(null, mapDispatchToProps)(Login))

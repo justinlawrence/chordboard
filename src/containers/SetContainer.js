@@ -21,14 +21,14 @@ class SetContainer extends Component {
 		this.handleProps(this.props)
 	}
 
-	handleChangeKey = (songId, amount) => {
+	handleChangeKey = (songId, amount, songKey) => {
 		const set = { ...this.props.currentSet }
 
 		const setSongs = set.songs.slice()
-		const setSong = find(setSongs, s => s.id === songId)
+		const setSong = find(setSongs, { id: songId })
 
 		if (setSong) {
-			setSong.key = transposeChord(setSong.key, amount)
+			setSong.key = transposeChord(setSong.key || songKey, amount)
 
 			set.songs = setSongs
 
@@ -88,7 +88,7 @@ class SetContainer extends Component {
 			<div>
 				<Route
 					exact
-					path={"/sets/:setId"}
+					path={'/sets/:setId'}
 					render={props => (
 						<SetViewer
 							onChangeKey={this.handleChangeKey}
@@ -102,7 +102,7 @@ class SetContainer extends Component {
 				/>
 				<Route
 					exact
-					path={"/sets/:setId/songs/:songId"}
+					path={'/sets/:setId/songs/:songId'}
 					render={({ match }) => {
 						const songId = match.params.songId
 
@@ -135,7 +135,4 @@ const mapStateToProps = state => ({
 	currentSet: state.sets.byId[state.currentSet.id],
 })
 
-export default connect(
-	mapStateToProps,
-	actions
-)(SetContainer)
+export default connect(mapStateToProps, actions)(SetContainer)

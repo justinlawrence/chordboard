@@ -118,8 +118,8 @@ class SetViewer extends Component {
 		this.handleSaveSet(set)
 	}
 
-	changeKey = (songId, amount) =>
-		this.props.onChangeKey && this.props.onChangeKey(songId, amount)
+	changeKey = (...args) =>
+		this.props.onChangeKey && this.props.onChangeKey(...args)
 
 	toggleEditMode = value => () => this.setState({ mode: value ? 'edit' : '' })
 
@@ -216,7 +216,10 @@ class SetViewer extends Component {
 										</Grid>
 									</Hidden>
 									<Grid item>
-										<Typography variant={'h4'} sx={{fontWeight: 700}}>
+										<Typography
+											variant={'h4'}
+											sx={{ fontWeight: 700 }}
+										>
 											{set.title}
 										</Typography>
 										<Typography variant={'caption'}>

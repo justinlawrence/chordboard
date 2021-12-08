@@ -1,4 +1,3 @@
-import { createTheme, adaptV4Theme } from '@mui/material/styles'
 import isEqual from 'lodash/fp/isEqual'
 
 import { FETCH_THEME_SUCCESS, SET_THEME, UPDATE_THEME } from '../actions'
@@ -9,12 +8,12 @@ export const themesOrder = ['light', 'dark']
 export const themes = {
 	dark: {
 		id: 'dark',
-		muiTheme: createTheme(adaptV4Theme(darkTheme)),
+		muiTheme: darkTheme,
 		name: 'Dark matter',
 	},
 	light: {
 		id: 'light',
-		muiTheme: createTheme(adaptV4Theme(lightTheme)),
+		muiTheme: lightTheme,
 		name: 'Flat white',
 	},
 }
