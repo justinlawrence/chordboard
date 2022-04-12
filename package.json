@@ -92,6 +92,6 @@
 		"eslint-plugin-prettier": "^4.0.0",
 		"eslint-plugin-react": "^7.23.2",
 		"prettier": "^2.2.1",
-		"simple-git": "^2.37.0"
+		"simple-git": "^3.5.0"
 	}
 }
