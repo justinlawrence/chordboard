@@ -27,7 +27,7 @@ class Parser {
 		return line.replace(
 			/[^a-zA-Z0-9+-._,:<>/?’'"+=%@#!$%*&();\s\r\n\t{}\[\]\\]/g,
 			''
-		);
+		)
 	}
 
 	parseToObject(songText) {
@@ -65,8 +65,10 @@ class Parser {
 						text = ''
 					}
 
+					const chordIndex = chordStringToObject(chords)
 					output.push({
-						chords: chordStringToObject(chords),
+						chords: chordIndex,
+						endText: chordIndex?.endText,
 						type: check.type,
 						text: text,
 					})
@@ -104,10 +106,17 @@ function chordStringToObject(chordString) {
 		indices.unshift(0)
 	}
 
-	const chordObject = {}
+	const chordObject = { endText: '' }
 	chords.forEach((chord, i) => {
 		chordObject._sort = indices
-		chordObject[indices[i]] = chord
+		// Put extra non-chord text into a text property
+		if (indices[i] === undefined) {
+			if (chord) {
+				chordObject.endText += chord
+			}
+		} else {
+			chordObject[indices[i]] = chord
+		}
 	})
 
 	return chordObject
