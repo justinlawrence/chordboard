@@ -104,9 +104,8 @@ const Song = ({
 				children.push(
 					<ChordPair
 						key={i}
-						chords={line.chords}
+						line={line}
 						chordSize={chordSize}
-						text={line.text}
 						wordSize={wordSize}
 					/>
 				)

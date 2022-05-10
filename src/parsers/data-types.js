@@ -2,7 +2,7 @@ const ENDS_WITH_COLON = /:$/
 const SURROUNDED_BY_SQUARE_BRACKETS = /\]$/
 
 const isChords = input =>
-	/^(\s|([A-G]7?)(#|b)?(sus|maj|min|aug|dim|add|m)?|[0-9]|\/|-|\||[()]|}x\d)+$/g.test(
+	/^(\s|([A-G]7?)(#|b)?(sus|maj|min|aug|dim|add|m)?|[0-9]|\/|-|\||[()]|}?x\d)+$/g.test(
 		input
 	)
 
