@@ -190,9 +190,9 @@ class Navbar extends React.Component {
 							</Grid>
 
 							<Grid item>
-								<Typography variant={'caption'}>
+								{/* <Typography variant={'caption'}>
 									v{version}
-								</Typography>
+								</Typography> */}
 								<Tooltip
 									title={
 										themeId === 'dark'
