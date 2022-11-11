@@ -17,6 +17,8 @@ export const sectionData = [
 	{ abbreviation: 'PC', color: '#ff9800', title: 'Pre chorus' },
 	{ abbreviation: 'PC', color: '#ff9800', title: 'Prechorus' },
 	{ abbreviation: 'PC', color: '#ff9800', title: 'Pre-chorus' },
+	{ abbreviation: 'PC1', color: '#ff9800', title: /^pre[-\s]?chorus\s1:?$/i },
+	{ abbreviation: 'PC2', color: '#ff9800', title: /^pre[-\s]?chorus\s2:?$/i },
 	{ abbreviation: 'IN', color: '#00bcd4', title: 'Intro' },
 	{ abbreviation: 'OUT', color: '#444', title: 'Outtro' },
 	{ abbreviation: 'OUT', color: '#444', title: 'Outro' },
@@ -46,19 +48,25 @@ export const getSectionFromTitle = title =>
 	find(section => toLower(section.title) === toLower(title))(sectionData) ||
 	{}
 
+export const getSectionFromTitleWithRegex = title =>
+	find(section => title.test(section.title))(sectionData) || {}
+
 const getSections = lines => {
 	const sections = []
 	let sectionIndex = 0
 
 	forEach(line => {
 		if (line.type === 'section') {
-			const section = getSectionFromTitle(line.text)
+			const section =
+				getSectionFromTitle(line.text) ||
+				getSectionFromTitleWithRegex(line.text)
 			sections.push({
 				abbreviation: section.abbreviation,
 				color: section.color,
 				title: section.title,
 				index: sectionIndex,
 			})
+			console.log({ section, line })
 			sectionIndex++
 		}
 	})(lines)
