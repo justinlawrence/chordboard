@@ -1,6 +1,7 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 import slugify from 'slugify'
+import { collection, onSnapshot } from 'firebase/firestore'
 
 import { db } from '../../firebase'
 import {
@@ -11,11 +12,11 @@ import {
 	mergeSongs,
 } from '../actions'
 
-const songsCollection = db.collection('songs')
+const songsCollection = collection(db, 'songs')
 
 const songsChannel = () =>
 	eventChannel(emitter => {
-		return songsCollection.onSnapshot(querySnapshot => {
+		return onSnapshot(songsCollection, querySnapshot => {
 			const songs = []
 			querySnapshot.forEach(doc => {
 				songs.push({ id: doc.id, ...doc.data() })

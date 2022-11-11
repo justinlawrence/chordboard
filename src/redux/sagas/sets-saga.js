@@ -6,7 +6,7 @@ import map from 'lodash/fp/map'
 import pick from 'lodash/fp/pick'
 import filter from 'lodash/fp/filter'
 import { db } from '../../firebase'
-
+import { collection, onSnapshot } from 'firebase/firestore'
 import {
 	ADD_SET,
 	REMOVE_SET,
@@ -17,11 +17,11 @@ import {
 	setSetSongs,
 } from '../actions'
 
-const setsCollection = db.collection('sets')
+const setsCollection = collection(db, 'sets')
 
 const setsChannel = () =>
 	eventChannel(emitter => {
-		setsCollection.onSnapshot(querySnapshot => {
+		onSnapshot(setsCollection, querySnapshot => {
 			const sets = []
 			querySnapshot.forEach(snapshot => {
 				const data = snapshot.data()

@@ -1,6 +1,6 @@
 import { put, select, takeEvery } from 'redux-saga/effects'
 //import { eventChannel } from 'redux-saga'
-
+import { collection } from 'firebase/firestore'
 import { db } from '../../firebase'
 import {
 	SET_CURRENT_SONG_ID,
@@ -9,7 +9,7 @@ import {
 	//setSong
 } from '../actions'
 
-const songsCollection = db.collection('songs')
+const songsCollection = collection(db, 'songs')
 
 export function* currentSongSaga() {
 	yield takeEvery(SET_CURRENT_SONG_ID, updateCurrentSongById)

@@ -11,8 +11,8 @@ import {
 
 import { ThemeProvider } from '@mui/material/styles'
 import { CssBaseline, Grid } from '@mui/material'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
-import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 
 import * as actions from './redux/actions'
 import { db } from './firebase'
@@ -114,10 +114,9 @@ class App extends Component {
 									path={'/login'}
 									component={Login}
 								/>
-								<Route
-									path={'/sets'}
-									component={SetListContainer}
-								/>
+								<Route path={'/sets'}>
+									<SetListContainer />
+								</Route>
 
 								{/* {!user.name && <Redirect to={'/login'} />} */}
 

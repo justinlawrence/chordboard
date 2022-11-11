@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import map from 'lodash/map'
+import { collection, onSnapshot } from 'firebase/firestore'
 
 import { styled } from '@mui/material/styles'
 import { IconButton, Tabs, Tab, Toolbar, Typography } from '@mui/material'
@@ -10,7 +11,7 @@ import { firestore } from '../firebase'
 import { setCurrentSetId } from '../redux/actions'
 import { CloseIcon, SyncOffIcon, SyncOnIcon } from '../icons'
 
-const syncCollection = firestore.collection('set-sync')
+const syncCollection = collection(firestore, 'set-sync')
 
 const TabLink = ({ children, ...props }) => (
 	<Typography component={Link} noWrap {...props}>
@@ -50,10 +51,10 @@ const SetToolbar = ({ currentSet, songId, songs }) => {
 			syncCollection
 				.doc(currentSetId)
 				.set(
-					{ song: firestore.collection('songs').doc(songId) },
+					{ song: collection(firestore, 'songs').doc(songId) },
 					{ merge: true }
 				)
-			return syncCollection.doc(currentSetId).onSnapshot(doc => {
+			return onSnapshot(syncCollection.doc(currentSetId), doc => {
 				doc.data()
 					.song.get()
 					.then(doc => {
