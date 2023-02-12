@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import map from 'lodash/map'
-import { collection, onSnapshot } from 'firebase/firestore'
 
 import { styled } from '@mui/material/styles'
 import { IconButton, Tabs, Tab, Toolbar, Typography } from '@mui/material'
@@ -11,7 +10,7 @@ import { firestore } from '../firebase'
 import { setCurrentSetId } from '../redux/actions'
 import { CloseIcon, SyncOffIcon, SyncOnIcon } from '../icons'
 
-const syncCollection = collection(firestore, 'set-sync')
+const syncCollection = firestore.collection('set-sync')
 
 const TabLink = ({ children, ...props }) => (
 	<Typography component={Link} noWrap {...props}>
@@ -51,10 +50,10 @@ const SetToolbar = ({ currentSet, songId, songs }) => {
 			syncCollection
 				.doc(currentSetId)
 				.set(
-					{ song: collection(firestore, 'songs').doc(songId) },
+					{ song: firestore.collection('songs').doc(songId) },
 					{ merge: true }
 				)
-			return onSnapshot(syncCollection.doc(currentSetId), doc => {
+			return syncCollection.doc(currentSetId).onSnapshot(doc => {
 				doc.data()
 					.song.get()
 					.then(doc => {
@@ -97,7 +96,7 @@ const SetToolbar = ({ currentSet, songId, songs }) => {
 					key={'tabs-setlist'}
 					component={TabLink}
 					to={`/sets/${currentSet.id}`}
-					label={'Setlist'}
+					label={'Cancioneros'}
 					color={'inherit'}
 					value={0}
 					wrapped={false}

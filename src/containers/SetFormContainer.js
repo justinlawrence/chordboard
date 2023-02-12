@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { format } from 'date-fns'
 
 import { Button, Grid, TextField } from '@mui/material'
-import { DatePicker } from '@mui/lab'
+import { DatePicker } from '@mui/x-date-pickers'
 
 const PREFIX = 'SetFormContainer'
 
@@ -108,7 +108,7 @@ class SetFormContainer extends Component {
 					<Grid item xs={12} lg={6}>
 						<TextField
 							name={'title'}
-							label={'Set title'}
+							label={'Agregar titulo'}
 							fullWidth
 							margin={'normal'}
 							onChange={this.handleChange}
@@ -125,7 +125,7 @@ class SetFormContainer extends Component {
 							renderInput={props => (
 								<TextField
 									fullWidth
-									label={'Set date'}
+									label={'Agregar fecha'}
 									margin={'normal'}
 									{...props}
 								/>
@@ -136,7 +136,7 @@ class SetFormContainer extends Component {
 					<Grid item xs={12} lg={6}>
 						<TextField
 							name={'author'}
-							label={'Set author'}
+							label={'Agregar autor'}
 							fullWidth
 							margin={'normal'}
 							onChange={this.handleChange}
@@ -147,7 +147,7 @@ class SetFormContainer extends Component {
 					<Grid item xs={12} lg={6}>
 						<TextField
 							name={'venue'}
-							label={'Venue'}
+							label={'Extras'}
 							fullWidth
 							margin={'normal'}
 							onChange={this.handleChange}
@@ -160,20 +160,20 @@ class SetFormContainer extends Component {
 								className={classes.deleteButton}
 								onClick={this.handleFormDelete}
 							>
-								Delete set
+								Eliminar cancionero
 							</Button>
 						</Grid>
 					)}
 
 					<Grid item xs={6} lg={2}>
-						<Button onClick={this.handleFormCancel}>Cancel</Button>
+						<Button onClick={this.handleFormCancel}>Cancelar</Button>
 
 						<Button
 							color={'primary'}
 							type={'submit'}
 							variant={'contained'}
 						>
-							Save
+							Guardar
 						</Button>
 					</Grid>
 				</Grid>

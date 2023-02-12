@@ -90,7 +90,7 @@ class Sets extends PureComponent {
 									variant={'h4'}
 									sx={{ fontWeight: 600 }} //TODO: move this into the global theme
 								>
-									Sets
+									Cancioneros
 								</Typography>
 							</Grid>
 							<Grid item>
@@ -103,7 +103,7 @@ class Sets extends PureComponent {
 										<TextField
 											onChange={this.handleSearchChange}
 											placeholder={
-												'Titles, authors, venues'
+												'Titulos, autor, extras'
 											}
 											value={searchText}
 											InputProps={{
@@ -136,8 +136,8 @@ class Sets extends PureComponent {
 					<Table>
 						<TableHead>
 							<TableRow>
-								<TableCell>Date</TableCell>
-								<TableCell>Set</TableCell>
+								<TableCell>Fecha</TableCell>
+								<TableCell>Cancionero</TableCell>
 							</TableRow>
 						</TableHead>
 

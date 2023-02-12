@@ -17,9 +17,10 @@ const StyledChordPair = styled('div')(({ theme }) => ({
 		color: '#03a9f4',
 		fontSize: '.8em',
 		fontWeight: '600',
-		// position: 'absolute',
-		// right: 0,
-		// top: 0,
+		lineHeight: 1.7,
+		position: 'absolute',
+		right: 0,
+		top: 0,
 	},
 
 	[`& .${classes.text}`]: {
@@ -90,7 +91,7 @@ const ChordPair = ({ chordSize, line, wordSize }) => {
 	return (
 		<StyledChordPair style={{ fontSize: `${wordSize}px` }}>
 			{children}
-			<span className={classes.endText}>{endText}</span>
+			<div className={classes.endText}>{endText}</div>
 		</StyledChordPair>
 	)
 }

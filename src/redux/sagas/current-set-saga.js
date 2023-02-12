@@ -1,6 +1,6 @@
 import { parseISO } from 'date-fns'
 import { put, select, takeLatest } from 'redux-saga/effects'
-import { collection } from 'firebase/firestore'
+
 import { db } from '../../firebase'
 import {
 	FETCH_CURRENT_SET,
@@ -9,7 +9,7 @@ import {
 	mergeSets,
 } from '../actions'
 
-const setsCollection = collection(db, 'sets')
+const setsCollection = db.collection('sets')
 
 export function* currentSetSaga() {
 	yield takeLatest(FETCH_CURRENT_SET, handleFetchSet)

@@ -160,7 +160,7 @@ class SetViewer extends Component {
 				) : (
 					<ListItem key={'id-none'}>
 						<Typography variant={'h6'}>
-							This set has no songs
+							Este cancionero no tiene canciones
 						</Typography>
 					</ListItem>
 				)}
@@ -253,7 +253,7 @@ class SetViewer extends Component {
 											)}
 											variant={'outlined'}
 										>
-											Edit set
+											Editar Cancionero
 										</Button>
 									</Hidden>
 									<Button
@@ -261,7 +261,7 @@ class SetViewer extends Component {
 										onClick={this.handleAddASong}
 										variant={'contained'}
 									>
-										<Hidden only={'xs'}>Add a song</Hidden>
+										<Hidden only={'xs'}>Agregar cancion</Hidden>
 										<Hidden smUp>Add</Hidden>
 									</Button>
 								</Stack>

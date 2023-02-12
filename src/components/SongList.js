@@ -131,7 +131,7 @@ class SongList extends Component {
 									variant={'h4'}
 									sx={{ fontWeight: 600 }} //TODO: move this into the global theme
 								>
-									Songs
+									Canciones
 								</Typography>
 							</Grid>
 
@@ -145,7 +145,7 @@ class SongList extends Component {
 										<SearchBox
 											onSearch={this.handleSearch}
 											placeholder={
-												'Titles, words, authors'
+												'Titulo, autor, palabras'
 											}
 										/>
 									</Grid>
@@ -157,7 +157,7 @@ class SongList extends Component {
 											color={'primary'}
 											variant={'contained'}
 										>
-											New song
+											Nueva cancion
 										</Button>
 									</Grid>
 								</Grid>
@@ -168,9 +168,9 @@ class SongList extends Component {
 				<Table>
 					<TableHead>
 						<TableRow>
-							<TableCell>Song</TableCell>
+							<TableCell>Cancion</TableCell>
 							<Hidden only={'xs'}>
-								<TableCell>Author</TableCell>
+								<TableCell>Autor</TableCell>
 							</Hidden>
 							{isAddToSet && <TableCell>Action</TableCell>}
 						</TableRow>

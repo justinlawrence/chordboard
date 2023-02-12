@@ -235,7 +235,7 @@ class SongEditor extends Component {
 										<Grid item xs={12}>
 											<TextField
 												id={'title'}
-												label={'Song title'}
+												label={'Titulo de la cancion'}
 												className={classes.textField}
 												fullWidth
 												onChange={this.onTitleInput}
@@ -247,7 +247,7 @@ class SongEditor extends Component {
 											<TextField
 												id={'author'}
 												label={
-													'Authors (comma separated)'
+													'Autores (separados por coma)'
 												}
 												className={classes.textField}
 												fullWidth
@@ -267,7 +267,7 @@ class SongEditor extends Component {
 												value={key}
 											/> */}
 											<KeySelector
-												label={'Song Key'}
+												label={'Tonalidad'}
 												onSelect={
 													this.handleSelectSongKey
 												}
@@ -291,7 +291,7 @@ class SongEditor extends Component {
 															}
 															color={'primary'}
 														>
-															Delete
+															Eliminar
 														</Button>
 													)}
 
@@ -300,7 +300,7 @@ class SongEditor extends Component {
 															this.handleCancel
 														}
 													>
-														Cancel
+														Cancelar
 													</Button>
 
 													<Button
@@ -310,7 +310,7 @@ class SongEditor extends Component {
 														color={'primary'}
 														variant={'contained'}
 													>
-														Save
+														Guardar
 													</Button>
 												</Grid>
 											</Grid>
@@ -356,7 +356,7 @@ class SongEditor extends Component {
 									<Typography
 										className={classes.addPaddingBottom}
 									>
-										Song Preview
+										Vista previa de la cancion
 									</Typography>
 
 									<SongViewer isPreview song={previewSong} />

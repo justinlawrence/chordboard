@@ -178,14 +178,14 @@ class Navbar extends React.Component {
 									color={'inherit'}
 									to={'/sets'}
 								>
-									Sets
+									Cancionero
 								</Button>
 								<Button
 									component={Link}
 									color={'inherit'}
 									to={'/songs'}
 								>
-									Songs
+									Canciones
 								</Button>
 							</Grid>
 

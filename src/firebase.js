@@ -1,26 +1,30 @@
-import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
-import { enableIndexedDbPersistence, getFirestore } from 'firebase/firestore'
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 
 import semver from 'semver'
-import { browserName, browserVersion } from 'react-device-detect'
+import {
+	browserName,
+	browserVersion,
+} from 'react-device-detect'
 
 // Initialize Firebase.
-const firebaseApp = initializeApp({
-	apiKey: 'AIzaSyAjZmRaQ30-wo5J6kAiSuMn9_8r-63xxlA',
-	authDomain: 'chordboard-209821.firebaseapp.com',
-	databaseURL: 'https://chordboard-209821.firebaseio.com',
-	projectId: 'chordboard-209821',
-	storageBucket: 'chordboard-209821.appspot.com',
-	messagingSenderId: '839278764423',
-})
 
+firebase.initializeApp({
+	apiKey: "AIzaSyCztNSkMliKVJy2uLJcxiqLf2zq6eeaBpY",
+	authDomain: "cancionero-42fd8.firebaseapp.com",
+	projectId: "cancionero-42fd8",
+	storageBucket: "cancionero-42fd8.appspot.com",
+	messagingSenderId: "792311619625",
+	appId: "1:792311619625:web:01459cfead94b3fcd2bc38",
+	measurementId: "G-KJLXB5L5K2"
+  });
 if (process.env.NODE_ENV === 'development') {
-	window.firebase = firebaseApp
+	window.firebase = firebase
 }
 
-export const auth = getAuth(firebaseApp)
-export const firestore = getFirestore(firebaseApp)
+export const auth = firebase.auth()
+export const firestore = firebase.firestore()
 // Deprecated
 export const db = firestore
 
@@ -28,7 +32,7 @@ const unsupportedPersistence =
 	browserName === 'Mobile Safari' &&
 	semver.satisfies(semver.valid(semver.coerce(browserVersion)), '<=9.0.0')
 if (!unsupportedPersistence) {
-	enableIndexedDbPersistence(firestore).catch(err => {
+	firestore.enablePersistence({ synchronizeTabs: true }).catch(err => {
 		if (err.code === 'failed-precondition') {
 			console.error(
 				'Multiple tabs open, persistence can only be enabled in one tab at a a time.'
