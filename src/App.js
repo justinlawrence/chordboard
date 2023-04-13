@@ -102,6 +102,7 @@ class App extends Component {
 						<CssBaseline />
 						<SetCurrentSong />
 						<Navbar />
+
 						<Grid className={classes.content} item xs>
 							<Switch>
 								<Route

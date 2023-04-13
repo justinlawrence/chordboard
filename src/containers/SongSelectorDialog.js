@@ -17,10 +17,15 @@ import sortBy from 'lodash/fp/sortBy'
 import startsWith from 'lodash/fp/startsWith'
 import upperCase from 'lodash/fp/upperCase'
 import without from 'lodash/without'
+import {
+	bindDialog,
+	bindTrigger,
+	usePopupState,
+} from 'material-ui-popup-state/hooks'
 
-import { styled } from '@material-ui/core/styles'
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import ButtonBase from '@mui/material/ButtonBase'
 import Checkbox from '@mui/material/Checkbox'
@@ -34,12 +39,19 @@ import IconButton from '@mui/material/IconButton'
 import InputBase from '@mui/material/InputBase'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
+import { ListItemAvatar } from '@mui/material'
+import { styled } from '@mui/material/styles'
 import {
 	Alphabetical as AlphabeticalIcon,
 	ArrowLeft as BackIcon,
+	Plus as PlusIcon,
 } from 'mdi-material-ui'
+
+import AddSongDialog from '../components/AddSongDialog'
 
 const PREFIX = 'SongSelectorDialog'
 
@@ -121,6 +133,10 @@ const SongSelectorDialog = ({ onClose = noop, open, songs = [] }) => {
 	const [setSongs, setSetSongs] = useState([])
 	const [searchValue, setSearchValue] = useState('')
 	const [showFilters, setShowFilters] = useState(false)
+	const popupState = usePopupState({
+		variant: 'dialog',
+		popupId: 'addSongDialog',
+	})
 
 	const listSize = { height: 500, width: 600 }
 
@@ -141,7 +157,15 @@ const SongSelectorDialog = ({ onClose = noop, open, songs = [] }) => {
 				: true
 		)
 
-		return flow(filterBySearch, filterBySection, sortBy('title'))(songs)
+		const songList = flow(
+			filterBySearch,
+			filterBySection,
+			sortBy('title')
+		)(songs)
+
+		songList.unshift({ id: 'new', title: 'Add new song' })
+
+		return songList
 	}, [searchValue, sectionFilter, songs])
 
 	const getItemSize = index => 50
@@ -180,33 +204,33 @@ const SongSelectorDialog = ({ onClose = noop, open, songs = [] }) => {
 		filteredSongs =>
 		({ index, style }) => {
 			const song = filteredSongs[index]
-			return (
+
+			return song.id === 'new' ? (
+				<ListItem button style={style} {...bindTrigger(popupState)}>
+					<ListItemAvatar>
+						<Avatar>
+							<PlusIcon />
+						</Avatar>
+					</ListItemAvatar>
+					<ListItemText primary={song.title} />
+				</ListItem>
+			) : (
 				<ListItem
 					button
 					onClick={handleListItemClick(song)}
-					key={song.id}
 					style={style}
 				>
-					<Grid container spacing={1} wrap={'nowrap'}>
-						<Grid item>
-							<Checkbox
-								className={classes.checkbox}
-								checked={includes(song)(setSongs)}
-								onClick={handleCheckboxClick(song)}
-							/>
-						</Grid>
-						<Grid item xs>
-							<Grid container direction={'column'}>
-								<Typography>{song.title}</Typography>
-								<Typography
-									color={'textSecondary'}
-									variant={'caption'}
-								>
-									{song.author}
-								</Typography>
-							</Grid>
-						</Grid>
-					</Grid>
+					<ListItemIcon>
+						<Checkbox
+							className={classes.checkbox}
+							checked={includes(song)(setSongs)}
+							onClick={handleCheckboxClick(song)}
+						/>
+					</ListItemIcon>
+					<ListItemText
+						primary={song.title}
+						secondary={song.author}
+					/>
 				</ListItem>
 			)
 		}
@@ -230,6 +254,7 @@ const SongSelectorDialog = ({ onClose = noop, open, songs = [] }) => {
 			fullWidth
 			open={open}
 		>
+			<AddSongDialog {...bindDialog(popupState)} />
 			<DialogTitle id={'song-selector-dialog'}>
 				<Paper className={classes.searchBar} elevation={1}>
 					<IconButton

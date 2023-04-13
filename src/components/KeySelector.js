@@ -19,7 +19,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 	},
 }))
 
-const options = [
+export const keyOptions = [
 	{ key: 'C', label: 'C', value: 'c' },
 	{ key: 'C#', label: 'C#', value: 'c#' },
 	{ key: 'D', label: 'D', value: 'd' },
@@ -44,7 +44,7 @@ const KeySelector = ({
 	const [key, setKey] = useState(songKey)
 
 	useEffect(() => {
-		const newKey = find(options, { value: toLower(songKey) })
+		const newKey = find(keyOptions, { value: toLower(songKey) })
 		if (!newKey) {
 			return
 		}
@@ -54,7 +54,7 @@ const KeySelector = ({
 
 	const handleChange = event => {
 		const value = event.target.value
-		const option = find(options, { value })
+		const option = find(keyOptions, { value })
 
 		setKey(value)
 
@@ -71,7 +71,7 @@ const KeySelector = ({
 			onChange={handleChange}
 			{...other}
 		>
-			{options.map(option => (
+			{keyOptions.map(option => (
 				<MenuItem key={option.value} value={option.value}>
 					{option.label}
 				</MenuItem>
