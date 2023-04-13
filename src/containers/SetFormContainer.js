@@ -4,7 +4,8 @@ import PropTypes from 'prop-types'
 import { format } from 'date-fns'
 
 import { Button, Grid, TextField } from '@mui/material'
-import { DatePicker } from '@mui/lab'
+//import { DatePicker } from '@mui/lab'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 
 const PREFIX = 'SetFormContainer'
 
