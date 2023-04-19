@@ -1,8 +1,8 @@
-import Textarea from 'react-textarea-autosize'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 
-import { Box, Button, MenuItem, TextField } from '@mui/material'
+import { Button, MenuItem, Paper, Stack, TextField } from '@mui/material'
+import { TextareaAutosize } from '@mui/base'
 import { styled } from '@mui/material/styles'
 
 import { keyOptions } from './KeySelector'
@@ -17,25 +17,27 @@ const classes = {
 }
 
 const StyledForm = styled('form', { name: PREFIX })(({ theme }) => ({
-	flexGrow: 1,
+	flex: `1 0 0`,
 
 	[`& .${classes.textEditor}`]: {
 		border: 'none',
 		fontFamily: 'monospace',
 		fontSize: theme.typography.h6.fontSize,
-		minHeight: '80vh',
-		padding: '24px',
+		padding: theme.spacing(3),
 		resize: 'none',
+		height: '100%',
 		width: '100%',
-		backgroundColor: theme.palette.backgroundColor, //TODO: JL: not sure why these don't work
-		color: theme.palette.color,
+
+		'&:focus': {
+			outline: 'none',
+		},
 	},
 
 	[`& .${classes.textEditorWrapper}`]: {
 		display: 'flex',
-		overflow: 'hidden',
+		flex: '1 0 50vh',
+		overflow: 'auto',
 		width: '100%',
-		marginBottom: theme.spacing(4),
 	},
 }))
 
@@ -43,9 +45,9 @@ const useSongForm = songId => {
 	const song = useSelector(state => state.songs.byId[songId]) || {}
 	const { handleSubmit, register, ...rest } = useForm({
 		defaultValues: {
-			title: song.title || 'Title',
-			author: song.author || 'Author',
-			key: song.key || keyOptions[0],
+			title: song.title || '',
+			author: song.author || '',
+			key: song.key || 'C',
 			content: song.content || '',
 			parserType: 'chords-above-words',
 		},
@@ -64,88 +66,97 @@ const useSongForm = songId => {
 			parserType: mapRefToInputRef(register('parserType')),
 		},
 		handleSubmit: handleSubmit(onSubmit),
+		register,
 		...rest,
 	}
 }
 
 const SongForm = ({ onCancel, songId }) => {
-	const { fields, formState, handleSubmit, reset } = useSongForm(songId)
+	const { fields, formState, handleSubmit, register, reset } =
+		useSongForm(songId)
 
 	const handleCancel = () => {
 		onCancel && onCancel()
 	}
 
-	console.log(fields['key'])
-
 	return (
 		<StyledForm onSubmit={handleSubmit}>
-			<TextField
-				id={'title'}
-				label={'Song title'}
-				fullWidth
-				margin={'dense'}
-				{...fields['title']}
-			/>
-			<TextField
-				id={'author'}
-				label={'Authors (comma separated)'}
-				fullWidth
-				margin={'dense'}
-				{...fields['author']}
-			/>
-			<TextField
-				select
-				label={'Song Key'}
-				margin={'dense'}
-				sx={{ width: '15ch' }}
-				//defaultValue={keyOptions.find(option => option.key === 'C')}
-				//defaultValue={keyOptions[0]}
-				{...fields['key']}
-			>
-				{keyOptions.map(option => (
-					<MenuItem key={option.key} value={option}>
-						{option.label}
-					</MenuItem>
-				))}
-			</TextField>
+			<Stack spacing={1}>
+				<TextField
+					id={'title'}
+					label={'Song title'}
+					fullWidth
+					margin={'dense'}
+					{...fields['title']}
+				/>
+				<TextField
+					id={'author'}
+					label={'Authors (comma separated)'}
+					fullWidth
+					margin={'dense'}
+					{...fields['author']}
+				/>
 
-			{/* <Grid item sm={12}>
-                <Grid container>
-                    <Grid item>
-                        <select
-                            onChange={this.handleParserChange}
-                            value={parserType}
-                            {...fields['parserType']}
-                        >
-                            <option value={'chords-above-words'}>
-                                Chords above words
-                            </option>
-                            <option value={'chordpro'}>Onsong</option>
-                        </select>
-                    </Grid>
-                </Grid>
+				<Stack direction={'row'} spacing={1} pt={1}>
+					<TextField
+						select
+						label={'Song Key'}
+						margin={'none'}
+						sx={{ width: '10ch' }}
+						defaultValue={formState.defaultValues.key}
+						{...fields['key']}
+					>
+						{keyOptions.map(option => (
+							<MenuItem key={option.key} value={option.key}>
+								{option.label}
+							</MenuItem>
+						))}
+					</TextField>
 
-                <Paper className={classes.textEditorWrapper}>
-                    <Textarea
-                        className={classes.textEditor}
-                        placeholder={
-                            'Type words and chords here. Add colons after section headings eg. Verse 1:'
-                        }
-                        {...fields['content']}
-                    />
-                </Paper>
-            </Grid> */}
+					<TextField
+						select
+						label={'Parser Type'}
+						margin={'none'}
+						sx={{ width: '25ch' }}
+						defaultValue={formState.defaultValues.parserType}
+						{...fields['parserType']}
+					>
+						<MenuItem value={'chords-above-words'}>
+							Chords above words
+						</MenuItem>
+						<MenuItem value={'chordpro'}>Onsong</MenuItem>
+					</TextField>
+				</Stack>
 
-			<Box sx={{ display: 'flex', justifyContent: 'flex-end', pt: 2 }}>
-				<Button onClick={() => reset(formState.defaultValues)}>
-					Reset
-				</Button>
-				<Button onClick={handleCancel}>Cancel</Button>
+				<Paper className={classes.textEditorWrapper}>
+					<TextareaAutosize
+						className={classes.textEditor}
+						placeholder={
+							'Type words and chords here. Add colons after section headings eg. Verse 1:'
+						}
+						{...register('content')}
+					/>
+				</Paper>
 
-				<Button color={'primary'} variant={'contained'} type={'submit'}>
-					Save
-				</Button>
-			</Box>
+				<Stack
+					direction={'row'}
+					spacing={1}
+					sx={{ justifyContent: 'flex-end', pt: 2 }}
+				>
+					<Button onClick={() => reset(formState.defaultValues)}>
+						Reset
+					</Button>
+					<Button onClick={handleCancel}>Cancel</Button>
+
+					<Button
+						color={'primary'}
+						variant={'contained'}
+						type={'submit'}
+					>
+						Save
+					</Button>
+				</Stack>
+			</Stack>
 		</StyledForm>
 	)
 }
