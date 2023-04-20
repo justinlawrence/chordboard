@@ -129,6 +129,7 @@ class SetViewer extends Component {
 	renderTableContent = (dropProvided = {}) => {
 		const { set } = this.props
 		const { mode } = this.state
+
 		return (
 			<div ref={dropProvided.innerRef} {...dropProvided.droppableProps}>
 				{set.songs.length ? (

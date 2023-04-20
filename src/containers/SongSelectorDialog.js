@@ -170,6 +170,12 @@ const SongSelectorDialog = ({ onClose = noop, open, songs = [] }) => {
 
 	const getItemSize = index => 50
 
+	const handleAddDialogClose = (song, reason) => {
+		if (reason === 'addSongSuccess') {
+			onClose([song])
+		}
+	}
+
 	const handleClose = () => onClose([])
 
 	const handleCheckboxClick = value => event => {
@@ -254,7 +260,10 @@ const SongSelectorDialog = ({ onClose = noop, open, songs = [] }) => {
 			fullWidth
 			open={open}
 		>
-			<AddSongDialog {...bindDialog(popupState)} />
+			<AddSongDialog
+				{...bindDialog(popupState)}
+				onClose={handleAddDialogClose}
+			/>
 			<DialogTitle id={'song-selector-dialog'}>
 				<Paper className={classes.searchBar} elevation={1}>
 					<IconButton

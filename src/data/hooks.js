@@ -1,7 +1,35 @@
 import { useEffect, useMemo, useState } from 'react'
-import { doc, onSnapshot } from 'firebase/firestore'
-
 import { firestore } from '../firebase'
+import { addDoc, collection, doc, getDoc, onSnapshot } from 'firebase/firestore'
+import slugify from 'slugify'
+
+export const useAddSong = () => {
+	const [isLoading, setIsLoading] = useState(false)
+
+	const songsCollection = collection(firestore, 'songs')
+
+	const addSong = async data => {
+		const newSong = {
+			...data,
+			slug: slugify(data.title),
+		}
+
+		setIsLoading(true)
+		const docRef = await addDoc(songsCollection, newSong)
+		setIsLoading(false)
+
+		const songDoc = await getDoc(docRef)
+		return {
+			id: songDoc.id,
+			...songDoc.data(),
+		}
+	}
+
+	return {
+		addSong,
+		isLoading,
+	}
+}
 
 export const useSet = setId => {
 	const [isLoading, setIsLoading] = useState(true)

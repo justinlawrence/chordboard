@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import map from 'lodash/map'
-import { collection, onSnapshot } from 'firebase/firestore'
+import { collection, doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore'
 
 import { styled } from '@mui/material/styles'
 import { IconButton, Tabs, Tab, Toolbar, Typography } from '@mui/material'
@@ -48,22 +48,17 @@ const SetToolbar = ({ currentSet, songId, songs }) => {
 
 	useEffect(() => {
 		if (isSyncOn && songId) {
-			syncCollection
-				.doc(currentSetId)
-				.set(
-					{ song: collection(firestore, 'songs').doc(songId) },
-					{ merge: true }
-				)
-			return onSnapshot(syncCollection.doc(currentSetId), doc => {
-				doc.data()
-					.song.get()
-					.then(doc => {
-						if (songId !== doc.id && doc.id != null) {
-							history.push(
-								`/sets/${currentSetId}/songs/${doc.id}`
-							)
-						}
-					})
+			setDoc(
+				doc(syncCollection, currentSetId),
+				{ song: doc(collection(firestore, 'songs'), songId) },
+				{ merge: true }
+			)
+			return onSnapshot(doc(syncCollection, currentSetId), doc => {
+				const song = getDoc(doc).then(doc => {
+					if (songId !== doc.id && doc.id != null) {
+						history.push(`/sets/${currentSetId}/songs/${doc.id}`)
+					}
+				})
 			})
 		}
 	}, [currentSetId, history, isSyncOn, songId])

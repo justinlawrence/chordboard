@@ -57,6 +57,9 @@ class SetSong extends PureComponent {
 
 		//FYI the header for this table is in SetViewer.js
 
+		const title =
+			song?.title && song?.content ? song?.title : '** Not found **'
+
 		return (
 			<ListItem button dense onClick={this.handleTableRowClick}>
 				{mode === 'edit' && (
@@ -69,7 +72,7 @@ class SetSong extends PureComponent {
 					{songIndex + 1}
 				</Typography>
 				<Typography noWrap variant={'h6'} sx={{ flexGrow: 1 }}>
-					{song.title}
+					{title}
 				</Typography>
 
 				<Box onClick={this.stopPropagation}>

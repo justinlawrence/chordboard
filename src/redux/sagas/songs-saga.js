@@ -1,7 +1,15 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 import slugify from 'slugify'
-import { collection, onSnapshot } from 'firebase/firestore'
+import {
+	collection,
+	deleteDoc,
+	doc,
+	getDoc,
+	onSnapshot,
+	setDoc,
+	updateDoc,
+} from 'firebase/firestore'
 
 import { db } from '../../firebase'
 import {
@@ -40,7 +48,7 @@ export function* songsSaga() {
 function* handleAddSong({ payload: newSong }) {
 	newSong.slug = slugify(newSong.title)
 
-	const song = yield songsCollection.add(newSong)
+	const song = yield setDoc(songsCollection, newSong)
 	yield put(
 		mergeSongs([
 			{
@@ -52,11 +60,11 @@ function* handleAddSong({ payload: newSong }) {
 }
 
 function* handleDeleteSong({ payload }) {
-	yield songsCollection.doc(payload).delete()
+	yield deleteDoc(doc(songsCollection, payload))
 }
 
 function* handleFetchSong({ payload: songId }) {
-	const song = yield songsCollection.doc(songId).get()
+	const song = yield getDoc(doc(songsCollection, songId))
 	const songs = [
 		{
 			id: songId,
@@ -68,7 +76,7 @@ function* handleFetchSong({ payload: songId }) {
 
 function* handleUpdateSong({ payload }) {
 	const { songId, partial } = payload
-	yield songsCollection.doc(songId).update(partial)
+	yield updateDoc(doc(songsCollection, songId), partial)
 	yield put(
 		mergeSongs([
 			{

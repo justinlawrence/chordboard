@@ -1,6 +1,6 @@
 import { parseISO } from 'date-fns'
 import { put, select, takeLatest } from 'redux-saga/effects'
-import { collection } from 'firebase/firestore'
+import { collection, doc } from 'firebase/firestore'
 import { db } from '../../firebase'
 import {
 	FETCH_CURRENT_SET,
@@ -18,7 +18,7 @@ export function* currentSetSaga() {
 
 function* handleFetchSet({ setId }) {
 	try {
-		const setQuery = yield setsCollection.doc(setId).get()
+		const setQuery = yield doc(setsCollection. setId).get()
 		const set = {
 			id: setQuery.id,
 			...setQuery.data(),

@@ -1,11 +1,14 @@
 import { Dialog, DialogContent, DialogTitle } from '@mui/material'
 
 import SongForm from './SongForm'
+import { useAddSong } from '../data/hooks'
 
 const AddSongDialog = props => {
-	const handleSubmit = data => {
-		// TODO: send data to firebase
-		console.log('AddSongDialog', data)
+	const { addSong } = useAddSong()
+
+	const handleSubmit = async data => {
+		const song = await addSong(data)
+		props.onClose && props.onClose(song, 'addSongSuccess')
 	}
 
 	return (

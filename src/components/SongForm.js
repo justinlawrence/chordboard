@@ -43,7 +43,7 @@ const StyledForm = styled('form', { name: PREFIX })(({ theme }) => ({
 
 const useSongForm = songId => {
 	const song = useSelector(state => state.songs.byId[songId]) || {}
-	const { handleSubmit, register, ...rest } = useForm({
+	const { register, ...rest } = useForm({
 		defaultValues: {
 			title: song.title || '',
 			author: song.author || '',
@@ -53,10 +53,6 @@ const useSongForm = songId => {
 		},
 	})
 
-	const onSubmit = data => {
-		console.log('submit form', data)
-	}
-
 	return {
 		fields: {
 			title: mapRefToInputRef(register('title')),
@@ -65,13 +61,12 @@ const useSongForm = songId => {
 			content: mapRefToInputRef(register('content')),
 			parserType: mapRefToInputRef(register('parserType')),
 		},
-		handleSubmit: handleSubmit(onSubmit),
 		register,
 		...rest,
 	}
 }
 
-const SongForm = ({ onCancel, songId }) => {
+const SongForm = ({ onCancel, onSubmit, songId }) => {
 	const { fields, formState, handleSubmit, register, reset } =
 		useSongForm(songId)
 
@@ -80,7 +75,7 @@ const SongForm = ({ onCancel, songId }) => {
 	}
 
 	return (
-		<StyledForm onSubmit={handleSubmit}>
+		<StyledForm onSubmit={handleSubmit(onSubmit)}>
 			<Stack spacing={1}>
 				<TextField
 					id={'title'}
