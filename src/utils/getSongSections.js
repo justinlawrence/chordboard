@@ -63,7 +63,6 @@ const getSections = lines => {
 				title: section.title,
 				index: sectionIndex,
 			})
-			console.log({ section, line })
 			sectionIndex++
 		}
 	})(lines)

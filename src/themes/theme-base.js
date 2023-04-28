@@ -5,6 +5,9 @@ const baseTheme = {
 			contrastText: '#fff',
 		},
 	},
+	typography: {
+		fontFamily: 'Poppins, sans-serif',
+	},
 
 	components: {
 		MuiTab: {

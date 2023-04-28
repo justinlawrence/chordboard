@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 import map from 'lodash/map'
-import { collection, doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore'
+import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore'
 
 import { styled } from '@mui/material/styles'
 import { IconButton, Tabs, Tab, Toolbar, Typography } from '@mui/material'
 
 import { firestore } from '../firebase'
-import { setCurrentSetId } from '../redux/actions'
 import { CloseIcon, SyncOffIcon, SyncOnIcon } from '../icons'
-
-const syncCollection = collection(firestore, 'set-sync')
 
 const TabLink = ({ children, ...props }) => (
 	<Typography component={Link} noWrap {...props}>
@@ -39,22 +35,31 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 	},
 }))
 
-const SetToolbar = ({ currentSet, songId, songs }) => {
-	const dispatch = useDispatch()
+const SetToolbar = ({ currentSet, songId }) => {
 	const history = useHistory()
 	const [isSyncOn, setIsSyncOn] = useState(false)
+	const [songs, setSongs] = useState([])
 
 	const currentSetId = currentSet?.id
 
 	useEffect(() => {
+		const songDocs = currentSet.songs.map(song =>
+			getDoc(doc(firestore, 'songs', song.id))
+		)
+		Promise.all(songDocs).then(docs => {
+			setSongs(docs.map(doc => ({ id: doc.id, ...doc.data() })))
+		})
+	}, [currentSet.songs])
+
+	useEffect(() => {
 		if (isSyncOn && songId) {
 			setDoc(
-				doc(syncCollection, currentSetId),
-				{ song: doc(collection(firestore, 'songs'), songId) },
+				doc(firestore, 'set-sync', currentSetId),
+				{ song: doc(firestore, 'songs', songId) },
 				{ merge: true }
 			)
-			return onSnapshot(doc(syncCollection, currentSetId), doc => {
-				const song = getDoc(doc).then(doc => {
+			return onSnapshot(doc(firestore, 'set-sync', currentSetId), doc => {
+				getDoc(doc.data().song).then(doc => {
 					if (songId !== doc.id && doc.id != null) {
 						history.push(`/sets/${currentSetId}/songs/${doc.id}`)
 					}
@@ -64,7 +69,6 @@ const SetToolbar = ({ currentSet, songId, songs }) => {
 	}, [currentSetId, history, isSyncOn, songId])
 
 	const handleBackClick = () => {
-		dispatch(setCurrentSetId(null))
 		history.push('/sets')
 	}
 
