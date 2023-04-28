@@ -6,7 +6,6 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import Textarea from 'react-textarea-autosize'
 
-import withStyles from '@mui/styles/withStyles'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Hidden from '@mui/material/Hidden'

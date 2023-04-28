@@ -25,12 +25,10 @@ import { styled } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import withStyles from '@mui/styles/withStyles'
 import Paper from '@mui/material/Paper'
 
 import * as actions from '../redux/actions'
 import ContentLimiter from './ContentLimiter'
-import Hero from './Hero'
 import SetFormContainer from '../containers/SetFormContainer'
 
 const PREFIX = 'SetEditor'

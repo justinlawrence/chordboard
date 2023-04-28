@@ -1,17 +1,27 @@
 import React from 'react'
 import cx from 'classnames'
 
-import { styled } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 
 const PREFIX = 'ChordPair'
 
 const classes = {
+	endText: `${PREFIX}-endText`,
 	justChords: `${PREFIX}-justChords`,
 	text: `${PREFIX}-text`,
 	trailingChord: `${PREFIX}-trailingChord`,
 }
 
 const StyledChordPair = styled('div')(({ theme }) => ({
+	[`& .${classes.endText}`]: {
+		color: '#03a9f4',
+		fontSize: '.8em',
+		fontWeight: '600',
+		// position: 'absolute',
+		// right: 0,
+		// top: 0,
+	},
+
 	[`& .${classes.text}`]: {
 		display: 'inline',
 		fontWeight: '500',
@@ -51,8 +61,9 @@ const StyledChordPair = styled('div')(({ theme }) => ({
 	},
 }))
 
-const ChordPair = ({ chords, chordSize, text, wordSize }) => {
+const ChordPair = ({ chordSize, line, wordSize }) => {
 	const children = []
+	const { chords, endText, text } = line
 
 	const isJustChords = !text
 
@@ -79,6 +90,7 @@ const ChordPair = ({ chords, chordSize, text, wordSize }) => {
 	return (
 		<StyledChordPair style={{ fontSize: `${wordSize}px` }}>
 			{children}
+			<span className={classes.endText}>{endText}</span>
 		</StyledChordPair>
 	)
 }

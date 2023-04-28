@@ -8,7 +8,6 @@ import sortBy from 'lodash/fp/sortBy'
 import toLower from 'lodash/fp/toLower'
 
 import { lighten } from '@mui/material/styles'
-import withStyles from '@mui/styles/withStyles'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Hidden from '@mui/material/Hidden'

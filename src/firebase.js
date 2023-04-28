@@ -1,20 +1,12 @@
-import firebase from 'firebase/app'
-import 'firebase/auth'
-import 'firebase/firestore'
+import { initializeApp } from 'firebase/app'
+import { getAuth } from 'firebase/auth'
+import { enableIndexedDbPersistence, getFirestore } from 'firebase/firestore'
 
 import semver from 'semver'
-import {
-	osVersion,
-	osName,
-	mobileVendor,
-	browserName,
-	browserVersion,
-	engineName,
-	engineVersion,
-} from 'react-device-detect'
+import { browserName, browserVersion } from 'react-device-detect'
 
 // Initialize Firebase.
-firebase.initializeApp({
+const firebaseApp = initializeApp({
 	apiKey: 'AIzaSyAjZmRaQ30-wo5J6kAiSuMn9_8r-63xxlA',
 	authDomain: 'chordboard-209821.firebaseapp.com',
 	databaseURL: 'https://chordboard-209821.firebaseio.com',
@@ -24,11 +16,11 @@ firebase.initializeApp({
 })
 
 if (process.env.NODE_ENV === 'development') {
-	window.firebase = firebase
+	window.firebase = firebaseApp
 }
 
-export const auth = firebase.auth()
-export const firestore = firebase.firestore()
+export const auth = getAuth(firebaseApp)
+export const firestore = getFirestore(firebaseApp)
 // Deprecated
 export const db = firestore
 
@@ -36,7 +28,7 @@ const unsupportedPersistence =
 	browserName === 'Mobile Safari' &&
 	semver.satisfies(semver.valid(semver.coerce(browserVersion)), '<=9.0.0')
 if (!unsupportedPersistence) {
-	firestore.enablePersistence({ synchronizeTabs: true }).catch(err => {
+	enableIndexedDbPersistence(firestore).catch(err => {
 		if (err.code === 'failed-precondition') {
 			console.error(
 				'Multiple tabs open, persistence can only be enabled in one tab at a a time.'

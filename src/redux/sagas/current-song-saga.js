@@ -1,6 +1,6 @@
 import { put, select, takeEvery } from 'redux-saga/effects'
 //import { eventChannel } from 'redux-saga'
-
+import { collection, doc, getDoc } from 'firebase/firestore'
 import { db } from '../../firebase'
 import {
 	SET_CURRENT_SONG_ID,
@@ -9,7 +9,7 @@ import {
 	//setSong
 } from '../actions'
 
-const songsCollection = db.collection('songs')
+const songsCollection = collection(db, 'songs')
 
 export function* currentSongSaga() {
 	yield takeEvery(SET_CURRENT_SONG_ID, updateCurrentSongById)
@@ -17,12 +17,12 @@ export function* currentSongSaga() {
 }
 
 function* updateCurrentSongById({ payload }) {
-	const doc = yield songsCollection.doc(payload.id).get()
-	if (doc.exists) {
+	const songDoc = yield getDoc(doc(songsCollection, payload.id))
+	if (songDoc.exists) {
 		yield put(
 			setCurrentSong({
-				id: doc.id,
-				...doc.data(),
+				id: songDoc.id,
+				...songDoc.data(),
 			})
 		)
 	} else {
@@ -48,7 +48,7 @@ function* updateUserKeyForCurrentSong({ key }) {
 
 	yield put(setCurrentSong({ users }))
 
-	//const song = yield songsCollection.doc(currentSong.id).get()
+	//const song = yield getDoc(doc(songsCollection, currentSong.id))
 	//song.users = users
 	//yield db.put(song)
 }

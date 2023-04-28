@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { atom, useAtom } from 'jotai'
 import { Helmet } from 'react-helmet'
 import { useDispatch } from 'react-redux'
+import get from 'lodash/get'
+import omit from 'lodash/omit'
+import set from 'lodash/set'
 
 import { styled } from '@mui/material/styles'
 import {
@@ -23,10 +26,30 @@ import Parser from '../parsers/song-parser'
 import Song from './Song'
 import transposeLines from '../utils/transpose-lines'
 import { linesToNashville } from '../utils/convertToNashville'
+import { loadLocalStorage, saveLocalStorage } from '../utils/localStorage'
 
 export const chordSizeAtom = atom(16)
 export const isNashvilleAtom = atom(false)
 export const wordSizeAtom = atom(20)
+
+const STORAGE_KEY = 'chordboard.capoKey'
+
+const loadCapoKey = (setId, songId) => {
+	const data = loadLocalStorage(STORAGE_KEY)
+	return get(data, [setId, songId])
+}
+
+const removeCapoKey = (setId, songId) => {
+	const prevData = loadLocalStorage(STORAGE_KEY) || {}
+	const nextData = omit(prevData, [[setId, songId]])
+	saveLocalStorage(STORAGE_KEY, nextData)
+}
+
+const saveCapoKey = (setId, songId, capoKey) => {
+	const prevData = loadLocalStorage(STORAGE_KEY) || {}
+	const nextData = set(prevData, [setId, songId], capoKey)
+	saveLocalStorage(STORAGE_KEY, nextData)
+}
 
 const printMediaStyles = (
 	<GlobalStyles
@@ -87,7 +110,7 @@ const StyledFade = styled(Fade)(({ theme }) => ({
 	},
 }))
 
-const SongViewer = ({ isPreview, setKey, song = {} }) => {
+const SongViewer = ({ currentSet, isPreview, setKey, song = {} }) => {
 	const dispatch = useDispatch()
 	const [chordSize] = useAtom(chordSizeAtom)
 	const [isNashville, setIsNashville] = useAtom(isNashvilleAtom)
@@ -95,19 +118,16 @@ const SongViewer = ({ isPreview, setKey, song = {} }) => {
 	const [capoKey, setCapoKey] = useState(setKey)
 	const [lines, setLines] = useState([])
 
+	const setId = currentSet?.id
 	const songId = song?.id
 	const capoDiff = getKeyDiff(capoKey, setKey || song.key) //this is only for display purposes, telling the user where to put the capo
 	const capoKeyDescr = capoDiff ? `Capo ${capoDiff}` : 'Capo key'
 	const transposeAmount = getKeyDiff(song.key, capoKey) //this is how much to transpose by
 
 	useEffect(() => {
-		const savedCapoKey = localStorage.getItem(
-			`chordboard.${songId}.capoKey`
-		)
-		if (savedCapoKey) {
-			setCapoKey(savedCapoKey)
-		}
-	}, [songId])
+		const savedCapoKey = loadCapoKey(setId, songId)
+		setCapoKey(savedCapoKey ? savedCapoKey : setKey)
+	}, [setId, setKey, songId])
 
 	useEffect(() => {
 		const parser = new Parser()
@@ -127,7 +147,7 @@ const SongViewer = ({ isPreview, setKey, song = {} }) => {
 		)
 
 		if (capoKey === option.key && song.id) {
-			localStorage.removeItem(`chordboard.${song.id}.capoKey`)
+			removeCapoKey(setId, song.id)
 		}
 	}
 
@@ -139,9 +159,9 @@ const SongViewer = ({ isPreview, setKey, song = {} }) => {
 
 		if (songId) {
 			if (setKey === option.key) {
-				localStorage.removeItem(`chordboard.${song.id}.capoKey`)
+				removeCapoKey(setId, songId)
 			} else {
-				localStorage.setItem(`chordboard.${song.id}.capoKey`, key)
+				saveCapoKey(setId, songId, key)
 			}
 		}
 		dispatch(setCurrentSongUserKey(key))

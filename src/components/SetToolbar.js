@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useHistory, useRouteMatch } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { Link, useHistory } from 'react-router-dom'
 import map from 'lodash/map'
+import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore'
 
 import { styled } from '@mui/material/styles'
 import { IconButton, Tabs, Tab, Toolbar, Typography } from '@mui/material'
 
 import { firestore } from '../firebase'
-import { setCurrentSetId } from '../redux/actions'
 import { CloseIcon, SyncOffIcon, SyncOnIcon } from '../icons'
 
-const syncCollection = firestore.collection('set-sync')
+const TabLink = ({ children, ...props }) => (
+	<Typography component={Link} noWrap {...props}>
+		<Typography noWrap sx={{ width: '100%' }}>
+			{children}
+		</Typography>
+	</Typography>
+)
 
 const PREFIX = 'SetToolbar'
 
 const classes = {
 	miniButton: `${PREFIX}-miniButton`,
 	tabs: `${PREFIX}-tabs`,
-	tab: `${PREFIX}-tab`,
 }
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
@@ -29,45 +33,42 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 		flexGrow: 1,
 		width: '100%',
 	},
-
-	[`& .${classes.tab}`]: {
-		root: {
-			padding: 0,
-		},
-	},
 }))
 
-const SetToolbar = ({ currentSet, songId, songs }) => {
-	const dispatch = useDispatch()
+const SetToolbar = ({ currentSet, songId }) => {
 	const history = useHistory()
 	const [isSyncOn, setIsSyncOn] = useState(false)
+	const [songs, setSongs] = useState([])
 
 	const currentSetId = currentSet?.id
 
 	useEffect(() => {
+		const songDocs = currentSet.songs.map(song =>
+			getDoc(doc(firestore, 'songs', song.id))
+		)
+		Promise.all(songDocs).then(docs => {
+			setSongs(docs.map(doc => ({ id: doc.id, ...doc.data() })))
+		})
+	}, [currentSet.songs])
+
+	useEffect(() => {
 		if (isSyncOn && songId) {
-			syncCollection
-				.doc(currentSetId)
-				.set(
-					{ song: firestore.collection('songs').doc(songId) },
-					{ merge: true }
-				)
-			return syncCollection.doc(currentSetId).onSnapshot(doc => {
-				doc.data()
-					.song.get()
-					.then(doc => {
-						if (songId !== doc.id && doc.id != null) {
-							history.push(
-								`/sets/${currentSetId}/songs/${doc.id}`
-							)
-						}
-					})
+			setDoc(
+				doc(firestore, 'set-sync', currentSetId),
+				{ song: doc(firestore, 'songs', songId) },
+				{ merge: true }
+			)
+			return onSnapshot(doc(firestore, 'set-sync', currentSetId), doc => {
+				getDoc(doc.data().song).then(doc => {
+					if (songId !== doc.id && doc.id != null) {
+						history.push(`/sets/${currentSetId}/songs/${doc.id}`)
+					}
+				})
 			})
 		}
 	}, [currentSetId, history, isSyncOn, songId])
 
 	const handleBackClick = () => {
-		dispatch(setCurrentSetId(null))
 		history.push('/sets')
 	}
 
@@ -77,6 +78,7 @@ const SetToolbar = ({ currentSet, songId, songs }) => {
 		<StyledToolbar variant={'dense'}>
 			<IconButton
 				color={'inherit'}
+				edge={'start'}
 				onClick={handleBackClick}
 				className={classes.miniButton}
 				size={'large'}
@@ -92,29 +94,20 @@ const SetToolbar = ({ currentSet, songId, songs }) => {
 			>
 				<Tab
 					key={'tabs-setlist'}
-					component={Link}
+					component={TabLink}
 					to={`/sets/${currentSet.id}`}
-					label={
-						<Typography variant={'button'} noWrap>
-							Setlist
-						</Typography>
-					}
-					className={classes.tab}
+					label={'Setlist'}
 					color={'inherit'}
 					value={0}
+					wrapped={false}
 				/>
 
 				{map(songs, song => (
 					<Tab
 						key={`tabs-${song.id}`}
-						component={Link}
+						component={TabLink}
 						to={`/sets/${currentSet.id}/songs/${song.id}`}
-						label={
-							<Typography variant={'button'} noWrap>
-								{song.title}
-							</Typography>
-						}
-						className={classes.tab}
+						label={song.title}
 						color={'inherit'}
 						value={song.id}
 					/>
@@ -122,6 +115,7 @@ const SetToolbar = ({ currentSet, songId, songs }) => {
 			</Tabs>
 			<IconButton
 				color={'inherit'}
+				edge={'end'}
 				onClick={handleSyncClick}
 				className={classes.miniButton}
 				size={'large'}

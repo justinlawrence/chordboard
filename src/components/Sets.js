@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { lowerCase, reverse, sortBy } from 'lodash'
 import { Link, withRouter } from 'react-router-dom'
 
-import withStyles from '@mui/styles/withStyles'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -159,13 +158,10 @@ class Sets extends PureComponent {
 									</TableCell>
 
 									<TableCell>
-										<Typography
-											variant={'h6'}
-											sx={{ fontWeight: 700 }}
-										>
+										<Typography variant={'h6'}>
 											{set.title}
 										</Typography>
-										<Typography>
+										<Typography variant={'caption'}>
 											{set.author}
 											{set.venue ? ' @ ' + set.venue : ''}
 										</Typography>

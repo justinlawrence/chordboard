@@ -1,46 +1,39 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { find, findIndex } from 'lodash'
-import { connect } from 'react-redux'
-import { Route } from 'react-router-dom'
+import { Route, useHistory } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
-import * as actions from '../redux/actions'
+import { useSet } from '../data/hooks'
+import { setCurrentSetId, updateSet, removeSet } from '../redux/actions'
 import SongContainer from './SongContainer'
 import SetViewer from '../components/SetViewer'
 import transposeChord from '../utils/transpose-chord'
 
-class SetContainer extends Component {
-	state = {
-		songs: [],
-	}
+const SetContainer = ({ setId }) => {
+	const dispatch = useDispatch()
+	const { data: currentSet, isLoading } = useSet(setId)
+	const history = useHistory()
 
-	componentDidMount() {
-		this.handleProps(this.props)
-	}
-
-	componentDidUpdate() {
-		this.handleProps(this.props)
-	}
-
-	handleChangeKey = (songId, amount) => {
-		const set = { ...this.props.currentSet }
+	const handleChangeKey = (songId, amount, songKey) => {
+		const set = { ...currentSet }
 
 		const setSongs = set.songs.slice()
-		const setSong = find(setSongs, s => s.id === songId)
+		const setSong = find(setSongs, { id: songId })
 
 		if (setSong) {
-			setSong.key = transposeChord(setSong.key, amount)
+			setSong.key = transposeChord(setSong.key || songKey, amount)
 
 			set.songs = setSongs
 
 			if (set) {
-				this.props.setCurrentSetId(set.id)
-				this.props.updateSet(set)
+				dispatch(setCurrentSetId(set.id))
+				dispatch(updateSet(set))
 			}
 		}
 	}
 
-	handleSongMove = (songId, targetIndex = 0) => {
-		const set = { ...this.props.currentSet }
+	const handleSongMove = (songId, targetIndex = 0) => {
+		const set = { ...currentSet }
 		const setSongs = set.songs.slice()
 		const index = findIndex(setSongs, { id: songId })
 		const song = setSongs[index]
@@ -52,90 +45,78 @@ class SetContainer extends Component {
 		set.songs = setSongs
 
 		if (set) {
-			this.props.setCurrentSetId(set.id)
-			this.props.updateSet(set)
+			dispatch(setCurrentSetId(set.id))
+			dispatch(updateSet(set))
 		}
 	}
 
-	handleProps = props => {
-		if (
-			!this.props.currentSet ||
-			this.props.currentSet.id !== props.setId
-		) {
-			props.fetchCurrentSet(props.setId)
-		}
+	const handleRemoveSong = args => {
+		console.log('handleRemoveSong', { args })
 	}
 
-	handleRemoveSet = () => {
+	const handleRemoveSet = () => {
 		if (window.confirm('Are you very sure you want to delete this set?')) {
-			const set = this.props.currentSet
+			const set = currentSet
 
-			this.props.removeSet(set.id)
-			if (this.props.history) {
+			dispatch(removeSet(set.id))
+			if (history) {
 				const location = {
 					pathname: '/sets',
 				}
 
-				this.props.history.replace(location)
+				history.replace(location)
 			}
 		}
 	}
 
-	render() {
-		const { currentSet } = this.props
-
-		return currentSet ? (
-			<div>
-				<Route
-					exact
-					path={"/sets/:setId"}
-					render={props => (
-						<SetViewer
-							onChangeKey={this.handleChangeKey}
-							onSongMove={this.handleSongMove}
-							onRemoveSet={this.handleRemoveSet}
-							onRemoveSong={this.handleRemoveSong}
-							setId={currentSet.id}
-							{...props}
-						/>
-					)}
-				/>
-				<Route
-					exact
-					path={"/sets/:setId/songs/:songId"}
-					render={({ match }) => {
-						const songId = match.params.songId
-
-						const index = findIndex(currentSet.songs, {
-							id: songId,
-						})
-						const currentKey =
-							currentSet && currentSet.songs[index]
-								? currentSet.songs[index].key
-								: null
-
-						//TODO: catch errors where the set song key is empty
-
-						return (
-							<div>
-								<SongContainer
-									currentKey={currentKey}
-									id={songId}
-								/>
-							</div>
-						)
-					}}
-				/>
-			</div>
-		) : null
+	if (isLoading) {
+		return null //<div>Loading...</div>
 	}
+
+	return currentSet ? (
+		<div>
+			<Route
+				exact
+				path={'/sets/:setId'}
+				render={props => (
+					<SetViewer
+						onChangeKey={handleChangeKey}
+						onSongMove={handleSongMove}
+						onRemoveSet={handleRemoveSet}
+						onRemoveSong={handleRemoveSong}
+						setId={currentSet.id}
+						{...props}
+					/>
+				)}
+			/>
+			<Route
+				exact
+				path={'/sets/:setId/songs/:songId'}
+				render={({ match }) => {
+					const songId = match.params.songId
+
+					const index = findIndex(currentSet.songs, {
+						id: songId,
+					})
+					const currentKey =
+						currentSet && currentSet.songs[index]
+							? currentSet.songs[index].key
+							: null
+
+					//TODO: catch errors where the set song key is empty
+
+					return (
+						<div>
+							<SongContainer
+								currentKey={currentKey}
+								id={songId}
+							/>
+						</div>
+					)
+				}}
+			/>
+		</div>
+	) : null
 }
 
-const mapStateToProps = state => ({
-	currentSet: state.sets.byId[state.currentSet.id],
-})
-
-export default connect(
-	mapStateToProps,
-	actions
-)(SetContainer)
+export default SetContainer

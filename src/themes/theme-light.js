@@ -1,27 +1,18 @@
+import { deepmerge } from '@mui/utils'
 import { createTheme } from '@mui/material/styles'
 
-const baseTheme = createTheme()
+import baseTheme from './theme-base'
 
-export const lightTheme = {
-	palette: {
-		...baseTheme.palette,
-		background: {
-			...baseTheme.palette.background,
-			hero: '#f5f5f5',
+export const lightTheme = createTheme(
+	deepmerge(baseTheme, {
+		palette: {
+			background: {
+				hero: '#f5f5f5',
+			},
+			secondary: {
+				main: '#fff', //nav was 283149 then fff then d283149
+				contrastText: '#000', //was fff then 000
+			},
 		},
-		primary: {
-			main: '#007FFF', //fab
-			contrastText: '#fff',
-		},
-		secondary: {
-			main: '#fff', //nav was 283149 then fff then d283149
-			contrastText: '#000', //was fff then 000
-		},
-	},
-
-	// Custom values
-	maxPageWidth: 1344,
-
-	heroBackgroundColor: '#f5f5f5', // hero was #dbedf3m then f5f5f5 then '#f0f4fc'
-	heroContrastText: '#000',
-}
+	})
+)

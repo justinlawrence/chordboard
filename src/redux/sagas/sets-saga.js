@@ -6,7 +6,14 @@ import map from 'lodash/fp/map'
 import pick from 'lodash/fp/pick'
 import filter from 'lodash/fp/filter'
 import { db } from '../../firebase'
-
+import {
+	collection,
+	deleteDoc,
+	doc,
+	onSnapshot,
+	setDoc,
+	updateDoc,
+} from 'firebase/firestore'
 import {
 	ADD_SET,
 	REMOVE_SET,
@@ -17,11 +24,11 @@ import {
 	setSetSongs,
 } from '../actions'
 
-const setsCollection = db.collection('sets')
+const setsCollection = collection(db, 'sets')
 
 const setsChannel = () =>
 	eventChannel(emitter => {
-		setsCollection.onSnapshot(querySnapshot => {
+		onSnapshot(setsCollection, querySnapshot => {
 			const sets = []
 			querySnapshot.forEach(snapshot => {
 				const data = snapshot.data()
@@ -54,7 +61,7 @@ function* handleAddSet({ payload: newSet }) {
 	newSet.slug = slugify(newSet.title)
 	newSet.songs = newSet.songs || []
 
-	const set = yield setsCollection.add(newSet)
+	const set = yield setDoc(setsCollection, newSet)
 	yield put(
 		mergeSets([
 			{
@@ -66,7 +73,7 @@ function* handleAddSet({ payload: newSet }) {
 }
 
 function* handleRemoveSet({ payload: setId }) {
-	yield setsCollection.doc(setId).delete()
+	yield deleteDoc(doc(setsCollection, setId))
 	yield put(removeSet(setId))
 }
 
@@ -76,7 +83,7 @@ function* handleRemoveSetSong({ payload }) {
 	const songs = filter(s => s.id !== payload.songId)(set.songs)
 	set.songs = songs
 	yield put(setSetSongs(payload.setId, songs))
-	yield setsCollection.doc(payload.setId).update({ songs })
+	yield updateDoc(doc(setsCollection, payload.setId), { songs })
 }
 
 function* handleUpdateSet({ payload: set }) {
@@ -105,7 +112,9 @@ function* handleUpdateSet({ payload: set }) {
 		set.songs = setSongs
 	}
 
-	yield setsCollection.doc(set.id).update(set)
+	console.log('set', set)
+
+	yield updateDoc(doc(setsCollection, set.id), set)
 }
 
 function* handleSetsEvent(sets) {

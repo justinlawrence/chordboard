@@ -3,6 +3,7 @@ import find from 'lodash/fp/find'
 import forEach from 'lodash/fp/forEach'
 import toLower from 'lodash/toLower'
 
+// prettier-ignore
 export const sectionData = [
 	{ abbreviation: 'BR', color: '#03a9f4', title: 'Bridge' },
 	{ abbreviation: 'BR1', color: '#03a9f4', title: 'Bridge 1' },
@@ -12,21 +13,19 @@ export const sectionData = [
 	{ abbreviation: 'CH2', color: '#ff5252', title: 'Chorus 2' },
 	{ abbreviation: 'CH3', color: '#ff5252', title: 'Chorus 3' },
 	{ abbreviation: 'CH4', color: '#ff5252', title: 'Chorus 4' },
-	{ abbreviation: 'PC', color: '#ff9800', title: 'Pre-chorus' },
-	{ abbreviation: 'PC', color: '#ff9800', title: 'Pre-Chorus' },
-	{ abbreviation: 'PC', color: '#ff9800', title: 'Pre chorus' },
-	{ abbreviation: 'PC', color: '#ff9800', title: 'Prechorus' },
-	{ abbreviation: 'PC', color: '#ff9800', title: 'Pre-chorus' },
+	{ abbreviation: 'PC', color: '#ff9800', title: 'Pre-chorus', regex: /^pre[-\s]?chorus:?$/i },
+	{ abbreviation: 'PC1', color: '#ff9800', title: 'Pre-chorus 1', regex: /^pre[-\s]?chorus\s1:?$/i },
+	{ abbreviation: 'PC2', color: '#ff9800', title: 'Pre-chorus 2', regex: /^pre[-\s]?chorus\s2:?$/i },
 	{ abbreviation: 'IN', color: '#00bcd4', title: 'Intro' },
-	{ abbreviation: 'OUT', color: '#444', title: 'Outtro' },
-	{ abbreviation: 'OUT', color: '#444', title: 'Outro' },
-	{ abbreviation: 'OUT', color: '#444', title: 'Out' },
+	{ abbreviation: 'OUT', color: '#444', title: 'Outro', regex: /^out(ro|tro)?:?$/i },
 	{ abbreviation: 'END', color: '#444', title: 'End' },
 	{ abbreviation: 'INT', color: 'silver', title: 'Interlude' },
 	{ abbreviation: 'INS1', color: 'silver', title: 'Interlude 1' },
 	{ abbreviation: 'INS2', color: 'silver', title: 'Interlude 2' },
 	{ abbreviation: 'INST', color: 'silver', title: 'Instrumental' },
 	{ abbreviation: 'TAG', color: '#444', title: 'Tag' },
+	{ abbreviation: 'TAG1', color: '#444', title: 'Tag 1' },
+	{ abbreviation: 'TAG2', color: '#444', title: 'Tag 2' },
 	{ abbreviation: 'HOOK', color: '#444', title: 'Hook' },
 	{ abbreviation: 'V', color: '#444', title: 'Verse' },
 	{ abbreviation: '1', color: '#444', title: 'Verse 1' },
@@ -43,8 +42,13 @@ export const sectionData = [
 ]
 
 export const getSectionFromTitle = title =>
-	find(section => toLower(section.title) === toLower(title))(sectionData) ||
-	{}
+	find(section => {
+		if (section.regex) {
+			return section.regex.test(title)
+		} else {
+			return toLower(section.title) === toLower(title)
+		}
+	})(sectionData) || {}
 
 const getSections = lines => {
 	const sections = []

@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react-dom/client'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import * as Sentry from '@sentry/react'
@@ -24,13 +24,12 @@ if (process.env.NODE_ENV === 'production') {
 	})
 }
 
-ReactDOM.render(
+ReactDOM.createRoot(document.getElementById('root')).render(
 	<Provider store={store}>
 		<Router>
 			<App />
 		</Router>
-	</Provider>,
-	document.getElementById('root')
+	</Provider>
 )
 
 // If you want your app to work offline and load faster, you can change
