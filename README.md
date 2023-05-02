@@ -56,7 +56,7 @@ git checkout dev
 
 ## About
 
-This project is maintained by [Justin Lawrence](https://github.com/justinlawrence) and [Brett Henderson](https://github.com/brettsvoid])
+This project is maintained by [Justin Lawrence](https://github.com/justinlawrence) and [Brett Henderson](https://github.com/brettsvoid)
 
 ## License
 
