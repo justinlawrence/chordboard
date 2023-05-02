@@ -26,7 +26,7 @@ const classes = {
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 	[`& .${classes.miniButton}`]: {
-		zoom: 0.8,
+		backgroundColor: theme.palette.background.paper,
 	},
 
 	[`& .${classes.tabs}`]: {
@@ -83,7 +83,7 @@ const SetToolbar = ({ currentSet, songId }) => {
 				className={classes.miniButton}
 				size={'large'}
 			>
-				<CloseIcon />
+				<CloseIcon fontSize={'small'} />
 			</IconButton>
 			<Tabs
 				className={classes.tabs}
