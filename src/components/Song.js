@@ -14,6 +14,7 @@ const PREFIX = 'Song'
 const classes = {
 	root: `${PREFIX}-root`,
 	section: `${PREFIX}-section`,
+	emptyLine: `${PREFIX}-emptyLine`,
 }
 
 const sectionStyles = {}
@@ -30,10 +31,9 @@ forEach(sectionData, section => {
 })
 
 const Root = styled('div')(({ theme }) => ({
-	[`.${classes.root}`]: {
-		overflowWrap: 'break-word',
-		whiteSpace: 'pre-wrap',
-	},
+	overflowWrap: 'break-word',
+	whiteSpace: 'pre-wrap',
+
 	[`& .${classes.section}`]: {
 		borderLeft: '4px solid #444',
 		marginLeft: theme.spacing(8),
@@ -66,6 +66,10 @@ const Root = styled('div')(({ theme }) => ({
 		'@media print': {
 			marginLeft: theme.spacing(6),
 		},
+	},
+
+	[`& .${classes.emptyLine}`]: {
+		lineHeight: 1.5,
 	},
 }))
 
@@ -112,7 +116,11 @@ const Song = ({
 				break
 
 			case 'empty':
-				children.push(<Root key={i} className={'empty-line'} />)
+				children.push(
+					<div key={i} className={classes.emptyLine}>
+						{' '}
+					</div>
+				)
 				break
 
 			case 'line':

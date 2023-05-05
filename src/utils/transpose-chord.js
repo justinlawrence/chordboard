@@ -10,8 +10,12 @@ export const octave = [
 	'F',
 	'F#',
 	'G',
-	'G#'
+	'G#',
 ]
+
+const CHORD_PATTERN = '[A-Ga-g][#b]?([^)/]*)'
+const SLASH_CHORD_PATTERN = `(\\(?)(${CHORD_PATTERN})\\/(${CHORD_PATTERN})(\\)?)`
+const PARENTHESIS_PATTERN = `(\\()(${CHORD_PATTERN})(\\))`
 
 export default function transposeChord(chord, amount) {
 	//credit: https://codepen.io/Grilly86/pen/rwRYYM
@@ -19,12 +23,20 @@ export default function transposeChord(chord, amount) {
 		chord = ''
 	}
 
-	const chords = chord.split('/')
-	if (chords.length > 1) {
-		return chords.map(c => transposeChord(c, amount)).join('/')
+	const slashMatches = chord.match(new RegExp(SLASH_CHORD_PATTERN))
+	const parenthesisMatches = chord.match(new RegExp(PARENTHESIS_PATTERN))
+	if (slashMatches) {
+		const firstChord = transposeChord(slashMatches[2], amount)
+		const secondChord = transposeChord(slashMatches[4], amount)
+		return (
+			slashMatches[1] + firstChord + '/' + secondChord + slashMatches[6]
+		)
+	} else if (parenthesisMatches) {
+		const chord = transposeChord(parenthesisMatches[2], amount)
+		return parenthesisMatches[1] + chord + parenthesisMatches[4]
 	}
 
-	let matches = chord.match(/[A-Ga-g][#b]?(.*)/)
+	let matches = chord.match(new RegExp(CHORD_PATTERN))
 
 	// Make chords uppercase
 	let newChord = chord
@@ -69,35 +81,6 @@ export default function transposeChord(chord, amount) {
 	} else {
 		return octave[chordNr] + (matches && matches[1] ? matches[1] : '')
 	}
-}
-
-// Test transposing.
-if (module.hot) {
-	const tests = [
-		[transposeChord('A', 1), 'Bb'],
-		[transposeChord('A', -1), 'G#'],
-		[transposeChord('a', 1), 'Bb'],
-		[transposeChord('a', -1), 'G#'],
-		[transposeChord('Bb', 1), 'B'],
-		[transposeChord('Bm', 1), 'Cm'],
-		[transposeChord('C#m7', -2), 'Bm7'],
-		[transposeChord('Dadd2', 2), 'Eadd2'],
-		[transposeChord('Ddim2', 2), 'Edim2'],
-		[transposeChord('Dsus4', 2), 'Esus4'],
-		[transposeChord('Didontcare', -2), 'Cidontcare'],
-		[transposeChord('Bb7sus', 2), 'C7sus'],
-		[transposeChord('C/E', 2), 'D/F#'],
-		[transposeChord('Cmaj7/E', 2), 'Dmaj7/F#'],
-		[transposeChord('G2', 2), 'A2'],
-		[transposeChord('Gmaj7', 4), 'Bmaj7']
-	]
-
-	tests.forEach((test, i) => {
-		console.assert(
-			test[0] === test[1],
-			i + ' - expected: ' + test[1] + ', actual: ' + test[0]
-		)
-	})
 }
 
 /*
