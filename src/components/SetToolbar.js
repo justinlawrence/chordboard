@@ -25,6 +25,8 @@ const classes = {
 }
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
+	gap: theme.spacing(1),
+
 	[`& .${classes.miniButton}`]: {
 		backgroundColor: theme.palette.background.paper,
 	},
