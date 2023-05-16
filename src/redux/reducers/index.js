@@ -4,7 +4,6 @@ import { currentSet } from './current-set'
 import { currentSong } from './current-song'
 import { sets } from './sets-reducer'
 import { songs } from './songs'
-import { theme } from './theme'
 import { user } from './user'
 
 const reducer = combineReducers({
@@ -12,7 +11,6 @@ const reducer = combineReducers({
 	currentSong,
 	sets,
 	songs,
-	theme,
 	user,
 })
 
