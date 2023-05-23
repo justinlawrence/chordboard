@@ -1,6 +1,5 @@
 import React from 'react'
-import { styled } from '@material-ui/core/styles'
-import PropTypes from 'prop-types'
+import { styled } from '@mui/material/styles'
 import { format, isBefore, isValid } from 'date-fns'
 import cx from 'classnames'
 
@@ -52,8 +51,8 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 	},
 }))
 
-const DateSignifier = ({ date }) =>
-	isValid(date) ? (
+const DateSignifier = ({ date }) => {
+	return isValid(date) ? (
 		<StyledPaper className={classes.root}>
 			<Grid container direction={'column'}>
 				<Grid item>
@@ -92,10 +91,6 @@ const DateSignifier = ({ date }) =>
 			</Grid>
 		</StyledPaper>
 	) : null
-
-DateSignifier.propTypes = {
-	classes: PropTypes.object,
-	date: PropTypes.object,
 }
 
 export default DateSignifier

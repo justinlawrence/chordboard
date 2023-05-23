@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import map from 'lodash/map'
-import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore'
 
 import { styled } from '@mui/material/styles'
 import { IconButton, Tabs, Tab, Toolbar, Typography } from '@mui/material'
 
-import { firestore } from '../firebase'
+import { useSongs, useSyncSet } from '../data/hooks'
 import { CloseIcon, SyncOffIcon, SyncOnIcon } from '../icons'
 
 const TabLink = ({ children, ...props }) => (
@@ -40,35 +39,20 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 const SetToolbar = ({ currentSet, songId }) => {
 	const history = useHistory()
 	const [isSyncOn, setIsSyncOn] = useState(false)
-	const [songs, setSongs] = useState([])
-
-	const currentSetId = currentSet?.id
-
-	useEffect(() => {
-		const songDocs = currentSet.songs.map(song =>
-			getDoc(doc(firestore, 'songs', song.id))
-		)
-		Promise.all(songDocs).then(docs => {
-			setSongs(docs.map(doc => ({ id: doc.id, ...doc.data() })))
-		})
-	}, [currentSet.songs])
+	const songs = useSongs(currentSet?.songs?.map(song => song.id))
+	const syncSet = useSyncSet(currentSet?.id, {
+		isEnabled: isSyncOn,
+		onSync: useCallback(
+			({ setId, songId }) => {
+				history.push(`/sets/${setId}/songs/${songId}`)
+			},
+			[history]
+		),
+	})
 
 	useEffect(() => {
-		if (isSyncOn && songId) {
-			setDoc(
-				doc(firestore, 'set-sync', currentSetId),
-				{ song: doc(firestore, 'songs', songId) },
-				{ merge: true }
-			)
-			return onSnapshot(doc(firestore, 'set-sync', currentSetId), doc => {
-				getDoc(doc.data().song).then(doc => {
-					if (songId !== doc.id && doc.id != null) {
-						history.push(`/sets/${currentSetId}/songs/${doc.id}`)
-					}
-				})
-			})
-		}
-	}, [currentSetId, history, isSyncOn, songId])
+		syncSet(songId)
+	}, [songId, syncSet])
 
 	const handleBackClick = () => {
 		history.push('/sets')

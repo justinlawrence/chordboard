@@ -1,22 +1,12 @@
-import React, { PureComponent } from 'react'
-import { connect } from 'react-redux'
-import reduce from 'lodash/fp/reduce'
+import React from 'react'
 
 import SongList from '../components/SongList'
 
-import * as actions from '../redux/actions'
+import { useAllSongs } from '../data/hooks'
 
-class SongListContainer extends PureComponent {
-	render() {
-		return <SongList {...this.props} />
-	}
+const SongListContainer = () => {
+	const songs = useAllSongs()
+	return <SongList songs={songs} />
 }
 
-const mapStateToProps = state => ({
-	songs: reduce((acc, song) => {
-		acc.push(song)
-		return acc
-	})([])(state.songs.byId),
-})
-
-export default connect(mapStateToProps, actions)(SongListContainer)
+export default SongListContainer

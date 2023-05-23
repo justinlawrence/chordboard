@@ -1,5 +1,5 @@
 import React from 'react'
-import { styled } from '@material-ui/core/styles'
+import { styled } from '@mui/material/styles'
 import cx from 'classnames'
 
 import Grid from '@mui/material/Grid'
@@ -11,11 +11,15 @@ const classes = {
 }
 
 const Root = styled('div')(({ theme }) => ({
-	[`&.${classes.root}`]: theme.mixins.gutters({
+	[`&.${classes.root}`]: {
 		backgroundColor: theme.palette.background.hero,
-		paddingBottom: theme.spacing(2),
-		paddingTop: theme.spacing(2),
-	}),
+		padding: theme.spacing(2),
+
+		[theme.breakpoints.up('sm')]: {
+			paddingLeft: theme.spacing(3),
+			paddingRight: theme.spacing(3),
+		},
+	},
 }))
 
 const Hero = ({ children, className }) => (

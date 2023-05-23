@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { styled } from '@material-ui/core/styles'
-import { useDispatch, useSelector } from 'react-redux'
+import { styled } from '@mui/material/styles'
+import { useDispatch } from 'react-redux'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import clamp from 'lodash/clamp'
 import findIndex from 'lodash/findIndex'
@@ -9,24 +9,11 @@ import map from 'lodash/fp/map'
 import size from 'lodash/size'
 import cx from 'classnames'
 
-import {
-	ButtonBase,
-	IconButton,
-	Menu,
-	MenuItem,
-	Tooltip,
-	Typography,
-} from '@mui/material'
-import {
-	ArrowUpDown as ArrowUpDownIcon,
-	ChevronLeft as ChevronLeftIcon,
-	ChevronRight as ChevronRightIcon,
-	FormatFontSizeIncrease as FormatFontSizeIncreaseIcon,
-} from 'mdi-material-ui'
+import { ButtonBase, Menu, MenuItem, Typography } from '@mui/material'
 
-import { setCurrentSongId, setFontSize } from '../redux/actions'
+import { setFontSize } from '../redux/actions'
 import getSongSections from '../utils/getSongSections'
-import { makeGetSet } from '../redux/reducers/sets-reducer'
+import { useSet } from '../data/hooks'
 
 const PREFIX = 'LiveBar'
 
@@ -61,11 +48,15 @@ const StyledAppBar = styled('div')(({ theme }) => ({
 		justifyContent: 'space-between',
 	},
 
-	[`& .${classes.form}`]: theme.mixins.gutters({
-		paddingBottom: theme.spacing(2),
-		paddingTop: theme.spacing(2),
+	[`& .${classes.form}`]: {
+		padding: theme.spacing(2),
 		width: 500,
-	}),
+
+		[theme.breakpoints.up('sm')]: {
+			paddingLeft: theme.spacing(3),
+			paddingRight: theme.spacing(3),
+		},
+	},
 
 	[`& .${classes.formFooter}`]: {
 		marginTop: theme.spacing(2),
@@ -123,29 +114,25 @@ const getSong = (currentSet, currentSong, direction = 'next') => {
 }
 
 const useLiveBar = () => {
-	const getSet = makeGetSet()
 	const dispatch = useDispatch()
-	const currentSetId = useSelector(state => state.currentSet.id)
-	const currentSong = useSelector(
-		state => state.songs.byId[state.currentSong.id]
-	)
-	const currentSet = useSelector(state =>
-		getSet(state, { setId: currentSetId })
-	)
+	const routeMatch = useRouteMatch({
+		path: ['/sets/:setId', '/sets/:setId/songs/:songId'],
+	})
+	const currentSetId = routeMatch?.params.setId
+	const currentSong = routeMatch?.params.songId
+	const currentSet = useSet(currentSetId)
 	const history = useHistory()
 
 	const handleFontSizeChange = fontSize => dispatch(setFontSize(fontSize))
 
 	const handleGoToNextSong = () => {
 		const nextSong = getSong(currentSet, currentSong, 'next')
-		dispatch(setCurrentSongId(nextSong.id))
 		history.push({
 			pathname: `/sets/${currentSetId}/songs/${nextSong.id}`,
 		})
 	}
 	const handleGoToPreviousSong = () => {
 		const prevSong = getSong(currentSet, currentSong, 'prev')
-		dispatch(setCurrentSongId(prevSong.id))
 		history.push({
 			pathname: `/sets/${currentSetId}/songs/${prevSong.id}`,
 		})

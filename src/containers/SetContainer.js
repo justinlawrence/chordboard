@@ -1,17 +1,16 @@
 import React from 'react'
 import { find, findIndex } from 'lodash'
 import { Route, useHistory } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 
-import { useSet } from '../data/hooks'
-import { setCurrentSetId, updateSet, removeSet } from '../redux/actions'
+import { useDeleteSet, useSet, useUpdateSet } from '../data/hooks'
 import SongContainer from './SongContainer'
 import SetViewer from '../components/SetViewer'
 import transposeChord from '../utils/transpose-chord'
 
 const SetContainer = ({ setId }) => {
-	const dispatch = useDispatch()
 	const { data: currentSet, isLoading } = useSet(setId)
+	const { updateSet } = useUpdateSet()
+	const { deleteSet } = useDeleteSet()
 	const history = useHistory()
 
 	const handleChangeKey = (songId, amount, songKey) => {
@@ -26,8 +25,8 @@ const SetContainer = ({ setId }) => {
 			set.songs = setSongs
 
 			if (set) {
-				dispatch(setCurrentSetId(set.id))
-				dispatch(updateSet(set))
+				history.push(`/sets/${set.id}`)
+				updateSet(set.id, set)
 			}
 		}
 	}
@@ -45,8 +44,8 @@ const SetContainer = ({ setId }) => {
 		set.songs = setSongs
 
 		if (set) {
-			dispatch(setCurrentSetId(set.id))
-			dispatch(updateSet(set))
+			history.push(`/sets/${set.id}`)
+			updateSet(set.id, set)
 		}
 	}
 
@@ -58,7 +57,7 @@ const SetContainer = ({ setId }) => {
 		if (window.confirm('Are you very sure you want to delete this set?')) {
 			const set = currentSet
 
-			dispatch(removeSet(set.id))
+			deleteSet(set.id)
 			if (history) {
 				const location = {
 					pathname: '/sets',
@@ -80,11 +79,11 @@ const SetContainer = ({ setId }) => {
 				path={'/sets/:setId'}
 				render={props => (
 					<SetViewer
+						currentSet={currentSet}
 						onChangeKey={handleChangeKey}
 						onSongMove={handleSongMove}
 						onRemoveSet={handleRemoveSet}
 						onRemoveSong={handleRemoveSong}
-						setId={currentSet.id}
 						{...props}
 					/>
 				)}

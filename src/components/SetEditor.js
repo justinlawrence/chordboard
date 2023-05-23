@@ -20,16 +20,15 @@
 #
 */
 
-import React, { Component } from 'react'
-import { styled } from '@material-ui/core/styles'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import React from 'react'
+import { useHistory } from 'react-router-dom'
 
-import Paper from '@mui/material/Paper'
+import { Paper } from '@mui/material'
+import { styled } from '@mui/material/styles'
 
-import * as actions from '../redux/actions'
 import ContentLimiter from './ContentLimiter'
 import SetFormContainer from '../containers/SetFormContainer'
+import { useAddSet } from '../data/hooks'
 
 const PREFIX = 'SetEditor'
 
@@ -45,10 +44,14 @@ const Root = styled('div')(({ theme }) => ({
 		flexGrow: 1,
 	},
 
-	[`& .${classes.form}`]: theme.mixins.gutters({
-		paddingBottom: theme.spacing(2),
-		paddingTop: theme.spacing(2),
-	}),
+	[`& .${classes.form}`]: {
+		padding: theme.spacing(2),
+
+		[theme.breakpoints.up('sm')]: {
+			paddingLeft: theme.spacing(3),
+			paddingRight: theme.spacing(3),
+		},
+	},
 
 	[`& .${classes.formFooter}`]: {
 		marginTop: theme.spacing(2),
@@ -59,50 +62,40 @@ const Root = styled('div')(({ theme }) => ({
 	},
 }))
 
-class SetEditor extends Component {
-	static propTypes = {
-		classes: PropTypes.object,
-		history: PropTypes.object,
-		// Redux props
-		addSet: PropTypes.func.isRequired,
-	}
+const SetEditor = () => {
+	const history = useHistory()
+	const { addSet } = useAddSet()
 
-	handleFormCancel = () => {
-		if (this.props.history) {
-			this.props.history.goBack()
+	const handleFormCancel = () => {
+		if (history) {
+			history.goBack()
 		}
 	}
 
-	handleFormSubmit = setData => {
-		this.props.addSet(setData)
-		this.props.history.goBack()
+	const handleFormSubmit = setData => {
+		addSet(setData)
+		history.goBack()
 
 		/*
-		if (this.props.history) {
-			this.props.history.push({
+		if (history) {
+			history.push({
 				pathname: '/sets',
 			})
 		}		*/
 	}
 
-	render() {
-		return (
-			<Root className={'set-editor'}>
-				<ContentLimiter>
-					<Paper className={classes.form}>
-						<SetFormContainer
-							onCancel={this.handleFormCancel}
-							onSubmit={this.handleFormSubmit}
-						/>
-					</Paper>
-				</ContentLimiter>
-			</Root>
-		)
-	}
+	return (
+		<Root className={'set-editor'}>
+			<ContentLimiter>
+				<Paper className={classes.form}>
+					<SetFormContainer
+						onCancel={handleFormCancel}
+						onSubmit={handleFormSubmit}
+					/>
+				</Paper>
+			</ContentLimiter>
+		</Root>
+	)
 }
 
-const mapStateToProps = state => ({
-	user: state.user,
-})
-
-export default connect(mapStateToProps, actions)(SetEditor)
+export default SetEditor

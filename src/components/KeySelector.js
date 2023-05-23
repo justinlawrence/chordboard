@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { styled } from '@material-ui/core/styles'
+import { styled } from '@mui/material/styles'
 import { find, noop, toLower } from 'lodash'
 
 import MenuItem from '@mui/material/MenuItem'
@@ -41,7 +41,7 @@ const KeySelector = ({
 	songKey = 'c',
 	...other
 }) => {
-	const [key, setKey] = useState(songKey)
+	const [key, setKey] = useState(toLower(songKey))
 
 	useEffect(() => {
 		const newKey = find(keyOptions, { value: toLower(songKey) })

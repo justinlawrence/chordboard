@@ -1,13 +1,7 @@
 import * as Sentry from '@sentry/react'
-import { put, takeLatest } from 'redux-saga/effects'
+import { takeLatest } from 'redux-saga/effects'
 
-import {
-	FETCH_THEME_REQUEST,
-	SET_FONT_SIZE,
-	UPDATE_THEME,
-	fetchThemeFailure,
-	fetchThemeSuccess,
-} from '../actions/'
+import { SET_FONT_SIZE } from '../actions/'
 
 export function* userSaga() {
 	yield takeLatest(SET_FONT_SIZE, handleSetFontSize)

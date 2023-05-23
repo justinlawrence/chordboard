@@ -1,5 +1,5 @@
 import React from 'react'
-import { styled } from '@material-ui/core/styles'
+import { styled } from '@mui/material/styles'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
@@ -11,17 +11,18 @@ import {
 	Toolbar,
 	Tooltip,
 } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 import {
 	WbSunnyOutlined as DarkModeIcon,
 	Brightness2Outlined as LightModeIcon,
 } from '@mui/icons-material'
 
 import * as actions from '../redux/actions'
-import { getThemeId } from '../redux/reducers/theme'
 import SetToolbar from './SetToolbar'
 import chordboardLogoDark from '../chordboard-logo-light.png'
 import chordboardLogoLight from '../chordboard-logo-dark.png'
 import { useSetToolbar } from '../hooks'
+import { useUpdateAppTheme } from '../themes/useAppTheme'
 
 const PREFIX = 'Navbar'
 
@@ -81,14 +82,18 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 	},
 }))
 
-const Navbar = ({ setCurrentUser, songs, themeId, updateTheme }) => {
+const Navbar = ({ setCurrentUser, songs }) => {
 	const { currentSet, songId } = useSetToolbar()
+	const updateTheme = useUpdateAppTheme()
+	const theme = useTheme()
+
+	const isDarkMode = theme.palette.mode === 'dark'
 
 	const toggleTheme = () => {
-		if (themeId === 'light') {
-			updateTheme('dark')
-		} else {
+		if (theme.palette.mode === 'dark') {
 			updateTheme('light')
+		} else {
+			updateTheme('dark')
 		}
 	}
 
@@ -111,7 +116,7 @@ const Navbar = ({ setCurrentUser, songs, themeId, updateTheme }) => {
 							<Link to={'/'} className={classes.logoWrapper}>
 								<img
 									src={
-										themeId === 'dark'
+										isDarkMode
 											? chordboardLogoDark
 											: chordboardLogoLight
 									}
@@ -140,17 +145,13 @@ const Navbar = ({ setCurrentUser, songs, themeId, updateTheme }) => {
 									v{version}
 								</Typography> */}
 							<Tooltip
-								title={
-									themeId === 'dark'
-										? 'light mode'
-										: 'dark mode'
-								}
+								title={isDarkMode ? 'light mode' : 'dark mode'}
 							>
 								<IconButton
 									onClick={toggleTheme}
 									size={'large'}
 								>
-									{themeId === 'dark' ? (
+									{isDarkMode ? (
 										<LightModeIcon />
 									) : (
 										<DarkModeIcon />
@@ -165,9 +166,4 @@ const Navbar = ({ setCurrentUser, songs, themeId, updateTheme }) => {
 	)
 }
 
-const mapStateToProps = state => ({
-	currentSong: state.songs.byId[state.currentSong.id],
-	themeId: getThemeId(state),
-})
-
-export default connect(mapStateToProps, actions)(Navbar)
+export default Navbar

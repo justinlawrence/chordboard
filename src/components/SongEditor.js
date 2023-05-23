@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { styled } from '@material-ui/core/styles'
+import { styled } from '@mui/material/styles'
 import PropTypes from 'prop-types'
 import { isNil } from 'lodash'
 import { connect } from 'react-redux'
@@ -40,10 +40,14 @@ const StyledHero = styled(Hero)(({ theme }) => ({
 		flexGrow: 1,
 	},
 
-	[`& .${classes.form}`]: theme.mixins.gutters({
-		paddingBottom: theme.spacing(2),
-		paddingTop: theme.spacing(2),
-	}),
+	[`& .${classes.form}`]: {
+		padding: theme.spacing(2),
+
+		[theme.breakpoints.up('sm')]: {
+			paddingLeft: theme.spacing(3),
+			paddingRight: theme.spacing(3),
+		},
+	},
 
 	[`& .${classes.formFooter}`]: {
 		marginTop: theme.spacing(2),

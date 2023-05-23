@@ -1,11 +1,7 @@
-import React, { Component } from 'react'
-import { styled } from '@material-ui/core/styles'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import React, { useEffect, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import uniqBy from 'lodash/fp/uniqBy'
-
-import { parseISO } from 'date-fns'
+import { useHistory } from 'react-router-dom'
 
 import {
 	Button,
@@ -19,8 +15,9 @@ import {
 	Stack,
 	Typography,
 } from '@mui/material'
+import { styled } from '@mui/material/styles'
 
-import * as actions from '../redux/actions'
+import { useUpdateSet } from '../data/hooks'
 import DateSignifier from './DateSignifier'
 import Hero from './Hero'
 import SetSongRow from './SetSongRow'
@@ -37,11 +34,15 @@ const classes = {
 }
 
 const Root = styled('div')(({ theme }) => ({
-	[`& .${classes.form}`]: theme.mixins.gutters({
-		paddingBottom: theme.spacing(2),
-		paddingTop: theme.spacing(2),
+	[`& .${classes.form}`]: {
+		padding: theme.spacing(2),
 		width: 500,
-	}),
+
+		[theme.breakpoints.up('sm')]: {
+			paddingLeft: theme.spacing(3),
+			paddingRight: theme.spacing(3),
+		},
+	},
 
 	[`& .${classes.formFooter}`]: {
 		marginTop: theme.spacing(2),
@@ -52,52 +53,29 @@ const Root = styled('div')(({ theme }) => ({
 	},
 }))
 
-class SetViewer extends Component {
-	static propTypes = {
-		classes: PropTypes.object,
-		history: PropTypes.object,
-		onChangeKey: PropTypes.func,
-		onRemoveSet: PropTypes.func,
-		onSongMove: PropTypes.func,
-		user: PropTypes.object,
-		// Redux props
-		set: PropTypes.object,
-		updateSet: PropTypes.func.isRequired,
-	}
+const SetViewer = ({ currentSet, onChangeKey, onRemoveSet }) => {
+	const [mode, setMode] = useState('')
+	const [isSongSelectorVisible, setIsSongSelectorVisible] = useState(false)
+	const { updateSet } = useUpdateSet()
+	const history = useHistory()
 
-	state = {
-		isLoading: false,
-		isSongSelectorVisible: false,
-		mode: '',
-	}
-
-	componentDidMount() {
-		this.handleProps({})
-	}
-
-	componentDidUpdate(prevProps) {
-		this.handleProps(prevProps)
-	}
-
-	handleProps = prevProps => {
-		const { set } = this.props
-		if (set && prevProps.set && prevProps.set.title !== set.title) {
-			document.title = 'Set: ' + set.title
+	useEffect(() => {
+		if (currentSet?.title) {
+			document.title = 'Set: ' + currentSet.title
 		}
+	}, [currentSet?.title])
+
+	const handleAddASong = () => setIsSongSelectorVisible(true)
+
+	const handleSaveSet = data => {
+		updateSet(currentSet.id, data)
+		toggleEditMode(false)()
 	}
 
-	handleAddASong = () => this.setState({ isSongSelectorVisible: true })
+	const handleDeleteSet = () => onRemoveSet && onRemoveSet()
 
-	handleSaveSet = data => {
-		data.id = this.props.set.id
-		this.props.updateSet(data)
-		this.toggleEditMode(false)()
-	}
-
-	handleDeleteSet = () => this.props.onRemoveSet && this.props.onRemoveSet()
-
-	handleDragEnd = ({ destination, source }) => {
-		const set = { ...this.props.set }
+	const handleDragEnd = ({ destination, source }) => {
+		const set = { ...currentSet }
 		const setSongs = Array.from(set.songs)
 
 		const [song] = setSongs.splice(source.index, 1)
@@ -106,34 +84,30 @@ class SetViewer extends Component {
 		set.songs = setSongs
 
 		if (set) {
-			this.props.setCurrentSetId(set.id)
-			this.props.updateSet(set)
+			history.push('/set/' + set.id)
+			updateSet(set)
 		}
 	}
 
-	handleSongSelectorClose = setSongs => {
-		this.setState({ isSongSelectorVisible: false })
-		const set = { ...this.props.set }
+	const handleSongSelectorClose = setSongs => {
+		setIsSongSelectorVisible(false)
+		const set = { ...currentSet }
 		set.songs = uniqBy('id')([...set.songs, ...setSongs])
-		this.handleSaveSet(set)
+		handleSaveSet(set)
 	}
 
-	changeKey = (...args) =>
-		this.props.onChangeKey && this.props.onChangeKey(...args)
+	const changeKey = (...args) => onChangeKey && onChangeKey(...args)
 
-	toggleEditMode = value => () => this.setState({ mode: value ? 'edit' : '' })
+	const toggleEditMode = value => () => setMode(value ? 'edit' : '')
 
-	transposeDown = song => this.changeKey(song.id, -1)
-	transposeUp = song => this.changeKey(song.id, 1)
+	// const transposeDown = song => changeKey(song.id, -1)
+	// const transposeUp = song => changeKey(song.id, 1)
 
-	renderTableContent = (dropProvided = {}) => {
-		const { set } = this.props
-		const { mode } = this.state
-
+	const renderTableContent = (dropProvided = {}) => {
 		return (
 			<div ref={dropProvided.innerRef} {...dropProvided.droppableProps}>
-				{set.songs.length ? (
-					set.songs.map((song, index) => (
+				{currentSet?.songs?.length ? (
+					currentSet.songs.map((song, index) => (
 						<Draggable
 							draggableId={song.id}
 							index={index}
@@ -148,8 +122,8 @@ class SetViewer extends Component {
 								>
 									<SetSongRow
 										mode={mode}
-										onChangeKey={this.changeKey}
-										setId={set.id}
+										onChangeKey={changeKey}
+										setId={currentSet.id}
 										setKey={song.key}
 										songIndex={index}
 										songId={song.id}
@@ -170,134 +144,128 @@ class SetViewer extends Component {
 		)
 	}
 
-	render() {
-		const { set } = this.props
-		const { mode, isSongSelectorVisible } = this.state
-		if (!(set.setDate instanceof Date) && !isNaN(set.setDate)) {
-			console.log(
-				'TODO: setviewer needs work - setDate is not a javascript date'
-			)
-			set.setDate = parseISO(set.setDate)
-		}
+	/* if (!(currentSet?.setDate instanceof Date) && !isNaN(currentSet?.setDate)) {
+		console.log(
+			'TODO: setviewer needs work - setDate is not a javascript date'
+		)
+		currentSet.setDate = parseISO(currentSet.setDate)
+	} */
 
-		return set ? (
-			<Root className={'set-viewer'}>
-				<Hero>
-					<Grid container spacing={1}>
-						<Grid item xs>
-							{mode === 'edit' ? (
-								<SetFormContainer
-									initialValues={{
-										author: set.author,
-										setDate: set.setDate,
-										title: set.title,
-										venue: set.venue,
-									}}
-									onCancel={this.toggleEditMode(false)}
-									onDelete={this.handleDeleteSet}
-									onSubmit={this.handleSaveSet}
-									isEdit
-								/>
-							) : (
-								<Grid container spacing={3}>
-									<Hidden mdDown>
-										<Grid item>
-											<Grow
-												in={Boolean(set.setDate)}
-												mountOnEnter
-											>
-												<div>
-													{set.setDate && (
-														<DateSignifier
-															date={set.setDate}
-														/>
-													)}
-												</div>
-											</Grow>
-										</Grid>
-									</Hidden>
+	return currentSet ? (
+		<Root className={'set-viewer'}>
+			<Hero>
+				<Grid container spacing={1}>
+					<Grid item xs>
+						{mode === 'edit' ? (
+							<SetFormContainer
+								initialValues={{
+									author: currentSet.author,
+									setDate: currentSet.setDate,
+									title: currentSet.title,
+									venue: currentSet.venue,
+								}}
+								onCancel={toggleEditMode(false)}
+								onDelete={handleDeleteSet}
+								onSubmit={handleSaveSet}
+								isEdit
+							/>
+						) : (
+							<Grid container spacing={3}>
+								<Hidden mdDown>
 									<Grid item>
-										<Typography
-											variant={'h4'}
-											sx={{ fontWeight: 700 }}
+										<Grow
+											in={Boolean(currentSet.setDate)}
+											mountOnEnter
 										>
-											{set.title}
-										</Typography>
-										<Typography variant={'caption'}>
-											{set.author}
-											{set.venue ? ' @ ' + set.venue : ''}
-										</Typography>
+											<div>
+												{currentSet.setDate && (
+													<DateSignifier
+														date={
+															currentSet.setDate
+														}
+													/>
+												)}
+											</div>
+										</Grow>
 									</Grid>
-								</Grid>
-							)}
-						</Grid>
-
-						{mode !== 'edit' && (
-							<Grid item>
-								<Stack direction={'row'} spacing={2}>
-									<Hidden smUp>
-										<IconButton
-											size={'small'}
-											variant={'contained'}
-											aria-label={'Edit'}
-											onClick={this.toggleEditMode(
-												mode !== 'edit'
-											)}
-										>
-											<PencilIcon />
-										</IconButton>
-									</Hidden>
-									<Hidden only={'xs'}>
-										<Button
-											onClick={this.toggleEditMode(
-												mode !== 'edit'
-											)}
-											variant={'outlined'}
-										>
-											Edit set
-										</Button>
-									</Hidden>
-									<Button
-										color={'primary'}
-										onClick={this.handleAddASong}
-										variant={'contained'}
+								</Hidden>
+								<Grid item>
+									<Typography
+										variant={'h4'}
+										sx={{ fontWeight: 700 }}
 									>
-										<Hidden only={'xs'}>Add a song</Hidden>
-										<Hidden smUp>Add</Hidden>
-									</Button>
-								</Stack>
+										{currentSet.title}
+									</Typography>
+									<Typography variant={'caption'}>
+										{currentSet.author}
+										{currentSet.venue
+											? ' @ ' + currentSet.venue
+											: ''}
+									</Typography>
+								</Grid>
 							</Grid>
 						)}
-
-						<Grid item>
-							<SongSelectorDialog
-								onClose={this.handleSongSelectorClose}
-								open={isSongSelectorVisible}
-							/>
-						</Grid>
 					</Grid>
-				</Hero>
 
-				<section className={'section'}>
-					<Container maxWidth={'xl'}>
-						<List className={classes.table}>
-							<DragDropContext onDragEnd={this.handleDragEnd}>
-								<Droppable droppableId={'droppable'}>
-									{provided => (
-										<>{this.renderTableContent(provided)}</>
-									)}
-								</Droppable>
-							</DragDropContext>
-						</List>
-					</Container>
-				</section>
-			</Root>
-		) : null
-	}
+					{mode !== 'edit' && (
+						<Grid item>
+							<Stack direction={'row'} spacing={2}>
+								<Hidden smUp>
+									<IconButton
+										size={'small'}
+										variant={'contained'}
+										aria-label={'Edit'}
+										onClick={toggleEditMode(
+											mode !== 'edit'
+										)}
+									>
+										<PencilIcon />
+									</IconButton>
+								</Hidden>
+								<Hidden only={'xs'}>
+									<Button
+										onClick={toggleEditMode(
+											mode !== 'edit'
+										)}
+										variant={'outlined'}
+									>
+										Edit set
+									</Button>
+								</Hidden>
+								<Button
+									color={'primary'}
+									onClick={handleAddASong}
+									variant={'contained'}
+								>
+									<Hidden only={'xs'}>Add a song</Hidden>
+									<Hidden smUp>Add</Hidden>
+								</Button>
+							</Stack>
+						</Grid>
+					)}
+
+					<Grid item>
+						<SongSelectorDialog
+							onClose={handleSongSelectorClose}
+							open={isSongSelectorVisible}
+						/>
+					</Grid>
+				</Grid>
+			</Hero>
+
+			<section className={'section'}>
+				<Container maxWidth={'xl'}>
+					<List className={classes.table}>
+						<DragDropContext onDragEnd={handleDragEnd}>
+							<Droppable droppableId={'droppable'}>
+								{renderTableContent}
+							</Droppable>
+						</DragDropContext>
+					</List>
+				</Container>
+			</section>
+		</Root>
+	) : null
 }
 
-const mapStateToProps = (state, ownProps) => ({
-	set: state.sets.byId[ownProps.setId],
-})
-
-export default connect(mapStateToProps, actions)(SetViewer)
+export default SetViewer

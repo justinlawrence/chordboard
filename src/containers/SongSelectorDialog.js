@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react'
-import { connect } from 'react-redux'
 import { compose } from 'recompose'
 import { VariableSizeList } from 'react-window'
 import cx from 'classnames'
@@ -10,7 +9,6 @@ import groupBy from 'lodash/fp/groupBy'
 import includes from 'lodash/fp/includes'
 import map from 'lodash/fp/map'
 import noop from 'lodash/noop'
-import reduce from 'lodash/fp/reduce'
 import toLower from 'lodash/fp/toLower'
 import size from 'lodash/size'
 import sortBy from 'lodash/fp/sortBy'
@@ -23,28 +21,29 @@ import {
 	usePopupState,
 } from 'material-ui-popup-state/hooks'
 
-import { useTheme } from '@mui/material/styles'
+import {
+	Avatar,
+	Button,
+	ButtonBase,
+	Checkbox,
+	Collapse,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+	Grid,
+	IconButton,
+	InputBase,
+	List,
+	ListItem,
+	ListItemAvatar,
+	ListItemIcon,
+	ListItemText,
+	Paper,
+	Typography,
+} from '@mui/material'
+import { styled, useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import Avatar from '@mui/material/Avatar'
-import Button from '@mui/material/Button'
-import ButtonBase from '@mui/material/ButtonBase'
-import Checkbox from '@mui/material/Checkbox'
-import Collapse from '@mui/material/Collapse'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
-import Grid from '@mui/material/Grid'
-import IconButton from '@mui/material/IconButton'
-import InputBase from '@mui/material/InputBase'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
-import Paper from '@mui/material/Paper'
-import Typography from '@mui/material/Typography'
-import { ListItemAvatar } from '@mui/material'
-import { styled } from '@mui/material/styles'
 import {
 	Alphabetical as AlphabeticalIcon,
 	ArrowLeft as BackIcon,
@@ -52,6 +51,7 @@ import {
 } from 'mdi-material-ui'
 
 import AddSongDialog from '../components/AddSongDialog'
+import { useAllSongs } from '../data/hooks'
 
 const PREFIX = 'SongSelectorDialog'
 
@@ -126,13 +126,14 @@ const withWidth = () => WrappedComponent => props =>
 
 const mapWithKey = map.convert({ cap: false })
 
-const SongSelectorDialog = ({ onClose = noop, open, songs = [] }) => {
+const SongSelectorDialog = ({ onClose = noop, open }) => {
 	const theme = useTheme()
 	const isFullscreen = useMediaQuery(theme.breakpoints.down('xs'))
 	const [sectionFilter, setSectionFilter] = useState('')
 	const [setSongs, setSetSongs] = useState([])
 	const [searchValue, setSearchValue] = useState('')
 	const [showFilters, setShowFilters] = useState(false)
+	const songs = useAllSongs()
 	const popupState = usePopupState({
 		variant: 'dialog',
 		popupId: 'addSongDialog',
@@ -343,15 +344,4 @@ const SongSelectorDialog = ({ onClose = noop, open, songs = [] }) => {
 	)
 }
 
-const mapStateToProps = state => ({
-	songs: reduce((acc, song) => {
-		acc.push(song)
-		return acc
-	})([])(state.songs.byId),
-})
-
-export default compose(
-	connect(mapStateToProps),
-
-	withWidth()
-)(SongSelectorDialog)
+export default compose(withWidth())(SongSelectorDialog)
