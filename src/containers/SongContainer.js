@@ -1,44 +1,23 @@
-import React, { PureComponent } from 'react'
-import { connect } from 'react-redux'
+import React from 'react'
+import { useRouteMatch } from 'react-router-dom'
 
-import * as actions from '../redux/actions'
 import SongViewer from '../components/SongViewer'
+import { useSet, useSong, useUser } from '../data/hooks'
 
-class SongContainer extends PureComponent {
-	componentDidMount() {
-		this.updateCurrentSong()
-	}
+const SongContainer = ({ id, currentKey }) => {
+	const setId = useRouteMatch('/sets/:setId').params.setId
+	const { data: currentSet } = useSet(setId)
+	const { data: song } = useSong(id)
+	const { data: user } = useUser()
 
-	componentDidUpdate() {
-		this.updateCurrentSong()
-	}
-
-	updateCurrentSong = () => {
-		if (!this.props.song || this.props.song.id !== this.props.id) {
-			this.props.setCurrentSongId(this.props.id)
-		}
-	}
-
-	render() {
-		const { currentSet, currentKey, song, user } = this.props
-		return (
-			<SongViewer
-				currentSet={currentSet}
-				setKey={currentKey}
-				song={song}
-				user={user}
-			/>
-		)
-	}
+	return song ? (
+		<SongViewer
+			currentSet={currentSet}
+			setKey={currentKey}
+			song={song}
+			user={user}
+		/>
+	) : null
 }
 
-const mapStateToProps = (state, ownProps) => ({
-	currentSet: state.sets.byId[state.currentSet.id],
-	song: state.songs.byId[ownProps.id],
-	user: state.user
-})
-
-export default connect(
-	mapStateToProps,
-	actions
-)(SongContainer)
+export default SongContainer

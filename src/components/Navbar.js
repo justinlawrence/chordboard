@@ -1,5 +1,5 @@
 import React from 'react'
-import { styled } from '@material-ui/core/styles'
+import { styled } from '@mui/material/styles'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
@@ -166,8 +166,4 @@ const Navbar = ({ setCurrentUser, songs }) => {
 	)
 }
 
-const mapStateToProps = state => ({
-	currentSong: state.songs.byId[state.currentSong.id],
-})
-
-export default connect(mapStateToProps, actions)(Navbar)
+export default Navbar

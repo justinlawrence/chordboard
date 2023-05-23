@@ -10,7 +10,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import LiveBar from './components/LiveBar'
 import Login from './pages/Login'
 import Navbar from './components/Navbar'
-import SetCurrentSong from './components/SetCurrentSong'
 import SongListContainer from './containers/SongListContainer'
 import SongEditor from './components/SongEditor'
 import SongContainer from './containers/SongContainer'
@@ -38,7 +37,6 @@ const App = () => {
 					wrap={'nowrap'}
 				>
 					<CssBaseline />
-					<SetCurrentSong />
 					<Navbar />
 
 					<Grid className={classes.content} item xs>

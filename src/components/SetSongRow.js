@@ -1,123 +1,94 @@
-import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
+import React from 'react'
+import { useHistory } from 'react-router-dom'
 
 import { Box, IconButton, ListItem, Typography, Tooltip } from '@mui/material'
 import { Delete as DeleteIcon, Drag as DragIcon } from 'mdi-material-ui'
 
-import * as actions from '../redux/actions'
 import KeySelector from './KeySelector'
+import { useDeleteSetSong, useSong } from '../data/hooks'
 
-class SetSong extends PureComponent {
-	static defaultProps = {
-		song: {
-			needsFetching: true,
-			title: 'Loading...',
-		},
-	}
+const SetSongRow = ({
+	mode,
+	onChangeKey,
+	setId,
+	setKey,
+	songIndex,
+	songId,
+}) => {
+	const history = useHistory()
+	const { data: song } = useSong(songId)
+	const { deleteSetSong } = useDeleteSetSong()
 
-	static propTypes = {
-		mode: PropTypes.string,
-		onChangeKey: PropTypes.func,
-		provided: PropTypes.object,
-		setId: PropTypes.string,
-		song: PropTypes.object,
-		songId: PropTypes.string,
-		songIndex: PropTypes.number,
-		songKey: PropTypes.string,
-		// Redux props
-		fetchSong: PropTypes.func.isRequired,
-	}
+	const handleKeySelect = (key, amount) =>
+		onChangeKey && onChangeKey(songId, amount, song.key)
 
-	componentDidMount() {
-		if (this.props.song.needsFetching) {
-			this.props.fetchSong(this.props.songId)
-		}
-	}
+	const handleTableRowClick = () =>
+		history.push(`/sets/${setId}/songs/${songId}`)
 
-	handleKeySelect = (key, amount) =>
-		this.props.onChangeKey &&
-		this.props.onChangeKey(this.props.songId, amount, this.props.song.key)
-
-	handleTableRowClick = () =>
-		this.props.history.push(
-			`/sets/${this.props.setId}/songs/${this.props.songId}`
-		)
-
-	removeSong = event => {
-		this.props.removeSetSong(this.props.setId, this.props.songId)
+	const removeSong = event => {
+		deleteSetSong(setId, songId)
 		event.stopPropagation()
 	}
 
-	stopPropagation = event => event.stopPropagation()
+	const stopPropagation = event => event.stopPropagation()
 
-	render() {
-		const { mode, setKey, song, songIndex } = this.props
+	//FYI the header for this table is in SetViewer.js
 
-		//FYI the header for this table is in SetViewer.js
+	const title = song?.title && song?.content ? song?.title : '** Not found **'
 
-		const title =
-			song?.title && song?.content ? song?.title : '** Not found **'
+	return (
+		<ListItem button dense onClick={handleTableRowClick}>
+			{mode === 'edit' && (
+				<Tooltip title={'Drag to reorder song'}>
+					<DragIcon />
+				</Tooltip>
+			)}
 
-		return (
-			<ListItem button dense onClick={this.handleTableRowClick}>
-				{mode === 'edit' && (
-					<Tooltip title={'Drag to reorder song'}>
-						<DragIcon />
-					</Tooltip>
-				)}
+			<Typography variant={'h6'} sx={{ mr: 3 }}>
+				{songIndex + 1}
+			</Typography>
+			<Typography noWrap variant={'h6'} sx={{ flexGrow: 1 }}>
+				{title}
+			</Typography>
 
-				<Typography variant={'h6'} sx={{ mr: 3 }}>
-					{songIndex + 1}
-				</Typography>
-				<Typography noWrap variant={'h6'} sx={{ flexGrow: 1 }}>
-					{title}
-				</Typography>
+			<Box onClick={stopPropagation}>
+				<KeySelector
+					onSelect={handleKeySelect}
+					songKey={setKey || song?.key}
+				/>
+			</Box>
 
-				<Box onClick={this.stopPropagation}>
-					<KeySelector
-						onSelect={this.handleKeySelect}
-						songKey={setKey || song?.key}
-					/>
-				</Box>
-
-				{/*mode === 'edit' && (
+			{/*mode === 'edit' && (
 								<Grid item>
 									<IconButton
 										aria-label="Transpose down"
-										onClick={() => this.transposeDown(song)}
+										onClick={() => transposeDown(song)}
 									>
 										<MinusIcon />
 									</IconButton>
 
 									<IconButton
 										aria-label="Transpose up"
-										onClick={() => this.transposeUp(song)}
+										onClick={() => transposeUp(song)}
 									>
 										<PlusIcon />
 									</IconButton>
 								</Grid>
 							)*/}
 
-				{mode === 'edit' && (
-					<Tooltip title={'Remove song from set'}>
-						<IconButton
-							aria-label={'Remove song'}
-							onClick={this.removeSong}
-							size={'large'}
-						>
-							<DeleteIcon />
-						</IconButton>
-					</Tooltip>
-				)}
-			</ListItem>
-		)
-	}
+			{mode === 'edit' && (
+				<Tooltip title={'Remove song from set'}>
+					<IconButton
+						aria-label={'Remove song'}
+						onClick={removeSong}
+						size={'large'}
+					>
+						<DeleteIcon />
+					</IconButton>
+				</Tooltip>
+			)}
+		</ListItem>
+	)
 }
 
-const mapStateToProps = (state, ownProps) => ({
-	song: state.songs.byId[ownProps.songId],
-})
-
-export default connect(mapStateToProps, actions)(withRouter(SetSong))
+export default SetSongRow

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { atom, useAtom } from 'jotai'
+import { atom, useAtom, useSetAtom } from 'jotai'
 import { Helmet } from 'react-helmet'
-import { useDispatch } from 'react-redux'
 import get from 'lodash/get'
 import omit from 'lodash/omit'
 import set from 'lodash/set'
@@ -16,7 +15,8 @@ import {
 	Typography,
 } from '@mui/material'
 
-import { setCurrentSetSongKey, setCurrentSongUserKey } from '../redux/actions'
+import { currentSetSongKeyAtom } from '../sets'
+import { currentSongUserKeyAtom } from '../songs'
 import SongViewerMenu from './SongViewerMenu'
 import ContentLimiter from './ContentLimiter'
 import getKeyDiff from '../utils/getKeyDiff'
@@ -111,12 +111,13 @@ const StyledFade = styled(Fade)(({ theme }) => ({
 }))
 
 const SongViewer = ({ currentSet, isPreview, setKey, song = {} }) => {
-	const dispatch = useDispatch()
 	const [chordSize] = useAtom(chordSizeAtom)
 	const [isNashville, setIsNashville] = useAtom(isNashvilleAtom)
 	const [wordSize] = useAtom(wordSizeAtom)
 	const [capoKey, setCapoKey] = useState(setKey)
 	const [lines, setLines] = useState([])
+	const setCurrentSongUserKey = useSetAtom(currentSongUserKeyAtom)
+	const setCurrentSetSongKey = useSetAtom(currentSetSongKeyAtom)
 
 	const setId = currentSet?.id
 	const songId = song?.id
@@ -139,12 +140,7 @@ const SongViewer = ({ currentSet, isPreview, setKey, song = {} }) => {
 	}, [capoKey, isNashville, song.content, transposeAmount])
 
 	const handleSelectSetKey = option => {
-		dispatch(
-			setCurrentSetSongKey({
-				key: option.key,
-				song,
-			})
-		)
+		setCurrentSetSongKey({ key: option.key, song })
 
 		if (capoKey === option.key && song.id) {
 			removeCapoKey(setId, song.id)
@@ -164,7 +160,7 @@ const SongViewer = ({ currentSet, isPreview, setKey, song = {} }) => {
 				saveCapoKey(setId, songId, key)
 			}
 		}
-		dispatch(setCurrentSongUserKey(key))
+		setCurrentSongUserKey(key)
 	}
 
 	/* 
@@ -189,7 +185,7 @@ const SongViewer = ({ currentSet, isPreview, setKey, song = {} }) => {
 	const changeKey = key => {
 		if (key) {
 			setDisplayKey(key)
-			dispatch(setCurrentSongUserKey(key))
+			setCurrentSongUserKey(key)
 		}
 	}
 

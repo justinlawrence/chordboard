@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { styled } from '@material-ui/core/styles'
+import { styled } from '@mui/material/styles'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import cx from 'classnames'
@@ -43,11 +43,18 @@ const Root = styled('div')(({ theme }) => ({
 		flexGrow: 1,
 	},
 
-	[`& .${classes.form}`]: theme.mixins.gutters({
+	[`& .${classes.form}`]: {
 		paddingBottom: theme.spacing(8),
+		paddingLeft: theme.spacing(2),
+		paddingRight: theme.spacing(2),
 		paddingTop: theme.spacing(2),
 		width: theme.spacing(40),
-	}),
+
+		[theme.breakpoints.up('sm')]: {
+			paddingLeft: theme.spacing(3),
+			paddingRight: theme.spacing(3),
+		},
+	},
 
 	[`& .${classes.formFooter}`]: {
 		marginTop: theme.spacing(2),

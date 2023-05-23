@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react'
-import { styled } from '@material-ui/core/styles'
+import { styled } from '@mui/material/styles'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import { lowerCase, reverse, sortBy } from 'lodash'
 import { Link, withRouter } from 'react-router-dom'
 
@@ -16,7 +15,7 @@ import TableRow from '@mui/material/TableRow'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 
-import * as actions from '../redux/actions'
+import { getDateFromFirebase } from '../data/utils'
 import ContentLimiter from './ContentLimiter'
 import DateSignifier from './DateSignifier'
 import Hero from './Hero'
@@ -152,9 +151,9 @@ class Sets extends PureComponent {
 									key={set.id}
 								>
 									<TableCell className={classes.shrinkCell}>
-										{set.setDate && (
+										{set.setDate ? (
 											<DateSignifier date={set.setDate} />
-										)}
+										) : null}
 									</TableCell>
 
 									<TableCell>
@@ -176,4 +175,4 @@ class Sets extends PureComponent {
 	}
 }
 
-export default connect(null, actions)(withRouter(Sets))
+export default withRouter(Sets)

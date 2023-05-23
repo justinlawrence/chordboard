@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import map from 'lodash/map'
 
@@ -39,7 +39,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 const SetToolbar = ({ currentSet, songId }) => {
 	const history = useHistory()
 	const [isSyncOn, setIsSyncOn] = useState(false)
-	const songs = useSongs(currentSet?.songs.map(song => song.id))
+	const songs = useSongs(currentSet?.songs?.map(song => song.id))
 	const syncSet = useSyncSet(currentSet?.id, {
 		isEnabled: isSyncOn,
 		onSync: useCallback(
