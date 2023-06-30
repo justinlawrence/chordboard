@@ -1,5 +1,5 @@
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
 
 import { Button, MenuItem, Paper, Stack, TextField } from '@mui/material'
 import { TextareaAutosize } from '@mui/base'
@@ -8,6 +8,8 @@ import { styled } from '@mui/material/styles'
 import { keyOptions } from './KeySelector'
 
 import { mapRefToInputRef } from '../utils/forms'
+import { useSong } from '../data/hooks'
+import { useEffect } from 'react'
 
 const PREFIX = 'SongForm'
 
@@ -27,6 +29,7 @@ const StyledForm = styled('form', { name: PREFIX })(({ theme }) => ({
 		resize: 'none',
 		height: '100%',
 		width: '100%',
+		whiteSpace: 'nowrap',
 
 		'&:focus': {
 			outline: 'none',
@@ -41,17 +44,31 @@ const StyledForm = styled('form', { name: PREFIX })(({ theme }) => ({
 	},
 }))
 
-const useSongForm = songId => {
-	const song = useSelector(state => state.songs.byId[songId]) || {}
-	const { register, ...rest } = useForm({
+const useSongForm = (songId, config) => {
+	const { data: song } = useSong(songId)
+	const [hasLoaded, setHasLoaded] = useState(false)
+	const { register, reset, ...rest } = useForm({
 		defaultValues: {
-			title: song.title || '',
-			author: song.author || '',
-			key: song.key || 'C',
-			content: song.content || '',
+			title: song?.title || '',
+			author: song?.author || '',
+			key: song?.key || 'C',
+			content: song?.content || '',
 			parserType: 'chords-above-words',
 		},
+		...config,
 	})
+
+	useEffect(() => {
+		if (song && !hasLoaded) {
+			setHasLoaded(true)
+			reset({
+				title: song.title || '',
+				author: song.author || '',
+				key: song.key || 'C',
+				content: song.content || '',
+			})
+		}
+	}, [hasLoaded, reset, song])
 
 	return {
 		fields: {
@@ -66,9 +83,17 @@ const useSongForm = songId => {
 	}
 }
 
-const SongForm = ({ onCancel, onSubmit, songId }) => {
-	const { fields, formState, handleSubmit, register, reset } =
+const SongForm = ({ onCancel, onChange, onSubmit, songId }) => {
+	const { fields, formState, handleSubmit, register, reset, watch } =
 		useSongForm(songId)
+
+	const watchAllFields = Boolean(onChange) && watch()
+
+	useEffect(() => {
+		if (onChange) {
+			onChange(watchAllFields)
+		}
+	}, [onChange, watchAllFields])
 
 	const handleCancel = () => {
 		onCancel && onCancel()
@@ -124,11 +149,15 @@ const SongForm = ({ onCancel, onSubmit, songId }) => {
 				</Stack>
 
 				<Paper className={classes.textEditorWrapper}>
-					<TextareaAutosize
+					{/* <TextareaAutosize
 						className={classes.textEditor}
 						placeholder={
 							'Type words and chords here. Add colons after section headings eg. Verse 1:'
 						}
+						{...register('content')}
+					/> */}
+					<textarea
+						className={classes.textEditor}
 						{...register('content')}
 					/>
 				</Paper>
@@ -156,4 +185,4 @@ const SongForm = ({ onCancel, onSubmit, songId }) => {
 	)
 }
 
-export default SongForm
+export default React.memo(SongForm)

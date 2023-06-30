@@ -12,6 +12,7 @@ import Login from './pages/Login'
 import Navbar from './components/Navbar'
 import SongListContainer from './containers/SongListContainer'
 import SongEditor from './components/SongEditor'
+import SongEditPage from './components/SongEditPage'
 import SongContainer from './containers/SongContainer'
 import SetListContainer from './containers/SetListContainer'
 import Privacy from './pages/Privacy'
@@ -80,8 +81,8 @@ const App = () => {
 								exact
 								path={'/songs/:id/edit'}
 								render={props => (
-									<SongEditor
-										id={props.match.params.id}
+									<SongEditPage
+										songId={props.match.params.id}
 										{...props}
 									/>
 								)}

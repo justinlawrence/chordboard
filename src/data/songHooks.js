@@ -67,7 +67,7 @@ export const useSong = songId => {
 		}
 		return onSnapshot(doc(firestore, 'songs', songId), doc => {
 			if (doc.exists()) {
-				setSong(doc.data())
+				setSong({ id: doc.id, ...doc.data() })
 			} else {
 				// doc.data() will be undefined in this case
 				setSong(null)

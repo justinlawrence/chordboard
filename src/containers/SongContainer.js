@@ -5,7 +5,8 @@ import SongViewer from '../components/SongViewer'
 import { useSet, useSong, useUser } from '../data/hooks'
 
 const SongContainer = ({ id, currentKey }) => {
-	const setId = useRouteMatch('/sets/:setId').params.setId
+	const match = useRouteMatch('/sets/:setId')
+	const setId = match ? match.params.setId : null
 	const { data: currentSet } = useSet(setId)
 	const { data: song } = useSong(id)
 	const { data: user } = useUser()

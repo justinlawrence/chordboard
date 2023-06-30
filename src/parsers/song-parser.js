@@ -5,6 +5,36 @@
  */
 import dataTypes from './data-types.js'
 
+const trimTrailingEmptyLines = input => {
+	const newOutput = []
+	let isEmptySequence = false
+	let buffer = []
+
+	for (let i = 0; i < input.length; i++) {
+		const line = input[i]
+		if (line.type === 'empty') {
+			isEmptySequence = true
+			buffer.push(line)
+		} else if (line.type === 'section' && isEmptySequence) {
+			isEmptySequence = false
+			buffer = []
+			newOutput.push(line)
+		} else if (
+			line.type !== 'empty' &&
+			line.type !== 'section' &&
+			isEmptySequence
+		) {
+			isEmptySequence = false
+			newOutput.push(...buffer)
+			newOutput.push(line)
+		} else {
+			newOutput.push(line)
+		}
+	}
+
+	return newOutput
+}
+
 class Parser {
 	constructor() {
 		this.checks = [
@@ -80,7 +110,8 @@ class Parser {
 			prevLine = line
 		})
 
-		return output
+		// Remove empty lines before sections
+		return trimTrailingEmptyLines(output)
 	}
 }
 
