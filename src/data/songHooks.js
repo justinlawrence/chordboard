@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { firestore } from '../firebase'
 import {
 	addDoc,
@@ -120,11 +120,11 @@ export const useSongs = (songIdsInput = []) => {
 export const useUpdateSong = () => {
 	const [isLoading, setIsLoading] = useState(false)
 
-	const updateSong = async (songId, changes) => {
+	const updateSong = useCallback(async (songId, changes) => {
 		setIsLoading(true)
 		await updateDoc(doc(songsCollection, songId), changes)
 		setIsLoading(false)
-	}
+	}, [])
 
 	return {
 		updateSong,

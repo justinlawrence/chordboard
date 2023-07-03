@@ -6,14 +6,7 @@ import omit from 'lodash/omit'
 import set from 'lodash/set'
 
 import { styled } from '@mui/material/styles'
-import {
-	Box,
-	Container,
-	Fade,
-	GlobalStyles,
-	Grid,
-	Typography,
-} from '@mui/material'
+import { Box, Container, GlobalStyles, Grid, Typography } from '@mui/material'
 
 import { currentSetSongKeyAtom } from '../sets'
 import { currentSongUserKeyAtom } from '../songs'
@@ -81,7 +74,7 @@ const classes = {
 	noPrint: `${PREFIX}-noPrint`,
 }
 
-const StyledFade = styled(Fade)(({ theme }) => ({
+const StyledContainer = styled('div', { name: PREFIX })(({ theme }) => ({
 	[`& .${classes.root}`]: {
 		flexGrow: 1,
 	},
@@ -110,7 +103,13 @@ const StyledFade = styled(Fade)(({ theme }) => ({
 	},
 }))
 
-const SongViewer = ({ currentSet, isPreview, setKey, song = {} }) => {
+const SongViewer = ({
+	className,
+	currentSet,
+	isPreview,
+	setKey,
+	song = {},
+}) => {
 	const [chordSize] = useAtom(chordSizeAtom)
 	const [isNashville, setIsNashville] = useAtom(isNashvilleAtom)
 	const [wordSize] = useAtom(wordSizeAtom)
@@ -193,9 +192,9 @@ const SongViewer = ({ currentSet, isPreview, setKey, song = {} }) => {
 
 	const transposeUp = () => changeKey(transposeChord(displayKey, 1)) */
 
-	return (
-		<StyledFade in={Boolean(song)} appear mountOnEnter unmountOnExit>
-			<Box>
+	return song ? (
+		<StyledContainer>
+			<div className={className}>
 				{printMediaStyles}
 				<Helmet>
 					<title>{song.title}</title>
@@ -308,9 +307,9 @@ const SongViewer = ({ currentSet, isPreview, setKey, song = {} }) => {
 						height: theme => theme.spacing(12),
 					}}
 				/>
-			</Box>
-		</StyledFade>
-	)
+			</div>
+		</StyledContainer>
+	) : null
 }
 
 export default SongViewer

@@ -1,21 +1,40 @@
 import { useCallback, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 
-import { Grid } from '@mui/material'
+import { Box, Container, Grid } from '@mui/material'
+import { styled } from '@mui/material/styles'
 
 import SongForm from './SongForm'
 import SongViewer from './SongViewer'
 import Parser from '../parsers/song-parser'
 import chordproParser from '../parsers/chordpro-parser'
+import { useUpdateSong } from '../data/hooks'
+
+const PREFIX = 'SongEditPage'
+
+const classes = {
+	preview: `${PREFIX}-preview`,
+}
+
+const StyledContainer = styled(Container, { name: PREFIX })(({ theme }) => ({
+	display: 'flex',
+	height: '100%',
+
+	[`& .${classes.preview}`]: {
+		zoom: '0.6',
+	},
+}))
 
 const parser = new Parser()
 
 const SongEditPage = ({ songId }) => {
+	const history = useHistory()
+	const { isLoading: isSaving, updateSong } = useUpdateSong()
 	const [songPreview, setSongPreview] = useState(null)
 
 	const handleCancel = useCallback(() => {
-		// TODO: navigate back
-		console.log('handleCancel')
-	}, [])
+		history.goBack()
+	}, [history])
 
 	const handleChange = useCallback(data => {
 		let parsedContent = data.content
@@ -30,27 +49,38 @@ const SongEditPage = ({ songId }) => {
 		})
 	}, [])
 
-	const handleSubmit = useCallback(data => {
-		// TODO: save song
-		console.log('handleSubmit', data)
-	}, [])
+	const handleSubmit = useCallback(
+		data => {
+			updateSong(songId, data)
+		},
+		[songId, updateSong]
+	)
 
 	return (
-		<Grid container>
-			<Grid item xs={12} md={6}>
-				<SongForm
-					onCancel={handleCancel}
-					onChange={handleChange}
-					onSubmit={handleSubmit}
-					songId={songId}
-				/>
+		<StyledContainer>
+			<Grid container spacing={2}>
+				<Grid item xs={12} md={8}>
+					<SongForm
+						onCancel={handleCancel}
+						onChange={handleChange}
+						onSubmit={handleSubmit}
+						isSaving={isSaving}
+						songId={songId}
+					/>
+				</Grid>
+				<Grid item xs={12} md={4}>
+					{songPreview ? (
+						<Box sx={{ py: 2 }}>
+							<SongViewer
+								className={classes.preview}
+								isPreview
+								song={songPreview}
+							/>
+						</Box>
+					) : null}
+				</Grid>
 			</Grid>
-			<Grid item xs={12} md={6}>
-				{songPreview ? (
-					<SongViewer isPreview song={songPreview} />
-				) : null}
-			</Grid>
-		</Grid>
+		</StyledContainer>
 	)
 }
 

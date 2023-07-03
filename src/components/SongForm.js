@@ -1,8 +1,17 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import pick from 'lodash/pick'
 
-import { Button, MenuItem, Paper, Stack, TextField } from '@mui/material'
-import { TextareaAutosize } from '@mui/base'
+import {
+	Box,
+	Button,
+	CircularProgress,
+	MenuItem,
+	Paper,
+	Stack,
+	TextField,
+} from '@mui/material'
+
 import { styled } from '@mui/material/styles'
 
 import { keyOptions } from './KeySelector'
@@ -19,7 +28,9 @@ const classes = {
 }
 
 const StyledForm = styled('form', { name: PREFIX })(({ theme }) => ({
-	flex: `1 0 0`,
+	display: 'flex',
+	height: '100%',
+	padding: theme.spacing(2, 0, 4),
 
 	[`& .${classes.textEditor}`]: {
 		border: 'none',
@@ -47,7 +58,7 @@ const StyledForm = styled('form', { name: PREFIX })(({ theme }) => ({
 const useSongForm = (songId, config) => {
 	const { data: song } = useSong(songId)
 	const [hasLoaded, setHasLoaded] = useState(false)
-	const { register, reset, ...rest } = useForm({
+	const { getValues, register, reset, ...rest } = useForm({
 		defaultValues: {
 			title: song?.title || '',
 			author: song?.author || '',
@@ -66,25 +77,32 @@ const useSongForm = (songId, config) => {
 				author: song.author || '',
 				key: song.key || 'C',
 				content: song.content || '',
+				parserType: 'chords-above-words',
 			})
 		}
 	}, [hasLoaded, reset, song])
 
+	const addLabelFix = fieldName => ({
+		...mapRefToInputRef(register(fieldName)),
+		InputLabelProps: { shrink: Boolean(getValues(fieldName)) },
+	})
+
 	return {
 		fields: {
-			title: mapRefToInputRef(register('title')),
-			author: mapRefToInputRef(register('author')),
-			key: mapRefToInputRef(register('key')),
-			content: mapRefToInputRef(register('content')),
-			parserType: mapRefToInputRef(register('parserType')),
+			title: addLabelFix('title'),
+			author: addLabelFix('author'),
+			key: addLabelFix('key'),
+			content: addLabelFix('content'),
+			parserType: addLabelFix('parserType'),
 		},
+		getValues,
 		register,
 		...rest,
 	}
 }
 
-const SongForm = ({ onCancel, onChange, onSubmit, songId }) => {
-	const { fields, formState, handleSubmit, register, reset, watch } =
+const SongForm = ({ isSaving, onCancel, onChange, onSubmit, songId }) => {
+	const { fields, formState, handleSubmit, register, watch } =
 		useSongForm(songId)
 
 	const watchAllFields = Boolean(onChange) && watch()
@@ -99,25 +117,34 @@ const SongForm = ({ onCancel, onChange, onSubmit, songId }) => {
 		onCancel && onCancel()
 	}
 
+	const submit = data => {
+		const dirtyData = pick(data, Object.keys(formState.dirtyFields))
+		onSubmit(dirtyData)
+	}
+
 	return (
-		<StyledForm onSubmit={handleSubmit(onSubmit)}>
-			<Stack spacing={1}>
+		<StyledForm onSubmit={handleSubmit(submit)}>
+			<Stack spacing={2} sx={{ flexGrow: 1 }}>
 				<TextField
 					id={'title'}
 					label={'Song title'}
 					fullWidth
-					margin={'dense'}
+					margin={'none'}
 					{...fields['title']}
 				/>
 				<TextField
 					id={'author'}
 					label={'Authors (comma separated)'}
 					fullWidth
-					margin={'dense'}
+					margin={'none'}
 					{...fields['author']}
 				/>
 
-				<Stack direction={'row'} spacing={1} pt={1}>
+				<Stack
+					direction={'row'}
+					spacing={1}
+					sx={{ alignItems: 'center' }}
+				>
 					<TextField
 						select
 						label={'Song Key'}
@@ -146,6 +173,23 @@ const SongForm = ({ onCancel, onChange, onSubmit, songId }) => {
 						</MenuItem>
 						<MenuItem value={'chordpro'}>Onsong</MenuItem>
 					</TextField>
+
+					<Box sx={{ flexGrow: 1 }} />
+
+					<Button onClick={handleCancel}>Cancel</Button>
+
+					<Button
+						color={'primary'}
+						disabled={isSaving}
+						variant={'contained'}
+						type={'submit'}
+					>
+						{isSaving ? (
+							<CircularProgress color={'inherit'} size={24} />
+						) : (
+							'Save'
+						)}
+					</Button>
 				</Stack>
 
 				<Paper className={classes.textEditorWrapper}>
@@ -161,25 +205,6 @@ const SongForm = ({ onCancel, onChange, onSubmit, songId }) => {
 						{...register('content')}
 					/>
 				</Paper>
-
-				<Stack
-					direction={'row'}
-					spacing={1}
-					sx={{ justifyContent: 'flex-end', pt: 2 }}
-				>
-					<Button onClick={() => reset(formState.defaultValues)}>
-						Reset
-					</Button>
-					<Button onClick={handleCancel}>Cancel</Button>
-
-					<Button
-						color={'primary'}
-						variant={'contained'}
-						type={'submit'}
-					>
-						Save
-					</Button>
-				</Stack>
 			</Stack>
 		</StyledForm>
 	)
