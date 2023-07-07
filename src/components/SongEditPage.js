@@ -8,7 +8,7 @@ import SongForm from './SongForm'
 import SongViewer from './SongViewer'
 import Parser from '../parsers/song-parser'
 import chordproParser from '../parsers/chordpro-parser'
-import { useUpdateSong } from '../data/hooks'
+import { useAddSong, useDeleteSong, useUpdateSong } from '../data/hooks'
 
 const PREFIX = 'SongEditPage'
 
@@ -29,6 +29,8 @@ const parser = new Parser()
 
 const SongEditPage = ({ songId }) => {
 	const history = useHistory()
+	const { addSong, sLoading: isAdding } = useAddSong()
+	const { deleteSong } = useDeleteSong()
 	const { isLoading: isSaving, updateSong } = useUpdateSong()
 	const [songPreview, setSongPreview] = useState(null)
 
@@ -49,11 +51,21 @@ const SongEditPage = ({ songId }) => {
 		})
 	}, [])
 
+	const handleDelete = useCallback(async () => {
+		await deleteSong(songId)
+		history.goBack()
+	}, [deleteSong, history, songId])
+
 	const handleSubmit = useCallback(
-		data => {
-			updateSong(songId, data)
+		async data => {
+			if (songId) {
+				await updateSong(songId, data)
+			} else {
+				await addSong(data)
+			}
+			history.goBack()
 		},
-		[songId, updateSong]
+		[addSong, history, songId, updateSong]
 	)
 
 	return (
@@ -63,8 +75,9 @@ const SongEditPage = ({ songId }) => {
 					<SongForm
 						onCancel={handleCancel}
 						onChange={handleChange}
+						onDelete={songId && handleDelete}
 						onSubmit={handleSubmit}
-						isSaving={isSaving}
+						isSaving={isAdding || isSaving}
 						songId={songId}
 					/>
 				</Grid>

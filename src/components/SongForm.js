@@ -82,14 +82,14 @@ const useSongForm = (songId, config) => {
 		}
 	}, [hasLoaded, reset, song])
 
-	const addLabelFix = fieldName => ({
-		...mapRefToInputRef(register(fieldName)),
+	const addLabelFix = (fieldName, options) => ({
+		...mapRefToInputRef(register(fieldName, options)),
 		InputLabelProps: { shrink: Boolean(getValues(fieldName)) },
 	})
 
 	return {
 		fields: {
-			title: addLabelFix('title'),
+			title: addLabelFix('title', { required: true }),
 			author: addLabelFix('author'),
 			key: addLabelFix('key'),
 			content: addLabelFix('content'),
@@ -101,7 +101,14 @@ const useSongForm = (songId, config) => {
 	}
 }
 
-const SongForm = ({ isSaving, onCancel, onChange, onSubmit, songId }) => {
+const SongForm = ({
+	isSaving,
+	onCancel,
+	onChange,
+	onDelete,
+	onSubmit,
+	songId,
+}) => {
 	const { fields, formState, handleSubmit, register, watch } =
 		useSongForm(songId)
 
@@ -117,9 +124,17 @@ const SongForm = ({ isSaving, onCancel, onChange, onSubmit, songId }) => {
 		onCancel && onCancel()
 	}
 
+	const handleDelete = () => {
+		onDelete && onDelete()
+	}
+
 	const submit = data => {
-		const dirtyData = pick(data, Object.keys(formState.dirtyFields))
-		onSubmit(dirtyData)
+		if (songId) {
+			const dirtyData = pick(data, Object.keys(formState.dirtyFields))
+			onSubmit(dirtyData)
+		} else {
+			onSubmit(data)
+		}
 	}
 
 	return (
@@ -175,6 +190,10 @@ const SongForm = ({ isSaving, onCancel, onChange, onSubmit, songId }) => {
 					</TextField>
 
 					<Box sx={{ flexGrow: 1 }} />
+
+					{onDelete ? (
+						<Button onClick={handleDelete}>Delete</Button>
+					) : null}
 
 					<Button onClick={handleCancel}>Cancel</Button>
 

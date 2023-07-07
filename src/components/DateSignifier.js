@@ -3,9 +3,7 @@ import { styled } from '@mui/material/styles'
 import { format, isBefore, isValid } from 'date-fns'
 import cx from 'classnames'
 
-import Grid from '@mui/material/Grid'
-import Paper from '@mui/material/Paper'
-import Typography from '@mui/material/Typography'
+import { Stack, Paper, Typography } from '@mui/material'
 
 const PREFIX = 'DateSignifier'
 
@@ -29,7 +27,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 		backgroundColor: '#007FFF', //TODO: connect this to the theme primary (it wasn't visible from here)
 		color: theme.palette.common.white,
 		fontWeight: 800,
-		height: theme.spacing(1),
+		height: theme.spacing(2.5),
 		lineHeight: theme.spacing(2.5),
 	},
 
@@ -54,41 +52,37 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 const DateSignifier = ({ date }) => {
 	return isValid(date) ? (
 		<StyledPaper className={classes.root}>
-			<Grid container direction={'column'}>
-				<Grid item>
-					<Typography
-						className={cx(classes.month, {
-							[classes.monthPast]: isBefore(date, new Date()),
-						})}
-						align={'center'}
-						display={'block'}
-						variant={'caption'}
-					>
-						{format(date, 'MMM')}
-					</Typography>
-				</Grid>
-				<Grid item>
-					<Typography
-						className={classes.date}
-						align={'center'}
-						display={'block'}
-						variant={'h5'}
-					>
-						{format(date, 'd')}
-					</Typography>
-				</Grid>
-				<Grid item className={classes.divider} />
-				<Grid item>
-					<Typography
-						className={classes.day}
-						align={'center'}
-						display={'block'}
-						variant={'caption'}
-					>
-						{format(date, 'EEE')}
-					</Typography>
-				</Grid>
-			</Grid>
+			<Stack>
+				<Typography
+					className={cx(classes.month, {
+						[classes.monthPast]: isBefore(date, new Date()),
+					})}
+					align={'center'}
+					display={'block'}
+					variant={'caption'}
+				>
+					{format(date, 'MMM')}
+				</Typography>
+				<Typography
+					className={classes.date}
+					align={'center'}
+					display={'block'}
+					variant={'h5'}
+				>
+					{format(date, 'd')}
+				</Typography>
+
+				<div className={classes.divider} />
+
+				<Typography
+					className={classes.day}
+					align={'center'}
+					display={'block'}
+					variant={'caption'}
+				>
+					{format(date, 'EEE')}
+				</Typography>
+			</Stack>
 		</StyledPaper>
 	) : null
 }

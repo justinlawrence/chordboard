@@ -175,6 +175,7 @@ const SongSelectorDialog = ({ onClose = noop, open }) => {
 		if (reason === 'addSongSuccess') {
 			onClose([song])
 		}
+		popupState.close()
 	}
 
 	const handleClose = () => onClose([])

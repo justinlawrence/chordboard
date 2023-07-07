@@ -88,7 +88,7 @@ const App = () => {
 							<Route
 								exact
 								path={'/songs/new'}
-								component={SongEditor}
+								component={SongEditPage}
 							/>
 
 							<Route

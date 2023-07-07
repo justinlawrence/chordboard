@@ -20,7 +20,7 @@ const setsCollection = collection(firestore, 'sets')
 export const useAddSet = () => {
 	const [isLoading, setIsLoading] = useState(false)
 
-	const addSet = async data => {
+	const addSet = useCallback(async data => {
 		const newSet = {
 			...data,
 			songs: Array.isArray(data.songs) ? data.songs : [],
@@ -36,7 +36,7 @@ export const useAddSet = () => {
 			id: setDoc.id,
 			...setDoc.data(),
 		}
-	}
+	}, [])
 
 	return {
 		addSet,
@@ -72,11 +72,11 @@ export const useAllSets = () => {
 export const useDeleteSet = () => {
 	const [isLoading, setIsLoading] = useState(false)
 
-	const deleteSet = async setId => {
+	const deleteSet = useCallback(async setId => {
 		setIsLoading(true)
 		await deleteDoc(doc(setsCollection, setId))
 		setIsLoading(false)
-	}
+	}, [])
 
 	return {
 		deleteSet,
@@ -86,13 +86,13 @@ export const useDeleteSet = () => {
 export const useDeleteSetSong = () => {
 	const [isLoading, setIsLoading] = useState(false)
 
-	const deleteSetSong = async (setId, songId) => {
+	const deleteSetSong = useCallback(async (setId, songId) => {
 		setIsLoading(true)
 		const set = await getDoc(doc(setsCollection, setId))
 		const songs = set.data().songs.filter(song => song.id !== songId)
 		await updateDoc(doc(setsCollection, setId), { songs })
 		setIsLoading(false)
-	}
+	}, [])
 
 	return {
 		deleteSetSong,
@@ -176,7 +176,7 @@ export const useSyncSet = (
 export const useUpdateSet = () => {
 	const [isLoading, setIsLoading] = useState(false)
 
-	const updateSet = async (setId, changes) => {
+	const updateSet = useCallback(async (setId, changes) => {
 		const newSet = {
 			...changes,
 		}
@@ -195,7 +195,7 @@ export const useUpdateSet = () => {
 		setIsLoading(true)
 		await updateDoc(doc(setsCollection, setId), newSet)
 		setIsLoading(false)
-	}
+	}, [])
 
 	return {
 		updateSet,

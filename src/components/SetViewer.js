@@ -54,10 +54,10 @@ const Root = styled('div')(({ theme }) => ({
 }))
 
 const SetViewer = ({ currentSet, onChangeKey, onRemoveSet }) => {
+	const history = useHistory()
 	const [mode, setMode] = useState('')
 	const [isSongSelectorVisible, setIsSongSelectorVisible] = useState(false)
 	const { updateSet } = useUpdateSet()
-	const history = useHistory()
 
 	useEffect(() => {
 		if (currentSet?.title) {

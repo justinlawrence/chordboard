@@ -18,7 +18,7 @@ const songsCollection = collection(firestore, 'songs')
 export const useAddSong = () => {
 	const [isLoading, setIsLoading] = useState(false)
 
-	const addSong = async data => {
+	const addSong = useCallback(async data => {
 		const newSong = {
 			...data,
 			slug: slugify(data.title),
@@ -33,7 +33,7 @@ export const useAddSong = () => {
 			id: songDoc.id,
 			...songDoc.data(),
 		}
-	}
+	}, [])
 
 	return {
 		addSong,
@@ -44,11 +44,11 @@ export const useAddSong = () => {
 export const useDeleteSong = () => {
 	const [isLoading, setIsLoading] = useState(false)
 
-	const deleteSong = async songId => {
+	const deleteSong = useCallback(async songId => {
 		setIsLoading(true)
 		await deleteDoc(doc(songsCollection, songId))
 		setIsLoading(false)
-	}
+	}, [])
 
 	return {
 		deleteSong,
